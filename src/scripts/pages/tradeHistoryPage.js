@@ -1,9 +1,7 @@
 import { getState } from "../state.js";
-import { fetchDashboardData } from "../data.js";
+import { getTradeHistory } from "../dataAccess.js";
 
 const TRADE_HISTORY_PAGE = "page-trade-history";
-const DUMMY_DATA_NOTE =
-  "DEV ONLY: Trade History dummy data below. Remove for production.";
 
 const formatNumber = (value, digits = 2) =>
   new Intl.NumberFormat("en-US", {
@@ -17,8 +15,7 @@ const formatCompactNumber = (value, digits = 1) =>
     maximumFractionDigits: digits,
   }).format(value);
 
-const formatCurrency = (value, digits = 2) =>
-  `$${formatNumber(Math.abs(value), digits)}`;
+const formatCurrency = (value, digits = 2) => `$${formatNumber(Math.abs(value), digits)}`;
 
 const formatTimestamp = (date) => {
   const datePart = date.toLocaleDateString("en-GB");
@@ -26,74 +23,41 @@ const formatTimestamp = (date) => {
   return { date: datePart, time: timePart };
 };
 
-const randBetween = (min, max) => Math.random() * (max - min) + min;
-const randInt = (min, max) => Math.floor(randBetween(min, max + 1));
-const pick = (items) => items[randInt(0, items.length - 1)];
+const normalizeMarket = (marketType) => {
+  if (!marketType) {
+    return "Spot";
+  }
+  return marketType === "futures" ? "Futures" : "Spot";
+};
 
-const createDummyTrades = () => {
-  // DEV ONLY: Dummy trade history generator. Remove when wiring real API data.
-  const accounts = [
-    { name: "Binance", icon: "B" },
-    { name: "OKX", icon: "O" },
-    { name: "Bybit", icon: "Y" },
-  ];
-  const markets = ["Spot", "Futures"];
-  const pairs = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "AVAXUSDT", "ADAUSDT"];
-  const actions = [
-    "Buy Long",
-    "Sell Short",
-    "Open Long",
-    "Close Long",
-    "Open Short",
-    "Close Short",
-    "Buy",
-    "Sell",
-  ];
-  const statuses = ["Filled", "Cancelled", "Failed"];
-  const planNames = ["GridBot 2.0", "PingPong Alpha", "Scalper Plan", "Trend Rider"];
-  const accounts = ["Main Account", "Futures Desk", "Quant Lab"];
+const mapTrade = (trade) => {
+  const timestamp = trade.executedAt instanceof Date ? trade.executedAt : new Date(trade.executedAt);
+  const { date, time } = formatTimestamp(timestamp);
+  const price = Number(trade.price_usd || 0);
+  const quantity = Number(trade.quantity || 0);
+  const value = Number(trade.valueUsd || price * quantity);
+  const fee = value * 0.0005;
+  const sideLabel = trade.side === "sell" ? "Sell" : "Buy";
+  const statusLabel = trade.result === "loss" ? "Failed" : "Filled";
+  const assetSymbol = trade.assetSymbol || "BTC";
 
-  const now = Date.now();
-  return Array.from({ length: 100 }, (_, index) => {
-    const exchange = pick(accounts);
-    const market = pick(markets);
-    const pair = pick(pairs);
-    const action = pick(actions);
-    const status = pick(statuses);
-    const basePrice = pair.startsWith("BTC")
-      ? randBetween(64000, 72000)
-      : pair.startsWith("ETH")
-        ? randBetween(2800, 3800)
-        : randBetween(0.25, 220);
-    const quantity = pair.startsWith("BTC")
-      ? randBetween(0.05, 0.6)
-      : pair.startsWith("ETH")
-        ? randBetween(0.5, 4)
-        : randBetween(5, 450);
-    const value = basePrice * quantity;
-    const fee = value * randBetween(0.0002, 0.0008);
-    const pnl = randBetween(-0.09, 0.12) * value;
-    const timestamp = new Date(now - randInt(0, 1000 * 60 * 60 * 24 * 30));
-    const { date, time } = formatTimestamp(timestamp);
-
-    return {
-      id: `${exchange.name}-${pair}-${timestamp.getTime()}-${index}`,
-      time: { date, time, raw: timestamp },
-      exchange: exchange.name,
-      exchangeIcon: exchange.icon,
-      market,
-      pair,
-      action,
-      price: basePrice,
-      quantity,
-      value,
-      fee,
-      pnl,
-      status,
-      tradingPlan: pick(planNames),
-      account: pick(accounts),
-    };
-  }).sort((a, b) => b.time.raw - a.time.raw);
+  return {
+    id: trade.tradeId,
+    time: { date, time, raw: timestamp },
+    exchange: trade.accountName || "Exchange",
+    exchangeIcon: trade.accountName?.charAt(0) || "E",
+    market: normalizeMarket(trade.marketType),
+    pair: `${assetSymbol}USDT`,
+    action: sideLabel,
+    price,
+    quantity,
+    value,
+    fee,
+    pnl: Number(trade.pnl_usd || 0),
+    status: statusLabel,
+    tradingPlan: trade.tradingPlanName || "Default Plan",
+    account: trade.accountCode || trade.accountName || trade.account_id,
+  };
 };
 
 const getTradeHistoryData = async () => {
@@ -101,8 +65,8 @@ const getTradeHistoryData = async () => {
   if (state?.data?.tradeHistoryPage?.length) {
     return state.data.tradeHistoryPage;
   }
-  const data = await fetchDashboardData();
-  return data?.tradeHistoryPage?.length ? data.tradeHistoryPage : createDummyTrades();
+  const data = await getTradeHistory();
+  return data.map(mapTrade);
 };
 
 const initTradeHistoryPage = async () => {
@@ -183,6 +147,18 @@ const initTradeHistoryPage = async () => {
     ...pairs.map((pair) => `<option value="${pair}">${pair}</option>`),
   ].join("");
 
+  const accounts = Array.from(new Set(trades.map((trade) => trade.account)));
+  accountSelect.innerHTML = [
+    `<option value="all" selected>All accounts</option>`,
+    ...accounts.map((account) => `<option value="${account}">${account}</option>`),
+  ].join("");
+
+  const markets = Array.from(new Set(trades.map((trade) => trade.market)));
+  marketSelect.innerHTML = [
+    `<option value="all" selected>Spot / Futures</option>`,
+    ...markets.map((market) => `<option value="${market}">${market}</option>`),
+  ].join("");
+
   const renderRows = (items) => {
     tableBody.innerHTML = "";
     if (!items.length) {
@@ -197,8 +173,7 @@ const initTradeHistoryPage = async () => {
     }
 
     items.forEach((trade) => {
-      const pnlClass =
-        trade.pnl > 0 ? "positive" : trade.pnl < 0 ? "negative" : "";
+      const pnlClass = trade.pnl > 0 ? "positive" : trade.pnl < 0 ? "negative" : "";
       const pnlLabel =
         trade.pnl === 0
           ? "$0.00"
@@ -364,15 +339,6 @@ const initTradeHistoryPage = async () => {
   updateTableLayout();
 
   window.addEventListener("resize", updateTableLayout);
-
-  if (!document.querySelector("[data-trade-history-dummy-note]")) {
-    const note = document.createElement("span");
-    note.dataset.tradeHistoryDummyNote = "true";
-    note.className = "row-hint";
-    note.textContent = DUMMY_DATA_NOTE;
-    note.style.display = "none";
-    document.body.appendChild(note);
-  }
 };
 
 initTradeHistoryPage();
