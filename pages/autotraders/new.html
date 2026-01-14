@@ -903,14 +903,14 @@
                 <div class="selector-field" id="exchange-selector">
                   <button class="selector-trigger" type="button" id="exchange-trigger" aria-expanded="false">
                     <div class="selector-text">
-                      <span class="selector-placeholder" id="exchange-placeholder">Select exchange account</span>
+                      <span class="selector-placeholder" id="exchange-placeholder">Select account</span>
                       <span class="selector-selection" id="exchange-selection"></span>
                     </div>
                     <span class="selector-chevron">▾</span>
                   </button>
                   <div class="selector-panel scrollable" id="exchange-panel" role="listbox"></div>
                 </div>
-                <div class="empty-state" id="exchange-empty">Select a market to view available exchanges.</div>
+                <div class="empty-state" id="exchange-empty">Select a market to view available accounts.</div>
               </div>
               <div class="config-section" id="section-trading-plan">
                 <div class="config-section-header">
@@ -1367,7 +1367,7 @@
           0
         );
 
-      const renderExchanges = () => {
+      const renderAccounts = () => {
         elements.exchangePanel.innerHTML = "";
         const hasMarket = Boolean(autotraderConfig.market);
         elements.exchangeEmpty.style.display = hasMarket ? "none" : "block";
@@ -1773,7 +1773,7 @@
 
       const render = () => {
         renderToggle();
-        renderExchanges();
+        renderAccounts();
         renderPlans();
         renderPairs();
         renderSummary();

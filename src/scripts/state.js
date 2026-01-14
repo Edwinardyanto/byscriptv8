@@ -1,6 +1,6 @@
 const baseStatus = {
   assetSummary: "idle",
-  exchangesSummary: "idle",
+  accountsSummary: "idle",
   alerts: "idle",
   topAutotraders: "idle",
   tradeHistory: "idle",
@@ -9,7 +9,7 @@ const baseStatus = {
 let state = {
   data: {
     assetSummary: null,
-    exchangesSummary: null,
+    accountsSummary: null,
     alerts: null,
     topAutotraders: [],
     tradeHistory: [],
@@ -17,7 +17,7 @@ let state = {
   status: { ...baseStatus },
   errors: {
     assetSummary: null,
-    exchangesSummary: null,
+    accountsSummary: null,
     alerts: null,
     topAutotraders: null,
     tradeHistory: null,
@@ -64,7 +64,7 @@ export const resetState = () => {
   state = {
     data: {
       assetSummary: null,
-      exchangesSummary: null,
+      accountsSummary: null,
       alerts: null,
       topAutotraders: [],
       tradeHistory: [],
@@ -72,7 +72,7 @@ export const resetState = () => {
     status: { ...baseStatus },
     errors: {
       assetSummary: null,
-      exchangesSummary: null,
+      accountsSummary: null,
       alerts: null,
       topAutotraders: null,
       tradeHistory: null,

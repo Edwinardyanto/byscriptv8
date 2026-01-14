@@ -22,9 +22,9 @@ export const dashboardData = {
       },
     },
   },
-  exchangesSummary: {
+  accountsSummary: {
     total: "$21,240",
-    exchanges: [
+    accounts: [
       { name: "Binance", value: "$9,150", amount: 9150 },
       { name: "Bybit", value: "$6,050", amount: 6050 },
       { name: "Kraken", value: "$3,150", amount: 3150 },

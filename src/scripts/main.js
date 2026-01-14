@@ -1,6 +1,6 @@
 import { fetchDashboardData } from "./data.js";
 import { getState, setState, subscribe } from "./state.js";
-import { renderExchangesSummary } from "./render/exchangesSummary.js";
+import { renderAccountsSummary } from "./render/accountsSummary.js";
 import { renderAlerts } from "./render/alerts.js";
 import { renderTopAutotraders } from "./render/topAutotraders.js";
 import { renderTradeHistory } from "./render/tradeHistory.js";
@@ -11,7 +11,7 @@ const appRoot = document.getElementById("app");
 
 const sectionKeys = [
   "assetSummary",
-  "exchangesSummary",
+  "accountsSummary",
   "alerts",
   "topAutotraders",
   "tradeHistory",
@@ -34,8 +34,8 @@ const evaluateStatus = (data, key) => {
     return data.length === 0 ? "empty" : "ready";
   }
 
-  if (key === "exchangesSummary") {
-    return data.exchanges?.length ? "ready" : "empty";
+  if (key === "accountsSummary") {
+    return data.accounts?.length ? "ready" : "empty";
   }
 
   if (key === "tradeHistory") {
@@ -74,9 +74,9 @@ const renderDashboard = (state) => {
       });
     },
   });
-  renderExchangesSummary({
-    data: state.data.exchangesSummary,
-    status: state.status.exchangesSummary,
+  renderAccountsSummary({
+    data: state.data.accountsSummary,
+    status: state.status.accountsSummary,
   });
   renderAlerts({ data: state.data.alerts, status: state.status.alerts });
   renderTopAutotraders({
