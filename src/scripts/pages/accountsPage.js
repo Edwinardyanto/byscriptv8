@@ -19,33 +19,46 @@ const ASSET_COLORS = new Map([
   ["BNB", "#ecc94b"],
 ]);
 
-const CHART_PALETTE = [
-  "#f5b94c",
-  "#5e7bff",
-  "#68d391",
-  "#f56565",
-  "#9f7aea",
-  "#4fd1c5",
-];
 const NEUTRAL_COLOR = "#8a8f98";
-const ACCOUNT_COLOR_MAP = new Map();
-const ASSET_COLOR_MAP = new Map();
-const MARKET_COLOR_MAP = new Map();
+const GOLDEN_ANGLE = 137.508;
 
-const getNextAvailableColor = (palette, usedColors) =>
-  palette.find((color) => !usedColors.has(color)) || palette[usedColors.size % palette.length];
-
-const getStableColor = (label, palette, colorMap, preferredColor = null) => {
-  if (colorMap.has(label)) {
-    return colorMap.get(label);
+const hashString = (value) => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) | 0;
   }
-  const usedColors = new Set(colorMap.values());
-  const nextColor =
-    preferredColor && !usedColors.has(preferredColor)
-      ? preferredColor
-      : getNextAvailableColor(palette, usedColors);
-  colorMap.set(label, nextColor);
-  return nextColor;
+  return Math.abs(hash);
+};
+
+const formatHsl = (hue, saturation = 70, lightness = 55) =>
+  `hsl(${hue.toFixed(2)}deg ${saturation}% ${lightness}%)`;
+
+const resolveUniqueColor = (key, usedColors, preferredColor = null) => {
+  if (preferredColor && !usedColors.has(preferredColor)) {
+    return preferredColor;
+  }
+  let hue = hashString(key) % 360;
+  let color = formatHsl(hue);
+  let guard = 0;
+  while (usedColors.has(color) && guard < 360) {
+    hue = (hue + GOLDEN_ANGLE) % 360;
+    color = formatHsl(hue);
+    guard += 1;
+  }
+  return color;
+};
+
+const buildUniqueColorMap = (items, getKey, getPreferredColor) => {
+  const usedColors = new Set();
+  const colorMap = new Map();
+  const keys = Array.from(new Set(items.map(getKey))).sort();
+  keys.forEach((key) => {
+    const preferred = getPreferredColor ? getPreferredColor(key) : null;
+    const color = resolveUniqueColor(key, usedColors, preferred);
+    colorMap.set(key, color);
+    usedColors.add(color);
+  });
+  return colorMap;
 };
 
 const formatCurrency = (value, digits = 0) =>
@@ -153,16 +166,15 @@ const buildDistributionData = (type, accounts) => {
         amount,
         colorKey: label,
       }))
-      .sort((a, b) => b.amount - a.amount)
-      .map((item) => ({
-        ...item,
-        color: getStableColor(
-          item.colorKey,
-          CHART_PALETTE,
-          ASSET_COLOR_MAP,
-          ASSET_COLORS.get(item.colorKey)
-        ),
-      }));
+      .sort((a, b) => b.amount - a.amount);
+    const assetColors = buildUniqueColorMap(
+      sortedAssets,
+      (item) => item.colorKey,
+      (key) => ASSET_COLORS.get(key)
+    );
+    sortedAssets.forEach((item) => {
+      item.color = assetColors.get(item.colorKey);
+    });
     const listItems = sortedAssets.slice(0, 4).map((item) => ({
       ...item,
       listIndex: null,
@@ -195,10 +207,13 @@ const buildDistributionData = (type, accounts) => {
     const items = Array.from(marketTotals.entries()).map(([label, amount], index) => ({
       label,
       amount,
-      color: getStableColor(label, CHART_PALETTE, MARKET_COLOR_MAP),
       colorKey: label,
       listIndex: index,
     }));
+    const marketColors = buildUniqueColorMap(items, (item) => item.colorKey);
+    items.forEach((item) => {
+      item.color = marketColors.get(item.colorKey);
+    });
     return { listItems: items, donutItems: items };
   }
 
@@ -210,11 +225,11 @@ const buildDistributionData = (type, accounts) => {
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
     }))
-    .sort((a, b) => b.amount - a.amount)
-    .map((item) => ({
-      ...item,
-      color: getStableColor(item.colorKey || item.label, CHART_PALETTE, ACCOUNT_COLOR_MAP),
-    }));
+    .sort((a, b) => b.amount - a.amount);
+  const accountColors = buildUniqueColorMap(sortedAccounts, (item) => item.colorKey || item.label);
+  sortedAccounts.forEach((item) => {
+    item.color = accountColors.get(item.colorKey || item.label);
+  });
   const listItems = sortedAccounts.slice(0, 4).map((item) => ({
     ...item,
     listIndex: null,
@@ -246,6 +261,7 @@ const renderDonutChart = (container, items, onHover, tooltip) => {
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
+  svg.style.transform = "rotate(-90deg)";
 
   let offset = 0;
   items.forEach((item, index) => {
