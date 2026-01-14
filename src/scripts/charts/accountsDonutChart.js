@@ -30,8 +30,8 @@ const describeArc = (x, y, radius, startAngle, endAngle) => {
   ].join(" ");
 };
 
-export const renderExchangesDonutChart = (container, exchanges) => {
-  if (!container || !Array.isArray(exchanges) || exchanges.length === 0) {
+export const renderAccountsDonutChart = (container, accounts) => {
+  if (!container || !Array.isArray(accounts) || accounts.length === 0) {
     return;
   }
 
@@ -46,7 +46,7 @@ export const renderExchangesDonutChart = (container, exchanges) => {
   const height = 214;
   const strokeWidth = 18;
   const radius = (Math.min(width, height) - strokeWidth) / 2;
-  const total = exchanges.reduce((sum, item) => sum + Number(item.amount || 0), 0) || 1;
+  const total = accounts.reduce((sum, item) => sum + Number(item.amount || 0), 0) || 1;
   const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -75,8 +75,8 @@ export const renderExchangesDonutChart = (container, exchanges) => {
   labelGroup.appendChild(labelValue);
 
   let currentAngle = 0;
-  exchanges.forEach((exchange, index) => {
-    const value = Number(exchange.amount || 0);
+  accounts.forEach((account, index) => {
+    const value = Number(account.amount || 0);
     const angle = (value / total) * 360;
     const arc = createSvgElement("path");
     arc.setAttribute(
@@ -90,8 +90,8 @@ export const renderExchangesDonutChart = (container, exchanges) => {
     arc.setAttribute("opacity", "0.9");
     arc.style.cursor = "pointer";
     arc.addEventListener("mouseenter", () => {
-      labelName.textContent = exchange.name || "Exchange";
-      labelValue.textContent = exchange.value || formatCurrency.format(value);
+      labelName.textContent = account.name || "Account";
+      labelValue.textContent = account.value || formatCurrency.format(value);
       labelGroup.setAttribute("opacity", "1");
       arc.setAttribute("opacity", "1");
     });

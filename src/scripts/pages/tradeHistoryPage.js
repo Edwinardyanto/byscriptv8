@@ -32,7 +32,7 @@ const pick = (items) => items[randInt(0, items.length - 1)];
 
 const createDummyTrades = () => {
   // DEV ONLY: Dummy trade history generator. Remove when wiring real API data.
-  const exchanges = [
+  const accounts = [
     { name: "Binance", icon: "B" },
     { name: "OKX", icon: "O" },
     { name: "Bybit", icon: "Y" },
@@ -55,7 +55,7 @@ const createDummyTrades = () => {
 
   const now = Date.now();
   return Array.from({ length: 100 }, (_, index) => {
-    const exchange = pick(exchanges);
+    const exchange = pick(accounts);
     const market = pick(markets);
     const pair = pick(pairs);
     const action = pick(actions);
@@ -117,7 +117,7 @@ const initTradeHistoryPage = async () => {
   const filtersSection = document.querySelector(".trade-history-filters");
   const contentShell = document.querySelector(".content-shell");
   const dateRangeSelect = document.getElementById("trade-history-date-range");
-  const exchangeSelect = document.getElementById("trade-history-exchange");
+  const accountSelect = document.getElementById("trade-history-account");
   const marketSelect = document.getElementById("trade-history-market");
   const pairSelect = document.getElementById("trade-history-pair");
   const sideSelect = document.getElementById("trade-history-side");
@@ -134,7 +134,7 @@ const initTradeHistoryPage = async () => {
     !filtersSection ||
     !contentShell ||
     !dateRangeSelect ||
-    !exchangeSelect ||
+    !accountSelect ||
     !marketSelect ||
     !pairSelect ||
     !sideSelect ||
@@ -168,7 +168,7 @@ const initTradeHistoryPage = async () => {
 
   const state = {
     dateRange: "7d",
-    exchange: "all",
+    account: "all",
     market: "all",
     pair: "all",
     side: "all",
@@ -212,8 +212,8 @@ const initTradeHistoryPage = async () => {
         </td>
         <td>
           <div class="exchange">
-            <span class="exchange-icon">${trade.exchangeIcon}</span>
-            ${trade.exchange}
+            <span class="exchange-icon">${trade.account?.charAt(0) || "A"}</span>
+            ${trade.account}
           </div>
         </td>
         <td><span class="trade-pill">${trade.market}</span></td>
@@ -226,7 +226,7 @@ const initTradeHistoryPage = async () => {
         <td class="numeric"><span class="trade-pill ${pnlClass}">${pnlLabel}</span></td>
         <td><span class="status-pill ${statusClass}">${trade.status}</span></td>
         <td class="wrap">${trade.tradingPlan}</td>
-        <td class="wrap">${trade.account} <span class="row-hint">▾</span></td>
+        <td class="wrap">${trade.exchange} <span class="row-hint">▾</span></td>
       `;
       tableBody.appendChild(row);
     });
@@ -273,7 +273,7 @@ const initTradeHistoryPage = async () => {
       if (!isWithinRange(trade)) {
         return false;
       }
-      if (state.exchange !== "all" && trade.exchange !== state.exchange) {
+      if (state.account !== "all" && trade.account !== state.account) {
         return false;
       }
       if (state.market !== "all" && trade.market !== state.market) {
@@ -305,14 +305,14 @@ const initTradeHistoryPage = async () => {
 
   const resetFilters = () => {
     state.dateRange = "7d";
-    state.exchange = "all";
+    state.account = "all";
     state.market = "all";
     state.pair = "all";
     state.side = "all";
     state.status = "all";
     state.page = 1;
     dateRangeSelect.value = state.dateRange;
-    exchangeSelect.value = state.exchange;
+    accountSelect.value = state.account;
     marketSelect.value = state.market;
     pairSelect.value = state.pair;
     sideSelect.value = state.side;
@@ -324,8 +324,8 @@ const initTradeHistoryPage = async () => {
     state.page = 1;
     updateTable();
   });
-  exchangeSelect.addEventListener("change", () => {
-    state.exchange = exchangeSelect.value;
+  accountSelect.addEventListener("change", () => {
+    state.account = accountSelect.value;
     state.page = 1;
     updateTable();
   });

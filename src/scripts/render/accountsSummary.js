@@ -1,4 +1,4 @@
-import { renderExchangesDonutChart } from "../charts/exchangesDonutChart.js";
+import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 
 const setText = (selector, value) => {
   const element = document.querySelector(selector);
@@ -25,7 +25,7 @@ const getCssVar = (name, fallback) => {
 
 const createSvgElement = (tag) => document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const renderAccountsDonutChart = (container, accounts, colors = []) => {
+const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
   if (!container || !Array.isArray(accounts) || accounts.length === 0) {
     return;
   }
@@ -137,15 +137,15 @@ const setChartMessage = (container, message) => {
   container.textContent = message;
 };
 
-export const renderExchangesSummary = (sectionState) => {
+export const renderAccountsSummary = (sectionState) => {
   const { data, status } = sectionState;
-  const list = document.querySelector('[data-list="exchanges"]');
+  const list = document.querySelector('[data-list="accounts"]');
   const section = list?.closest(".section");
   const chartContainer =
     section?.querySelector('[data-accounts-donut] .chart-placeholder') ||
     section?.querySelector(".summary-total .chart-placeholder");
   const isAccountsPage = document.body?.classList.contains("page-accounts");
-  const label = isAccountsPage ? "accounts" : "exchanges";
+  const label = "accounts";
   const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -174,7 +174,7 @@ export const renderExchangesSummary = (sectionState) => {
       setListMessage(list, `Loading ${label}...`);
       setChartMessage(chartContainer, "Loading chart...");
     }
-    setText('[data-field="exchanges.total"]', "--");
+    setText('[data-field="accounts.total"]', "--");
     return;
   }
 
@@ -190,11 +190,11 @@ export const renderExchangesSummary = (sectionState) => {
       setListMessage(list, `Unable to load ${label}`);
       setChartMessage(chartContainer, "Chart unavailable");
     }
-    setText('[data-field="exchanges.total"]', "--");
+    setText('[data-field="accounts.total"]', "--");
     return;
   }
 
-  if (!data || data.exchanges.length === 0) {
+  if (!data || data.accounts.length === 0) {
     if (isAccountsPage) {
       if (chartContainer) {
         chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\"></div>";
@@ -206,12 +206,12 @@ export const renderExchangesSummary = (sectionState) => {
       setListMessage(list, `No ${label} data`);
       setChartMessage(chartContainer, "No chart data");
     }
-    setText('[data-field="exchanges.total"]', "--");
+    setText('[data-field="accounts.total"]', "--");
     return;
   }
 
   list.innerHTML = "";
-  let exchanges = data.exchanges;
+  let accounts = data.accounts;
   let totalValue = data.total;
   let accountsColors = [];
 
@@ -226,57 +226,57 @@ export const renderExchangesSummary = (sectionState) => {
     const assetTotalText = document.querySelector('[data-field="asset.totalBalance"]')?.textContent;
     const assetTotal = parseCurrency(assetTotalText);
     const dataTotal = parseCurrency(data.total);
-    const sourceTotal = data.exchanges.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    const sourceTotal = data.accounts.reduce((sum, item) => sum + Number(item.amount || 0), 0);
     const targetTotal =
       (Number.isFinite(assetTotal) && assetTotal) ||
       (Number.isFinite(dataTotal) && dataTotal) ||
       sourceTotal;
     const scale = sourceTotal ? targetTotal / sourceTotal : 1;
-    const scaledAmounts = data.exchanges.map((exchange) =>
-      Math.round(Number(exchange.amount || 0) * scale)
+    const scaledAmounts = data.accounts.map((account) =>
+      Math.round(Number(account.amount || 0) * scale)
     );
     const scaledSum = scaledAmounts.reduce((sum, amount) => sum + amount, 0);
     const adjustment = Math.round(targetTotal - scaledSum);
     if (scaledAmounts.length > 0 && adjustment !== 0) {
       scaledAmounts[scaledAmounts.length - 1] += adjustment;
     }
-    exchanges = data.exchanges.map((exchange, index) => {
-      const amount = scaledAmounts[index] ?? Number(exchange.amount || 0);
+    accounts = data.accounts.map((account, index) => {
+      const amount = scaledAmounts[index] ?? Number(account.amount || 0);
       return {
-        ...exchange,
+        ...account,
         name: `Accounts ${index + 1}`,
         amount,
         value: formatCurrency.format(amount),
       };
     });
-    exchanges = exchanges.slice(0, 5);
+    accounts = accounts.slice(0, 5);
     if (Number.isFinite(targetTotal)) {
       totalValue = formatCurrency.format(targetTotal);
     }
   }
 
-  exchanges.forEach((exchange, index) => {
+  accounts.forEach((account, index) => {
     const item = document.createElement("div");
     if (isAccountsPage) {
       item.className = "accounts-legend-item";
       item.innerHTML = `
         <span class="accounts-legend-dot" style="--legend-color: ${accountsColors[index % accountsColors.length]}"></span>
-        <span>${exchange.name}</span>
+        <span>${account.name}</span>
       `;
     } else {
       item.className = "summary-item";
       item.innerHTML = `
-        <span class="summary-item-name">${exchange.name}</span>
-        <span class="summary-item-value">${exchange.value}</span>
+        <span class="summary-item-name">${account.name}</span>
+        <span class="summary-item-value">${account.value}</span>
       `;
     }
     list.appendChild(item);
   });
 
-  setText('[data-field="exchanges.total"]', totalValue);
+  setText('[data-field="accounts.total"]', totalValue);
   if (isAccountsPage) {
-    renderAccountsDonutChart(chartContainer, exchanges, accountsColors);
+    renderAccountsPageDonutChart(chartContainer, accounts, accountsColors);
   } else {
-    renderExchangesDonutChart(chartContainer, exchanges);
+    renderAccountsDonutChart(chartContainer, accounts);
   }
 };
