@@ -162,7 +162,7 @@ export const renderExchangesSummary = (sectionState) => {
   if (status === "loading") {
     if (isAccountsPage) {
       if (chartContainer) {
-        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\">Loading...</div>";
+        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\"></div>";
       }
       if (list) {
         list.innerHTML = "";
@@ -178,7 +178,7 @@ export const renderExchangesSummary = (sectionState) => {
   if (status === "error") {
     if (isAccountsPage) {
       if (chartContainer) {
-        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\">No data</div>";
+        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\"></div>";
       }
       if (list) {
         list.innerHTML = "";
@@ -194,7 +194,7 @@ export const renderExchangesSummary = (sectionState) => {
   if (!data || data.exchanges.length === 0) {
     if (isAccountsPage) {
       if (chartContainer) {
-        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\">No data</div>";
+        chartContainer.innerHTML = "<div class=\"accounts-distribution-empty\"></div>";
       }
       if (list) {
         list.innerHTML = "";

@@ -254,6 +254,11 @@
         font-weight: 600;
       }
 
+      .page-accounts .account-name {
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
       .page-accounts .exchange-icon {
         width: 24px;
         height: 24px;
@@ -282,6 +287,11 @@
       .page-accounts .account-type {
         font-size: 0.65rem;
         color: var(--color-text-tertiary);
+      }
+
+      .page-accounts .account-label {
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
       }
 
       .page-accounts .metric-positive {
@@ -417,10 +427,11 @@
                     <table class="accounts-table">
                       <thead>
                         <tr>
-                          <th style="width: 16%">Exchange</th>
-                          <th style="width: 6%"></th>
                           <th style="width: 16%">Account</th>
-                          <th style="width: 11%">Balance</th>
+                          <th style="width: 6%"></th>
+                          <th style="width: 14%">Account ID</th>
+                          <th style="width: 14%">Label</th>
+                          <th style="width: 10%">Balance</th>
                           <th style="width: 10%">USD value</th>
                           <th style="width: 6%">7D</th>
                           <th style="width: 6%">30D</th>
@@ -432,14 +443,10 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td><span class="exchange-name">Binance</span></td>
+                          <td><span class="account-name">Binance</span></td>
                           <td><span class="exchange-icon">B</span></td>
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">8guN...59RP</span>
-                              <span class="account-type">Binance Spot</span>
-                            </div>
-                          </td>
+                          <td><span class="account-id">8guN...59RP</span></td>
+                          <td><span class="account-label">Primary trading</span></td>
                           <td>5,353.12</td>
                           <td class="metric-positive">$5,353</td>
                           <td class="metric-positive">+3.4%</td>
@@ -462,14 +469,10 @@
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
                         </tr>
                         <tr>
-                          <td><span class="exchange-name">Bybit</span></td>
+                          <td><span class="account-name">Bybit</span></td>
                           <td><span class="exchange-icon">Y</span></td>
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">gQuA...8TaT</span>
-                              <span class="account-type">Bybit USDT Perpetual</span>
-                            </div>
-                          </td>
+                          <td><span class="account-id">gQuA...8TaT</span></td>
+                          <td><span class="account-label">Momentum vault</span></td>
                           <td>3,539.44</td>
                           <td class="metric-positive">$3,539</td>
                           <td class="metric-positive">+2.8%</td>
@@ -492,14 +495,10 @@
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
                         </tr>
                         <tr>
-                          <td><span class="exchange-name">Kraken</span></td>
+                          <td><span class="account-name">Kraken</span></td>
                           <td><span class="exchange-icon">K</span></td>
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Yt9F...2LkQ</span>
-                              <span class="account-type">Kraken Spot</span>
-                            </div>
-                          </td>
+                          <td><span class="account-id">Yt9F...2LkQ</span></td>
+                          <td><span class="account-label">Long-term holdings</span></td>
                           <td>1,842.73</td>
                           <td class="metric-positive">$1,843</td>
                           <td class="metric-positive">+1.6%</td>
@@ -522,14 +521,10 @@
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
                         </tr>
                         <tr>
-                          <td><span class="exchange-name">Coinbase</span></td>
+                          <td><span class="account-name">Coinbase</span></td>
                           <td><span class="exchange-icon">C</span></td>
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Ux3K...7SwP</span>
-                              <span class="account-type">Coinbase Prime</span>
-                            </div>
-                          </td>
+                          <td><span class="account-id">Ux3K...7SwP</span></td>
+                          <td><span class="account-label">Treasury operations</span></td>
                           <td>1,404.11</td>
                           <td class="metric-positive">$1,404</td>
                           <td class="metric-positive">+1.1%</td>
@@ -552,14 +547,10 @@
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
                         </tr>
                         <tr>
-                          <td><span class="exchange-name">Others</span></td>
+                          <td><span class="account-name">Others</span></td>
                           <td><span class="exchange-icon">O</span></td>
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Qm1D...90Vx</span>
-                              <span class="account-type">Multi-exchange vault</span>
-                            </div>
-                          </td>
+                          <td><span class="account-id">Qm1D...90Vx</span></td>
+                          <td><span class="account-label">Cold storage</span></td>
                           <td>291.00</td>
                           <td class="metric-positive">$291</td>
                           <td class="metric-positive">+0.6%</td>
