@@ -9,6 +9,7 @@ const chartMarkup = `
           <div class="asset-summary-header">
             <div class="stat-value-row">
               <div class="stat-value" data-field="asset.totalBalance"></div>
+              <span class="stat-status-dot" aria-hidden="true"></span>
               <span class="badge badge--positive" data-field="asset.change"></span>
             </div>
             <div class="timeframe-pills" aria-label="Asset summary timeframe">
@@ -110,6 +111,7 @@ export const renderTotalPerformanceChart = ({
   bindTimeframeControls(pillsContainer, onRangeChange);
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
+  const isAccountsPage = document.body?.classList.contains("page-accounts");
 
   if (status === "loading") {
     setText(container, '[data-field="asset.totalBalance"]', "Loading...");
@@ -135,9 +137,15 @@ export const renderTotalPerformanceChart = ({
     return;
   }
 
-  setText(container, '[data-field="asset.totalBalance"]', data.totalBalance);
-  setText(container, '[data-field="asset.change"]', data.change);
-  setText(container, '[data-field="asset.changeLabel"]', data.changeLabel);
+  if (isAccountsPage) {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
+    setText(container, '[data-field="asset.change"]', "");
+    setText(container, '[data-field="asset.changeLabel"]', "");
+  } else {
+    setText(container, '[data-field="asset.totalBalance"]', data.totalBalance);
+    setText(container, '[data-field="asset.change"]', data.change);
+    setText(container, '[data-field="asset.changeLabel"]', data.changeLabel);
+  }
 
   const activeRange = data.chart?.activeRange || "7D";
   updateTimeframeButtons(pillsContainer, activeRange);
