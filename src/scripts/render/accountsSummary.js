@@ -279,7 +279,7 @@ const buildAccountsTableData = (formatCurrency) => {
   return rows.map((row) => {
     const name = row.querySelector(".account-name")?.textContent?.trim() || "Account";
     const type = row.querySelector(".account-type")?.textContent?.trim() || "";
-    const usdValue = parseCurrency(row.querySelectorAll("td")[4]?.textContent || "");
+    const usdValue = parseCurrency(row.querySelectorAll("td")[1]?.textContent || "");
     return {
       name,
       type,
