@@ -1,0 +1,22 @@
+[
+  {
+    "id": "acct_001",
+    "account_number": "TRD-1001",
+    "name": "Primary Brokerage",
+    "account_type": "individual",
+    "base_currency": "USD",
+    "status": "active",
+    "owner_id": "user_001",
+    "created_at": "2024-01-05T14:30:00Z"
+  },
+  {
+    "id": "acct_002",
+    "account_number": "TRD-1002",
+    "name": "Retirement IRA",
+    "account_type": "retirement",
+    "base_currency": "USD",
+    "status": "active",
+    "owner_id": "user_002",
+    "created_at": "2024-02-01T11:15:00Z"
+  }
+]

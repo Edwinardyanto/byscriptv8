@@ -1,0 +1,44 @@
+[
+  {
+    "id": "trade_001",
+    "account_id": "acct_001",
+    "asset_id": "asset_001",
+    "trading_plan_id": "plan_001",
+    "autotrader_id": "auto_001",
+    "side": "buy",
+    "quantity": 10,
+    "price": 175.5,
+    "fees": 1.25,
+    "executed_at": "2024-02-25T14:05:00Z",
+    "order_id": "ord_9001",
+    "status": "filled"
+  },
+  {
+    "id": "trade_002",
+    "account_id": "acct_001",
+    "asset_id": "asset_002",
+    "trading_plan_id": "plan_001",
+    "autotrader_id": "auto_001",
+    "side": "sell",
+    "quantity": 0.25,
+    "price": 43500,
+    "fees": 2.5,
+    "executed_at": "2024-02-26T09:40:00Z",
+    "order_id": "ord_9002",
+    "status": "filled"
+  },
+  {
+    "id": "trade_003",
+    "account_id": "acct_002",
+    "asset_id": "asset_003",
+    "trading_plan_id": "plan_002",
+    "autotrader_id": "auto_002",
+    "side": "buy",
+    "quantity": 5,
+    "price": 210,
+    "fees": 1,
+    "executed_at": "2024-02-27T12:20:00Z",
+    "order_id": "ord_9003",
+    "status": "filled"
+  }
+]
