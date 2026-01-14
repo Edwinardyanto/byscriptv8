@@ -18,15 +18,15 @@
   {
     "asset_id": "0000003",
     "symbol": "SOL",
-    "name": "Solana",
-    "type": "crypto",
-    "decimals": 8,
+    "name": "SOL Token",
+    "type": "equity",
+    "decimals": 2,
     "is_active": true
   },
   {
     "asset_id": "0000004",
     "symbol": "BNB",
-    "name": "Binance Coin",
+    "name": "BNB Token",
     "type": "crypto",
     "decimals": 8,
     "is_active": true
@@ -34,9 +34,1169 @@
   {
     "asset_id": "0000005",
     "symbol": "AVAX",
-    "name": "Avalanche",
+    "name": "AVAX Token",
     "type": "crypto",
     "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000006",
+    "symbol": "ADA",
+    "name": "ADA Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000007",
+    "symbol": "XRP",
+    "name": "XRP Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000008",
+    "symbol": "DOGE",
+    "name": "DOGE Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000009",
+    "symbol": "DOT",
+    "name": "DOT Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000010",
+    "symbol": "MATIC",
+    "name": "MATIC Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000011",
+    "symbol": "LINK",
+    "name": "LINK Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000012",
+    "symbol": "UNI",
+    "name": "UNI Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000013",
+    "symbol": "ATOM",
+    "name": "ATOM Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000014",
+    "symbol": "LTC",
+    "name": "LTC Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000015",
+    "symbol": "BCH",
+    "name": "BCH Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000016",
+    "symbol": "AAPL",
+    "name": "AAPL Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000017",
+    "symbol": "MSFT",
+    "name": "MSFT Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000018",
+    "symbol": "NVDA",
+    "name": "NVDA Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000019",
+    "symbol": "AMZN",
+    "name": "AMZN Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000020",
+    "symbol": "TSLA",
+    "name": "TSLA Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000021",
+    "symbol": "META",
+    "name": "META Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000022",
+    "symbol": "GOOGL",
+    "name": "GOOGL Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000023",
+    "symbol": "NFLX",
+    "name": "NFLX Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000024",
+    "symbol": "ORCL",
+    "name": "ORCL Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000025",
+    "symbol": "INTC",
+    "name": "INTC Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000026",
+    "symbol": "AMD",
+    "name": "AMD Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000027",
+    "symbol": "IBM",
+    "name": "IBM Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000028",
+    "symbol": "SAP",
+    "name": "SAP Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000029",
+    "symbol": "CRM",
+    "name": "CRM Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000030",
+    "symbol": "ADBE",
+    "name": "ADBE Token",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000031",
+    "symbol": "BTC30",
+    "name": "BTC30 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000032",
+    "symbol": "ETH31",
+    "name": "ETH31 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000033",
+    "symbol": "SOL32",
+    "name": "SOL32 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000034",
+    "symbol": "BNB33",
+    "name": "BNB33 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000035",
+    "symbol": "AVAX34",
+    "name": "AVAX34 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000036",
+    "symbol": "ADA35",
+    "name": "ADA35 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000037",
+    "symbol": "XRP36",
+    "name": "XRP36 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000038",
+    "symbol": "DOGE37",
+    "name": "DOGE37 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000039",
+    "symbol": "DOT38",
+    "name": "DOT38 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000040",
+    "symbol": "MATIC39",
+    "name": "MATIC39 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000041",
+    "symbol": "LINK40",
+    "name": "LINK40 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000042",
+    "symbol": "UNI41",
+    "name": "UNI41 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000043",
+    "symbol": "ATOM42",
+    "name": "ATOM42 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000044",
+    "symbol": "LTC43",
+    "name": "LTC43 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000045",
+    "symbol": "BCH44",
+    "name": "BCH44 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000046",
+    "symbol": "AAPL45",
+    "name": "AAPL45 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000047",
+    "symbol": "MSFT46",
+    "name": "MSFT46 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000048",
+    "symbol": "NVDA47",
+    "name": "NVDA47 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000049",
+    "symbol": "AMZN48",
+    "name": "AMZN48 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000050",
+    "symbol": "TSLA49",
+    "name": "TSLA49 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000051",
+    "symbol": "META50",
+    "name": "META50 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000052",
+    "symbol": "GOOGL51",
+    "name": "GOOGL51 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000053",
+    "symbol": "NFLX52",
+    "name": "NFLX52 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000054",
+    "symbol": "ORCL53",
+    "name": "ORCL53 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000055",
+    "symbol": "INTC54",
+    "name": "INTC54 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000056",
+    "symbol": "AMD55",
+    "name": "AMD55 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000057",
+    "symbol": "IBM56",
+    "name": "IBM56 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000058",
+    "symbol": "SAP57",
+    "name": "SAP57 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000059",
+    "symbol": "CRM58",
+    "name": "CRM58 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000060",
+    "symbol": "ADBE59",
+    "name": "ADBE59 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000061",
+    "symbol": "BTC60",
+    "name": "BTC60 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000062",
+    "symbol": "ETH61",
+    "name": "ETH61 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000063",
+    "symbol": "SOL62",
+    "name": "SOL62 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000064",
+    "symbol": "BNB63",
+    "name": "BNB63 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000065",
+    "symbol": "AVAX64",
+    "name": "AVAX64 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000066",
+    "symbol": "ADA65",
+    "name": "ADA65 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000067",
+    "symbol": "XRP66",
+    "name": "XRP66 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000068",
+    "symbol": "DOGE67",
+    "name": "DOGE67 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000069",
+    "symbol": "DOT68",
+    "name": "DOT68 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000070",
+    "symbol": "MATIC69",
+    "name": "MATIC69 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000071",
+    "symbol": "LINK70",
+    "name": "LINK70 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000072",
+    "symbol": "UNI71",
+    "name": "UNI71 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000073",
+    "symbol": "ATOM72",
+    "name": "ATOM72 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000074",
+    "symbol": "LTC73",
+    "name": "LTC73 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000075",
+    "symbol": "BCH74",
+    "name": "BCH74 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000076",
+    "symbol": "AAPL75",
+    "name": "AAPL75 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000077",
+    "symbol": "MSFT76",
+    "name": "MSFT76 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000078",
+    "symbol": "NVDA77",
+    "name": "NVDA77 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000079",
+    "symbol": "AMZN78",
+    "name": "AMZN78 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000080",
+    "symbol": "TSLA79",
+    "name": "TSLA79 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000081",
+    "symbol": "META80",
+    "name": "META80 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000082",
+    "symbol": "GOOGL81",
+    "name": "GOOGL81 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000083",
+    "symbol": "NFLX82",
+    "name": "NFLX82 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000084",
+    "symbol": "ORCL83",
+    "name": "ORCL83 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000085",
+    "symbol": "INTC84",
+    "name": "INTC84 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000086",
+    "symbol": "AMD85",
+    "name": "AMD85 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000087",
+    "symbol": "IBM86",
+    "name": "IBM86 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000088",
+    "symbol": "SAP87",
+    "name": "SAP87 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000089",
+    "symbol": "CRM88",
+    "name": "CRM88 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000090",
+    "symbol": "ADBE89",
+    "name": "ADBE89 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000091",
+    "symbol": "BTC90",
+    "name": "BTC90 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000092",
+    "symbol": "ETH91",
+    "name": "ETH91 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000093",
+    "symbol": "SOL92",
+    "name": "SOL92 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000094",
+    "symbol": "BNB93",
+    "name": "BNB93 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000095",
+    "symbol": "AVAX94",
+    "name": "AVAX94 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000096",
+    "symbol": "ADA95",
+    "name": "ADA95 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000097",
+    "symbol": "XRP96",
+    "name": "XRP96 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000098",
+    "symbol": "DOGE97",
+    "name": "DOGE97 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000099",
+    "symbol": "DOT98",
+    "name": "DOT98 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000100",
+    "symbol": "MATIC99",
+    "name": "MATIC99 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000101",
+    "symbol": "LINK100",
+    "name": "LINK100 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000102",
+    "symbol": "UNI101",
+    "name": "UNI101 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000103",
+    "symbol": "ATOM102",
+    "name": "ATOM102 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000104",
+    "symbol": "LTC103",
+    "name": "LTC103 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000105",
+    "symbol": "BCH104",
+    "name": "BCH104 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000106",
+    "symbol": "AAPL105",
+    "name": "AAPL105 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000107",
+    "symbol": "MSFT106",
+    "name": "MSFT106 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000108",
+    "symbol": "NVDA107",
+    "name": "NVDA107 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000109",
+    "symbol": "AMZN108",
+    "name": "AMZN108 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000110",
+    "symbol": "TSLA109",
+    "name": "TSLA109 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000111",
+    "symbol": "META110",
+    "name": "META110 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000112",
+    "symbol": "GOOGL111",
+    "name": "GOOGL111 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000113",
+    "symbol": "NFLX112",
+    "name": "NFLX112 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000114",
+    "symbol": "ORCL113",
+    "name": "ORCL113 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000115",
+    "symbol": "INTC114",
+    "name": "INTC114 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000116",
+    "symbol": "AMD115",
+    "name": "AMD115 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000117",
+    "symbol": "IBM116",
+    "name": "IBM116 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000118",
+    "symbol": "SAP117",
+    "name": "SAP117 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000119",
+    "symbol": "CRM118",
+    "name": "CRM118 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000120",
+    "symbol": "ADBE119",
+    "name": "ADBE119 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000121",
+    "symbol": "BTC120",
+    "name": "BTC120 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000122",
+    "symbol": "ETH121",
+    "name": "ETH121 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000123",
+    "symbol": "SOL122",
+    "name": "SOL122 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000124",
+    "symbol": "BNB123",
+    "name": "BNB123 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000125",
+    "symbol": "AVAX124",
+    "name": "AVAX124 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000126",
+    "symbol": "ADA125",
+    "name": "ADA125 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000127",
+    "symbol": "XRP126",
+    "name": "XRP126 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000128",
+    "symbol": "DOGE127",
+    "name": "DOGE127 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000129",
+    "symbol": "DOT128",
+    "name": "DOT128 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000130",
+    "symbol": "MATIC129",
+    "name": "MATIC129 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000131",
+    "symbol": "LINK130",
+    "name": "LINK130 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000132",
+    "symbol": "UNI131",
+    "name": "UNI131 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000133",
+    "symbol": "ATOM132",
+    "name": "ATOM132 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000134",
+    "symbol": "LTC133",
+    "name": "LTC133 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000135",
+    "symbol": "BCH134",
+    "name": "BCH134 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000136",
+    "symbol": "AAPL135",
+    "name": "AAPL135 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000137",
+    "symbol": "MSFT136",
+    "name": "MSFT136 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000138",
+    "symbol": "NVDA137",
+    "name": "NVDA137 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000139",
+    "symbol": "AMZN138",
+    "name": "AMZN138 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000140",
+    "symbol": "TSLA139",
+    "name": "TSLA139 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000141",
+    "symbol": "META140",
+    "name": "META140 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000142",
+    "symbol": "GOOGL141",
+    "name": "GOOGL141 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000143",
+    "symbol": "NFLX142",
+    "name": "NFLX142 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000144",
+    "symbol": "ORCL143",
+    "name": "ORCL143 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000145",
+    "symbol": "INTC144",
+    "name": "INTC144 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000146",
+    "symbol": "AMD145",
+    "name": "AMD145 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000147",
+    "symbol": "IBM146",
+    "name": "IBM146 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000148",
+    "symbol": "SAP147",
+    "name": "SAP147 Holdings",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000149",
+    "symbol": "CRM148",
+    "name": "CRM148 Holdings",
+    "type": "equity",
+    "decimals": 2,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000150",
+    "symbol": "ADBE149",
+    "name": "ADBE149 Holdings",
+    "type": "equity",
+    "decimals": 2,
     "is_active": true
   }
 ]

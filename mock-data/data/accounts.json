@@ -1,29 +1,461 @@
 [
   {
-    "account_id": "Y9QICT0Y4U",
-    "account_code": "36QLRYV9T2",
+    "account_id": "MZDAXSKYXJ",
+    "account_code": "TWE8PEYAAD",
     "provider": "Binance",
     "provider_type": "exchange",
-    "market_type": "spot",
-    "status": "active",
-    "created_at": "2024-11-02T08:21:00Z"
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-10-03T08:00:00Z"
   },
   {
-    "account_id": "QXDPRH5AL6",
-    "account_code": "0QWNGWVHW7",
-    "provider": "Binance",
-    "provider_type": "exchange",
+    "account_id": "WPBYRL5GRQ",
+    "account_code": "H6W5LT3JA8",
+    "provider": "Coinbase",
+    "provider_type": "broker",
     "market_type": "spot",
     "status": "active",
-    "created_at": "2024-11-02T08:21:00Z"
+    "created_at": "2024-10-04T08:00:00Z"
   },
   {
-    "account_id": "PEMBA3GA1H",
-    "account_code": "2LU5HNK77H",
+    "account_id": "GH3JDZ5YV6",
+    "account_code": "32ZK7WT53B",
+    "provider": "Kraken",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-05T08:00:00Z"
+  },
+  {
+    "account_id": "88HAFD53CY",
+    "account_code": "AECTJ7KX3P",
+    "provider": "Gemini",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-06T08:00:00Z"
+  },
+  {
+    "account_id": "ZVN2M6SBGE",
+    "account_code": "LG7LZW9ELB",
+    "provider": "Interactive Brokers",
+    "provider_type": "broker",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-07T08:00:00Z"
+  },
+  {
+    "account_id": "QDHLRV7DSU",
+    "account_code": "NHCQSW9CC5",
     "provider": "Binance",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-08T08:00:00Z"
+  },
+  {
+    "account_id": "VTFDWF5SL5",
+    "account_code": "SCPR9M39J8",
+    "provider": "Coinbase",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-09T08:00:00Z"
+  },
+  {
+    "account_id": "865ALEK8D4",
+    "account_code": "JJCC3L5QTL",
+    "provider": "Kraken",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-10T08:00:00Z"
+  },
+  {
+    "account_id": "5KXCXN9YGE",
+    "account_code": "8DU9XZWZ5G",
+    "provider": "Gemini",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-11T08:00:00Z"
+  },
+  {
+    "account_id": "82UJ256ATP",
+    "account_code": "6AKWQPU49D",
+    "provider": "Interactive Brokers",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-12T08:00:00Z"
+  },
+  {
+    "account_id": "NUHP7AKQG2",
+    "account_code": "SJRVZ6NDWS",
+    "provider": "Binance",
+    "provider_type": "broker",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-13T08:00:00Z"
+  },
+  {
+    "account_id": "MVZYGJKPBY",
+    "account_code": "7MJTBGXWAD",
+    "provider": "Coinbase",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-14T08:00:00Z"
+  },
+  {
+    "account_id": "HHJ852SGZV",
+    "account_code": "4G2GMPLGAZ",
+    "provider": "Kraken",
+    "provider_type": "exchange",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-15T08:00:00Z"
+  },
+  {
+    "account_id": "ZDGT74HMHN",
+    "account_code": "EG3AFYC6EW",
+    "provider": "Gemini",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-16T08:00:00Z"
+  },
+  {
+    "account_id": "L28NULRCU4",
+    "account_code": "QS5HHHGNY7",
+    "provider": "Interactive Brokers",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-17T08:00:00Z"
+  },
+  {
+    "account_id": "TZB72K8WKR",
+    "account_code": "ZZ2EN3EHQA",
+    "provider": "Binance",
+    "provider_type": "exchange",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-18T08:00:00Z"
+  },
+  {
+    "account_id": "BSTNSATKRC",
+    "account_code": "E7SXD287UX",
+    "provider": "Coinbase",
+    "provider_type": "broker",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-19T08:00:00Z"
+  },
+  {
+    "account_id": "CUME4EEZRS",
+    "account_code": "Y8TPB59PJM",
+    "provider": "Kraken",
+    "provider_type": "custodian",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-20T08:00:00Z"
+  },
+  {
+    "account_id": "Y6FECQAUEE",
+    "account_code": "SR49CUNVZW",
+    "provider": "Gemini",
     "provider_type": "exchange",
     "market_type": "spot",
     "status": "active",
-    "created_at": "2024-11-02T08:21:00Z"
+    "created_at": "2024-10-21T08:00:00Z"
+  },
+  {
+    "account_id": "TMR6VJ8V6L",
+    "account_code": "CA83WMNZCU",
+    "provider": "Interactive Brokers",
+    "provider_type": "broker",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-10-22T08:00:00Z"
+  },
+  {
+    "account_id": "CBCKREEQVP",
+    "account_code": "T6WR6PASFV",
+    "provider": "Binance",
+    "provider_type": "custodian",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-23T08:00:00Z"
+  },
+  {
+    "account_id": "TW7DSGPD8D",
+    "account_code": "QUUSTAC36U",
+    "provider": "Coinbase",
+    "provider_type": "exchange",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-10-24T08:00:00Z"
+  },
+  {
+    "account_id": "3CUU4JYX2V",
+    "account_code": "FERWTAJ9CV",
+    "provider": "Kraken",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-25T08:00:00Z"
+  },
+  {
+    "account_id": "BKAPRYWCK7",
+    "account_code": "2TX8JHUM8N",
+    "provider": "Gemini",
+    "provider_type": "custodian",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-26T08:00:00Z"
+  },
+  {
+    "account_id": "BWKHVB5NQW",
+    "account_code": "UJG3TLJ8YP",
+    "provider": "Interactive Brokers",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-27T08:00:00Z"
+  },
+  {
+    "account_id": "QKZVQALMWM",
+    "account_code": "4MYDGNB9MJ",
+    "provider": "Binance",
+    "provider_type": "broker",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-28T08:00:00Z"
+  },
+  {
+    "account_id": "9UDHVARSV3",
+    "account_code": "HTXKFUHGVJ",
+    "provider": "Coinbase",
+    "provider_type": "custodian",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-10-29T08:00:00Z"
+  },
+  {
+    "account_id": "ZYU92Y9V5R",
+    "account_code": "ANBCSH882V",
+    "provider": "Kraken",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-30T08:00:00Z"
+  },
+  {
+    "account_id": "4EYWAXB54D",
+    "account_code": "DA97BX3DA8",
+    "provider": "Gemini",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-31T08:00:00Z"
+  },
+  {
+    "account_id": "5ZK58V2MRJ",
+    "account_code": "HBZVU7H6KH",
+    "provider": "Interactive Brokers",
+    "provider_type": "custodian",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-01T08:00:00Z"
+  },
+  {
+    "account_id": "WJSSLWRAT3",
+    "account_code": "HJLQGVVVCN",
+    "provider": "Binance",
+    "provider_type": "exchange",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-11-02T08:00:00Z"
+  },
+  {
+    "account_id": "WR8M658FVU",
+    "account_code": "DHCGMR8B9C",
+    "provider": "Coinbase",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-03T08:00:00Z"
+  },
+  {
+    "account_id": "YYGMLP2N63",
+    "account_code": "JFHAUDY63K",
+    "provider": "Kraken",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-04T08:00:00Z"
+  },
+  {
+    "account_id": "TG7K2Z3D2U",
+    "account_code": "UZEC66XSQS",
+    "provider": "Gemini",
+    "provider_type": "exchange",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-05T08:00:00Z"
+  },
+  {
+    "account_id": "CDASYV58XD",
+    "account_code": "NEQL88B623",
+    "provider": "Interactive Brokers",
+    "provider_type": "broker",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-11-06T08:00:00Z"
+  },
+  {
+    "account_id": "KWZWMHLQFK",
+    "account_code": "R7PR4BLNG3",
+    "provider": "Binance",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-07T08:00:00Z"
+  },
+  {
+    "account_id": "PY9S6S4XA5",
+    "account_code": "J8DYNNLWM6",
+    "provider": "Coinbase",
+    "provider_type": "exchange",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-08T08:00:00Z"
+  },
+  {
+    "account_id": "XDDNT5J3JP",
+    "account_code": "NKA7QK7DCG",
+    "provider": "Kraken",
+    "provider_type": "broker",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-09T08:00:00Z"
+  },
+  {
+    "account_id": "XUKFFKDE7G",
+    "account_code": "Y558UYVW3E",
+    "provider": "Gemini",
+    "provider_type": "custodian",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-10T08:00:00Z"
+  },
+  {
+    "account_id": "SQTST5T9GP",
+    "account_code": "N2PTNCEB3K",
+    "provider": "Interactive Brokers",
+    "provider_type": "exchange",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-11T08:00:00Z"
+  },
+  {
+    "account_id": "CCGGYH9AJF",
+    "account_code": "A49ZRY8J5P",
+    "provider": "Binance",
+    "provider_type": "broker",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-12T08:00:00Z"
+  },
+  {
+    "account_id": "XMJDKVDNKW",
+    "account_code": "6AJVUQ972G",
+    "provider": "Coinbase",
+    "provider_type": "custodian",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-13T08:00:00Z"
+  },
+  {
+    "account_id": "WG6PTT78Z2",
+    "account_code": "9947E4CYGE",
+    "provider": "Kraken",
+    "provider_type": "exchange",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-14T08:00:00Z"
+  },
+  {
+    "account_id": "REBTTUPSLJ",
+    "account_code": "3PN2327QP7",
+    "provider": "Gemini",
+    "provider_type": "broker",
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-11-15T08:00:00Z"
+  },
+  {
+    "account_id": "4HRVCMTLXN",
+    "account_code": "V6WTLAYMMD",
+    "provider": "Interactive Brokers",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-16T08:00:00Z"
+  },
+  {
+    "account_id": "YGZKDKY5FM",
+    "account_code": "QUTFKB2BHR",
+    "provider": "Binance",
+    "provider_type": "exchange",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-17T08:00:00Z"
+  },
+  {
+    "account_id": "82ZNDB5QKQ",
+    "account_code": "75BKSZ79XZ",
+    "provider": "Coinbase",
+    "provider_type": "broker",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-18T08:00:00Z"
+  },
+  {
+    "account_id": "75LZX2SSWK",
+    "account_code": "HHUMPF9R8X",
+    "provider": "Kraken",
+    "provider_type": "custodian",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-19T08:00:00Z"
+  },
+  {
+    "account_id": "M6TZY7NQRP",
+    "account_code": "29Y5Y2FP7A",
+    "provider": "Gemini",
+    "provider_type": "exchange",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-20T08:00:00Z"
+  },
+  {
+    "account_id": "ERPMQVMTN6",
+    "account_code": "R6VDU48TDK",
+    "provider": "Interactive Brokers",
+    "provider_type": "broker",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-21T08:00:00Z"
+  },
+  {
+    "account_id": "N8BTBTWYGN",
+    "account_code": "CRZ4XNBNXQ",
+    "provider": "Binance",
+    "provider_type": "custodian",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-22T08:00:00Z"
   }
 ]
