@@ -409,6 +409,10 @@
         color: var(--color-status-positive);
       }
 
+      .page-accounts .metric-negative {
+        color: var(--color-status-negative);
+      }
+
       .page-accounts .assets-bar {
         display: flex;
         align-items: center;
@@ -572,7 +576,7 @@
                       <div class="chart-placeholder"></div>
                     </div>
                     <div class="accounts-distribution-list">
-                      <div class="accounts-legend" data-list="accounts"></div>
+                      <div class="accounts-legend" data-accounts-legend></div>
                     </div>
                   </div>
                 </div>
@@ -598,128 +602,10 @@
                           <th style="width: 4%"> </th>
                         </tr>
                       </thead>
-                      <tbody>
-                        <tr data-assets="BTC:45,ETH:25,SOL:18,AVAX:12">
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">8guN...59RP</span>
-                              <span class="account-type"><span>Binance</span> · Spot</span>
-                            </div>
-                          </td>
-                          <td>$5,353</td>
-                          <td class="metric-positive">+3.4%</td>
-                          <td class="metric-positive">+9.2%</td>
-                          <td class="metric-positive">+14.8%</td>
-                          <td><span class="autotrader-count-pill">124</span></td>
-                          <td>
-                            <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 45%; --asset-color: #f5b94c" data-asset="BTC" data-percent="45" data-usd="$2,409"></span>
-                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-asset="ETH" data-percent="25" data-usd="$1,338"></span>
-                              <span class="asset-segment" style="width: 18%; --asset-color: #68d391" data-asset="SOL" data-percent="18" data-usd="$964"></span>
-                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-asset="AVAX" data-percent="12" data-usd="$642"></span>
-                            </div>
-                          </td>
-                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
-                        </tr>
-                        <tr data-assets="BTC:35,ETH:30,SOL:20,AVAX:15">
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">gQuA...8TaT</span>
-                              <span class="account-type"><span>Bybit</span> · Futures</span>
-                            </div>
-                          </td>
-                          <td>$3,539</td>
-                          <td class="metric-positive">+2.8%</td>
-                          <td class="metric-positive">+7.6%</td>
-                          <td class="metric-positive">+12.4%</td>
-                          <td><span class="autotrader-count-pill">98</span></td>
-                          <td>
-                            <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 35%; --asset-color: #f5b94c" data-asset="BTC" data-percent="35" data-usd="$1,239"></span>
-                              <span class="asset-segment" style="width: 30%; --asset-color: #5e7bff" data-asset="ETH" data-percent="30" data-usd="$1,062"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$708"></span>
-                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-asset="AVAX" data-percent="15" data-usd="$531"></span>
-                            </div>
-                          </td>
-                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
-                        </tr>
-                        <tr data-assets="BTC:40,ETH:32,SOL:16,AVAX:12">
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Yt9F...2LkQ</span>
-                              <span class="account-type"><span>Kraken</span> · Spot</span>
-                            </div>
-                          </td>
-                          <td>$1,843</td>
-                          <td class="metric-positive">+1.6%</td>
-                          <td class="metric-positive">+5.4%</td>
-                          <td class="metric-positive">+9.1%</td>
-                          <td><span class="autotrader-count-pill">42</span></td>
-                          <td>
-                            <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 40%; --asset-color: #f5b94c" data-asset="BTC" data-percent="40" data-usd="$737"></span>
-                              <span class="asset-segment" style="width: 32%; --asset-color: #5e7bff" data-asset="ETH" data-percent="32" data-usd="$590"></span>
-                              <span class="asset-segment" style="width: 16%; --asset-color: #68d391" data-asset="SOL" data-percent="16" data-usd="$295"></span>
-                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-asset="AVAX" data-percent="12" data-usd="$221"></span>
-                            </div>
-                          </td>
-                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
-                        </tr>
-                        <tr data-assets="BTC:30,ETH:35,SOL:20,AVAX:15">
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Ux3K...7SwP</span>
-                              <span class="account-type"><span>Coinbase</span> · Spot</span>
-                            </div>
-                          </td>
-                          <td>$1,404</td>
-                          <td class="metric-positive">+1.1%</td>
-                          <td class="metric-positive">+3.7%</td>
-                          <td class="metric-positive">+6.9%</td>
-                          <td><span class="autotrader-count-pill">31</span></td>
-                          <td>
-                            <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 30%; --asset-color: #f5b94c" data-asset="BTC" data-percent="30" data-usd="$421"></span>
-                              <span class="asset-segment" style="width: 35%; --asset-color: #5e7bff" data-asset="ETH" data-percent="35" data-usd="$491"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$281"></span>
-                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-asset="AVAX" data-percent="15" data-usd="$211"></span>
-                            </div>
-                          </td>
-                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
-                        </tr>
-                        <tr data-assets="BTC:25,ETH:25,SOL:20,AVAX:30">
-                          <td>
-                            <div class="account-main">
-                              <span class="account-id">Qm1D...90Vx</span>
-                              <span class="account-type"><span>Ledger</span> · Web3</span>
-                            </div>
-                          </td>
-                          <td>$291</td>
-                          <td class="metric-positive">+0.6%</td>
-                          <td class="metric-positive">+1.4%</td>
-                          <td class="metric-positive">+2.8%</td>
-                          <td><span class="autotrader-count-pill">18</span></td>
-                          <td>
-                            <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 25%; --asset-color: #f5b94c" data-asset="BTC" data-percent="25" data-usd="$73"></span>
-                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-asset="ETH" data-percent="25" data-usd="$73"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$58"></span>
-                              <span class="asset-segment" style="width: 30%; --asset-color: #f56565" data-asset="AVAX" data-percent="30" data-usd="$87"></span>
-                            </div>
-                          </td>
-                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
-                        </tr>
-                      </tbody>
+                      <tbody data-accounts-rows></tbody>
                     </table>
                   </div>
-                  <div class="accounts-table-pagination">
-                    <button class="page-button active">1</button>
-                    <button class="page-button">2</button>
-                    <button class="page-button">3</button>
-                    <span class="page-button">…</span>
-                    <button class="page-button">8</button>
-                    <button class="page-button next">Next</button>
-                  </div>
+                  <div class="accounts-table-pagination" data-accounts-pagination></div>
                 </div>
               </div>
             </section>
@@ -728,5 +614,6 @@
       </div>
     </div>
     <script type="module" src="../src/scripts/main.js"></script>
+    <script type="module" src="../src/scripts/pages/accountsPage.js"></script>
   </body>
 </html>
