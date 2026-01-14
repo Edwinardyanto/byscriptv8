@@ -431,27 +431,42 @@
         filter: brightness(1.15);
       }
 
-      .page-accounts .asset-segment::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        bottom: calc(100% + 8px);
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 6px 8px;
-        border-radius: 8px;
+      .page-accounts .asset-tooltip {
+        position: fixed;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 12px 10px 16px;
+        border-radius: 10px;
         background: rgba(12, 14, 18, 0.96);
         color: var(--color-text);
-        font-size: 0.62rem;
+        font-size: 0.7rem;
         white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease;
         border: 1px solid rgba(255, 255, 255, 0.12);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+        pointer-events: none;
+        opacity: 0;
+        transform: translate3d(0, 0, 0);
+        transition: opacity 0.15s ease;
       }
 
-      .page-accounts .asset-segment:hover::after {
+      .page-accounts .asset-tooltip.is-visible {
         opacity: 1;
+      }
+
+      .page-accounts .asset-tooltip-name {
+        font-weight: 700;
+        font-size: 0.74rem;
+        letter-spacing: 0.02em;
+      }
+
+      .page-accounts .asset-tooltip-accent {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 3px;
+        border-radius: 10px 0 0 10px;
+        background: var(--asset-color, #3fd37c);
       }
 
       .page-accounts .autotrader-count-pill {
@@ -598,10 +613,10 @@
                           <td><span class="autotrader-count-pill">124</span></td>
                           <td>
                             <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 45%; --asset-color: #f5b94c" data-tooltip="BTC · 45% · $2,409"></span>
-                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-tooltip="ETH · 25% · $1,338"></span>
-                              <span class="asset-segment" style="width: 18%; --asset-color: #68d391" data-tooltip="SOL · 18% · $964"></span>
-                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-tooltip="AVAX · 12% · $642"></span>
+                              <span class="asset-segment" style="width: 45%; --asset-color: #f5b94c" data-asset="BTC" data-percent="45" data-usd="$2,409"></span>
+                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-asset="ETH" data-percent="25" data-usd="$1,338"></span>
+                              <span class="asset-segment" style="width: 18%; --asset-color: #68d391" data-asset="SOL" data-percent="18" data-usd="$964"></span>
+                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-asset="AVAX" data-percent="12" data-usd="$642"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -620,10 +635,10 @@
                           <td><span class="autotrader-count-pill">98</span></td>
                           <td>
                             <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 35%; --asset-color: #f5b94c" data-tooltip="BTC · 35% · $1,239"></span>
-                              <span class="asset-segment" style="width: 30%; --asset-color: #5e7bff" data-tooltip="ETH · 30% · $1,062"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $708"></span>
-                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-tooltip="AVAX · 15% · $531"></span>
+                              <span class="asset-segment" style="width: 35%; --asset-color: #f5b94c" data-asset="BTC" data-percent="35" data-usd="$1,239"></span>
+                              <span class="asset-segment" style="width: 30%; --asset-color: #5e7bff" data-asset="ETH" data-percent="30" data-usd="$1,062"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$708"></span>
+                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-asset="AVAX" data-percent="15" data-usd="$531"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -642,10 +657,10 @@
                           <td><span class="autotrader-count-pill">42</span></td>
                           <td>
                             <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 40%; --asset-color: #f5b94c" data-tooltip="BTC · 40% · $737"></span>
-                              <span class="asset-segment" style="width: 32%; --asset-color: #5e7bff" data-tooltip="ETH · 32% · $590"></span>
-                              <span class="asset-segment" style="width: 16%; --asset-color: #68d391" data-tooltip="SOL · 16% · $295"></span>
-                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-tooltip="AVAX · 12% · $221"></span>
+                              <span class="asset-segment" style="width: 40%; --asset-color: #f5b94c" data-asset="BTC" data-percent="40" data-usd="$737"></span>
+                              <span class="asset-segment" style="width: 32%; --asset-color: #5e7bff" data-asset="ETH" data-percent="32" data-usd="$590"></span>
+                              <span class="asset-segment" style="width: 16%; --asset-color: #68d391" data-asset="SOL" data-percent="16" data-usd="$295"></span>
+                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-asset="AVAX" data-percent="12" data-usd="$221"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -664,10 +679,10 @@
                           <td><span class="autotrader-count-pill">31</span></td>
                           <td>
                             <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 30%; --asset-color: #f5b94c" data-tooltip="BTC · 30% · $421"></span>
-                              <span class="asset-segment" style="width: 35%; --asset-color: #5e7bff" data-tooltip="ETH · 35% · $491"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $281"></span>
-                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-tooltip="AVAX · 15% · $211"></span>
+                              <span class="asset-segment" style="width: 30%; --asset-color: #f5b94c" data-asset="BTC" data-percent="30" data-usd="$421"></span>
+                              <span class="asset-segment" style="width: 35%; --asset-color: #5e7bff" data-asset="ETH" data-percent="35" data-usd="$491"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$281"></span>
+                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-asset="AVAX" data-percent="15" data-usd="$211"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -686,10 +701,10 @@
                           <td><span class="autotrader-count-pill">18</span></td>
                           <td>
                             <div class="assets-bar" role="img" aria-label="Asset distribution">
-                              <span class="asset-segment" style="width: 25%; --asset-color: #f5b94c" data-tooltip="BTC · 25% · $73"></span>
-                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-tooltip="ETH · 25% · $73"></span>
-                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $58"></span>
-                              <span class="asset-segment" style="width: 30%; --asset-color: #f56565" data-tooltip="AVAX · 30% · $87"></span>
+                              <span class="asset-segment" style="width: 25%; --asset-color: #f5b94c" data-asset="BTC" data-percent="25" data-usd="$73"></span>
+                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-asset="ETH" data-percent="25" data-usd="$73"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-asset="SOL" data-percent="20" data-usd="$58"></span>
+                              <span class="asset-segment" style="width: 30%; --asset-color: #f56565" data-asset="AVAX" data-percent="30" data-usd="$87"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
