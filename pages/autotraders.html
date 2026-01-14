@@ -289,6 +289,11 @@
     <script type="module" src="../src/scripts/main.js"></script>
     <script type="module">
       import { renderTotalPerformanceChart } from "../src/scripts/components/TotalPerformanceChart.js";
+      import {
+        getAccounts,
+        getAutotradersByAccount,
+        getTradeHistory,
+      } from "../src/scripts/dataAccess.js";
 
       const buildSeries = (points, start, end) => {
         const trend = (end - start) / Math.max(points - 1, 1);
@@ -299,85 +304,13 @@
         });
       };
 
-      const autotradersData = {
-        "7D": {
-          chart: Array.from({ length: 7 }, (_, i) => 120 + i * 15),
-          metrics: {
-            pnl: 10790,
-            pnlPct: 52.3,
-            volume: 294305000,
-            trades: { total: 10234, win: 7320, loss: 2914 },
-            capital: 305000,
-            profit: 22659,
-            loss: 10790,
-            autotraders: { active: 151, stopped: 50 },
-          },
-        },
-        "30D": {
-          chart: Array.from({ length: 30 }, (_, i) => 80 + i * 8),
-          metrics: {
-            pnl: 18320,
-            pnlPct: 64.1,
-            volume: 610400000,
-            trades: { total: 29840, win: 21400, loss: 8440 },
-            capital: 305000,
-            profit: 44200,
-            loss: 18320,
-            autotraders: { active: 162, stopped: 39 },
-          },
-        },
-        "90D": {
-          chart: Array.from({ length: 90 }, (_, i) => 40 + i * 5),
-          metrics: {
-            pnl: 39250,
-            pnlPct: 88.7,
-            volume: 1280000000,
-            trades: { total: 82120, win: 61200, loss: 20920 },
-            capital: 305000,
-            profit: 113825,
-            loss: 39250,
-            autotraders: { active: 180, stopped: 21 },
-          },
-        },
-        All: {
-          chart: buildSeries(120, 60, 520),
-          metrics: {
-            pnl: 51240,
-            pnlPct: 104.2,
-            volume: 2200000000,
-            trades: { total: 112340, win: 84200, loss: 28140 },
-            capital: 305000,
-            profit: 165000,
-            loss: 51240,
-            autotraders: { active: 182, stopped: 19 },
-          },
-        },
-      };
-
       const PAGE_SIZE = 10;
       let currentPage = 1;
-
-      const storedAutotraders = JSON.parse(
-        localStorage.getItem("byscript_custom_autotraders") || "[]"
-      );
-      const autotradersList = [
-        ...storedAutotraders,
-        ...[...Array(42)].map((_, i) => ({
-          id: i + 1,
-          name: `Strategy ${i + 1}`,
-          pair: "BTC_USDT",
-          exchange: "Binance",
-          capital: 200 + i * 10,
-          pnl: i % 3 === 0 ? -20 : 40 + i,
-          winRate: 60 + (i % 10),
-          running: i % 2,
-          status: i % 2 ? "ACTIVE" : "STOPPED",
-        })),
-      ];
 
       const performanceContainer = document.querySelector(
         ".page-autotraders [data-total-performance=\"autotraders\"]"
       );
+      const paginationContainer = document.querySelector(".table-pagination");
 
       const autotradersPerformance = {
         totalBalance: "",
@@ -385,34 +318,20 @@
         changeLabel: "",
         chart: {
           activeRange: "7D",
-          fullSeries: autotradersData.All.chart,
-          ranges: {
-            "7D": autotradersData["7D"].chart,
-            "30D": autotradersData["30D"].chart,
-            "90D": autotradersData["90D"].chart,
-          },
+          fullSeries: [],
+          ranges: {},
         },
       };
 
       const normalizeRangeKey = (range) => (range === "all" ? "All" : range);
 
-      const updatePerformanceSummary = (range) => {
-        const rangeKey = normalizeRangeKey(range);
-        const metrics = autotradersData[rangeKey]?.metrics;
-        if (!metrics) {
-          return;
-        }
-        const pnlPctValue = Number(metrics.pnlPct);
-        const pnlPctSign = pnlPctValue > 0 ? "+" : pnlPctValue < 0 ? "-" : "";
-
-        autotradersPerformance.totalBalance = `+$${metrics.pnl.toLocaleString()}`;
-        autotradersPerformance.change = `${pnlPctSign}${Math.abs(pnlPctValue)}%`;
-        autotradersPerformance.changeLabel =
-          rangeKey === "All" ? "vs all time" : `vs last ${rangeKey.toLowerCase()}`;
-        autotradersPerformance.chart.activeRange = range;
+      const buildChartSeries = (points, metrics) => {
+        const endValue = Math.max(80, Math.abs(metrics.pnl) + 140);
+        const startValue = Math.max(20, endValue * 0.65);
+        return buildSeries(points, startValue, endValue);
       };
 
-      const renderAutotradersPerformance = () => {
+      const renderAutotradersPerformance = (handleRangeChange) => {
         renderTotalPerformanceChart({
           container: performanceContainer,
           dataSource: "autotraders",
@@ -445,116 +364,249 @@
         `;
       };
 
-      function renderAutotradersPage(page) {
-        const start = (page - 1) * PAGE_SIZE;
-        const end = start + PAGE_SIZE;
-        const rows = autotradersList.slice(start, end);
-
-        const tbody = document.querySelector("#autotraders-tbody");
-        if (!tbody) {
+      const renderPagination = (totalPages, onPageChange) => {
+        if (!paginationContainer) {
           return;
         }
-        tbody.innerHTML = "";
+        paginationContainer.innerHTML = "";
+        if (totalPages <= 1) {
+          return;
+        }
+        for (let page = 1; page <= totalPages; page += 1) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `page-button pagination-btn${page === currentPage ? " active" : ""}`;
+          button.dataset.page = String(page);
+          button.textContent = String(page);
+          button.addEventListener("click", () => onPageChange(page));
+          paginationContainer.appendChild(button);
+        }
+      };
 
-        rows.forEach((row) => {
-          tbody.insertAdjacentHTML("beforeend", renderRow(row));
+      const initAutotradersPage = async () => {
+        const storedAutotraders = JSON.parse(
+          localStorage.getItem("byscript_custom_autotraders") || "[]"
+        );
+        const accounts = await getAccounts();
+        const accountMap = new Map(accounts.map((account) => [account.account_id, account]));
+        const autotradersByAccount = await Promise.all(
+          accounts.map((account) => getAutotradersByAccount(account.account_id))
+        );
+        const coreAutotraders = autotradersByAccount.flat();
+        const trades = await getTradeHistory();
+        const latestTradeByAutotrader = trades.reduce((acc, trade) => {
+          if (!acc.has(trade.autotrader_id)) {
+            acc.set(trade.autotrader_id, trade);
+          }
+          return acc;
+        }, new Map());
+
+        const mappedAutotraders = coreAutotraders.map((autotrader) => {
+          const account = accountMap.get(autotrader.account_id);
+          const trade = latestTradeByAutotrader.get(autotrader.autotrader_id);
+          const assetSymbol = trade?.assetSymbol || "BTC";
+          return {
+            id: autotrader.autotrader_id,
+            name: autotrader.tradingPlanName || "Autotrader",
+            pair: `${assetSymbol}_USDT`,
+            exchange: account?.provider || "Exchange",
+            capital: Number(autotrader.capital_usd || 0),
+            pnl: Number(autotrader.pnl_usd || 0),
+            winRate: Number(autotrader.win_rate || 0),
+            running: autotrader.is_running ? 1 : 0,
+            status: autotrader.is_running ? "ACTIVE" : "STOPPED",
+          };
         });
-      }
 
-      function updateGlobalMetrics(range) {
-        const rangeKey = normalizeRangeKey(range);
-        const m = autotradersData[rangeKey]?.metrics;
-        if (!m) {
-          return;
-        }
-        const profitFactor = (m.profit / m.loss).toFixed(1);
-        document.querySelector("#metric-profit-factor").innerText = profitFactor;
-        document.querySelector("#metric-trades").innerText = `${m.trades.total.toLocaleString()}`;
-        document.querySelector("#metric-volume").innerText = `$${m.volume.toLocaleString()}`;
-        updateCapitalAllocation();
-      }
+        const autotradersList = [...storedAutotraders, ...mappedAutotraders];
 
-      function updateCapitalAllocation() {
-        const activeCapital = autotradersList
-          .filter((bot) => bot.status === "ACTIVE")
-          .reduce((sum, bot) => sum + bot.capital, 0);
-        document.querySelector("#live-capital-value").innerText = `$${activeCapital.toLocaleString()}`;
-      }
+        const buildMetrics = (rangeDays) => {
+          const now = Date.now();
+          const cutoff = rangeDays
+            ? new Date(now - rangeDays * 24 * 60 * 60 * 1000)
+            : null;
+          const scopedTrades = cutoff
+            ? trades.filter((trade) => trade.executedAt >= cutoff)
+            : trades;
+          const totalTrades = scopedTrades.length;
+          const winTrades = scopedTrades.filter((trade) => trade.result === "win").length;
+          const lossTrades = totalTrades - winTrades;
+          const volume = scopedTrades.reduce((sum, trade) => sum + Number(trade.valueUsd || 0), 0);
+          const pnl = scopedTrades.reduce((sum, trade) => sum + Number(trade.pnl_usd || 0), 0);
+          const profit = scopedTrades.reduce(
+            (sum, trade) => sum + Math.max(Number(trade.pnl_usd || 0), 0),
+            0
+          );
+          const loss = scopedTrades.reduce(
+            (sum, trade) => sum + Math.abs(Math.min(Number(trade.pnl_usd || 0), 0)),
+            0
+          );
+          const capital = autotradersList.reduce((sum, bot) => sum + Number(bot.capital || 0), 0);
+          const pnlPct = capital ? (pnl / capital) * 100 : 0;
+          const activeCount = autotradersList.filter((bot) => bot.status === "ACTIVE").length;
+          const stoppedCount = autotradersList.length - activeCount;
+          return {
+            pnl,
+            pnlPct,
+            volume,
+            trades: { total: totalTrades, win: winTrades, loss: lossTrades },
+            capital,
+            profit,
+            loss: loss || 1,
+            autotraders: { active: activeCount, stopped: stoppedCount },
+          };
+        };
 
-      function computeLiveAutotraders() {
-        const active = autotradersList.filter((bot) => bot.status === "ACTIVE").length;
-        const stopped = autotradersList.filter((bot) => bot.status === "STOPPED").length;
-        return { total: autotradersList.length, active, stopped };
-      }
+        const autotradersData = {
+          "7D": {
+            chart: [],
+            metrics: buildMetrics(7),
+          },
+          "30D": {
+            chart: [],
+            metrics: buildMetrics(30),
+          },
+          "90D": {
+            chart: [],
+            metrics: buildMetrics(90),
+          },
+          All: {
+            chart: [],
+            metrics: buildMetrics(null),
+          },
+        };
 
-      function updateLiveAutotraders() {
-        const live = computeLiveAutotraders();
-        document.querySelector("#live-autotraders-total").innerText = live.total;
-        document.querySelector("#live-autotraders-active").innerText = live.active;
-        document.querySelector("#live-autotraders-stopped").innerText = live.stopped;
-      }
+        autotradersData["7D"].chart = buildChartSeries(7, autotradersData["7D"].metrics);
+        autotradersData["30D"].chart = buildChartSeries(30, autotradersData["30D"].metrics);
+        autotradersData["90D"].chart = buildChartSeries(90, autotradersData["90D"].metrics);
+        autotradersData.All.chart = buildChartSeries(120, autotradersData.All.metrics);
 
-      function handleRangeChange(range) {
-        updatePerformanceSummary(range);
-        updateGlobalMetrics(range);
-        renderAutotradersPerformance();
-      }
+        autotradersPerformance.chart.fullSeries = autotradersData.All.chart;
+        autotradersPerformance.chart.ranges = {
+          "7D": autotradersData["7D"].chart,
+          "30D": autotradersData["30D"].chart,
+          "90D": autotradersData["90D"].chart,
+        };
 
-      document.querySelectorAll(".pagination-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          currentPage = Number(btn.dataset.page);
-          renderAutotradersPage(currentPage);
-
-          document.querySelectorAll(".pagination-btn").forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-        });
-      });
-
-      document.addEventListener("click", (e) => {
-        const target = e.target;
-        if (!(target instanceof HTMLElement)) {
-          return;
-        }
-
-        if (target.classList.contains("detail-btn")) {
-          const id = Number(target.dataset.id);
-          if (Number.isNaN(id)) {
+        const updatePerformanceSummary = (range) => {
+          const rangeKey = normalizeRangeKey(range);
+          const metrics = autotradersData[rangeKey]?.metrics;
+          if (!metrics) {
             return;
           }
-          window.location.href = `autotraders/detail.html?id=${id}`;
-          return;
-        }
+          const pnlPctValue = Number(metrics.pnlPct || 0);
+          const pnlPctSign = pnlPctValue > 0 ? "+" : pnlPctValue < 0 ? "-" : "";
 
-        if (!target.classList.contains("action-btn")) {
-          return;
-        }
+          autotradersPerformance.totalBalance = `+$${metrics.pnl.toLocaleString()}`;
+          autotradersPerformance.change = `${pnlPctSign}${Math.abs(pnlPctValue).toFixed(1)}%`;
+          autotradersPerformance.changeLabel =
+            rangeKey === "All" ? "vs all time" : `vs last ${rangeKey.toLowerCase()}`;
+          autotradersPerformance.chart.activeRange = range;
+        };
 
-        const id = Number(target.dataset.id);
-        const bot = autotradersList.find((entry) => entry.id === id);
+        const updateGlobalMetrics = (range) => {
+          const rangeKey = normalizeRangeKey(range);
+          const m = autotradersData[rangeKey]?.metrics;
+          if (!m) {
+            return;
+          }
+          const profitFactor = (m.profit / m.loss).toFixed(1);
+          document.querySelector("#metric-profit-factor").innerText = profitFactor;
+          document.querySelector("#metric-trades").innerText = `${m.trades.total.toLocaleString()}`;
+          document.querySelector("#metric-volume").innerText = `$${m.volume.toLocaleString()}`;
+          updateCapitalAllocation();
+        };
 
-        if (!bot) {
-          return;
-        }
+        const updateCapitalAllocation = () => {
+          const activeCapital = autotradersList
+            .filter((bot) => bot.status === "ACTIVE")
+            .reduce((sum, bot) => sum + bot.capital, 0);
+          document.querySelector("#live-capital-value").innerText = `$${activeCapital.toLocaleString()}`;
+        };
 
-        if (bot.status === "ACTIVE") {
-          bot.status = "STOPPED";
-          bot.running = 0;
-        } else {
-          bot.status = "ACTIVE";
-          bot.running = 1;
-        }
+        const updateLiveAutotraders = () => {
+          const active = autotradersList.filter((bot) => bot.status === "ACTIVE").length;
+          const stopped = autotradersList.filter((bot) => bot.status === "STOPPED").length;
+          document.querySelector("#live-autotraders-total").innerText = autotradersList.length;
+          document.querySelector("#live-autotraders-active").innerText = active;
+          document.querySelector("#live-autotraders-stopped").innerText = stopped;
+        };
 
+        const renderAutotradersPage = (page) => {
+          const start = (page - 1) * PAGE_SIZE;
+          const end = start + PAGE_SIZE;
+          const rows = autotradersList.slice(start, end);
+          const tbody = document.querySelector("#autotraders-tbody");
+          if (!tbody) {
+            return;
+          }
+          tbody.innerHTML = "";
+          rows.forEach((row) => {
+            tbody.insertAdjacentHTML("beforeend", renderRow(row));
+          });
+        };
+
+        const handleRangeChange = (range) => {
+          updatePerformanceSummary(range);
+          updateGlobalMetrics(range);
+          renderAutotradersPerformance(handleRangeChange);
+        };
+
+        const handlePageChange = (page) => {
+          currentPage = page;
+          renderAutotradersPage(currentPage);
+          renderPagination(Math.ceil(autotradersList.length / PAGE_SIZE), handlePageChange);
+        };
+
+        document.addEventListener("click", (e) => {
+          const target = e.target;
+          if (!(target instanceof HTMLElement)) {
+            return;
+          }
+
+          if (target.classList.contains("detail-btn")) {
+            const id = target.dataset.id;
+            if (!id) {
+              return;
+            }
+            window.location.href = `autotraders/detail.html?id=${encodeURIComponent(id)}`;
+            return;
+          }
+
+          if (!target.classList.contains("action-btn")) {
+            return;
+          }
+
+          const id = target.dataset.id;
+          const bot = autotradersList.find((entry) => String(entry.id) === String(id));
+
+          if (!bot) {
+            return;
+          }
+
+          if (bot.status === "ACTIVE") {
+            bot.status = "STOPPED";
+            bot.running = 0;
+          } else {
+            bot.status = "ACTIVE";
+            bot.running = 1;
+          }
+
+          renderAutotradersPage(currentPage);
+          updateLiveAutotraders();
+          updateCapitalAllocation();
+        });
+
+        updatePerformanceSummary("7D");
+        updateGlobalMetrics("7D");
+        renderAutotradersPerformance(handleRangeChange);
         renderAutotradersPage(currentPage);
+        renderPagination(Math.ceil(autotradersList.length / PAGE_SIZE), handlePageChange);
         updateLiveAutotraders();
         updateCapitalAllocation();
-      });
+      };
 
-      updatePerformanceSummary("7D");
-      updateGlobalMetrics("7D");
-      renderAutotradersPerformance();
-      renderAutotradersPage(currentPage);
-      updateLiveAutotraders();
-      updateCapitalAllocation();
+      initAutotradersPage();
     </script>
   </body>
 </html>
