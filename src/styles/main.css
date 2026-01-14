@@ -713,6 +713,15 @@ main {
   gap: 10px;
 }
 
+.stat-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-status-positive);
+  box-shadow: 0 0 8px rgba(102, 255, 51, 0.35);
+  display: none;
+}
+
 .stat-label {
   font-size: 0.8rem;
   color: var(--color-muted);

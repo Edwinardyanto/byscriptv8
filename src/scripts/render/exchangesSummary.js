@@ -25,21 +25,24 @@ const getCssVar = (name, fallback) => {
 
 const createSvgElement = (tag) => document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const renderAccountsDonutChart = (container, accounts) => {
+const renderAccountsDonutChart = (container, accounts, colors = []) => {
   if (!container || !Array.isArray(accounts) || accounts.length === 0) {
     return;
   }
 
-  const colors = [
-    getCssVar("--color-chart-accent-primary", "#3fd37c"),
-    getCssVar("--color-chart-secondary", "#7b62ff"),
-    getCssVar("--color-chart-tertiary", "#29b3d1"),
-    getCssVar("--color-chart-muted", "#4f7dff"),
-    getCssVar("--color-chart-muted", "#4f7dff"),
-  ];
-  const width = 220;
-  const height = 220;
-  const strokeWidth = 22;
+  const chartColors =
+    colors.length > 0
+      ? colors
+      : [
+          getCssVar("--color-chart-accent-primary", "#3fd37c"),
+          getCssVar("--color-chart-secondary", "#7b62ff"),
+          getCssVar("--color-chart-tertiary", "#29b3d1"),
+          getCssVar("--color-chart-muted", "#4f7dff"),
+          getCssVar("--color-chart-muted", "#4f7dff"),
+        ];
+  const width = 232;
+  const height = 232;
+  const strokeWidth = 20;
   const radius = (Math.min(width, height) - strokeWidth) / 2;
   const total = accounts.reduce((sum, item) => sum + Number(item.amount || 0), 0) || 1;
 
@@ -106,7 +109,7 @@ const renderAccountsDonutChart = (container, accounts) => {
       `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`
     );
     path.setAttribute("fill", "none");
-    path.setAttribute("stroke", colors[index % colors.length]);
+    path.setAttribute("stroke", chartColors[index % chartColors.length]);
     path.setAttribute("stroke-width", `${strokeWidth}`);
     path.setAttribute("stroke-linecap", "round");
     path.setAttribute("opacity", "0.95");
@@ -210,8 +213,16 @@ export const renderExchangesSummary = (sectionState) => {
   list.innerHTML = "";
   let exchanges = data.exchanges;
   let totalValue = data.total;
+  let accountsColors = [];
 
   if (isAccountsPage) {
+    accountsColors = [
+      getCssVar("--color-base-white", "#ffffff"),
+      getCssVar("--color-base-alert", "#ff5f5f"),
+      getCssVar("--color-base-lime", "#66ff33"),
+      getCssVar("--color-base-purple", "#3d2c8d"),
+      getCssVar("--color-base-cyan", "#00f7d5"),
+    ];
     const assetTotalText = document.querySelector('[data-field="asset.totalBalance"]')?.textContent;
     const assetTotal = parseCurrency(assetTotalText);
     const dataTotal = parseCurrency(data.total);
@@ -238,6 +249,7 @@ export const renderExchangesSummary = (sectionState) => {
         value: formatCurrency.format(amount),
       };
     });
+    exchanges = exchanges.slice(0, 5);
     if (Number.isFinite(targetTotal)) {
       totalValue = formatCurrency.format(targetTotal);
     }
@@ -248,16 +260,7 @@ export const renderExchangesSummary = (sectionState) => {
     if (isAccountsPage) {
       item.className = "accounts-legend-item";
       item.innerHTML = `
-        <span class="accounts-legend-dot" style="--legend-color: ${getCssVar(
-          index === 0
-            ? "--color-chart-accent-primary"
-            : index === 1
-              ? "--color-chart-secondary"
-              : index === 2
-                ? "--color-chart-tertiary"
-                : "--color-chart-muted",
-          "#4f7dff"
-        )}"></span>
+        <span class="accounts-legend-dot" style="--legend-color: ${accountsColors[index % accountsColors.length]}"></span>
         <span>${exchange.name}</span>
       `;
     } else {
@@ -272,7 +275,7 @@ export const renderExchangesSummary = (sectionState) => {
 
   setText('[data-field="exchanges.total"]', totalValue);
   if (isAccountsPage) {
-    renderAccountsDonutChart(chartContainer, exchanges);
+    renderAccountsDonutChart(chartContainer, exchanges, accountsColors);
   } else {
     renderExchangesDonutChart(chartContainer, exchanges);
   }
