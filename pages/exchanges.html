@@ -3,34 +3,599 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Exchanges | Trading Dashboard</title>
+    <title>Accounts | Trading Dashboard</title>
     <link rel="stylesheet" href="../src/styles/color-tokens.css">
     <link rel="stylesheet" href="../src/styles/main.css">
+    <style>
+      body.page-accounts {
+        background: radial-gradient(circle at top, #101319 0%, #0c0f14 50%, #080b10 100%);
+      }
+
+      .page-accounts .section--header .section-header {
+        justify-content: center;
+      }
+
+      .page-accounts .accounts-header {
+        padding: 0 18px;
+      }
+
+      .page-accounts .accounts-header .section-header {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        width: 100%;
+      }
+
+      .page-accounts .accounts-header .section-title {
+        margin: 0;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .page-accounts .accounts-header-spacer {
+        height: 32px;
+      }
+
+      .page-accounts .accounts-main {
+        gap: 12px;
+      }
+
+      .page-accounts .accounts-content {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-summary {
+        padding: 0;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+      }
+
+      .page-accounts .accounts-summary-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-panel {
+        background: linear-gradient(145deg, rgba(18, 20, 24, 0.92), rgba(14, 16, 20, 0.78));
+        border: 1px solid var(--color-border-subtle);
+        border-radius: var(--radius-lg);
+        padding: 18px;
+        box-shadow: 0 24px 40px var(--color-shadow-deep), inset 0 1px 0 var(--color-overlay-xs-strong);
+        backdrop-filter: blur(16px);
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-section-title,
+      .page-accounts .accounts-distribution-title {
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        color: var(--color-muted);
+      }
+
+      .page-accounts .accounts-summary-left {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-summary-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        flex: 1;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-summary-panel [data-total-performance="dashboard"] {
+        flex: 1;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-summary-panel .card--summary {
+        gap: 16px;
+      }
+
+      .page-accounts .accounts-summary-panel .stat-value {
+        font-size: 2.5rem;
+        font-weight: 600;
+      }
+
+      .page-accounts .accounts-summary-panel .chart-placeholder {
+        min-height: 220px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(13, 16, 20, 0.9), rgba(19, 22, 28, 0.65));
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 6px;
+      }
+
+      .page-accounts .accounts-distribution {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-distribution-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+        gap: 16px;
+        align-items: center;
+        min-height: 0;
+      }
+
+      .page-accounts .accounts-donut {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 240px;
+      }
+
+      .page-accounts .accounts-donut .chart-placeholder {
+        width: 220px;
+        height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: radial-gradient(circle at center, rgba(11, 13, 16, 0.9), rgba(19, 22, 26, 0.6));
+        box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.35), 0 18px 36px rgba(0, 0, 0, 0.35);
+      }
+
+      .page-accounts .accounts-distribution-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-align: center;
+        color: var(--color-text-tertiary);
+        font-size: 0.72rem;
+      }
+
+      .page-accounts .accounts-legend {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .page-accounts .accounts-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.76rem;
+        color: var(--color-text-secondary);
+      }
+
+      .page-accounts .accounts-legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--legend-color, var(--color-chart-muted));
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+      }
+
+      .page-accounts .accounts-table-section .section-header {
+        padding: 0 4px 8px;
+      }
+
+      .page-accounts .accounts-table-section .section-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .page-accounts .accounts-table-panel {
+        background: linear-gradient(150deg, rgba(16, 19, 24, 0.95), rgba(12, 15, 19, 0.82));
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 18px;
+        padding: 14px 16px 12px;
+        box-shadow: 0 24px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .page-accounts .accounts-table-scroll {
+        overflow: hidden;
+      }
+
+      .page-accounts .accounts-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 6px;
+        table-layout: fixed;
+      }
+
+      .page-accounts .accounts-table thead th {
+        text-align: left;
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--color-muted);
+        padding: 0 10px 6px;
+      }
+
+      .page-accounts .accounts-table tbody tr {
+        background: rgba(19, 22, 27, 0.82);
+        border-radius: 12px;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .page-accounts .accounts-table tbody tr:hover {
+        background: rgba(26, 30, 36, 0.92);
+        transform: translateY(-1px);
+      }
+
+      .page-accounts .accounts-table td {
+        padding: 10px 10px;
+        font-size: 0.74rem;
+        color: var(--color-text);
+        vertical-align: middle;
+      }
+
+      .page-accounts .accounts-table td:first-child {
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+      }
+
+      .page-accounts .accounts-table td:last-child {
+        border-top-right-radius: 12px;
+        border-bottom-right-radius: 12px;
+      }
+
+      .page-accounts .exchange-name {
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+
+      .page-accounts .exchange-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.06);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-secondary);
+        font-size: 0.7rem;
+      }
+
+      .page-accounts .account-main {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .page-accounts .account-id {
+        font-size: 0.66rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-text-secondary);
+      }
+
+      .page-accounts .account-type {
+        font-size: 0.65rem;
+        color: var(--color-text-tertiary);
+      }
+
+      .page-accounts .metric-positive {
+        color: var(--color-status-positive);
+      }
+
+      .page-accounts .asset-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .page-accounts .asset-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-accounts .asset-label {
+        font-size: 0.62rem;
+        color: var(--color-text-secondary);
+        min-width: 78px;
+      }
+
+      .page-accounts .asset-bars {
+        display: flex;
+        flex: 1;
+        height: 6px;
+        border-radius: 999px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .page-accounts .asset-bar {
+        height: 100%;
+        background: var(--asset-color, rgba(86, 221, 97, 0.5));
+      }
+
+      .page-accounts .asset-more {
+        font-size: 0.62rem;
+        color: var(--color-text-tertiary);
+        margin-left: auto;
+      }
+
+      .page-accounts .table-action {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        border: 1px solid var(--color-border-subtle);
+        background: rgba(18, 21, 26, 0.7);
+        color: var(--color-text-secondary);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+
+      .page-accounts .accounts-table-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding-top: 10px;
+      }
+
+      .page-accounts .page-button {
+        min-width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        border: 1px solid var(--color-border-subtle);
+        background: transparent;
+        color: var(--color-text-secondary);
+        font-size: 0.7rem;
+        cursor: pointer;
+      }
+
+      .page-accounts .page-button.active {
+        border-color: var(--color-action-primary-border-strong);
+        color: var(--color-text);
+        background: rgba(86, 221, 97, 0.12);
+      }
+
+      .page-accounts .page-button.next {
+        padding: 0 10px;
+      }
+
+      @media (max-width: 1200px) {
+        .page-accounts .accounts-summary-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
   </head>
-  <body>
+  <body class="page-accounts">
     <div id="app" class="app">
-      <header class="header section section--header section-header">
+      <header class="header section section--header section-header accounts-header">
         <div class="section-header">
-          <h1 class="section-title">Exchanges</h1>
-        </div>
-        <div class="section-body">
-          <div class="header-meta">
-            <span class="pill" data-field="header.context"></span>
-            <span class="header-subtitle" data-field="header.subtitle"></span>
-          </div>
+          <div class="accounts-header-spacer"></div>
+          <h1 class="section-title">Accounts</h1>
+          <div class="accounts-header-spacer"></div>
         </div>
       </header>
       <div class="app-body">
         <aside data-sidebar-slot></aside>
-        <main class="main">
-          <section class="section section--secondary empty-state">
-            <div class="section-body">
-              <div class="empty-state__content">
-                <h2 class="empty-state__title">Exchanges</h2>
-                <p class="empty-state__subtitle">This page is under construction</p>
+        <main class="main accounts-main">
+          <div class="accounts-content">
+            <section class="section section--primary accounts-summary">
+              <div class="accounts-summary-grid">
+                <div class="accounts-summary-left accounts-panel">
+                  <div class="accounts-section-title">Asset Summary</div>
+                  <div class="accounts-summary-panel">
+                    <div data-total-performance="dashboard"></div>
+                  </div>
+                </div>
+                <div class="accounts-distribution accounts-panel">
+                  <div class="accounts-distribution-title">Accounts</div>
+                  <div class="accounts-distribution-layout">
+                    <div class="accounts-donut" data-accounts-donut>
+                      <div class="chart-placeholder"></div>
+                    </div>
+                    <div class="accounts-legend" data-list="exchanges"></div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+            <section class="section section--secondary accounts-table-section">
+              <div class="section-header">
+                <h2 class="section-title">Accounts</h2>
+              </div>
+              <div class="section-body">
+                <div class="accounts-table-panel">
+                  <div class="accounts-table-scroll">
+                    <table class="accounts-table">
+                      <thead>
+                        <tr>
+                          <th style="width: 16%">Exchange</th>
+                          <th style="width: 6%"></th>
+                          <th style="width: 16%">Account</th>
+                          <th style="width: 11%">Balance</th>
+                          <th style="width: 10%">USD value</th>
+                          <th style="width: 6%">7D</th>
+                          <th style="width: 6%">30D</th>
+                          <th style="width: 6%">90D</th>
+                          <th style="width: 8%">Autotrader</th>
+                          <th style="width: 13%">Assets</th>
+                          <th style="width: 4%"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><span class="exchange-name">Binance</span></td>
+                          <td><span class="exchange-icon">B</span></td>
+                          <td>
+                            <div class="account-main">
+                              <span class="account-id">8guN...59RP</span>
+                              <span class="account-type">Binance Spot</span>
+                            </div>
+                          </td>
+                          <td>5,353.12</td>
+                          <td class="metric-positive">$5,353</td>
+                          <td class="metric-positive">+3.4%</td>
+                          <td class="metric-positive">+9.2%</td>
+                          <td class="metric-positive">+14.8%</td>
+                          <td>9</td>
+                          <td>
+                            <div class="asset-stack">
+                              <div class="asset-row">
+                                <span class="asset-label">USDT 26.08%</span>
+                                <span class="asset-bars">
+                                  <span class="asset-bar" style="width: 26.08%; --asset-color: #3fd37c"></span>
+                                  <span class="asset-bar" style="width: 21.64%; --asset-color: #7b62ff"></span>
+                                  <span class="asset-bar" style="width: 7.13%; --asset-color: #4f7dff"></span>
+                                </span>
+                              </div>
+                              <span class="asset-more">+124</span>
+                            </div>
+                          </td>
+                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
+                        </tr>
+                        <tr>
+                          <td><span class="exchange-name">Bybit</span></td>
+                          <td><span class="exchange-icon">Y</span></td>
+                          <td>
+                            <div class="account-main">
+                              <span class="account-id">gQuA...8TaT</span>
+                              <span class="account-type">Bybit USDT Perpetual</span>
+                            </div>
+                          </td>
+                          <td>3,539.44</td>
+                          <td class="metric-positive">$3,539</td>
+                          <td class="metric-positive">+2.8%</td>
+                          <td class="metric-positive">+7.6%</td>
+                          <td class="metric-positive">+12.4%</td>
+                          <td>12</td>
+                          <td>
+                            <div class="asset-stack">
+                              <div class="asset-row">
+                                <span class="asset-label">USDT 32.10%</span>
+                                <span class="asset-bars">
+                                  <span class="asset-bar" style="width: 32.1%; --asset-color: #3fd37c"></span>
+                                  <span class="asset-bar" style="width: 18.72%; --asset-color: #29b3d1"></span>
+                                  <span class="asset-bar" style="width: 6.94%; --asset-color: #b84fff"></span>
+                                </span>
+                              </div>
+                              <span class="asset-more">+98</span>
+                            </div>
+                          </td>
+                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
+                        </tr>
+                        <tr>
+                          <td><span class="exchange-name">Kraken</span></td>
+                          <td><span class="exchange-icon">K</span></td>
+                          <td>
+                            <div class="account-main">
+                              <span class="account-id">Yt9F...2LkQ</span>
+                              <span class="account-type">Kraken Spot</span>
+                            </div>
+                          </td>
+                          <td>1,842.73</td>
+                          <td class="metric-positive">$1,843</td>
+                          <td class="metric-positive">+1.6%</td>
+                          <td class="metric-positive">+5.4%</td>
+                          <td class="metric-positive">+9.1%</td>
+                          <td>4</td>
+                          <td>
+                            <div class="asset-stack">
+                              <div class="asset-row">
+                                <span class="asset-label">BTC 28.40%</span>
+                                <span class="asset-bars">
+                                  <span class="asset-bar" style="width: 28.4%; --asset-color: #7b62ff"></span>
+                                  <span class="asset-bar" style="width: 19.32%; --asset-color: #3fd37c"></span>
+                                  <span class="asset-bar" style="width: 5.65%; --asset-color: #4f7dff"></span>
+                                </span>
+                              </div>
+                              <span class="asset-more">+42</span>
+                            </div>
+                          </td>
+                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
+                        </tr>
+                        <tr>
+                          <td><span class="exchange-name">Coinbase</span></td>
+                          <td><span class="exchange-icon">C</span></td>
+                          <td>
+                            <div class="account-main">
+                              <span class="account-id">Ux3K...7SwP</span>
+                              <span class="account-type">Coinbase Prime</span>
+                            </div>
+                          </td>
+                          <td>1,404.11</td>
+                          <td class="metric-positive">$1,404</td>
+                          <td class="metric-positive">+1.1%</td>
+                          <td class="metric-positive">+3.7%</td>
+                          <td class="metric-positive">+6.9%</td>
+                          <td>2</td>
+                          <td>
+                            <div class="asset-stack">
+                              <div class="asset-row">
+                                <span class="asset-label">USDC 24.90%</span>
+                                <span class="asset-bars">
+                                  <span class="asset-bar" style="width: 24.9%; --asset-color: #29b3d1"></span>
+                                  <span class="asset-bar" style="width: 14.08%; --asset-color: #3fd37c"></span>
+                                  <span class="asset-bar" style="width: 5.52%; --asset-color: #b84fff"></span>
+                                </span>
+                              </div>
+                              <span class="asset-more">+31</span>
+                            </div>
+                          </td>
+                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
+                        </tr>
+                        <tr>
+                          <td><span class="exchange-name">Others</span></td>
+                          <td><span class="exchange-icon">O</span></td>
+                          <td>
+                            <div class="account-main">
+                              <span class="account-id">Qm1D...90Vx</span>
+                              <span class="account-type">Multi-exchange vault</span>
+                            </div>
+                          </td>
+                          <td>291.00</td>
+                          <td class="metric-positive">$291</td>
+                          <td class="metric-positive">+0.6%</td>
+                          <td class="metric-positive">+1.4%</td>
+                          <td class="metric-positive">+2.8%</td>
+                          <td>1</td>
+                          <td>
+                            <div class="asset-stack">
+                              <div class="asset-row">
+                                <span class="asset-label">USDT 18.42%</span>
+                                <span class="asset-bars">
+                                  <span class="asset-bar" style="width: 18.42%; --asset-color: #3fd37c"></span>
+                                  <span class="asset-bar" style="width: 9.11%; --asset-color: #7b62ff"></span>
+                                  <span class="asset-bar" style="width: 5.07%; --asset-color: #4f7dff"></span>
+                                </span>
+                              </div>
+                              <span class="asset-more">+18</span>
+                            </div>
+                          </td>
+                          <td><button class="table-action" aria-label="Open actions">⋮</button></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="accounts-table-pagination">
+                    <button class="page-button active">1</button>
+                    <button class="page-button">2</button>
+                    <button class="page-button">3</button>
+                    <span class="page-button">…</span>
+                    <button class="page-button">8</button>
+                    <button class="page-button next">Next</button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
         </main>
       </div>
     </div>

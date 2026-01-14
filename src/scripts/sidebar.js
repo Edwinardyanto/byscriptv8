@@ -7,7 +7,7 @@ const sidebarMenu = [
   },
   {
     id: "exchanges",
-    label: "Exchanges",
+    label: "Accounts",
     path: "pages/exchanges.html",
     match: (route) => route === "pages/exchanges.html",
   },
