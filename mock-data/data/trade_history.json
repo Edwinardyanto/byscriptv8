@@ -1,0 +1,62 @@
+[
+  {
+    "trade_id": "17683782030490000000001",
+    "autotrader_id": "MBO9THK0X2",
+    "account_id": "Y9QICT0Y4U",
+    "asset_id": "0000001",
+    "side": "buy",
+    "quantity": 0.553261,
+    "price_usd": 27107.81,
+    "pnl_usd": 46.3,
+    "result": "win",
+    "executed_at": "2025-01-12T09:31:00Z"
+  },
+  {
+    "trade_id": "17683782030490000000002",
+    "autotrader_id": "5HAUV1GRPC",
+    "account_id": "QXDPRH5AL6",
+    "asset_id": "0000002",
+    "side": "sell",
+    "quantity": 0.447761,
+    "price_usd": 1078.7,
+    "pnl_usd": -25.91,
+    "result": "win",
+    "executed_at": "2025-01-12T09:31:00Z"
+  },
+  {
+    "trade_id": "17683782030490000000003",
+    "autotrader_id": "5SQQPHQ4KC",
+    "account_id": "PEMBA3GA1H",
+    "asset_id": "0000003",
+    "side": "sell",
+    "quantity": 0.565144,
+    "price_usd": 2899.67,
+    "pnl_usd": -47.7,
+    "result": "win",
+    "executed_at": "2025-01-12T09:31:00Z"
+  },
+  {
+    "trade_id": "17683782030490000000004",
+    "autotrader_id": "MBO9THK0X2",
+    "account_id": "Y9QICT0Y4U",
+    "asset_id": "0000004",
+    "side": "buy",
+    "quantity": 0.92868,
+    "price_usd": 21699.56,
+    "pnl_usd": -31.89,
+    "result": "loss",
+    "executed_at": "2025-01-12T09:31:00Z"
+  },
+  {
+    "trade_id": "17683782030490000000005",
+    "autotrader_id": "5HAUV1GRPC",
+    "account_id": "QXDPRH5AL6",
+    "asset_id": "0000005",
+    "side": "sell",
+    "quantity": 0.93787,
+    "price_usd": 4157.91,
+    "pnl_usd": -46.08,
+    "result": "win",
+    "executed_at": "2025-01-12T09:31:00Z"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "asset_id": "0000001",
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000002",
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000003",
+    "symbol": "SOL",
+    "name": "Solana",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000004",
+    "symbol": "BNB",
+    "name": "Binance Coin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  },
+  {
+    "asset_id": "0000005",
+    "symbol": "AVAX",
+    "name": "Avalanche",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true
+  }
+]

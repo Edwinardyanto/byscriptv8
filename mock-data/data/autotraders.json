@@ -1,0 +1,38 @@
+[
+  {
+    "autotrader_id": "MBO9THK0X2",
+    "plan_id": "DS8JBYWD17",
+    "account_id": "Y9QICT0Y4U",
+    "status": "error",
+    "capital_usd": 1824.79,
+    "pnl_percent": 2.02,
+    "pnl_usd": 36.86,
+    "win_rate": 55,
+    "is_running": false,
+    "created_at": "2024-12-01T09:00:00Z"
+  },
+  {
+    "autotrader_id": "5HAUV1GRPC",
+    "plan_id": "X6S1B3OKW0",
+    "account_id": "QXDPRH5AL6",
+    "status": "running",
+    "capital_usd": 830.36,
+    "pnl_percent": -19.99,
+    "pnl_usd": -165.99,
+    "win_rate": 79,
+    "is_running": true,
+    "created_at": "2024-12-01T09:00:00Z"
+  },
+  {
+    "autotrader_id": "5SQQPHQ4KC",
+    "plan_id": "DS8JBYWD17",
+    "account_id": "PEMBA3GA1H",
+    "status": "paused",
+    "capital_usd": 1847.66,
+    "pnl_percent": -17.97,
+    "pnl_usd": -332.02,
+    "win_rate": 43,
+    "is_running": false,
+    "created_at": "2024-12-01T09:00:00Z"
+  }
+]
