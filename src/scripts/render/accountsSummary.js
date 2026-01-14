@@ -164,6 +164,86 @@ const parseAssetsData = (value) => {
     .filter((item) => item.name && Number.isFinite(item.percent));
 };
 
+const setupAssetSegmentTooltip = () => {
+  const table = document.querySelector(".accounts-table");
+  if (!table || table.dataset.assetTooltipBound) {
+    return;
+  }
+
+  table.dataset.assetTooltipBound = "true";
+  const tooltip = document.createElement("div");
+  tooltip.className = "asset-tooltip";
+  tooltip.innerHTML = `
+    <span class="asset-tooltip-accent"></span>
+    <span class="asset-tooltip-name"></span>
+    <span class="asset-tooltip-percent"></span>
+    <span class="asset-tooltip-value"></span>
+  `;
+  document.body.appendChild(tooltip);
+
+  const nameEl = tooltip.querySelector(".asset-tooltip-name");
+  const percentEl = tooltip.querySelector(".asset-tooltip-percent");
+  const valueEl = tooltip.querySelector(".asset-tooltip-value");
+  let activeSegment = null;
+
+  const updateTooltip = (segment) => {
+    const assetName = segment.dataset.asset || "Asset";
+    const percent = segment.dataset.percent || "--";
+    const usd = segment.dataset.usd || "--";
+    nameEl.textContent = assetName;
+    percentEl.textContent = `${percent}% of account value`;
+    valueEl.textContent = `${usd} USD`;
+    const color = getComputedStyle(segment).getPropertyValue("--asset-color").trim();
+    tooltip.style.setProperty("--asset-color", color || "#3fd37c");
+  };
+
+  const positionTooltip = (event) => {
+    const offsetX = 14;
+    const offsetY = 16;
+    const { innerWidth, innerHeight } = window;
+    const rect = tooltip.getBoundingClientRect();
+    let x = event.clientX + offsetX;
+    let y = event.clientY + offsetY;
+    if (x + rect.width > innerWidth - 12) {
+      x = innerWidth - rect.width - 12;
+    }
+    if (y + rect.height > innerHeight - 12) {
+      y = innerHeight - rect.height - 12;
+    }
+    tooltip.style.left = `${Math.max(12, x)}px`;
+    tooltip.style.top = `${Math.max(12, y)}px`;
+  };
+
+  table.addEventListener("mouseover", (event) => {
+    const segment = event.target.closest(".asset-segment");
+    if (!segment || !table.contains(segment)) {
+      return;
+    }
+    if (segment !== activeSegment) {
+      activeSegment = segment;
+      updateTooltip(segment);
+    }
+    tooltip.classList.add("is-visible");
+    positionTooltip(event);
+  });
+
+  table.addEventListener("mousemove", (event) => {
+    if (!activeSegment) {
+      return;
+    }
+    positionTooltip(event);
+  });
+
+  table.addEventListener("mouseout", (event) => {
+    const segment = event.target.closest(".asset-segment");
+    if (!segment || segment.contains(event.relatedTarget)) {
+      return;
+    }
+    activeSegment = null;
+    tooltip.classList.remove("is-visible");
+  });
+};
+
 const getMarketType = (label) => {
   if (!label) {
     return "Spot";
@@ -435,6 +515,7 @@ export const renderAccountsSummary = (sectionState) => {
 
     const activeFilter = filterSelect?.value || "accounts";
     renderDistribution(activeFilter);
+    setupAssetSegmentTooltip();
   } else {
     accounts.forEach((account) => {
       const item = document.createElement("div");
