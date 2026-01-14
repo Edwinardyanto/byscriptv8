@@ -27,6 +27,7 @@ const CHART_PALETTE = [
   "#9f7aea",
   "#4fd1c5",
 ];
+const NEUTRAL_COLOR = "#8a8f98";
 
 const formatCurrency = (value, digits = 0) =>
   new Intl.NumberFormat("en-US", {
@@ -127,11 +128,28 @@ const buildDistributionData = (type, accounts) => {
         assetTotals.set(symbol, current + Number(asset.usd_value || 0));
       });
     });
-    return Array.from(assetTotals.entries()).map(([label, amount], index) => ({
-      label,
-      amount,
-      color: ASSET_COLORS.get(label) || CHART_PALETTE[index % CHART_PALETTE.length],
+    const sorted = Array.from(assetTotals.entries())
+      .map(([label, amount]) => ({
+        label,
+        amount,
+        color: ASSET_COLORS.get(label) || null,
+      }))
+      .sort((a, b) => b.amount - a.amount);
+    const topItems = sorted.slice(0, 4).map((item, index) => ({
+      ...item,
+      color: item.color || CHART_PALETTE[index % CHART_PALETTE.length],
     }));
+    const remainder = sorted.slice(4);
+    if (remainder.length) {
+      const othersAmount = remainder.reduce((sum, item) => sum + item.amount, 0);
+      topItems.push({
+        label: "Others",
+        amount: othersAmount,
+        color: NEUTRAL_COLOR,
+        isOther: true,
+      });
+    }
+    return topItems;
   }
 
   if (type === "market") {
@@ -148,13 +166,29 @@ const buildDistributionData = (type, accounts) => {
     }));
   }
 
-  return accounts
-    .map((account, index) => ({
-      label: `${account.provider} · ${formatAccountCode(account.account_code || account.account_id)}`,
+  const sortedAccounts = accounts
+    .map((account) => ({
+      label: formatAccountCode(account.account_code || account.account_id),
+      provider: account.provider || "Provider",
+      market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
-      color: CHART_PALETTE[index % CHART_PALETTE.length],
     }))
     .sort((a, b) => b.amount - a.amount);
+  const topAccounts = sortedAccounts.slice(0, 4).map((item, index) => ({
+    ...item,
+    color: CHART_PALETTE[index % CHART_PALETTE.length],
+  }));
+  const remainingAccounts = sortedAccounts.slice(4);
+  if (remainingAccounts.length) {
+    const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
+    topAccounts.push({
+      label: "Others",
+      amount: othersAmount,
+      color: NEUTRAL_COLOR,
+      isOther: true,
+    });
+  }
+  return topAccounts;
 };
 
 const renderDonutChart = (container, items, onHover) => {
@@ -194,28 +228,58 @@ const renderDonutChart = (container, items, onHover) => {
   container.appendChild(svg);
 };
 
-const renderDistributionList = (container, items, onHover) => {
+const renderDistributionList = (container, items, onHover, filter) => {
   container.innerHTML = "";
   items.forEach((item, index) => {
     const listItem = document.createElement("div");
     listItem.className = "accounts-distribution-item";
     listItem.dataset.index = String(index);
-    listItem.innerHTML = `
-      <div class="accounts-distribution-item-header">
-        <div class="accounts-distribution-item-name">
+    if (filter === "assets") {
+      listItem.classList.add("accounts-distribution-item--compact");
+      listItem.innerHTML = `
+        <div class="accounts-distribution-item-line">
           <span class="accounts-legend-dot" style="--legend-color: ${item.color};"></span>
-          <span>${item.label}</span>
+          <span class="accounts-distribution-item-label">${item.label}</span>
+          <span class="accounts-distribution-item-percent">${item.percent.toFixed(1)}%</span>
+          <span class="accounts-distribution-item-value">${formatCurrency(item.amount)}</span>
         </div>
-        <strong>${formatCurrency(item.amount)}</strong>
-      </div>
-      <div class="accounts-distribution-item-meta">
-        <span>${item.percent.toFixed(1)}%</span>
-        <span>${formatCurrency(item.amount)}</span>
-      </div>
-      <div class="accounts-distribution-bar">
-        <span style="--fill-width: ${item.percent}%; --fill-color: ${item.color};"></span>
-      </div>
-    `;
+      `;
+    } else if (filter === "accounts") {
+      listItem.classList.add("accounts-distribution-item--compact");
+      const headerLabel = item.isOther ? item.label : `${item.provider} · ${item.market}`;
+      const accountLabel = item.isOther ? "" : item.label;
+      const accountLabelHtml = accountLabel ? `<span>${accountLabel}</span>` : "";
+      listItem.innerHTML = `
+        <div class="accounts-distribution-item-line">
+          <span class="accounts-legend-dot" style="--legend-color: ${item.color};"></span>
+          <div class="accounts-distribution-item-details">
+            <div class="accounts-distribution-item-provider">${headerLabel}</div>
+            <div class="accounts-distribution-item-stats">
+              ${accountLabelHtml}
+              <span>${item.percent.toFixed(1)}%</span>
+              <span>${formatCurrency(item.amount)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    } else {
+      listItem.innerHTML = `
+        <div class="accounts-distribution-item-header">
+          <div class="accounts-distribution-item-name">
+            <span class="accounts-legend-dot" style="--legend-color: ${item.color};"></span>
+            <span>${item.label}</span>
+          </div>
+          <strong>${formatCurrency(item.amount)}</strong>
+        </div>
+        <div class="accounts-distribution-item-meta">
+          <span>${item.percent.toFixed(1)}%</span>
+          <span>${formatCurrency(item.amount)}</span>
+        </div>
+        <div class="accounts-distribution-bar">
+          <span style="--fill-width: ${item.percent}%; --fill-color: ${item.color};"></span>
+        </div>
+      `;
+    }
     listItem.addEventListener("mouseenter", () => onHover(index));
     listItem.addEventListener("mouseleave", () => onHover(null));
     container.appendChild(listItem);
@@ -244,7 +308,7 @@ const renderDistribution = (filter, accounts, donutContainer, legendContainer) =
   };
 
   renderDonutChart(donutContainer, normalized, setActive);
-  renderDistributionList(legendContainer, normalized, setActive);
+  renderDistributionList(legendContainer, normalized, setActive, filter);
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
@@ -311,6 +375,30 @@ const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
   renderPagination();
 };
 
+const syncDistributionHeight = () => {
+  const summaryPanel = document.querySelector(".accounts-summary-left");
+  const distributionPanel = document.querySelector(".accounts-distribution");
+  if (!summaryPanel || !distributionPanel) {
+    return;
+  }
+
+  const applyHeight = () => {
+    const { height } = summaryPanel.getBoundingClientRect();
+    if (height) {
+      distributionPanel.style.height = `${height}px`;
+    }
+  };
+
+  applyHeight();
+
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(() => applyHeight());
+    observer.observe(summaryPanel);
+  }
+
+  window.addEventListener("resize", applyHeight);
+};
+
 const initAccountsPage = async () => {
   if (!document.body.classList.contains("page-accounts")) {
     return;
@@ -325,6 +413,8 @@ const initAccountsPage = async () => {
   if (!tableBody || !pagination || !filterSelect || !donutContainer || !legendContainer) {
     return;
   }
+
+  syncDistributionHeight();
 
   const tooltip = document.createElement("div");
   tooltip.className = "asset-tooltip";
