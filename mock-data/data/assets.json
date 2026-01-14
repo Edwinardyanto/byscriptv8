@@ -1,0 +1,32 @@
+[
+  {
+    "id": "asset_001",
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "asset_type": "equity",
+    "exchange": "NASDAQ",
+    "currency": "USD",
+    "is_active": true,
+    "created_at": "2024-01-10T09:00:00Z"
+  },
+  {
+    "id": "asset_002",
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "asset_type": "crypto",
+    "exchange": "COINBASE",
+    "currency": "USD",
+    "is_active": true,
+    "created_at": "2024-01-10T09:00:00Z"
+  },
+  {
+    "id": "asset_003",
+    "symbol": "TSLA",
+    "name": "Tesla, Inc.",
+    "asset_type": "equity",
+    "exchange": "NASDAQ",
+    "currency": "USD",
+    "is_active": true,
+    "created_at": "2024-01-10T09:00:00Z"
+  }
+]

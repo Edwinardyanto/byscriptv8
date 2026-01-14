@@ -1,0 +1,29 @@
+[
+  {
+    "id": "acct_asset_001",
+    "account_id": "acct_001",
+    "asset_id": "asset_001",
+    "quantity": 50,
+    "average_cost": 172.35,
+    "market_value": 8900.0,
+    "last_updated": "2024-03-01T16:00:00Z"
+  },
+  {
+    "id": "acct_asset_002",
+    "account_id": "acct_001",
+    "asset_id": "asset_002",
+    "quantity": 0.75,
+    "average_cost": 41000.0,
+    "market_value": 33000.0,
+    "last_updated": "2024-03-01T16:00:00Z"
+  },
+  {
+    "id": "acct_asset_003",
+    "account_id": "acct_002",
+    "asset_id": "asset_003",
+    "quantity": 20,
+    "average_cost": 215.0,
+    "market_value": 4650.0,
+    "last_updated": "2024-03-01T16:00:00Z"
+  }
+]
