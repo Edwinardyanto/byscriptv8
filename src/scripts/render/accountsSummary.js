@@ -46,6 +46,7 @@ const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
   const radius = (Math.min(width, height) - strokeWidth) / 2;
   const total = accounts.reduce((sum, item) => sum + Number(item.amount || 0), 0) || 1;
   const gapDegrees = 3;
+  const START_ANGLE = -90;
 
   const svg = createSvgElement("svg");
   svg.setAttribute("width", `${width}`);
@@ -97,12 +98,12 @@ const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
     const startAngle = currentAngle + appliedGap / 2;
     const endAngle = currentAngle + angle - appliedGap / 2;
     const start = {
-      x: width / 2 + radius * Math.cos(((endAngle - 90) * Math.PI) / 180),
-      y: height / 2 + radius * Math.sin(((endAngle - 90) * Math.PI) / 180),
+      x: width / 2 + radius * Math.cos(((endAngle + START_ANGLE) * Math.PI) / 180),
+      y: height / 2 + radius * Math.sin(((endAngle + START_ANGLE) * Math.PI) / 180),
     };
     const end = {
-      x: width / 2 + radius * Math.cos(((startAngle - 90) * Math.PI) / 180),
-      y: height / 2 + radius * Math.sin(((startAngle - 90) * Math.PI) / 180),
+      x: width / 2 + radius * Math.cos(((startAngle + START_ANGLE) * Math.PI) / 180),
+      y: height / 2 + radius * Math.sin(((startAngle + START_ANGLE) * Math.PI) / 180),
     };
     const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
     const path = createSvgElement("path");

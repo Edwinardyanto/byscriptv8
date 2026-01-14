@@ -255,11 +255,13 @@ const renderDonutChart = (container, items, onHover, tooltip) => {
   const stroke = 28;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
+  const START_ANGLE = -90;
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
   svg.setAttribute("width", "100%");
   svg.setAttribute("height", "100%");
-  svg.style.transform = "rotate(-90deg)";
+  svg.style.transform = `rotate(${START_ANGLE}deg)`;
+  svg.style.transformOrigin = "50% 50%";
 
   let offset = 0;
   items.forEach((item, index) => {
@@ -371,6 +373,8 @@ const renderDistributionList = (container, items, filter) => {
   });
 };
 
+let updateDistributionHeight = null;
+
 const renderDistribution = (filter, accounts, donutContainer, legendContainer, tooltip) => {
   const { listItems, donutItems } = buildDistributionData(filter, accounts);
   const totalAmount = donutItems.reduce((sum, item) => sum + item.amount, 0);
@@ -401,6 +405,9 @@ const renderDistribution = (filter, accounts, donutContainer, legendContainer, t
 
   renderDonutChart(donutContainer, normalizedDonut, setActive, tooltip);
   renderDistributionList(legendContainer, normalizedList, filter);
+  if (typeof updateDistributionHeight === "function") {
+    updateDistributionHeight();
+  }
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
@@ -474,10 +481,19 @@ const syncDistributionHeight = () => {
     return;
   }
 
+  let lockedHeight = 0;
   const applyHeight = () => {
     const { height } = summaryPanel.getBoundingClientRect();
-    if (height) {
-      distributionPanel.style.height = `${height}px`;
+    const header = distributionPanel.querySelector(".accounts-distribution-header");
+    const layout = distributionPanel.querySelector(".accounts-distribution-layout");
+    const gap = Number.parseFloat(getComputedStyle(distributionPanel).gap || "0");
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    const layoutHeight = layout ? layout.scrollHeight : 0;
+    const requiredHeight = headerHeight + gap + layoutHeight;
+    const nextHeight = Math.max(height || 0, requiredHeight, lockedHeight);
+    if (nextHeight) {
+      lockedHeight = nextHeight;
+      distributionPanel.style.height = `${nextHeight}px`;
     }
   };
 
@@ -489,6 +505,8 @@ const syncDistributionHeight = () => {
   }
 
   window.addEventListener("resize", applyHeight);
+
+  return applyHeight;
 };
 
 const initAccountsPage = async () => {
@@ -506,7 +524,7 @@ const initAccountsPage = async () => {
     return;
   }
 
-  syncDistributionHeight();
+  updateDistributionHeight = syncDistributionHeight();
 
   const tooltip = document.createElement("div");
   tooltip.className = "asset-tooltip";
