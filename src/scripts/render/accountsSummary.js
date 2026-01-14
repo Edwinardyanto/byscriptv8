@@ -45,6 +45,7 @@ const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
   const strokeWidth = 20;
   const radius = (Math.min(width, height) - strokeWidth) / 2;
   const total = accounts.reduce((sum, item) => sum + Number(item.amount || 0), 0) || 1;
+  const gapDegrees = 3;
 
   const svg = createSvgElement("svg");
   svg.setAttribute("width", `${width}`);
@@ -92,8 +93,9 @@ const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
   accounts.forEach((account, index) => {
     const value = Number(account.amount || 0);
     const angle = (value / total) * 360;
-    const startAngle = currentAngle;
-    const endAngle = currentAngle + angle;
+    const appliedGap = angle > gapDegrees ? gapDegrees : 0;
+    const startAngle = currentAngle + appliedGap / 2;
+    const endAngle = currentAngle + angle - appliedGap / 2;
     const start = {
       x: width / 2 + radius * Math.cos(((endAngle - 90) * Math.PI) / 180),
       y: height / 2 + radius * Math.sin(((endAngle - 90) * Math.PI) / 180),
@@ -109,10 +111,15 @@ const renderAccountsPageDonutChart = (container, accounts, colors = []) => {
       `M ${start.x} ${start.y} A ${radius} ${radius} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`
     );
     path.setAttribute("fill", "none");
-    path.setAttribute("stroke", chartColors[index % chartColors.length]);
+    const segmentColor = chartColors[index % chartColors.length];
+    path.setAttribute("stroke", segmentColor);
     path.setAttribute("stroke-width", `${strokeWidth}`);
     path.setAttribute("stroke-linecap", "round");
-    path.setAttribute("opacity", "0.95");
+    path.setAttribute("opacity", "0.82");
+    path.classList.add("accounts-donut-segment");
+    path.dataset.accountIndex = `${index}`;
+    path.style.color = segmentColor;
+    path.style.cursor = "pointer";
     svg.appendChild(path);
     currentAngle += angle;
   });
@@ -217,11 +224,11 @@ export const renderAccountsSummary = (sectionState) => {
 
   if (isAccountsPage) {
     accountsColors = [
-      getCssVar("--color-base-white", "#ffffff"),
-      getCssVar("--color-base-alert", "#ff5f5f"),
-      getCssVar("--color-base-lime", "#66ff33"),
-      getCssVar("--color-base-purple", "#3d2c8d"),
-      getCssVar("--color-base-cyan", "#00f7d5"),
+      getCssVar("--color-chart-accent-primary", "rgba(102, 255, 51, 0.75)"),
+      getCssVar("--color-chart-secondary", "rgba(0, 247, 213, 0.6)"),
+      getCssVar("--color-chart-tertiary", "rgba(61, 44, 141, 0.6)"),
+      getCssVar("--color-status-negative-text-muted", "rgba(255, 95, 95, 0.75)"),
+      getCssVar("--color-chart-muted", "rgba(217, 217, 217, 0.5)"),
     ];
     const assetTotalText = document.querySelector('[data-field="asset.totalBalance"]')?.textContent;
     const assetTotal = parseCurrency(assetTotalText);
@@ -259,6 +266,7 @@ export const renderAccountsSummary = (sectionState) => {
     const item = document.createElement("div");
     if (isAccountsPage) {
       item.className = "accounts-legend-item";
+      item.dataset.accountIndex = `${index}`;
       item.innerHTML = `
         <span class="accounts-legend-dot" style="--legend-color: ${accountsColors[index % accountsColors.length]}"></span>
         <span>${account.name}</span>
@@ -276,6 +284,29 @@ export const renderAccountsSummary = (sectionState) => {
   setText('[data-field="accounts.total"]', totalValue);
   if (isAccountsPage) {
     renderAccountsPageDonutChart(chartContainer, accounts, accountsColors);
+    const segments = chartContainer?.querySelectorAll(".accounts-donut-segment");
+    const legendItems = list?.querySelectorAll(".accounts-legend-item");
+    if (segments?.length && legendItems?.length) {
+      const clearActive = () => {
+        segments.forEach((segment) => segment.classList.remove("is-active"));
+        legendItems.forEach((item) => item.classList.remove("is-active"));
+      };
+      const setActive = (index) => {
+        clearActive();
+        segments[index]?.classList.add("is-active");
+        legendItems[index]?.classList.add("is-active");
+      };
+      segments.forEach((segment) => {
+        const index = Number(segment.dataset.accountIndex || 0);
+        segment.addEventListener("mouseenter", () => setActive(index));
+        segment.addEventListener("mouseleave", clearActive);
+      });
+      legendItems.forEach((item) => {
+        const index = Number(item.dataset.accountIndex || 0);
+        item.addEventListener("mouseenter", () => setActive(index));
+        item.addEventListener("mouseleave", clearActive);
+      });
+    }
   } else {
     renderAccountsDonutChart(chartContainer, accounts);
   }
