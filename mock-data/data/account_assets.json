@@ -3,27 +3,171 @@
     "id": "acct_asset_001",
     "account_id": "acct_001",
     "asset_id": "asset_001",
-    "quantity": 50,
-    "average_cost": 172.35,
-    "market_value": 8900.0,
-    "last_updated": "2024-03-01T16:00:00Z"
+    "quantity": 62,
+    "average_cost": 284.68,
+    "market_value": 20827.19,
+    "last_updated": "2024-03-11T08:00:00Z"
   },
   {
     "id": "acct_asset_002",
     "account_id": "acct_001",
     "asset_id": "asset_002",
-    "quantity": 0.75,
-    "average_cost": 41000.0,
-    "market_value": 33000.0,
-    "last_updated": "2024-03-01T16:00:00Z"
+    "quantity": 64,
+    "average_cost": 280.59,
+    "market_value": 19394.38,
+    "last_updated": "2024-03-14T08:00:00Z"
   },
   {
     "id": "acct_asset_003",
+    "account_id": "acct_001",
+    "asset_id": "asset_004",
+    "quantity": 24,
+    "average_cost": 82.22,
+    "market_value": 2150.88,
+    "last_updated": "2024-03-12T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_004",
+    "account_id": "acct_001",
+    "asset_id": "asset_003",
+    "quantity": 103,
+    "average_cost": 247.95,
+    "market_value": 25283.46,
+    "last_updated": "2024-03-17T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_005",
+    "account_id": "acct_002",
+    "asset_id": "asset_008",
+    "quantity": 1.1274,
+    "average_cost": 50316.39,
+    "market_value": 52755.83,
+    "last_updated": "2024-03-16T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_006",
+    "account_id": "acct_002",
+    "asset_id": "asset_007",
+    "quantity": 3.0441,
+    "average_cost": 16612.36,
+    "market_value": 55626.65,
+    "last_updated": "2024-03-11T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_007",
+    "account_id": "acct_002",
+    "asset_id": "asset_001",
+    "quantity": 82,
+    "average_cost": 199.09,
+    "market_value": 19427.2,
+    "last_updated": "2024-03-15T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_008",
     "account_id": "acct_002",
     "asset_id": "asset_003",
-    "quantity": 20,
-    "average_cost": 215.0,
-    "market_value": 4650.0,
-    "last_updated": "2024-03-01T16:00:00Z"
+    "quantity": 27,
+    "average_cost": 95.49,
+    "market_value": 3042.31,
+    "last_updated": "2024-03-16T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_009",
+    "account_id": "acct_002",
+    "asset_id": "asset_002",
+    "quantity": 72,
+    "average_cost": 147.97,
+    "market_value": 12038.84,
+    "last_updated": "2024-03-16T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_010",
+    "account_id": "acct_003",
+    "asset_id": "asset_001",
+    "quantity": 6,
+    "average_cost": 158.56,
+    "market_value": 989.41,
+    "last_updated": "2024-03-12T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_011",
+    "account_id": "acct_003",
+    "asset_id": "asset_005",
+    "quantity": 94,
+    "average_cost": 185.19,
+    "market_value": 18800.49,
+    "last_updated": "2024-03-16T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_012",
+    "account_id": "acct_003",
+    "asset_id": "asset_004",
+    "quantity": 86,
+    "average_cost": 113.32,
+    "market_value": 9550.61,
+    "last_updated": "2024-03-13T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_013",
+    "account_id": "acct_003",
+    "asset_id": "asset_002",
+    "quantity": 54,
+    "average_cost": 56.51,
+    "market_value": 3387.21,
+    "last_updated": "2024-03-12T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_014",
+    "account_id": "acct_003",
+    "asset_id": "asset_008",
+    "quantity": 0.9195,
+    "average_cost": 15781.6,
+    "market_value": 17123.19,
+    "last_updated": "2024-03-17T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_015",
+    "account_id": "acct_004",
+    "asset_id": "asset_005",
+    "quantity": 102,
+    "average_cost": 136.27,
+    "market_value": 14038.54,
+    "last_updated": "2024-03-12T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_016",
+    "account_id": "acct_004",
+    "asset_id": "asset_002",
+    "quantity": 50,
+    "average_cost": 165.09,
+    "market_value": 9327.58,
+    "last_updated": "2024-03-17T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_017",
+    "account_id": "acct_004",
+    "asset_id": "asset_006",
+    "quantity": 1.5018,
+    "average_cost": 31340.89,
+    "market_value": 46597.07,
+    "last_updated": "2024-03-14T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_018",
+    "account_id": "acct_004",
+    "asset_id": "asset_001",
+    "quantity": 15,
+    "average_cost": 270.67,
+    "market_value": 4669.06,
+    "last_updated": "2024-03-14T08:00:00Z"
+  },
+  {
+    "id": "acct_asset_019",
+    "account_id": "acct_004",
+    "asset_id": "asset_008",
+    "quantity": 2.6072,
+    "average_cost": 4834.24,
+    "market_value": 14872.52,
+    "last_updated": "2024-03-16T08:00:00Z"
   }
 ]

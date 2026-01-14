@@ -7,7 +7,7 @@
     "base_currency": "USD",
     "status": "active",
     "owner_id": "user_001",
-    "created_at": "2024-01-05T14:30:00Z"
+    "created_at": "2024-01-06T08:00:00Z"
   },
   {
     "id": "acct_002",
@@ -17,6 +17,26 @@
     "base_currency": "USD",
     "status": "active",
     "owner_id": "user_002",
-    "created_at": "2024-02-01T11:15:00Z"
+    "created_at": "2024-01-14T08:00:00Z"
+  },
+  {
+    "id": "acct_003",
+    "account_number": "TRD-1003",
+    "name": "Growth Portfolio",
+    "account_type": "joint",
+    "base_currency": "USD",
+    "status": "active",
+    "owner_id": "user_003",
+    "created_at": "2024-01-19T08:00:00Z"
+  },
+  {
+    "id": "acct_004",
+    "account_number": "TRD-1004",
+    "name": "Trading Sandbox",
+    "account_type": "corporate",
+    "base_currency": "USD",
+    "status": "suspended",
+    "owner_id": "user_004",
+    "created_at": "2024-01-26T08:00:00Z"
   }
 ]
