@@ -147,34 +147,42 @@ const buildDistributionData = (type, accounts) => {
         assetTotals.set(symbol, current + Number(asset.usd_value || 0));
       });
     });
-    const sorted = Array.from(assetTotals.entries())
+    const sortedAssets = Array.from(assetTotals.entries())
       .map(([label, amount]) => ({
         label,
         amount,
         colorKey: label,
       }))
-      .sort((a, b) => b.amount - a.amount);
-    const topItems = sorted.slice(0, 4).map((item) => ({
+      .sort((a, b) => b.amount - a.amount)
+      .map((item) => ({
+        ...item,
+        color: getStableColor(
+          item.colorKey,
+          CHART_PALETTE,
+          ASSET_COLOR_MAP,
+          ASSET_COLORS.get(item.colorKey)
+        ),
+      }));
+    const listItems = sortedAssets.slice(0, 4).map((item) => ({
       ...item,
-      color: getStableColor(
-        item.colorKey,
-        CHART_PALETTE,
-        ASSET_COLOR_MAP,
-        ASSET_COLORS.get(item.colorKey)
-      ),
+      listIndex: null,
     }));
-    const remainder = sorted.slice(4);
+    const remainder = sortedAssets.slice(4);
     if (remainder.length) {
       const othersAmount = remainder.reduce((sum, item) => sum + item.amount, 0);
-      topItems.push({
+      listItems.push({
         label: "Others",
         amount: othersAmount,
         color: NEUTRAL_COLOR,
         isOther: true,
         colorKey: "others",
+        listIndex: null,
       });
     }
-    return topItems;
+    sortedAssets.forEach((item, index) => {
+      item.listIndex = index < 4 ? index : listItems.length - 1;
+    });
+    return { listItems, donutItems: sortedAssets };
   }
 
   if (type === "market") {
@@ -184,12 +192,14 @@ const buildDistributionData = (type, accounts) => {
       const current = marketTotals.get(label) || 0;
       marketTotals.set(label, current + Number(account.totalValueUsd || 0));
     });
-    return Array.from(marketTotals.entries()).map(([label, amount]) => ({
+    const items = Array.from(marketTotals.entries()).map(([label, amount], index) => ({
       label,
       amount,
       color: getStableColor(label, CHART_PALETTE, MARKET_COLOR_MAP),
       colorKey: label,
+      listIndex: index,
     }));
+    return { listItems: items, donutItems: items };
   }
 
   const sortedAccounts = accounts
@@ -200,23 +210,31 @@ const buildDistributionData = (type, accounts) => {
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
     }))
-    .sort((a, b) => b.amount - a.amount);
-  const topAccounts = sortedAccounts.slice(0, 4).map((item) => ({
+    .sort((a, b) => b.amount - a.amount)
+    .map((item) => ({
+      ...item,
+      color: getStableColor(item.colorKey || item.label, CHART_PALETTE, ACCOUNT_COLOR_MAP),
+    }));
+  const listItems = sortedAccounts.slice(0, 4).map((item) => ({
     ...item,
-    color: getStableColor(item.colorKey || item.label, CHART_PALETTE, ACCOUNT_COLOR_MAP),
+    listIndex: null,
   }));
   const remainingAccounts = sortedAccounts.slice(4);
-  if (remainingAccounts.length) {
-    const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
-    topAccounts.push({
+  const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
+  if (sortedAccounts.length >= 4) {
+    listItems.push({
       label: "Others",
       amount: othersAmount,
       color: NEUTRAL_COLOR,
       isOther: true,
       colorKey: "others",
+      listIndex: null,
     });
   }
-  return topAccounts;
+  sortedAccounts.forEach((item, index) => {
+    item.listIndex = index < 4 ? index : listItems.length - 1;
+  });
+  return { listItems, donutItems: sortedAccounts };
 };
 
 const renderDonutChart = (container, items, onHover, tooltip) => {
@@ -340,30 +358,35 @@ const renderDistributionList = (container, items, filter) => {
 };
 
 const renderDistribution = (filter, accounts, donutContainer, legendContainer, tooltip) => {
-  const items = buildDistributionData(filter, accounts);
-  const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
-  const normalized = items.map((item) => ({
+  const { listItems, donutItems } = buildDistributionData(filter, accounts);
+  const totalAmount = donutItems.reduce((sum, item) => sum + item.amount, 0);
+  const normalizedDonut = donutItems.map((item) => ({
+    ...item,
+    percent: totalAmount ? (item.amount / totalAmount) * 100 : 0,
+  }));
+  const normalizedList = listItems.map((item) => ({
     ...item,
     percent: totalAmount ? (item.amount / totalAmount) * 100 : 0,
   }));
 
   const setActive = (index) => {
     const donutSegments = donutContainer.querySelectorAll(".accounts-donut-segment");
-    const listItems = legendContainer.querySelectorAll(".accounts-distribution-item");
+    const listRows = legendContainer.querySelectorAll(".accounts-distribution-item");
     const hasActive = index !== null;
+    const targetListIndex = hasActive ? normalizedDonut[index]?.listIndex : null;
     donutSegments.forEach((segment) => {
       const isActive = hasActive && Number(segment.dataset.index) === index;
       segment.classList.toggle("is-active", isActive);
       segment.classList.toggle("is-dimmed", hasActive && !isActive);
     });
-    listItems.forEach((item) => {
-      const isActive = hasActive && Number(item.dataset.index) === index;
+    listRows.forEach((item) => {
+      const isActive = hasActive && Number(item.dataset.index) === targetListIndex;
       item.classList.toggle("is-active", isActive);
     });
   };
 
-  renderDonutChart(donutContainer, normalized, setActive, tooltip);
-  renderDistributionList(legendContainer, normalized, filter);
+  renderDonutChart(donutContainer, normalizedDonut, setActive, tooltip);
+  renderDistributionList(legendContainer, normalizedList, filter);
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
