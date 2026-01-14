@@ -1,10 +1,3 @@
-import {
-  getAccounts,
-  getAccountsWithSummary,
-  getAutotradersByAccount,
-  getTradeHistory,
-} from "./dataAccess.js";
-
 const buildSeries = (points, start, end) => {
   const trend = (end - start) / Math.max(points - 1, 1);
   return Array.from({ length: points }, (_, index) => {
@@ -14,198 +7,168 @@ const buildSeries = (points, start, end) => {
   });
 };
 
-const formatCurrency = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  maximumFractionDigits: 0,
-});
-
-const formatCurrencyDetailed = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-
-const formatPercent = (value) => {
-  const sign = value > 0 ? "+" : value < 0 ? "-" : "";
-  return `${sign}${Math.abs(value).toFixed(1)}%`;
-};
-
-const formatRelativeTime = (date) => {
-  if (!date) {
-    return "--";
-  }
-  const now = Date.now();
-  const diffMs = now - date.getTime();
-  const minutes = Math.floor(diffMs / (1000 * 60));
-  if (minutes < 60) {
-    return `${minutes}m`;
-  }
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours}h`;
-  }
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
-};
-
-const formatRuntime = (date, isRunning) => {
-  if (!date) {
-    return isRunning ? "Running" : "Stopped";
-  }
-  const diffMs = Date.now() - date.getTime();
-  const hours = Math.floor(diffMs / (1000 * 60 * 60));
-  const days = Math.floor(hours / 24);
-  const remainderHours = hours % 24;
-  const label = isRunning ? "Running" : "Stopped";
-  return `${label} ${days}d ${remainderHours}h`;
-};
-
-const buildAssetSummary = async () => {
-  const { total_value: totalValue } = await getAccountsWithSummary();
-  const now = new Date();
-  const startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  const recentTrades = await getTradeHistory({ startDate });
-  const recentPnl = recentTrades.reduce(
-    (sum, trade) => sum + Number(trade.pnl_usd || 0),
-    0
-  );
-  const changePercent = totalValue ? (recentPnl / totalValue) * 100 : 0;
-  const baseValue = totalValue || 0;
-  const startValue = baseValue * 0.68;
-  const midValue = baseValue * 0.82;
-  const endValue = baseValue;
-
-  return {
-    totalBalance: formatCurrency.format(baseValue),
-    change: formatPercent(changePercent),
-    changeLabel: "vs last 30 days",
+export const dashboardData = {
+  assetSummary: {
+    totalBalance: "$12,430",
+    change: "+3.4%",
+    changeLabel: "vs last 7 days",
     chart: {
       activeRange: "7D",
-      fullSeries: buildSeries(120, startValue, endValue),
+      fullSeries: buildSeries(120, 6000, 12430),
       ranges: {
-        "7D": buildSeries(7, midValue, endValue),
-        "30D": buildSeries(30, baseValue * 0.74, endValue),
-        "90D": buildSeries(90, startValue, endValue),
+        "7D": buildSeries(7, 10250, 12430),
+        "30D": buildSeries(30, 8200, 12430),
+        "90D": buildSeries(90, 6800, 12430),
       },
     },
-  };
-};
-
-const buildAccountsSummary = async () => {
-  const { total_value: totalValue, accounts } = await getAccountsWithSummary();
-  return {
-    total: formatCurrency.format(totalValue || 0),
-    accounts: accounts.map((account) => ({
-      name: account.provider,
-      value: formatCurrency.format(account.total_value || 0),
-      amount: account.total_value || 0,
-    })),
-  };
-};
-
-const buildTopAutotraders = async () => {
-  const accounts = await getAccounts();
-  const autotradersList = (
-    await Promise.all(accounts.map((account) => getAutotradersByAccount(account.account_id)))
-  ).flat();
-  const trades = await getTradeHistory();
-  const latestTradeByAutotrader = new Map();
-  trades.forEach((trade) => {
-    if (!latestTradeByAutotrader.has(trade.autotrader_id)) {
-      latestTradeByAutotrader.set(trade.autotrader_id, trade);
-    }
-  });
-
-  return autotradersList
-    .slice()
-    .sort((a, b) => Number(b.pnl_percent || 0) - Number(a.pnl_percent || 0))
-    .slice(0, 3)
-    .map((autotrader) => {
-      const trade = latestTradeByAutotrader.get(autotrader.autotrader_id);
-      const assetSymbol = trade?.asset?.symbol || "BTC";
-      const pair = `${assetSymbol} / USDT`;
-      return {
-        name: autotrader.plan?.name || autotrader.autotrader_id,
-        pair,
-        runtime: formatRuntime(
-          autotrader.created_at ? new Date(autotrader.created_at) : null,
-          autotrader.is_running
-        ),
-        pnl: formatPercent(Number(autotrader.pnl_percent || 0)),
-      };
-    });
-};
-
-const buildTradeHistorySummary = async () => {
-  const trades = await getTradeHistory({ limit: 6 });
-  return trades.map((trade) => {
-    const asset = trade.asset?.symbol?.toLowerCase() || "btc";
-    const profit = Number(trade.pnl_usd || 0);
-    const profitState = profit > 0 ? "positive" : profit < 0 ? "negative" : "neutral";
-    const profitPct = trade.value_usd
-      ? `${profit > 0 ? "+" : profit < 0 ? "-" : ""}${Math.abs(
-          (profit / trade.value_usd) * 100
-        ).toFixed(1)}%`
-      : "–";
-    return {
-      pair: [asset, "usdt"],
-      action: trade.side?.toUpperCase() === "SELL" ? "SELL" : "BUY",
-      status: "FILLED",
-      profitUsd:
-        profit === 0
-          ? "–"
-          : `${profit > 0 ? "+" : "-"}${formatCurrencyDetailed.format(Math.abs(profit))}`,
-      profitPct,
-      profitState,
-      time: formatRelativeTime(trade.executed_at_date),
-    };
-  });
-};
-
-export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders, tradeHistory] =
-    await Promise.all([
-      buildAssetSummary(),
-      buildAccountsSummary(),
-      buildTopAutotraders(),
-      buildTradeHistorySummary(),
-    ]);
-
-  return {
-    assetSummary,
-    accountsSummary,
-    alerts: [
-      {
-        title: "Autotrader Error",
-        message: "Insufficient balance for USDT / AVAX",
-        type: "Action Needed",
-        time: "2 minutes ago",
-        cta: "View Autotrader",
-        alertState: "error",
-        alertStatus: "active",
-      },
-      {
-        title: "Margin Warning",
-        message: "Maintenance margin below 20% on BTC / USDT",
-        type: "Warning",
-        time: "10 minutes ago",
-        cta: "Review Margin",
-        alertState: "error",
-        alertStatus: "active",
-      },
-      {
-        title: "Autotrader Paused",
-        message: "Trading paused for ETH / USDT due to volatility",
-        type: "Action Needed",
-        time: "35 minutes ago",
-        cta: "Resume Autotrader",
-        alertState: "error",
-        alertStatus: "active",
-      },
+  },
+  accountsSummary: {
+    total: "$21,240",
+    accounts: [
+      { name: "Binance", value: "$9,150", amount: 9150 },
+      { name: "Bybit", value: "$6,050", amount: 6050 },
+      { name: "Kraken", value: "$3,150", amount: 3150 },
+      { name: "Coinbase", value: "$2,400", amount: 2400 },
+      { name: "Others", value: "$490", amount: 490 },
     ],
-    topAutotraders,
-    tradeHistory,
-  };
+  },
+  alerts: [
+    {
+      title: "Autotrader Error",
+      message: "Insufficient balance for USDT / AVAX",
+      type: "Action Needed",
+      time: "2 minutes ago",
+      cta: "View Autotrader",
+      alertState: "error",
+      alertStatus: "active",
+    },
+    {
+      title: "Margin Warning",
+      message: "Maintenance margin below 20% on BTC / USDT",
+      type: "Warning",
+      time: "10 minutes ago",
+      cta: "Review Margin",
+      alertState: "error",
+      alertStatus: "active",
+    },
+    {
+      title: "Autotrader Paused",
+      message: "Trading paused for ETH / USDT due to volatility",
+      type: "Action Needed",
+      time: "35 minutes ago",
+      cta: "Resume Autotrader",
+      alertState: "error",
+      alertStatus: "active",
+    },
+    {
+      title: "Deposit Confirmed",
+      message: "$1,200 USDT deposit confirmed",
+      type: "Update",
+      time: "1 hour ago",
+      cta: "View Wallet",
+      alertState: "error",
+      alertStatus: "active",
+    },
+    {
+      title: "Price Alert",
+      message: "SOL reached $182.40 target",
+      type: "Update",
+      time: "3 hours ago",
+      cta: "View Chart",
+      alertState: "error",
+      alertStatus: "active",
+    },
+    {
+      title: "Risk Review Needed",
+      message: "One or more positions require review",
+      type: "Action Needed",
+      time: "Yesterday",
+      cta: "Review Positions",
+      alertState: "error",
+      alertStatus: "active",
+    },
+  ],
+  topAutotraders: [
+    {
+      name: "alexayu",
+      pair: "USDT / AVAX",
+      runtime: "Running 12d 4h",
+      pnl: "+9.2%",
+    },
+    {
+      name: "testing 3",
+      pair: "USDT / BTC",
+      runtime: "Running 31d 16h",
+      pnl: "+7.8%",
+    },
+    {
+      name: "aklayu",
+      pair: "USDT / AVAX",
+      runtime: "Running 44d 6h",
+      pnl: "+5.5%",
+    },
+  ],
+  tradeHistory: [
+    {
+      pair: ["avax", "usdt"],
+      action: "BUY",
+      status: "FILLED",
+      profitUsd: "+$124.30",
+      profitPct: "+2.1%",
+      profitState: "positive",
+      time: "2m",
+    },
+    {
+      pair: ["btc", "usdt"],
+      action: "SELL",
+      status: "FAILED",
+      profitUsd: "–",
+      profitPct: "–",
+      profitState: "neutral",
+      time: "18m",
+    },
+    {
+      pair: ["eth", "usdt"],
+      action: "SELL",
+      status: "FILLED",
+      profitUsd: "-$48.90",
+      profitPct: "-0.6%",
+      profitState: "negative",
+      time: "1h",
+    },
+    {
+      pair: ["sol", "usdt"],
+      action: "CANCEL",
+      status: "CANCELLED",
+      profitUsd: "–",
+      profitPct: "–",
+      profitState: "neutral",
+      time: "3h",
+    },
+    {
+      pair: ["ada", "usdt"],
+      action: "BUY",
+      status: "ERROR",
+      profitUsd: "–",
+      profitPct: "–",
+      profitState: "neutral",
+      time: "7h",
+    },
+    {
+      pair: ["btc", "usdt"],
+      action: "CANCEL",
+      status: "CANCELLED",
+      profitUsd: "+$0.00",
+      profitPct: "0.0%",
+      profitState: "neutral",
+      time: "1d",
+    },
+  ],
 };
+
+export const fetchDashboardData = () =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(structuredClone(dashboardData));
+    }, 700);
+  });
