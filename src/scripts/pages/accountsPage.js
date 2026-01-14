@@ -19,15 +19,47 @@ const ASSET_COLORS = new Map([
   ["BNB", "#ecc94b"],
 ]);
 
-const CHART_PALETTE = [
-  "#f5b94c",
-  "#5e7bff",
-  "#68d391",
-  "#f56565",
-  "#9f7aea",
-  "#4fd1c5",
-];
 const NEUTRAL_COLOR = "#8a8f98";
+const GOLDEN_ANGLE = 137.508;
+
+const hashString = (value) => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash * 31 + value.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+};
+
+const formatHsl = (hue, saturation = 70, lightness = 55) =>
+  `hsl(${hue.toFixed(2)}deg ${saturation}% ${lightness}%)`;
+
+const resolveUniqueColor = (key, usedColors, preferredColor = null) => {
+  if (preferredColor && !usedColors.has(preferredColor)) {
+    return preferredColor;
+  }
+  let hue = hashString(key) % 360;
+  let color = formatHsl(hue);
+  let guard = 0;
+  while (usedColors.has(color) && guard < 360) {
+    hue = (hue + GOLDEN_ANGLE) % 360;
+    color = formatHsl(hue);
+    guard += 1;
+  }
+  return color;
+};
+
+const buildUniqueColorMap = (items, getKey, getPreferredColor) => {
+  const usedColors = new Set();
+  const colorMap = new Map();
+  const keys = Array.from(new Set(items.map(getKey))).sort();
+  keys.forEach((key) => {
+    const preferred = getPreferredColor ? getPreferredColor(key) : null;
+    const color = resolveUniqueColor(key, usedColors, preferred);
+    colorMap.set(key, color);
+    usedColors.add(color);
+  });
+  return colorMap;
+};
 
 const formatCurrency = (value, digits = 0) =>
   new Intl.NumberFormat("en-US", {
@@ -128,28 +160,41 @@ const buildDistributionData = (type, accounts) => {
         assetTotals.set(symbol, current + Number(asset.usd_value || 0));
       });
     });
-    const sorted = Array.from(assetTotals.entries())
+    const sortedAssets = Array.from(assetTotals.entries())
       .map(([label, amount]) => ({
         label,
         amount,
-        color: ASSET_COLORS.get(label) || null,
+        colorKey: label,
       }))
       .sort((a, b) => b.amount - a.amount);
-    const topItems = sorted.slice(0, 4).map((item, index) => ({
+    const assetColors = buildUniqueColorMap(
+      sortedAssets,
+      (item) => item.colorKey,
+      (key) => ASSET_COLORS.get(key)
+    );
+    sortedAssets.forEach((item) => {
+      item.color = assetColors.get(item.colorKey);
+    });
+    const listItems = sortedAssets.slice(0, 4).map((item) => ({
       ...item,
-      color: item.color || CHART_PALETTE[index % CHART_PALETTE.length],
+      listIndex: null,
     }));
-    const remainder = sorted.slice(4);
+    const remainder = sortedAssets.slice(4);
     if (remainder.length) {
       const othersAmount = remainder.reduce((sum, item) => sum + item.amount, 0);
-      topItems.push({
+      listItems.push({
         label: "Others",
         amount: othersAmount,
         color: NEUTRAL_COLOR,
         isOther: true,
+        colorKey: "others",
+        listIndex: null,
       });
     }
-    return topItems;
+    sortedAssets.forEach((item, index) => {
+      item.listIndex = index < 4 ? index : listItems.length - 1;
+    });
+    return { listItems, donutItems: sortedAssets };
   }
 
   if (type === "market") {
@@ -159,47 +204,64 @@ const buildDistributionData = (type, accounts) => {
       const current = marketTotals.get(label) || 0;
       marketTotals.set(label, current + Number(account.totalValueUsd || 0));
     });
-    return Array.from(marketTotals.entries()).map(([label, amount], index) => ({
+    const items = Array.from(marketTotals.entries()).map(([label, amount], index) => ({
       label,
       amount,
-      color: CHART_PALETTE[index % CHART_PALETTE.length],
+      colorKey: label,
+      listIndex: index,
     }));
+    const marketColors = buildUniqueColorMap(items, (item) => item.colorKey);
+    items.forEach((item) => {
+      item.color = marketColors.get(item.colorKey);
+    });
+    return { listItems: items, donutItems: items };
   }
 
   const sortedAccounts = accounts
     .map((account) => ({
       label: formatAccountCode(account.account_code || account.account_id),
+      colorKey: account.account_id || account.account_code,
       provider: account.provider || "Provider",
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
     }))
     .sort((a, b) => b.amount - a.amount);
-  const topAccounts = sortedAccounts.slice(0, 4).map((item, index) => ({
+  const accountColors = buildUniqueColorMap(sortedAccounts, (item) => item.colorKey || item.label);
+  sortedAccounts.forEach((item) => {
+    item.color = accountColors.get(item.colorKey || item.label);
+  });
+  const listItems = sortedAccounts.slice(0, 4).map((item) => ({
     ...item,
-    color: CHART_PALETTE[index % CHART_PALETTE.length],
+    listIndex: null,
   }));
   const remainingAccounts = sortedAccounts.slice(4);
-  if (remainingAccounts.length) {
-    const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
-    topAccounts.push({
+  const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
+  if (sortedAccounts.length >= 4) {
+    listItems.push({
       label: "Others",
       amount: othersAmount,
       color: NEUTRAL_COLOR,
       isOther: true,
+      colorKey: "others",
+      listIndex: null,
     });
   }
-  return topAccounts;
+  sortedAccounts.forEach((item, index) => {
+    item.listIndex = index < 4 ? index : listItems.length - 1;
+  });
+  return { listItems, donutItems: sortedAccounts };
 };
 
-const renderDonutChart = (container, items, onHover) => {
+const renderDonutChart = (container, items, onHover, tooltip) => {
   const size = 220;
   const stroke = 28;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  svg.setAttribute("width", String(size));
-  svg.setAttribute("height", String(size));
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "100%");
+  svg.style.transform = "rotate(-90deg)";
 
   let offset = 0;
   items.forEach((item, index) => {
@@ -218,8 +280,35 @@ const renderDonutChart = (container, items, onHover) => {
     circle.setAttribute("stroke-dashoffset", String(-offset));
     circle.setAttribute("class", "accounts-donut-segment");
     circle.dataset.index = String(index);
-    circle.addEventListener("mouseenter", () => onHover(index));
-    circle.addEventListener("mouseleave", () => onHover(null));
+    circle.addEventListener("mouseenter", (event) => {
+      onHover(index);
+      if (!tooltip) {
+        return;
+      }
+      tooltip.innerHTML = `
+        <span class="asset-tooltip-accent" style="--asset-color: ${item.color};"></span>
+        <span class="asset-tooltip-name">${item.label}</span>
+        <span>${item.percent.toFixed(1)}% · ${formatCurrency(item.amount)}</span>
+      `;
+      tooltip.classList.add("is-visible");
+      tooltip.style.setProperty("--asset-color", item.color);
+      tooltip.style.left = `${event.clientX + 12}px`;
+      tooltip.style.top = `${event.clientY - 12}px`;
+    });
+    circle.addEventListener("mousemove", (event) => {
+      if (!tooltip) {
+        return;
+      }
+      tooltip.style.left = `${event.clientX + 12}px`;
+      tooltip.style.top = `${event.clientY - 12}px`;
+    });
+    circle.addEventListener("mouseleave", () => {
+      onHover(null);
+      if (!tooltip) {
+        return;
+      }
+      tooltip.classList.remove("is-visible");
+    });
     svg.appendChild(circle);
     offset += segmentLength;
   });
@@ -228,7 +317,7 @@ const renderDonutChart = (container, items, onHover) => {
   container.appendChild(svg);
 };
 
-const renderDistributionList = (container, items, onHover, filter) => {
+const renderDistributionList = (container, items, filter) => {
   container.innerHTML = "";
   items.forEach((item, index) => {
     const listItem = document.createElement("div");
@@ -280,35 +369,40 @@ const renderDistributionList = (container, items, onHover, filter) => {
         </div>
       `;
     }
-    listItem.addEventListener("mouseenter", () => onHover(index));
-    listItem.addEventListener("mouseleave", () => onHover(null));
     container.appendChild(listItem);
   });
 };
 
-const renderDistribution = (filter, accounts, donutContainer, legendContainer) => {
-  const items = buildDistributionData(filter, accounts);
-  const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
-  const normalized = items.map((item) => ({
+const renderDistribution = (filter, accounts, donutContainer, legendContainer, tooltip) => {
+  const { listItems, donutItems } = buildDistributionData(filter, accounts);
+  const totalAmount = donutItems.reduce((sum, item) => sum + item.amount, 0);
+  const normalizedDonut = donutItems.map((item) => ({
+    ...item,
+    percent: totalAmount ? (item.amount / totalAmount) * 100 : 0,
+  }));
+  const normalizedList = listItems.map((item) => ({
     ...item,
     percent: totalAmount ? (item.amount / totalAmount) * 100 : 0,
   }));
 
   const setActive = (index) => {
     const donutSegments = donutContainer.querySelectorAll(".accounts-donut-segment");
-    const listItems = legendContainer.querySelectorAll(".accounts-distribution-item");
+    const listRows = legendContainer.querySelectorAll(".accounts-distribution-item");
+    const hasActive = index !== null;
+    const targetListIndex = hasActive ? normalizedDonut[index]?.listIndex : null;
     donutSegments.forEach((segment) => {
-      const isActive = index !== null && Number(segment.dataset.index) === index;
+      const isActive = hasActive && Number(segment.dataset.index) === index;
       segment.classList.toggle("is-active", isActive);
+      segment.classList.toggle("is-dimmed", hasActive && !isActive);
     });
-    listItems.forEach((item) => {
-      const isActive = index !== null && Number(item.dataset.index) === index;
+    listRows.forEach((item) => {
+      const isActive = hasActive && Number(item.dataset.index) === targetListIndex;
       item.classList.toggle("is-active", isActive);
     });
   };
 
-  renderDonutChart(donutContainer, normalized, setActive);
-  renderDistributionList(legendContainer, normalized, setActive, filter);
+  renderDonutChart(donutContainer, normalizedDonut, setActive, tooltip);
+  renderDistributionList(legendContainer, normalizedList, filter);
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
@@ -437,14 +531,20 @@ const initAccountsPage = async () => {
   );
 
   renderAccountsTable(accountsWithMeta, tableBody, pagination, tooltip);
-  renderDistribution(filterSelect.value || "accounts", accountsWithMeta, donutContainer, legendContainer);
+  renderDistribution(
+    filterSelect.value || "accounts",
+    accountsWithMeta,
+    donutContainer,
+    legendContainer,
+    tooltip
+  );
 
   filterSelect.addEventListener("change", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLSelectElement)) {
       return;
     }
-    renderDistribution(target.value, accountsWithMeta, donutContainer, legendContainer);
+    renderDistribution(target.value, accountsWithMeta, donutContainer, legendContainer, tooltip);
   });
 };
 
