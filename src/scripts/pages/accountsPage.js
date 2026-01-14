@@ -28,6 +28,25 @@ const CHART_PALETTE = [
   "#4fd1c5",
 ];
 const NEUTRAL_COLOR = "#8a8f98";
+const ACCOUNT_COLOR_MAP = new Map();
+const ASSET_COLOR_MAP = new Map();
+const MARKET_COLOR_MAP = new Map();
+
+const getNextAvailableColor = (palette, usedColors) =>
+  palette.find((color) => !usedColors.has(color)) || palette[usedColors.size % palette.length];
+
+const getStableColor = (label, palette, colorMap, preferredColor = null) => {
+  if (colorMap.has(label)) {
+    return colorMap.get(label);
+  }
+  const usedColors = new Set(colorMap.values());
+  const nextColor =
+    preferredColor && !usedColors.has(preferredColor)
+      ? preferredColor
+      : getNextAvailableColor(palette, usedColors);
+  colorMap.set(label, nextColor);
+  return nextColor;
+};
 
 const formatCurrency = (value, digits = 0) =>
   new Intl.NumberFormat("en-US", {
@@ -132,12 +151,17 @@ const buildDistributionData = (type, accounts) => {
       .map(([label, amount]) => ({
         label,
         amount,
-        color: ASSET_COLORS.get(label) || null,
+        colorKey: label,
       }))
       .sort((a, b) => b.amount - a.amount);
-    const topItems = sorted.slice(0, 4).map((item, index) => ({
+    const topItems = sorted.slice(0, 4).map((item) => ({
       ...item,
-      color: item.color || CHART_PALETTE[index % CHART_PALETTE.length],
+      color: getStableColor(
+        item.colorKey,
+        CHART_PALETTE,
+        ASSET_COLOR_MAP,
+        ASSET_COLORS.get(item.colorKey)
+      ),
     }));
     const remainder = sorted.slice(4);
     if (remainder.length) {
@@ -147,6 +171,7 @@ const buildDistributionData = (type, accounts) => {
         amount: othersAmount,
         color: NEUTRAL_COLOR,
         isOther: true,
+        colorKey: "others",
       });
     }
     return topItems;
@@ -159,24 +184,26 @@ const buildDistributionData = (type, accounts) => {
       const current = marketTotals.get(label) || 0;
       marketTotals.set(label, current + Number(account.totalValueUsd || 0));
     });
-    return Array.from(marketTotals.entries()).map(([label, amount], index) => ({
+    return Array.from(marketTotals.entries()).map(([label, amount]) => ({
       label,
       amount,
-      color: CHART_PALETTE[index % CHART_PALETTE.length],
+      color: getStableColor(label, CHART_PALETTE, MARKET_COLOR_MAP),
+      colorKey: label,
     }));
   }
 
   const sortedAccounts = accounts
     .map((account) => ({
       label: formatAccountCode(account.account_code || account.account_id),
+      colorKey: account.account_id || account.account_code,
       provider: account.provider || "Provider",
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
     }))
     .sort((a, b) => b.amount - a.amount);
-  const topAccounts = sortedAccounts.slice(0, 4).map((item, index) => ({
+  const topAccounts = sortedAccounts.slice(0, 4).map((item) => ({
     ...item,
-    color: CHART_PALETTE[index % CHART_PALETTE.length],
+    color: getStableColor(item.colorKey || item.label, CHART_PALETTE, ACCOUNT_COLOR_MAP),
   }));
   const remainingAccounts = sortedAccounts.slice(4);
   if (remainingAccounts.length) {
@@ -186,20 +213,21 @@ const buildDistributionData = (type, accounts) => {
       amount: othersAmount,
       color: NEUTRAL_COLOR,
       isOther: true,
+      colorKey: "others",
     });
   }
   return topAccounts;
 };
 
-const renderDonutChart = (container, items, onHover) => {
+const renderDonutChart = (container, items, onHover, tooltip) => {
   const size = 220;
   const stroke = 28;
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  svg.setAttribute("width", String(size));
-  svg.setAttribute("height", String(size));
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", "100%");
 
   let offset = 0;
   items.forEach((item, index) => {
@@ -218,8 +246,35 @@ const renderDonutChart = (container, items, onHover) => {
     circle.setAttribute("stroke-dashoffset", String(-offset));
     circle.setAttribute("class", "accounts-donut-segment");
     circle.dataset.index = String(index);
-    circle.addEventListener("mouseenter", () => onHover(index));
-    circle.addEventListener("mouseleave", () => onHover(null));
+    circle.addEventListener("mouseenter", (event) => {
+      onHover(index);
+      if (!tooltip) {
+        return;
+      }
+      tooltip.innerHTML = `
+        <span class="asset-tooltip-accent" style="--asset-color: ${item.color};"></span>
+        <span class="asset-tooltip-name">${item.label}</span>
+        <span>${item.percent.toFixed(1)}% · ${formatCurrency(item.amount)}</span>
+      `;
+      tooltip.classList.add("is-visible");
+      tooltip.style.setProperty("--asset-color", item.color);
+      tooltip.style.left = `${event.clientX + 12}px`;
+      tooltip.style.top = `${event.clientY - 12}px`;
+    });
+    circle.addEventListener("mousemove", (event) => {
+      if (!tooltip) {
+        return;
+      }
+      tooltip.style.left = `${event.clientX + 12}px`;
+      tooltip.style.top = `${event.clientY - 12}px`;
+    });
+    circle.addEventListener("mouseleave", () => {
+      onHover(null);
+      if (!tooltip) {
+        return;
+      }
+      tooltip.classList.remove("is-visible");
+    });
     svg.appendChild(circle);
     offset += segmentLength;
   });
@@ -228,7 +283,7 @@ const renderDonutChart = (container, items, onHover) => {
   container.appendChild(svg);
 };
 
-const renderDistributionList = (container, items, onHover, filter) => {
+const renderDistributionList = (container, items, filter) => {
   container.innerHTML = "";
   items.forEach((item, index) => {
     const listItem = document.createElement("div");
@@ -280,13 +335,11 @@ const renderDistributionList = (container, items, onHover, filter) => {
         </div>
       `;
     }
-    listItem.addEventListener("mouseenter", () => onHover(index));
-    listItem.addEventListener("mouseleave", () => onHover(null));
     container.appendChild(listItem);
   });
 };
 
-const renderDistribution = (filter, accounts, donutContainer, legendContainer) => {
+const renderDistribution = (filter, accounts, donutContainer, legendContainer, tooltip) => {
   const items = buildDistributionData(filter, accounts);
   const totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
   const normalized = items.map((item) => ({
@@ -297,18 +350,20 @@ const renderDistribution = (filter, accounts, donutContainer, legendContainer) =
   const setActive = (index) => {
     const donutSegments = donutContainer.querySelectorAll(".accounts-donut-segment");
     const listItems = legendContainer.querySelectorAll(".accounts-distribution-item");
+    const hasActive = index !== null;
     donutSegments.forEach((segment) => {
-      const isActive = index !== null && Number(segment.dataset.index) === index;
+      const isActive = hasActive && Number(segment.dataset.index) === index;
       segment.classList.toggle("is-active", isActive);
+      segment.classList.toggle("is-dimmed", hasActive && !isActive);
     });
     listItems.forEach((item) => {
-      const isActive = index !== null && Number(item.dataset.index) === index;
+      const isActive = hasActive && Number(item.dataset.index) === index;
       item.classList.toggle("is-active", isActive);
     });
   };
 
-  renderDonutChart(donutContainer, normalized, setActive);
-  renderDistributionList(legendContainer, normalized, setActive, filter);
+  renderDonutChart(donutContainer, normalized, setActive, tooltip);
+  renderDistributionList(legendContainer, normalized, filter);
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
@@ -437,14 +492,20 @@ const initAccountsPage = async () => {
   );
 
   renderAccountsTable(accountsWithMeta, tableBody, pagination, tooltip);
-  renderDistribution(filterSelect.value || "accounts", accountsWithMeta, donutContainer, legendContainer);
+  renderDistribution(
+    filterSelect.value || "accounts",
+    accountsWithMeta,
+    donutContainer,
+    legendContainer,
+    tooltip
+  );
 
   filterSelect.addEventListener("change", (event) => {
     const target = event.target;
     if (!(target instanceof HTMLSelectElement)) {
       return;
     }
-    renderDistribution(target.value, accountsWithMeta, donutContainer, legendContainer);
+    renderDistribution(target.value, accountsWithMeta, donutContainer, legendContainer, tooltip);
   });
 };
 
