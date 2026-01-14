@@ -381,11 +381,6 @@
         border-bottom-right-radius: 12px;
       }
 
-      .page-accounts .account-name {
-        font-size: 0.78rem;
-        font-weight: 600;
-      }
-
       .page-accounts .account-main {
         display: flex;
         flex-direction: column;
@@ -393,62 +388,83 @@
       }
 
       .page-accounts .account-id {
-        font-size: 0.66rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: var(--color-text-secondary);
+        font-size: 0.84rem;
+        font-weight: 700;
+        color: var(--color-text);
       }
 
       .page-accounts .account-type {
-        font-size: 0.65rem;
-        color: var(--color-text-tertiary);
+        font-size: 0.66rem;
+        color: var(--color-text-secondary);
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
       }
 
-      .page-accounts .account-label {
-        font-size: 0.7rem;
-        color: var(--color-text-secondary);
+      .page-accounts .account-type span {
+        color: var(--color-text);
       }
 
       .page-accounts .metric-positive {
         color: var(--color-status-positive);
       }
 
-      .page-accounts .asset-stack {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-
-      .page-accounts .asset-row {
+      .page-accounts .assets-bar {
         display: flex;
         align-items: center;
-        gap: 8px;
-      }
-
-      .page-accounts .asset-label {
-        font-size: 0.62rem;
-        color: var(--color-text-secondary);
-        min-width: 78px;
-      }
-
-      .page-accounts .asset-bars {
-        display: flex;
-        flex: 1;
-        height: 6px;
+        height: 10px;
         border-radius: 999px;
         overflow: hidden;
         background: rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.35);
       }
 
-      .page-accounts .asset-bar {
+      .page-accounts .asset-segment {
         height: 100%;
         background: var(--asset-color, rgba(86, 221, 97, 0.5));
+        position: relative;
+        cursor: pointer;
+        transition: filter 0.2s ease;
       }
 
-      .page-accounts .asset-more {
+      .page-accounts .asset-segment:hover {
+        filter: brightness(1.15);
+      }
+
+      .page-accounts .asset-segment::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px 8px;
+        border-radius: 8px;
+        background: rgba(12, 14, 18, 0.96);
+        color: var(--color-text);
         font-size: 0.62rem;
-        color: var(--color-text-tertiary);
-        margin-left: auto;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+      }
+
+      .page-accounts .asset-segment:hover::after {
+        opacity: 1;
+      }
+
+      .page-accounts .autotrader-count-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 36px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(86, 221, 97, 0.12);
+        color: var(--color-status-positive);
+        font-weight: 600;
+        font-size: 0.68rem;
       }
 
       .page-accounts .table-action {
@@ -462,45 +478,6 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-      }
-
-      .page-accounts .autotrader-assets {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .page-accounts .autotrader-bar {
-        flex: 1;
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.45);
-      }
-
-      .page-accounts .autotrader-bar-fill {
-        height: 100%;
-        display: block;
-        background: linear-gradient(90deg, rgba(102, 255, 51, 0.85), rgba(102, 255, 51, 0.45));
-      }
-
-      .page-accounts .autotrader-meta {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        min-width: 44px;
-        gap: 2px;
-      }
-
-      .page-accounts .autotrader-percent {
-        font-size: 0.68rem;
-        color: var(--color-text);
-      }
-
-      .page-accounts .autotrader-count {
-        font-size: 0.6rem;
-        color: var(--color-text-tertiary);
       }
 
       .page-accounts .accounts-table-pagination {
@@ -596,42 +573,35 @@
                     <table class="accounts-table">
                       <thead>
                         <tr>
-                          <th style="width: 16%">Account</th>
-                          <th style="width: 14%">Account ID</th>
-                          <th style="width: 14%">Label</th>
-                          <th style="width: 10%">Balance</th>
-                          <th style="width: 10%">USD Value</th>
+                          <th style="width: 20%">Account</th>
+                          <th style="width: 12%">Value</th>
                           <th style="width: 6%">7D</th>
                           <th style="width: 6%">30D</th>
                           <th style="width: 6%">90D</th>
-                          <th style="width: 14%">Autotrader Assets</th>
-                          <th style="width: 4%"></th>
+                          <th style="width: 8%">Autotraders</th>
+                          <th style="width: 32%">Assets</th>
+                          <th style="width: 4%"> </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr data-assets="BTC:45,ETH:25,SOL:18,AVAX:12">
                           <td>
                             <div class="account-main">
-                              <span class="account-name">Binance</span>
-                              <span class="account-type">Binance Spot</span>
+                              <span class="account-id">8guN...59RP</span>
+                              <span class="account-type"><span>Binance</span> · Spot</span>
                             </div>
                           </td>
-                          <td><span class="account-id">8guN...59RP</span></td>
-                          <td><span class="account-label">Primary trading</span></td>
-                          <td>5,353.12</td>
-                          <td class="metric-positive">$5,353</td>
+                          <td>$5,353</td>
                           <td class="metric-positive">+3.4%</td>
                           <td class="metric-positive">+9.2%</td>
                           <td class="metric-positive">+14.8%</td>
+                          <td><span class="autotrader-count-pill">124</span></td>
                           <td>
-                            <div class="autotrader-assets">
-                              <div class="autotrader-bar">
-                                <span class="autotrader-bar-fill" style="width: 62%"></span>
-                              </div>
-                              <div class="autotrader-meta">
-                                <span class="autotrader-percent">62%</span>
-                                <span class="autotrader-count">+124</span>
-                              </div>
+                            <div class="assets-bar" role="img" aria-label="Asset distribution">
+                              <span class="asset-segment" style="width: 45%; --asset-color: #f5b94c" data-tooltip="BTC · 45% · $2,409"></span>
+                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-tooltip="ETH · 25% · $1,338"></span>
+                              <span class="asset-segment" style="width: 18%; --asset-color: #68d391" data-tooltip="SOL · 18% · $964"></span>
+                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-tooltip="AVAX · 12% · $642"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -639,26 +609,21 @@
                         <tr data-assets="BTC:35,ETH:30,SOL:20,AVAX:15">
                           <td>
                             <div class="account-main">
-                              <span class="account-name">Bybit</span>
-                              <span class="account-type">Bybit USDT-M</span>
+                              <span class="account-id">gQuA...8TaT</span>
+                              <span class="account-type"><span>Bybit</span> · Futures</span>
                             </div>
                           </td>
-                          <td><span class="account-id">gQuA...8TaT</span></td>
-                          <td><span class="account-label">Momentum vault</span></td>
-                          <td>3,539.44</td>
-                          <td class="metric-positive">$3,539</td>
+                          <td>$3,539</td>
                           <td class="metric-positive">+2.8%</td>
                           <td class="metric-positive">+7.6%</td>
                           <td class="metric-positive">+12.4%</td>
+                          <td><span class="autotrader-count-pill">98</span></td>
                           <td>
-                            <div class="autotrader-assets">
-                              <div class="autotrader-bar">
-                                <span class="autotrader-bar-fill" style="width: 48%"></span>
-                              </div>
-                              <div class="autotrader-meta">
-                                <span class="autotrader-percent">48%</span>
-                                <span class="autotrader-count">+98</span>
-                              </div>
+                            <div class="assets-bar" role="img" aria-label="Asset distribution">
+                              <span class="asset-segment" style="width: 35%; --asset-color: #f5b94c" data-tooltip="BTC · 35% · $1,239"></span>
+                              <span class="asset-segment" style="width: 30%; --asset-color: #5e7bff" data-tooltip="ETH · 30% · $1,062"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $708"></span>
+                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-tooltip="AVAX · 15% · $531"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -666,26 +631,21 @@
                         <tr data-assets="BTC:40,ETH:32,SOL:16,AVAX:12">
                           <td>
                             <div class="account-main">
-                              <span class="account-name">Kraken</span>
-                              <span class="account-type">Kraken Spot</span>
+                              <span class="account-id">Yt9F...2LkQ</span>
+                              <span class="account-type"><span>Kraken</span> · Spot</span>
                             </div>
                           </td>
-                          <td><span class="account-id">Yt9F...2LkQ</span></td>
-                          <td><span class="account-label">Long-term holdings</span></td>
-                          <td>1,842.73</td>
-                          <td class="metric-positive">$1,843</td>
+                          <td>$1,843</td>
                           <td class="metric-positive">+1.6%</td>
                           <td class="metric-positive">+5.4%</td>
                           <td class="metric-positive">+9.1%</td>
+                          <td><span class="autotrader-count-pill">42</span></td>
                           <td>
-                            <div class="autotrader-assets">
-                              <div class="autotrader-bar">
-                                <span class="autotrader-bar-fill" style="width: 28%"></span>
-                              </div>
-                              <div class="autotrader-meta">
-                                <span class="autotrader-percent">28%</span>
-                                <span class="autotrader-count">+42</span>
-                              </div>
+                            <div class="assets-bar" role="img" aria-label="Asset distribution">
+                              <span class="asset-segment" style="width: 40%; --asset-color: #f5b94c" data-tooltip="BTC · 40% · $737"></span>
+                              <span class="asset-segment" style="width: 32%; --asset-color: #5e7bff" data-tooltip="ETH · 32% · $590"></span>
+                              <span class="asset-segment" style="width: 16%; --asset-color: #68d391" data-tooltip="SOL · 16% · $295"></span>
+                              <span class="asset-segment" style="width: 12%; --asset-color: #f56565" data-tooltip="AVAX · 12% · $221"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -693,26 +653,21 @@
                         <tr data-assets="BTC:30,ETH:35,SOL:20,AVAX:15">
                           <td>
                             <div class="account-main">
-                              <span class="account-name">Coinbase</span>
-                              <span class="account-type">Coinbase Pro</span>
+                              <span class="account-id">Ux3K...7SwP</span>
+                              <span class="account-type"><span>Coinbase</span> · Spot</span>
                             </div>
                           </td>
-                          <td><span class="account-id">Ux3K...7SwP</span></td>
-                          <td><span class="account-label">Treasury operations</span></td>
-                          <td>1,404.11</td>
-                          <td class="metric-positive">$1,404</td>
+                          <td>$1,404</td>
                           <td class="metric-positive">+1.1%</td>
                           <td class="metric-positive">+3.7%</td>
                           <td class="metric-positive">+6.9%</td>
+                          <td><span class="autotrader-count-pill">31</span></td>
                           <td>
-                            <div class="autotrader-assets">
-                              <div class="autotrader-bar">
-                                <span class="autotrader-bar-fill" style="width: 21%"></span>
-                              </div>
-                              <div class="autotrader-meta">
-                                <span class="autotrader-percent">21%</span>
-                                <span class="autotrader-count">+31</span>
-                              </div>
+                            <div class="assets-bar" role="img" aria-label="Asset distribution">
+                              <span class="asset-segment" style="width: 30%; --asset-color: #f5b94c" data-tooltip="BTC · 30% · $421"></span>
+                              <span class="asset-segment" style="width: 35%; --asset-color: #5e7bff" data-tooltip="ETH · 35% · $491"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $281"></span>
+                              <span class="asset-segment" style="width: 15%; --asset-color: #f56565" data-tooltip="AVAX · 15% · $211"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
@@ -720,26 +675,21 @@
                         <tr data-assets="BTC:25,ETH:25,SOL:20,AVAX:30">
                           <td>
                             <div class="account-main">
-                              <span class="account-name">Others</span>
-                              <span class="account-type">Cold storage</span>
+                              <span class="account-id">Qm1D...90Vx</span>
+                              <span class="account-type"><span>Ledger</span> · Web3</span>
                             </div>
                           </td>
-                          <td><span class="account-id">Qm1D...90Vx</span></td>
-                          <td><span class="account-label">Cold storage</span></td>
-                          <td>291.00</td>
-                          <td class="metric-positive">$291</td>
+                          <td>$291</td>
                           <td class="metric-positive">+0.6%</td>
                           <td class="metric-positive">+1.4%</td>
                           <td class="metric-positive">+2.8%</td>
+                          <td><span class="autotrader-count-pill">18</span></td>
                           <td>
-                            <div class="autotrader-assets">
-                              <div class="autotrader-bar">
-                                <span class="autotrader-bar-fill" style="width: 12%"></span>
-                              </div>
-                              <div class="autotrader-meta">
-                                <span class="autotrader-percent">12%</span>
-                                <span class="autotrader-count">+18</span>
-                              </div>
+                            <div class="assets-bar" role="img" aria-label="Asset distribution">
+                              <span class="asset-segment" style="width: 25%; --asset-color: #f5b94c" data-tooltip="BTC · 25% · $73"></span>
+                              <span class="asset-segment" style="width: 25%; --asset-color: #5e7bff" data-tooltip="ETH · 25% · $73"></span>
+                              <span class="asset-segment" style="width: 20%; --asset-color: #68d391" data-tooltip="SOL · 20% · $58"></span>
+                              <span class="asset-segment" style="width: 30%; --asset-color: #f56565" data-tooltip="AVAX · 30% · $87"></span>
                             </div>
                           </td>
                           <td><button class="table-action" aria-label="Open actions">⋮</button></td>
