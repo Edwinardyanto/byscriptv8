@@ -236,16 +236,14 @@ const buildDistributionData = (type, accounts) => {
   }));
   const remainingAccounts = sortedAccounts.slice(4);
   const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
-  if (sortedAccounts.length >= 4) {
-    listItems.push({
-      label: "Others",
-      amount: othersAmount,
-      color: NEUTRAL_COLOR,
-      isOther: true,
-      colorKey: "others",
-      listIndex: null,
-    });
-  }
+  listItems.push({
+    label: "Others",
+    amount: othersAmount,
+    color: NEUTRAL_COLOR,
+    isOther: true,
+    colorKey: "others",
+    listIndex: null,
+  });
   sortedAccounts.forEach((item, index) => {
     item.listIndex = index < 4 ? index : listItems.length - 1;
   });
