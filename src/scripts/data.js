@@ -25,21 +25,6 @@ const formatCurrency = (value, digits = 0) =>
     maximumFractionDigits: digits,
   }).format(value);
 
-const formatRelativeTime = (timestamp) => {
-  const now = Date.now();
-  const diffMs = Math.max(now - timestamp.getTime(), 0);
-  const minutes = Math.floor(diffMs / (1000 * 60));
-  if (minutes < 60) {
-    return `${minutes || 1}m`;
-  }
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours}h`;
-  }
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
-};
-
 const getAssetBrandColor = (asset) =>
   asset?.brand_color || asset?.asset?.brand_color || "";
 
@@ -85,7 +70,7 @@ const buildAccountsSummary = async () => {
   };
 };
 
-const buildAssetSummary = async () => {
+export const buildAssetSummary = async () => {
   const accounts = await getAccounts();
   const accountValues = await Promise.all(
     accounts.map(async (account) => ({
@@ -155,15 +140,7 @@ const buildTopAutotraders = async () => {
     .slice(0, 3);
 };
 
-const buildTradeHistory = async () => {
-  const trades = await loadTrades();
-  return deriveTradeHistory(trades).map((trade) => ({
-    ...trade,
-    time: trade.time ? formatRelativeTime(new Date(trade.time)) : "–",
-  }));
-};
-
-const alerts = [
+export const alerts = [
   {
     title: "Autotrader Error",
     message: "Insufficient balance for USDT / AVAX",
@@ -219,20 +196,3 @@ const alerts = [
     alertStatus: "active",
   },
 ];
-
-export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders, tradeHistory] = await Promise.all([
-    buildAssetSummary(),
-    buildAccountsSummary(),
-    buildTopAutotraders(),
-    buildTradeHistory(),
-  ]);
-
-  return {
-    assetSummary,
-    accountsSummary,
-    alerts,
-    topAutotraders,
-    tradeHistory,
-  };
-};
