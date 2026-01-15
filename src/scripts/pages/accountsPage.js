@@ -11,54 +11,19 @@ const PERFORMANCE_RANGES = [
   { label: "90D", days: 90 },
 ];
 
-const ASSET_COLORS = new Map([
-  ["BTC", "#f5b94c"],
-  ["ETH", "#5e7bff"],
-  ["SOL", "#68d391"],
-  ["AVAX", "#f56565"],
-  ["BNB", "#ecc94b"],
-]);
+const getAssetBrandColor = (asset) =>
+  asset?.brand_color || asset?.asset?.brand_color || "";
 
-const NEUTRAL_COLOR = "#8a8f98";
-const GOLDEN_ANGLE = 137.508;
-
-const hashString = (value) => {
-  let hash = 0;
-  for (let i = 0; i < value.length; i += 1) {
-    hash = (hash * 31 + value.charCodeAt(i)) | 0;
+const getTopAssetColor = (assets = []) => {
+  if (!Array.isArray(assets) || assets.length === 0) {
+    return "";
   }
-  return Math.abs(hash);
-};
-
-const formatHsl = (hue, saturation = 70, lightness = 55) =>
-  `hsl(${hue.toFixed(2)}deg ${saturation}% ${lightness}%)`;
-
-const resolveUniqueColor = (key, usedColors, preferredColor = null) => {
-  if (preferredColor && !usedColors.has(preferredColor)) {
-    return preferredColor;
-  }
-  let hue = hashString(key) % 360;
-  let color = formatHsl(hue);
-  let guard = 0;
-  while (usedColors.has(color) && guard < 360) {
-    hue = (hue + GOLDEN_ANGLE) % 360;
-    color = formatHsl(hue);
-    guard += 1;
-  }
-  return color;
-};
-
-const buildUniqueColorMap = (items, getKey, getPreferredColor) => {
-  const usedColors = new Set();
-  const colorMap = new Map();
-  const keys = Array.from(new Set(items.map(getKey))).sort();
-  keys.forEach((key) => {
-    const preferred = getPreferredColor ? getPreferredColor(key) : null;
-    const color = resolveUniqueColor(key, usedColors, preferred);
-    colorMap.set(key, color);
-    usedColors.add(color);
-  });
-  return colorMap;
+  const topAsset = assets.reduce((best, current) => {
+    const currentValue = Number(current.usd_value || 0);
+    const bestValue = Number(best?.usd_value || 0);
+    return currentValue > bestValue ? current : best;
+  }, assets[0]);
+  return getAssetBrandColor(topAsset);
 };
 
 const formatCurrency = (value, digits = 0) =>
@@ -105,7 +70,7 @@ const buildAssetsBar = (assets, tooltip) => {
     const value = Number(asset.usd_value || 0);
     const percent = total ? (value / total) * 100 : 0;
     const symbol = asset.assetSymbol || asset.asset?.symbol || "ASSET";
-    const color = ASSET_COLORS.get(symbol) || "rgba(86, 221, 97, 0.5)";
+    const color = getAssetBrandColor(asset);
     const segment = document.createElement("span");
     segment.className = "asset-segment";
     segment.style.width = `${percent}%`;
@@ -156,25 +121,24 @@ const buildDistributionData = (type, accounts) => {
     accounts.forEach((account) => {
       account.assets.forEach((asset) => {
         const symbol = asset.assetSymbol || asset.asset?.symbol || "ASSET";
-        const current = assetTotals.get(symbol) || 0;
-        assetTotals.set(symbol, current + Number(asset.usd_value || 0));
+        const current = assetTotals.get(symbol) || {
+          amount: 0,
+          color: getAssetBrandColor(asset),
+        };
+        assetTotals.set(symbol, {
+          amount: current.amount + Number(asset.usd_value || 0),
+          color: current.color || getAssetBrandColor(asset),
+        });
       });
     });
     const sortedAssets = Array.from(assetTotals.entries())
-      .map(([label, amount]) => ({
+      .map(([label, details]) => ({
         label,
-        amount,
+        amount: details.amount,
+        color: details.color,
         colorKey: label,
       }))
       .sort((a, b) => b.amount - a.amount);
-    const assetColors = buildUniqueColorMap(
-      sortedAssets,
-      (item) => item.colorKey,
-      (key) => ASSET_COLORS.get(key)
-    );
-    sortedAssets.forEach((item) => {
-      item.color = assetColors.get(item.colorKey);
-    });
     const listItems = sortedAssets.slice(0, 4).map((item) => ({
       ...item,
       listIndex: null,
@@ -182,10 +146,11 @@ const buildDistributionData = (type, accounts) => {
     const remainder = sortedAssets.slice(4);
     if (remainder.length) {
       const othersAmount = remainder.reduce((sum, item) => sum + item.amount, 0);
+      const othersColor = remainder.find((item) => item.color)?.color || sortedAssets[0]?.color;
       listItems.push({
         label: "Others",
         amount: othersAmount,
-        color: NEUTRAL_COLOR,
+        color: othersColor,
         isOther: true,
         colorKey: "others",
         listIndex: null,
@@ -201,19 +166,20 @@ const buildDistributionData = (type, accounts) => {
     const marketTotals = new Map();
     accounts.forEach((account) => {
       const label = capitalize(account.market_type || "spot");
-      const current = marketTotals.get(label) || 0;
-      marketTotals.set(label, current + Number(account.totalValueUsd || 0));
+      if (!marketTotals.has(label)) {
+        marketTotals.set(label, { amount: 0, assets: [] });
+      }
+      const current = marketTotals.get(label);
+      current.amount += Number(account.totalValueUsd || 0);
+      current.assets.push(...account.assets);
     });
-    const items = Array.from(marketTotals.entries()).map(([label, amount], index) => ({
+    const items = Array.from(marketTotals.entries()).map(([label, details], index) => ({
       label,
-      amount,
+      amount: details.amount,
+      color: getTopAssetColor(details.assets),
       colorKey: label,
       listIndex: index,
     }));
-    const marketColors = buildUniqueColorMap(items, (item) => item.colorKey);
-    items.forEach((item) => {
-      item.color = marketColors.get(item.colorKey);
-    });
     return { listItems: items, donutItems: items };
   }
 
@@ -224,22 +190,21 @@ const buildDistributionData = (type, accounts) => {
       provider: account.provider || "Provider",
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
+      color: getTopAssetColor(account.assets),
+      assets: account.assets,
     }))
     .sort((a, b) => b.amount - a.amount);
-  const accountColors = buildUniqueColorMap(sortedAccounts, (item) => item.colorKey || item.label);
-  sortedAccounts.forEach((item) => {
-    item.color = accountColors.get(item.colorKey || item.label);
-  });
   const listItems = sortedAccounts.slice(0, 4).map((item) => ({
     ...item,
     listIndex: null,
   }));
   const remainingAccounts = sortedAccounts.slice(4);
   const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
+  const othersAssets = remainingAccounts.flatMap((item) => item.assets || []);
   listItems.push({
     label: "Others",
     amount: othersAmount,
-    color: NEUTRAL_COLOR,
+    color: getTopAssetColor(othersAssets) || sortedAccounts[0]?.color,
     isOther: true,
     colorKey: "others",
     listIndex: null,

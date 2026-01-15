@@ -35,13 +35,6 @@ export const renderAccountsDonutChart = (container, accounts) => {
     return;
   }
 
-  const chartColors = [
-    cssVar("--color-chart-accent-primary"),
-    cssVar("--color-chart-secondary"),
-    cssVar("--color-chart-tertiary"),
-    cssVar("--color-chart-muted"),
-    cssVar("--color-chart-muted"),
-  ];
   const width = 214;
   const height = 214;
   const strokeWidth = 18;
@@ -84,7 +77,8 @@ export const renderAccountsDonutChart = (container, accounts) => {
       describeArc(width / 2, height / 2, radius, currentAngle, currentAngle + angle)
     );
     arc.setAttribute("fill", "none");
-    arc.setAttribute("stroke", chartColors[index % chartColors.length]);
+    const segmentColor = account.brandColor || account.brand_color || "";
+    arc.setAttribute("stroke", segmentColor);
     arc.setAttribute("stroke-width", `${strokeWidth}`);
     arc.setAttribute("stroke-linecap", "round");
     arc.setAttribute("opacity", "0.9");
