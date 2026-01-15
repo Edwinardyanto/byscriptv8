@@ -137,29 +137,13 @@ const buildDistributionData = (type, accounts) => {
         amount: details.amount,
         color: details.color,
         colorKey: label,
+        listIndex: null,
       }))
       .sort((a, b) => b.amount - a.amount);
-    const listItems = sortedAssets.slice(0, 4).map((item) => ({
-      ...item,
-      listIndex: null,
-    }));
-    const remainder = sortedAssets.slice(4);
-    if (remainder.length) {
-      const othersAmount = remainder.reduce((sum, item) => sum + item.amount, 0);
-      const othersColor = remainder.find((item) => item.color)?.color || sortedAssets[0]?.color;
-      listItems.push({
-        label: "Others",
-        amount: othersAmount,
-        color: othersColor,
-        isOther: true,
-        colorKey: "others",
-        listIndex: null,
-      });
-    }
     sortedAssets.forEach((item, index) => {
-      item.listIndex = index < 4 ? index : listItems.length - 1;
+      item.listIndex = index;
     });
-    return { listItems, donutItems: sortedAssets };
+    return { listItems: sortedAssets, donutItems: sortedAssets };
   }
 
   if (type === "market") {
@@ -173,13 +157,18 @@ const buildDistributionData = (type, accounts) => {
       current.amount += Number(account.totalValueUsd || 0);
       current.assets.push(...account.assets);
     });
-    const items = Array.from(marketTotals.entries()).map(([label, details], index) => ({
-      label,
-      amount: details.amount,
-      color: getTopAssetColor(details.assets),
-      colorKey: label,
-      listIndex: index,
-    }));
+    const items = Array.from(marketTotals.entries())
+      .map(([label, details]) => ({
+        label,
+        amount: details.amount,
+        color: getTopAssetColor(details.assets),
+        colorKey: label,
+        listIndex: null,
+      }))
+      .sort((a, b) => b.amount - a.amount);
+    items.forEach((item, index) => {
+      item.listIndex = index;
+    });
     return { listItems: items, donutItems: items };
   }
 
@@ -192,27 +181,13 @@ const buildDistributionData = (type, accounts) => {
       amount: Number(account.totalValueUsd || 0),
       color: getTopAssetColor(account.assets),
       assets: account.assets,
+      listIndex: null,
     }))
     .sort((a, b) => b.amount - a.amount);
-  const listItems = sortedAccounts.slice(0, 4).map((item) => ({
-    ...item,
-    listIndex: null,
-  }));
-  const remainingAccounts = sortedAccounts.slice(4);
-  const othersAmount = remainingAccounts.reduce((sum, item) => sum + item.amount, 0);
-  const othersAssets = remainingAccounts.flatMap((item) => item.assets || []);
-  listItems.push({
-    label: "Others",
-    amount: othersAmount,
-    color: getTopAssetColor(othersAssets) || sortedAccounts[0]?.color,
-    isOther: true,
-    colorKey: "others",
-    listIndex: null,
-  });
   sortedAccounts.forEach((item, index) => {
-    item.listIndex = index < 4 ? index : listItems.length - 1;
+    item.listIndex = index;
   });
-  return { listItems, donutItems: sortedAccounts };
+  return { listItems: sortedAccounts, donutItems: sortedAccounts };
 };
 
 const renderDonutChart = (container, items, onHover, tooltip) => {
