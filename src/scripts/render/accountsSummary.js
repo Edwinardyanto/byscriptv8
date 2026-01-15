@@ -195,7 +195,9 @@ const setupAssetSegmentTooltip = () => {
     percentEl.textContent = `${percent}% of account value`;
     valueEl.textContent = `${usd} USD`;
     const color = getComputedStyle(segment).getPropertyValue("--asset-color").trim();
-    tooltip.style.setProperty("--asset-color", color || "#3fd37c");
+    if (color) {
+      tooltip.style.setProperty("--asset-color", color);
+    }
   };
 
   const positionTooltip = (event) => {

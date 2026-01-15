@@ -38,20 +38,40 @@ const formatRelativeTime = (timestamp) => {
   return `${days}d`;
 };
 
+const getAssetBrandColor = (asset) =>
+  asset?.brand_color || asset?.asset?.brand_color || "";
+
+const getTopAssetColor = (assets = []) => {
+  if (!Array.isArray(assets) || assets.length === 0) {
+    return "";
+  }
+  const topAsset = assets.reduce((best, current) => {
+    const currentValue = Number(current.usd_value || 0);
+    const bestValue = Number(best?.usd_value || 0);
+    return currentValue > bestValue ? current : best;
+  }, assets[0]);
+  return getAssetBrandColor(topAsset);
+};
+
 const buildAccountsSummary = async () => {
   const accounts = await getAccountsWithSummary();
   const totalsByProvider = accounts.reduce((acc, account) => {
     const key = account.provider || "Unknown";
-    const current = acc.get(key) || 0;
-    acc.set(key, current + Number(account.totalValueUsd || 0));
+    if (!acc.has(key)) {
+      acc.set(key, { amount: 0, assets: [] });
+    }
+    const current = acc.get(key);
+    current.amount += Number(account.totalValueUsd || 0);
+    current.assets.push(...account.assets);
     return acc;
   }, new Map());
 
   const accountsSummaryList = Array.from(totalsByProvider.entries())
-    .map(([name, amount]) => ({
+    .map(([name, details]) => ({
       name,
-      value: formatCurrency(amount),
-      amount,
+      value: formatCurrency(details.amount),
+      amount: details.amount,
+      brandColor: getTopAssetColor(details.assets),
     }))
     .sort((a, b) => b.amount - a.amount);
 
