@@ -2,7 +2,11 @@ import {
   getAccountsWithSummary,
   getAutotradersByAccount,
   getTradeHistory,
+  loadAccounts,
+  loadTrades,
 } from "../dataAccess.js";
+import { deriveAccountsSummary } from "../derive/deriveAccountsSummary.js";
+import { renderAccountsSummary } from "../render/accountsSummary.js";
 
 const PAGE_SIZE = 5;
 const PERFORMANCE_RANGES = [
@@ -57,6 +61,29 @@ const buildAccountPerformance = async (accountId, totalValue) => {
     })
   );
   return performance;
+};
+
+const buildSummaryState = (summary, accounts) => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+  const total = summary.reduce((sum, item) => sum + Number(item.value || 0), 0);
+  return {
+    total: formatter.format(total),
+    accounts: summary.map((item) => {
+      const account = accounts.find((acc) => acc.account_id === item.account_id);
+      const label =
+        account?.provider || account?.account_code || account?.account_id || item.account_id;
+      return {
+        name: label,
+        value: formatter.format(item.value || 0),
+        amount: Number(item.value || 0),
+        brandColor: "",
+      };
+    }),
+  };
 };
 
 const buildAssetsBar = (assets, tooltip) => {
@@ -446,6 +473,15 @@ const renderDistribution = (filter, accounts, donutContainer, legendContainer, t
 };
 
 const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
+  if (!accounts || accounts.length === 0) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="8"><span class="row-hint">No accounts available.</span></td>
+      </tr>
+    `;
+    pagination.innerHTML = "";
+    return;
+  }
   const totalPages = Math.ceil(accounts.length / PAGE_SIZE);
   let currentPage = 1;
 
@@ -565,9 +601,17 @@ const initAccountsPage = async () => {
   tooltip.className = "asset-tooltip";
   document.body.appendChild(tooltip);
 
-  const accounts = await getAccountsWithSummary();
+  const [trades, rawAccounts] = await Promise.all([loadTrades(), loadAccounts()]);
+  const summary = deriveAccountsSummary(trades, rawAccounts);
+  const summaryState = buildSummaryState(summary, rawAccounts);
+  renderAccountsSummary({
+    data: summaryState,
+    status: summaryState.accounts.length ? "ready" : "empty",
+  });
+
+  const accountsWithSummary = await getAccountsWithSummary();
   const accountsWithMeta = await Promise.all(
-    accounts.map(async (account) => {
+    accountsWithSummary.map(async (account) => {
       const autotraders = await getAutotradersByAccount(account.account_id);
       const performance = await buildAccountPerformance(
         account.account_id,

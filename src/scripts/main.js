@@ -1,4 +1,4 @@
-import { fetchDashboardData } from "./data.js";
+import { fetchDashboardData } from "./pages/dashboardPage.js";
 import { getState, setState, subscribe } from "./state.js";
 import { renderAccountsSummary } from "./render/accountsSummary.js";
 import { renderAlerts } from "./render/alerts.js";

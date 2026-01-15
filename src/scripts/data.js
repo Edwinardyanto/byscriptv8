@@ -23,21 +23,6 @@ const formatCurrency = (value, digits = 0) =>
     maximumFractionDigits: digits,
   }).format(value);
 
-const formatRelativeTime = (timestamp) => {
-  const now = Date.now();
-  const diffMs = Math.max(now - timestamp.getTime(), 0);
-  const minutes = Math.floor(diffMs / (1000 * 60));
-  if (minutes < 60) {
-    return `${minutes || 1}m`;
-  }
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) {
-    return `${hours}h`;
-  }
-  const days = Math.floor(hours / 24);
-  return `${days}d`;
-};
-
 const getAssetBrandColor = (asset) =>
   asset?.brand_color || asset?.asset?.brand_color || "";
 
@@ -83,7 +68,7 @@ const buildAccountsSummary = async () => {
   };
 };
 
-const buildAssetSummary = async () => {
+export const buildAssetSummary = async () => {
   const accounts = await getAccounts();
   const accountValues = await Promise.all(
     accounts.map(async (account) => ({
@@ -153,31 +138,7 @@ const buildTopAutotraders = async () => {
     .slice(0, 3);
 };
 
-const buildTradeHistory = async () => {
-  const trades = await getTradeHistory({ limit: 6 });
-
-  return trades.map((trade) => {
-    const pnl = Number(trade.pnl_usd || 0);
-    const profitState = pnl > 0 ? "positive" : pnl < 0 ? "negative" : "neutral";
-    const profitUsd = pnl === 0 ? "–" : `${pnl > 0 ? "+" : "-"}$${Math.abs(pnl).toFixed(2)}`;
-    const profitPct = trade.valueUsd
-      ? `${pnl >= 0 ? "+" : "-"}${Math.abs((pnl / trade.valueUsd) * 100).toFixed(1)}%`
-      : "–";
-    const action = trade.side?.toUpperCase() === "BUY" ? "BUY" : "SELL";
-    const status = trade.result === "loss" ? "FAILED" : "FILLED";
-    return {
-      pair: [trade.assetSymbol?.toLowerCase() || "btc", "usdt"],
-      action,
-      status,
-      profitUsd,
-      profitPct,
-      profitState,
-      time: formatRelativeTime(trade.executedAt),
-    };
-  });
-};
-
-const alerts = [
+export const alerts = [
   {
     title: "Autotrader Error",
     message: "Insufficient balance for USDT / AVAX",
@@ -233,20 +194,3 @@ const alerts = [
     alertStatus: "active",
   },
 ];
-
-export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders, tradeHistory] = await Promise.all([
-    buildAssetSummary(),
-    buildAccountsSummary(),
-    buildTopAutotraders(),
-    buildTradeHistory(),
-  ]);
-
-  return {
-    assetSummary,
-    accountsSummary,
-    alerts,
-    topAutotraders,
-    tradeHistory,
-  };
-};
