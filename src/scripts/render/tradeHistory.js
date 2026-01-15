@@ -36,6 +36,10 @@ const buildPairIcons = (pair) =>
     )
     .join("");
 
+const renderEmptyState = (list) => {
+  setListMessage(list, "No recent trades");
+};
+
 export const renderTradeHistory = (sectionState) => {
   const { data, status } = sectionState;
   const list = document.querySelector('[data-list="tradeHistory"]');
@@ -51,24 +55,48 @@ export const renderTradeHistory = (sectionState) => {
   }
 
   if (!data || data.length === 0) {
-    setListMessage(list, "No recent trades");
+    renderEmptyState(list);
     return;
   }
 
   list.innerHTML = "";
   data.forEach((trade) => {
+    const pairValue = Array.isArray(trade.pair)
+      ? trade.pair
+      : [String(trade.pair || "asset").toLowerCase()];
+    const actionValue = (trade.action || "buy").toString().toUpperCase();
+    const statusValue = (trade.status || "executed").toString().toUpperCase();
+    const profitValue =
+      typeof trade.profitUsd === "string"
+        ? trade.profitUsd
+        : trade.profit
+        ? `${trade.profit >= 0 ? "+" : "-"}$${Math.abs(Number(trade.profit)).toFixed(2)}`
+        : "–";
+    const profitPctValue =
+      typeof trade.profitPct === "string"
+        ? trade.profitPct
+        : trade.profit
+        ? `${trade.profit >= 0 ? "+" : "-"}${Math.abs(Number(trade.profit)).toFixed(1)}%`
+        : "–";
+    const profitStateValue =
+      trade.profitState ||
+      (Number(trade.profit || 0) > 0
+        ? "positive"
+        : Number(trade.profit || 0) < 0
+        ? "negative"
+        : "neutral");
     const row = document.createElement("a");
     row.className = "trade-history-row";
     row.href = "activity.html";
     row.innerHTML = `
-      <div class="trade-history-pair">${buildPairIcons(trade.pair)}</div>
-      <div class="trade-history-action ${actionClassMap[trade.action] || ""}">${trade.action}</div>
-      <div class="trade-history-status ${statusClassMap[trade.status] || ""}">${trade.status}</div>
-      <div class="trade-history-profit ${profitClassMap[trade.profitState] || ""}">
-        <span>${trade.profitUsd}</span>
-        <span>${trade.profitPct}</span>
+      <div class="trade-history-pair">${buildPairIcons(pairValue)}</div>
+      <div class="trade-history-action ${actionClassMap[actionValue] || ""}">${actionValue}</div>
+      <div class="trade-history-status ${statusClassMap[statusValue] || ""}">${statusValue}</div>
+      <div class="trade-history-profit ${profitClassMap[profitStateValue] || ""}">
+        <span>${profitValue}</span>
+        <span>${profitPctValue}</span>
       </div>
-      <div class="trade-history-time">${trade.time}</div>
+      <div class="trade-history-time">${trade.time || "–"}</div>
     `;
     list.appendChild(row);
   });

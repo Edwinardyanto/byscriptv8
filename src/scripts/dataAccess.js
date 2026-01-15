@@ -3,7 +3,6 @@ const DATA_URLS = {
   accountAssets: new URL("../../mock-data/data/account_assets.json", import.meta.url),
   assets: new URL("../../mock-data/data/assets.json", import.meta.url),
   autotraders: new URL("../../mock-data/data/autotraders.json", import.meta.url),
-  tradeHistory: new URL("../../mock-data/data/trade_history.json", import.meta.url),
   tradingPlans: new URL("../../mock-data/data/trading_plans.json", import.meta.url),
 };
 
@@ -133,9 +132,24 @@ export const getAutotradersByAccount = async (accountId) => {
     });
 };
 
+export async function loadTrades() {
+  const res = await fetch("/mock-data/data/trades.json");
+  return res.json();
+}
+
+export async function loadAccounts() {
+  const res = await fetch("/mock-data/data/accounts.json");
+  return res.json();
+}
+
+export async function loadAutotraders() {
+  const res = await fetch("/mock-data/data/autotraders.json");
+  return res.json();
+}
+
 export const getTradeHistory = async (filters = {}) => {
   const [tradeHistory, assets, accounts, autotraders, tradingPlans] = await Promise.all([
-    fetchDataset("tradeHistory"),
+    loadTrades(),
     fetchDataset("assets"),
     fetchDataset("accounts"),
     fetchDataset("autotraders"),
@@ -168,6 +182,7 @@ export const getTradeHistory = async (filters = {}) => {
       const autotrader = autotradersById.get(trade.autotrader_id);
       const plan = autotrader ? plansById.get(autotrader.plan_id) : null;
       const executedAt = new Date(trade.executed_at);
+      const quantity = Number(trade.quantity ?? trade.size ?? 0);
       return {
         ...trade,
         tradeId: trade.trade_id,
@@ -179,7 +194,9 @@ export const getTradeHistory = async (filters = {}) => {
         marketType: plan?.market_type || account?.market_type,
         tradingPlanName: plan?.name,
         executedAt,
-        valueUsd: Number(trade.price_usd || 0) * Number(trade.quantity || 0),
+        quantity,
+        valueUsd: Number(trade.price_usd || 0) * quantity,
+        pnl_usd: Number(trade.pnl_usd || 0),
       };
     })
     .filter((trade) => {
