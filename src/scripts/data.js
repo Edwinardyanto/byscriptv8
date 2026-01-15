@@ -4,7 +4,9 @@ import {
   getAccounts,
   getAccountAssets,
   getAutotradersByAccount,
+  loadTrades,
 } from "./dataAccess.js";
+import { deriveTradeHistory } from "./derive/deriveTradeHistory.js";
 
 const buildSeries = (points, start, end) => {
   const trend = (end - start) / Math.max(points - 1, 1);
@@ -154,27 +156,11 @@ const buildTopAutotraders = async () => {
 };
 
 const buildTradeHistory = async () => {
-  const trades = await getTradeHistory({ limit: 6 });
-
-  return trades.map((trade) => {
-    const pnl = Number(trade.pnl_usd || 0);
-    const profitState = pnl > 0 ? "positive" : pnl < 0 ? "negative" : "neutral";
-    const profitUsd = pnl === 0 ? "–" : `${pnl > 0 ? "+" : "-"}$${Math.abs(pnl).toFixed(2)}`;
-    const profitPct = trade.valueUsd
-      ? `${pnl >= 0 ? "+" : "-"}${Math.abs((pnl / trade.valueUsd) * 100).toFixed(1)}%`
-      : "–";
-    const action = trade.side?.toUpperCase() === "BUY" ? "BUY" : "SELL";
-    const status = trade.result === "loss" ? "FAILED" : "FILLED";
-    return {
-      pair: [trade.assetSymbol?.toLowerCase() || "btc", "usdt"],
-      action,
-      status,
-      profitUsd,
-      profitPct,
-      profitState,
-      time: formatRelativeTime(trade.executedAt),
-    };
-  });
+  const trades = await loadTrades();
+  return deriveTradeHistory(trades).map((trade) => ({
+    ...trade,
+    time: trade.time ? formatRelativeTime(new Date(trade.time)) : "–",
+  }));
 };
 
 const alerts = [
