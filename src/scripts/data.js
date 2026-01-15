@@ -4,7 +4,9 @@ import {
   getAccounts,
   getAccountAssets,
   getAutotradersByAccount,
+  loadTrades,
 } from "./dataAccess.js";
+import { deriveTradeHistory } from "./derive/deriveTradeHistory.js";
 
 const buildSeries = (points, start, end) => {
   const trend = (end - start) / Math.max(points - 1, 1);
