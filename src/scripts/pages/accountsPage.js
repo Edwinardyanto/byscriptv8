@@ -137,6 +137,7 @@ const buildDistributionData = (type, accounts) => {
         amount: details.amount,
         color: details.color,
         colorKey: label,
+        listIndex: null,
       }))
       .sort((a, b) => b.amount - a.amount);
     const donutItems = sortedAssets.map((item, index) => ({
@@ -241,6 +242,7 @@ const buildDistributionData = (type, accounts) => {
       amount: Number(account.totalValueUsd || 0),
       color: getTopAssetColor(account.assets),
       assets: account.assets,
+      listIndex: null,
     }))
     .sort((a, b) => b.amount - a.amount);
   const donutItems = sortedAccounts.map((item, index) => ({
