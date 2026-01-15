@@ -133,17 +133,17 @@ export const getAutotradersByAccount = async (accountId) => {
 };
 
 export async function loadTrades() {
-  const res = await fetch("/mock-data/data/trades.json");
+  const res = await fetch("./mock-data/data/trades.json");
   return res.json();
 }
 
 export async function loadAccounts() {
-  const res = await fetch("/mock-data/data/accounts.json");
+  const res = await fetch("./mock-data/data/accounts.json");
   return res.json();
 }
 
 export async function loadAutotraders() {
-  const res = await fetch("/mock-data/data/autotraders.json");
+  const res = await fetch("./mock-data/data/autotraders.json");
   return res.json();
 }
 
