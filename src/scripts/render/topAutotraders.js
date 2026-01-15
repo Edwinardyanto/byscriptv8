@@ -32,20 +32,23 @@ export const renderTopAutotraders = (sectionState) => {
   data.forEach((trader) => {
     const card = document.createElement("div");
     card.className = "autotrader-card";
+    const statusValue = trader.status || "LIVE";
+    const performanceValue = trader.performance || trader.pnl || "--";
+    const runtimeValue = trader.runtime || "--";
     card.innerHTML = `
       <div class="autotrader-header">
         <div class="autotrader-identity">
           <span class="autotrader-avatar" aria-hidden="true"></span>
           <div class="autotrader-name-group">
             <span class="autotrader-name">${trader.name}</span>
-            <span class="autotrader-status">LIVE</span>
+            <span class="autotrader-status">${statusValue}</span>
           </div>
         </div>
-        <span class="autotrader-pnl">${trader.pnl}</span>
+        <span class="autotrader-pnl">${performanceValue}</span>
       </div>
       <div class="autotrader-meta">
         <span class="autotrader-pair">${trader.pair}</span>
-        <span class="autotrader-runtime">${trader.runtime}</span>
+        <span class="autotrader-runtime">${runtimeValue}</span>
       </div>
       <div class="autotrader-footer">
         <button class="button" type="button">View Autotrader</button>
