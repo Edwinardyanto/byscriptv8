@@ -1,0 +1,475 @@
+{
+  "timestamp": 1754611200,
+  "prices": [
+    {
+      "asset_id": "0000001",
+      "timestamp": 1754611200,
+      "price_usd": 10643.3162
+    },
+    {
+      "asset_id": "0000002",
+      "timestamp": 1754611200,
+      "price_usd": 22329.4179
+    },
+    {
+      "asset_id": "0000003",
+      "timestamp": 1754611200,
+      "price_usd": 7197.7396
+    },
+    {
+      "asset_id": "0000004",
+      "timestamp": 1754611200,
+      "price_usd": 19726.7646
+    },
+    {
+      "asset_id": "0000005",
+      "timestamp": 1754611200,
+      "price_usd": 48725.0876
+    },
+    {
+      "asset_id": "0000006",
+      "timestamp": 1754611200,
+      "price_usd": 32064.6045
+    },
+    {
+      "asset_id": "0000007",
+      "timestamp": 1754611200,
+      "price_usd": 8544.9619
+    },
+    {
+      "asset_id": "0000008",
+      "timestamp": 1754611200,
+      "price_usd": 45983.9673
+    },
+    {
+      "asset_id": "0000009",
+      "timestamp": 1754611200,
+      "price_usd": 47379.9245
+    },
+    {
+      "asset_id": "0000010",
+      "timestamp": 1754611200,
+      "price_usd": 36095.6437
+    },
+    {
+      "asset_id": "0000011",
+      "timestamp": 1754611200,
+      "price_usd": 32266.159
+    },
+    {
+      "asset_id": "0000012",
+      "timestamp": 1754611200,
+      "price_usd": 936.2504
+    },
+    {
+      "asset_id": "0000013",
+      "timestamp": 1754611200,
+      "price_usd": 29772.0115
+    },
+    {
+      "asset_id": "0000014",
+      "timestamp": 1754611200,
+      "price_usd": 48002.893
+    },
+    {
+      "asset_id": "0000015",
+      "timestamp": 1754611200,
+      "price_usd": 357.1174
+    },
+    {
+      "asset_id": "0000016",
+      "timestamp": 1754611200,
+      "price_usd": 10083.7881
+    },
+    {
+      "asset_id": "0000017",
+      "timestamp": 1754611200,
+      "price_usd": 26945.241
+    },
+    {
+      "asset_id": "0000018",
+      "timestamp": 1754611200,
+      "price_usd": 5591.5617
+    },
+    {
+      "asset_id": "0000019",
+      "timestamp": 1754611200,
+      "price_usd": 25072.1209
+    },
+    {
+      "asset_id": "0000020",
+      "timestamp": 1754611200,
+      "price_usd": 45912.6824
+    },
+    {
+      "asset_id": "0000021",
+      "timestamp": 1754611200,
+      "price_usd": 12160.0801
+    },
+    {
+      "asset_id": "0000022",
+      "timestamp": 1754611200,
+      "price_usd": 1875.8459
+    },
+    {
+      "asset_id": "0000023",
+      "timestamp": 1754611200,
+      "price_usd": 39818.9506
+    },
+    {
+      "asset_id": "0000024",
+      "timestamp": 1754611200,
+      "price_usd": 46193.9651
+    },
+    {
+      "asset_id": "0000025",
+      "timestamp": 1754611200,
+      "price_usd": 50775.8269
+    },
+    {
+      "asset_id": "0000026",
+      "timestamp": 1754611200,
+      "price_usd": 16607.2168
+    },
+    {
+      "asset_id": "0000027",
+      "timestamp": 1754611200,
+      "price_usd": 8561.2071
+    },
+    {
+      "asset_id": "0000028",
+      "timestamp": 1754611200,
+      "price_usd": 46939.7519
+    },
+    {
+      "asset_id": "0000029",
+      "timestamp": 1754611200,
+      "price_usd": 30639.7074
+    },
+    {
+      "asset_id": "0000030",
+      "timestamp": 1754611200,
+      "price_usd": 6025.831
+    },
+    {
+      "asset_id": "0000031",
+      "timestamp": 1754611200,
+      "price_usd": 1546.1996
+    },
+    {
+      "asset_id": "0000032",
+      "timestamp": 1754611200,
+      "price_usd": 36032.518
+    },
+    {
+      "asset_id": "0000033",
+      "timestamp": 1754611200,
+      "price_usd": 12507.547
+    },
+    {
+      "asset_id": "0000034",
+      "timestamp": 1754611200,
+      "price_usd": 36491.0129
+    },
+    {
+      "asset_id": "0000035",
+      "timestamp": 1754611200,
+      "price_usd": 49647.36
+    },
+    {
+      "asset_id": "0000036",
+      "timestamp": 1754611200,
+      "price_usd": 39474.8552
+    },
+    {
+      "asset_id": "0000037",
+      "timestamp": 1754611200,
+      "price_usd": 49380.3376
+    },
+    {
+      "asset_id": "0000038",
+      "timestamp": 1754611200,
+      "price_usd": 9741.8188
+    },
+    {
+      "asset_id": "0000039",
+      "timestamp": 1754611200,
+      "price_usd": 32244.6362
+    },
+    {
+      "asset_id": "0000040",
+      "timestamp": 1754611200,
+      "price_usd": 32307.339
+    },
+    {
+      "asset_id": "0000041",
+      "timestamp": 1754611200,
+      "price_usd": 45314.7016
+    },
+    {
+      "asset_id": "0000042",
+      "timestamp": 1754611200,
+      "price_usd": 825.9505
+    },
+    {
+      "asset_id": "0000043",
+      "timestamp": 1754611200,
+      "price_usd": 49325.9177
+    },
+    {
+      "asset_id": "0000044",
+      "timestamp": 1754611200,
+      "price_usd": 28289.3988
+    },
+    {
+      "asset_id": "0000045",
+      "timestamp": 1754611200,
+      "price_usd": 35833.4979
+    },
+    {
+      "asset_id": "0000046",
+      "timestamp": 1754611200,
+      "price_usd": 31360.505
+    },
+    {
+      "asset_id": "0000047",
+      "timestamp": 1754611200,
+      "price_usd": 16012.0875
+    },
+    {
+      "asset_id": "0000048",
+      "timestamp": 1754611200,
+      "price_usd": 20077.02
+    },
+    {
+      "asset_id": "0000049",
+      "timestamp": 1754611200,
+      "price_usd": 33678.2002
+    },
+    {
+      "asset_id": "0000050",
+      "timestamp": 1754611200,
+      "price_usd": 4949.116
+    },
+    {
+      "asset_id": "0000051",
+      "timestamp": 1754611200,
+      "price_usd": 37238.3065
+    },
+    {
+      "asset_id": "0000052",
+      "timestamp": 1754611200,
+      "price_usd": 41498.0327
+    },
+    {
+      "asset_id": "0000053",
+      "timestamp": 1754611200,
+      "price_usd": 24622.0333
+    },
+    {
+      "asset_id": "0000054",
+      "timestamp": 1754611200,
+      "price_usd": 38327.1451
+    },
+    {
+      "asset_id": "0000055",
+      "timestamp": 1754611200,
+      "price_usd": 42372.5452
+    },
+    {
+      "asset_id": "0000056",
+      "timestamp": 1754611200,
+      "price_usd": 2086.2583
+    },
+    {
+      "asset_id": "0000057",
+      "timestamp": 1754611200,
+      "price_usd": 305.371
+    },
+    {
+      "asset_id": "0000058",
+      "timestamp": 1754611200,
+      "price_usd": 40772.8648
+    },
+    {
+      "asset_id": "0000059",
+      "timestamp": 1754611200,
+      "price_usd": 41753.3698
+    },
+    {
+      "asset_id": "0000060",
+      "timestamp": 1754611200,
+      "price_usd": 23078.5475
+    },
+    {
+      "asset_id": "0000061",
+      "timestamp": 1754611200,
+      "price_usd": 32996.0093
+    },
+    {
+      "asset_id": "0000062",
+      "timestamp": 1754611200,
+      "price_usd": 39554.8784
+    },
+    {
+      "asset_id": "0000063",
+      "timestamp": 1754611200,
+      "price_usd": 12856.2861
+    },
+    {
+      "asset_id": "0000064",
+      "timestamp": 1754611200,
+      "price_usd": 6604.371
+    },
+    {
+      "asset_id": "0000065",
+      "timestamp": 1754611200,
+      "price_usd": 2703.1402
+    },
+    {
+      "asset_id": "0000066",
+      "timestamp": 1754611200,
+      "price_usd": 45752.8091
+    },
+    {
+      "asset_id": "0000067",
+      "timestamp": 1754611200,
+      "price_usd": 13785.2333
+    },
+    {
+      "asset_id": "0000068",
+      "timestamp": 1754611200,
+      "price_usd": 20559.0217
+    },
+    {
+      "asset_id": "0000069",
+      "timestamp": 1754611200,
+      "price_usd": 29617.4797
+    },
+    {
+      "asset_id": "0000070",
+      "timestamp": 1754611200,
+      "price_usd": 29919.7475
+    },
+    {
+      "asset_id": "0000071",
+      "timestamp": 1754611200,
+      "price_usd": 35018.3864
+    },
+    {
+      "asset_id": "0000072",
+      "timestamp": 1754611200,
+      "price_usd": 38980.2915
+    },
+    {
+      "asset_id": "0000073",
+      "timestamp": 1754611200,
+      "price_usd": 32709.1781
+    },
+    {
+      "asset_id": "0000074",
+      "timestamp": 1754611200,
+      "price_usd": 36550.0128
+    },
+    {
+      "asset_id": "0000075",
+      "timestamp": 1754611200,
+      "price_usd": 28910.6614
+    },
+    {
+      "asset_id": "0000076",
+      "timestamp": 1754611200,
+      "price_usd": 38062.5841
+    },
+    {
+      "asset_id": "0000077",
+      "timestamp": 1754611200,
+      "price_usd": 22839.7811
+    },
+    {
+      "asset_id": "0000078",
+      "timestamp": 1754611200,
+      "price_usd": 45951.1464
+    },
+    {
+      "asset_id": "0000079",
+      "timestamp": 1754611200,
+      "price_usd": 11549.0125
+    },
+    {
+      "asset_id": "0000080",
+      "timestamp": 1754611200,
+      "price_usd": 23630.6577
+    },
+    {
+      "asset_id": "0000081",
+      "timestamp": 1754611200,
+      "price_usd": 16239.7747
+    },
+    {
+      "asset_id": "0000082",
+      "timestamp": 1754611200,
+      "price_usd": 29866.707
+    },
+    {
+      "asset_id": "0000083",
+      "timestamp": 1754611200,
+      "price_usd": 32409.3414
+    },
+    {
+      "asset_id": "0000084",
+      "timestamp": 1754611200,
+      "price_usd": 40602.2223
+    },
+    {
+      "asset_id": "0000085",
+      "timestamp": 1754611200,
+      "price_usd": 11893.6998
+    },
+    {
+      "asset_id": "0000086",
+      "timestamp": 1754611200,
+      "price_usd": 28194.1778
+    },
+    {
+      "asset_id": "0000087",
+      "timestamp": 1754611200,
+      "price_usd": 32469.9177
+    },
+    {
+      "asset_id": "0000088",
+      "timestamp": 1754611200,
+      "price_usd": 37620.7647
+    },
+    {
+      "asset_id": "0000089",
+      "timestamp": 1754611200,
+      "price_usd": 20963.3869
+    },
+    {
+      "asset_id": "0000090",
+      "timestamp": 1754611200,
+      "price_usd": 14747.4853
+    },
+    {
+      "asset_id": "0000091",
+      "timestamp": 1754611200,
+      "price_usd": 10252.5773
+    },
+    {
+      "asset_id": "0000092",
+      "timestamp": 1754611200,
+      "price_usd": 18073.1462
+    },
+    {
+      "asset_id": "0000093",
+      "timestamp": 1754611200,
+      "price_usd": 33400.2014
+    },
+    {
+      "asset_id": "0000094",
+      "timestamp": 1754611200,
+      "price_usd": 17700.5505
+    }
+  ]
+}
