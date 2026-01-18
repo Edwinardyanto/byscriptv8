@@ -43,6 +43,34 @@ export const fetchAccountAssetDaily = async () => {
   }
 };
 
+const buildAccountAssetDaily = (points, start, end) => {
+  const totals = buildSeries(points, start, end);
+  const now = new Date();
+  return totals.map((total, index) => {
+    const date = new Date(now);
+    date.setDate(now.getDate() - (totals.length - 1 - index));
+    const primary = total * 0.62;
+    const secondary = total - primary;
+    return {
+      date: date.toISOString().slice(0, 10),
+      accounts: [
+        {
+          assets: [
+            { value_usd: Number((primary * 0.68).toFixed(2)) },
+            { value_usd: Number((primary * 0.32).toFixed(2)) },
+          ],
+        },
+        {
+          assets: [
+            { value_usd: Number((secondary * 0.54).toFixed(2)) },
+            { value_usd: Number((secondary * 0.46).toFixed(2)) },
+          ],
+        },
+      ],
+    };
+  });
+};
+
 export const dashboardData = {
   assetSummary: {
     totalBalance: "$12,430",
