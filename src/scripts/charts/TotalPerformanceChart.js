@@ -1,7 +1,7 @@
 import { loadAccountAssetsDaily } from "../data/loadAccountAssetsDaily.js";
 import { deriveDailyTotalUSD, applyTimeframe } from "../utils/assetSummaryData.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
+export async function renderTotalPerformanceChart() {
   const container = document.querySelector(".chart-placeholder");
   if (!container) return;
 
@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   container.innerHTML = "";
 
+  // TEMP VISUAL (bukti render jalan)
   const ul = document.createElement("ul");
   ul.style.color = "#68FE1D";
   ul.style.fontSize = "12px";
@@ -24,4 +25,4 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   container.appendChild(ul);
-});
+}
