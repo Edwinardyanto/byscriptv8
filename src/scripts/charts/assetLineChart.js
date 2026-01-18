@@ -60,7 +60,9 @@ export const renderAssetLineChart = (container, series) => {
   const plotBottomPadding = Math.max(4, Math.round(plotHeight * 0.04));
   const height = plotTop + plotHeight + labelZoneHeight;
   const baselineY = plotTop + plotHeight;
-  const values = series.map(Number);
+  const values = series.map((point) =>
+    typeof point.total_usd === "number" ? point.total_usd : Number(point.total_usd) || 0
+  );
   const min = Math.min(...values);
   const max = Math.max(...values);
   const range = max - min || 1;
@@ -138,9 +140,14 @@ export const renderAssetLineChart = (container, series) => {
   const labelFontSize = "11";
 
   const formatLabelDate = (index) => {
-    const daysFromEnd = values.length - 1 - index;
-    const date = new Date();
-    date.setDate(date.getDate() - daysFromEnd);
+    const rawDate = series[index]?.date;
+    if (!rawDate) {
+      return "";
+    }
+    const date = new Date(`${rawDate}T00:00:00Z`);
+    if (Number.isNaN(date.getTime())) {
+      return rawDate;
+    }
     return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
   };
 

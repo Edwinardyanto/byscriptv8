@@ -1,6 +1,7 @@
-export const deriveDailyTotalUSD = (accountAssetDaily = []) =>
+export const deriveDailyTotalUSD = (accountAssetDaily) =>
   accountAssetDaily.map((day) => {
     let total = 0;
+
     for (const account of day.accounts || []) {
       for (const asset of account.assets || []) {
         if (typeof asset.value_usd === "number") {
@@ -8,15 +9,21 @@ export const deriveDailyTotalUSD = (accountAssetDaily = []) =>
         }
       }
     }
+
     return {
       date: day.date,
-      total_usd: total,
+      total_usd: Number(total.toFixed(2)),
     };
   });
 
-export const applyTimeframe = (data, days) => {
-  if (days === "ALL") {
-    return data;
-  }
-  return data.slice(-days);
+export const applyTimeframe = (data, timeframe) => {
+  if (timeframe === "ALL") return data;
+
+  const map = {
+    "7D": 7,
+    "30D": 30,
+    "90D": 90,
+  };
+
+  return data.slice(-map[timeframe]);
 };

@@ -21,7 +21,7 @@ const setChartMessage = (container, message) => {
 
 const updateTimeframeButtons = (activeRange) => {
   const pills = document.querySelectorAll(".timeframe-pill");
-  const activeLabel = activeRange === "all" ? "All" : activeRange;
+  const activeLabel = activeRange === "ALL" ? "All" : activeRange;
   pills.forEach((pill) => {
     const isActive = pill.textContent.trim() === activeLabel;
     pill.classList.toggle("timeframe-pill--active", isActive);
@@ -64,15 +64,10 @@ export const renderAssetSummary = (sectionState) => {
   updateTimeframeButtons(activeRange);
 
   const derivedSeries = deriveDailyTotalUSD(data.accountAssetDaily || []);
-  const timeframe =
-    activeRange === "all" ? "ALL" : Number.parseInt(activeRange, 10);
-  const filteredSeries = Number.isFinite(timeframe)
-    ? applyTimeframe(derivedSeries, timeframe)
-    : derivedSeries;
-  const series = filteredSeries.map((point) => point.total_usd);
-  if (series.length === 0) {
+  const filteredSeries = applyTimeframe(derivedSeries, activeRange);
+  if (filteredSeries.length === 0) {
     setChartMessage(chartContainer, "No chart data");
   } else {
-    renderAssetLineChart(chartContainer, series);
+    renderAssetLineChart(chartContainer, filteredSeries);
   }
 };
