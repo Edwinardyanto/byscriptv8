@@ -1,5 +1,3 @@
-import { renderAssetLineChart } from "../charts/assetLineChart.js";
-
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
   <div class="asset-summary-content">
@@ -53,26 +51,6 @@ const updateTimeframeButtons = (pillsContainer, activeRange) => {
   });
 };
 
-const bindTimeframeControls = (pillsContainer, onRangeChange) => {
-  if (!pillsContainer) {
-    return;
-  }
-  const pills = pillsContainer.querySelectorAll(".timeframe-pill");
-  pills.forEach((pill) => {
-    if (pill.dataset.bound) {
-      return;
-    }
-    pill.dataset.bound = "true";
-    pill.addEventListener("click", () => {
-      const label = pill.textContent.trim();
-      const range = label === "All" ? "all" : label;
-      if (typeof onRangeChange === "function") {
-        onRangeChange(range);
-      }
-    });
-  });
-};
-
 const resolveTimeframePills = (container, externalContainer) => {
   const internalPills = container.querySelector(".timeframe-pills");
   if (!externalContainer) {
@@ -108,16 +86,24 @@ export const renderTotalPerformanceChart = ({
     container.dataset.totalPerformanceSource = dataSource;
   }
   const pillsContainer = resolveTimeframePills(container, timeframeContainer);
-  bindTimeframeControls(pillsContainer, onRangeChange);
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
   const isAccountsPage = document.body?.classList.contains("page-accounts");
+  const summaryCard = container.querySelector(".card--summary");
+  const summaryTop = container.querySelector(".card--summary .summary-top");
 
-  if (status === "loading") {
-    setText(container, '[data-field="asset.totalBalance"]', "Loading...");
+  if (summaryCard) {
+    summaryCard.classList.toggle("data-ready", status === "ready" && Boolean(data));
+  }
+  if (summaryTop) {
+    summaryTop.classList.toggle("data-ready", status === "ready" && Boolean(data));
+  }
+
+  if (status === "loading" || status === "idle") {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
     setText(container, '[data-field="asset.change"]', "--");
-    setText(container, '[data-field="asset.changeLabel"]', "Loading...");
-    setChartMessage(chartContainer, "Loading chart...");
+    setText(container, '[data-field="asset.changeLabel"]', "");
+    setChartMessage(chartContainer, "Chart Placeholder");
     return;
   }
 
@@ -150,13 +136,5 @@ export const renderTotalPerformanceChart = ({
   const activeRange = data.chart?.activeRange || "7D";
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  const series =
-    activeRange === "all"
-      ? data.chart?.fullSeries || []
-      : data.chart?.ranges?.[activeRange] || [];
-  if (series.length === 0) {
-    setChartMessage(chartContainer, "No chart data");
-  } else {
-    renderAssetLineChart(chartContainer, series);
-  }
+  setChartMessage(chartContainer, "Chart coming soon");
 };

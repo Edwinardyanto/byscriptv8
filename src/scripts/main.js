@@ -1,11 +1,16 @@
-import { fetchDashboardData } from "./pages/dashboardPage.js";
-import { getState, setState, subscribe } from "./state.js";
+import { fetchAssetSummary, fetchDashboardData } from "./pages/dashboardPage.js";
+import { getState, setSectionStatus, setState, subscribe } from "./state.js";
 import { renderAccountsSummary } from "./render/accountsSummary.js";
 import { renderAlerts } from "./render/alerts.js";
 import { renderTopAutotraders } from "./render/topAutotraders.js";
 import { renderTradeHistory } from "./render/tradeHistory.js";
 import { renderTotalPerformanceChart } from "./components/TotalPerformanceChart.js";
 import { initSidebar } from "./sidebar.js";
+import {
+  getTimeframe,
+  initTimeframeControls,
+  subscribeTimeframe,
+} from "./timeframeState.js";
 
 const appRoot = document.getElementById("app");
 
@@ -50,30 +55,14 @@ const evaluateStatus = (data, key) => {
 };
 
 const renderDashboard = (state) => {
+  const dashboardContainer = document.querySelector('[data-total-performance="dashboard"]');
   renderTotalPerformanceChart({
-    container: document.querySelector('[data-total-performance="dashboard"]'),
+    container: dashboardContainer,
     dataSource: "dashboard",
     data: state.data.assetSummary,
     status: state.status.assetSummary,
-    onRangeChange: (range) => {
-      const currentState = getState();
-      const assetSummary = currentState.data.assetSummary;
-      if (!assetSummary?.chart) {
-        return;
-      }
-      setState({
-        data: {
-          assetSummary: {
-            ...assetSummary,
-            chart: {
-              ...assetSummary.chart,
-              activeRange: range,
-            },
-          },
-        },
-      });
-    },
   });
+  initTimeframeControls(dashboardContainer);
   renderAccountsSummary({
     data: state.data.accountsSummary,
     status: state.status.accountsSummary,
@@ -118,7 +107,7 @@ const bindSidebarToggle = () => {
 const loadDashboardData = async () => {
   setSectionStatuses("loading");
   try {
-    const data = await fetchDashboardData();
+    const data = await fetchDashboardData(getTimeframe());
     const statuses = sectionKeys.reduce((acc, key) => {
       acc[key] = evaluateStatus(data[key], key);
       return acc;
@@ -138,9 +127,39 @@ const loadDashboardData = async () => {
   }
 };
 
+const bindDashboardTimeframe = () => {
+  subscribeTimeframe(async (timeframe) => {
+    setSectionStatus("assetSummary", "loading");
+    try {
+      const updated = await fetchAssetSummary(timeframe);
+      setState({
+        data: {
+          assetSummary: updated,
+        },
+        status: {
+          assetSummary: "ready",
+        },
+        errors: {
+          assetSummary: null,
+        },
+      });
+    } catch (error) {
+      setState({
+        status: {
+          assetSummary: "error",
+        },
+        errors: {
+          assetSummary: error,
+        },
+      });
+    }
+  });
+};
+
 if (appRoot) {
   appRoot.dataset.ready = "true";
   initSidebar(appRoot);
+  bindDashboardTimeframe();
   subscribe(renderDashboard);
   bindSidebarToggle();
   renderDashboard(getState());
