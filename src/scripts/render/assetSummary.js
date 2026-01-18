@@ -1,4 +1,4 @@
-import { renderAssetLineChart } from "../charts/assetLineChart.js";
+import { renderSimpleLineChart } from "../../ui/simpleLineChart.js";
 
 const setText = (selector, value) => {
   const element = document.querySelector(selector);
@@ -63,9 +63,5 @@ export const renderAssetSummary = (sectionState) => {
     activeRange === "all"
       ? data.chart?.fullSeries || []
       : data.chart?.ranges?.[activeRange] || [];
-  if (series.length === 0) {
-    setChartMessage(chartContainer, "No chart data");
-  } else {
-    renderAssetLineChart(chartContainer, series);
-  }
+  renderSimpleLineChart(chartContainer, series);
 };

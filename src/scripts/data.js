@@ -68,7 +68,10 @@ export const buildAssetSummary = async (timeframe = "7D") => {
   const normalized = summary.timeframe || normalizedTimeframe;
   const activeRange = normalized === "ALL" ? "all" : normalized;
   const seriesValues = Array.isArray(summary.series)
-    ? summary.series.map((point) => Number(point.value || 0))
+    ? summary.series.map((point) => ({
+        date: point.date,
+        value: Number(point.value || 0),
+      }))
     : [];
   const changeValue = Number(summary.percentage_change || 0);
   const changePrefix = changeValue > 0 ? "+" : changeValue < 0 ? "-" : "";

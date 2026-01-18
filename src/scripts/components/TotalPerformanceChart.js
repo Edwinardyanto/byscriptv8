@@ -1,4 +1,4 @@
-import { renderAssetLineChart } from "../charts/assetLineChart.js";
+import { renderSimpleLineChart } from "../../ui/simpleLineChart.js";
 
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
@@ -33,23 +33,12 @@ const setText = (container, selector, value) => {
   }
 };
 
-const setChartMessage = (container, message) => {
-  if (!container) {
-    return;
-  }
-  container.innerHTML = "";
-  container.textContent = message;
-};
-
 const renderAssetSummaryChart = (container, series) => {
   if (!container) {
     return;
   }
-  if (!Array.isArray(series) || series.length === 0) {
-    setChartMessage(container, "No chart data");
-    return;
-  }
-  renderAssetLineChart(container, series);
+  const safeSeries = Array.isArray(series) && series.length > 0 ? series : [];
+  renderSimpleLineChart(container, safeSeries);
 };
 
 const updateTimeframeButtons = (pillsContainer, activeRange) => {
@@ -116,7 +105,7 @@ export const renderTotalPerformanceChart = ({
     setText(container, '[data-field="asset.totalBalance"]', "--");
     setText(container, '[data-field="asset.change"]', "--");
     setText(container, '[data-field="asset.changeLabel"]', "");
-    setChartMessage(chartContainer, "Chart Placeholder");
+    renderAssetSummaryChart(chartContainer, []);
     return;
   }
 
@@ -124,7 +113,7 @@ export const renderTotalPerformanceChart = ({
     setText(container, '[data-field="asset.totalBalance"]', "--");
     setText(container, '[data-field="asset.change"]', "--");
     setText(container, '[data-field="asset.changeLabel"]', "Unable to load");
-    setChartMessage(chartContainer, "Chart unavailable");
+    renderAssetSummaryChart(chartContainer, []);
     return;
   }
 
@@ -132,7 +121,7 @@ export const renderTotalPerformanceChart = ({
     setText(container, '[data-field="asset.totalBalance"]', "--");
     setText(container, '[data-field="asset.change"]', "--");
     setText(container, '[data-field="asset.changeLabel"]', "No data available");
-    setChartMessage(chartContainer, "No chart data");
+    renderAssetSummaryChart(chartContainer, []);
     return;
   }
 
