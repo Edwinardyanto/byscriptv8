@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autotrader Detail | byScript</title>
+    <link rel="stylesheet" href="../../src/styles/color-tokens.css" />
+    <link rel="stylesheet" href="../../src/styles/main.css" />
+    <style>
+      body.page-autotrader-detail {
+        background: radial-gradient(circle at top, var(--color-state-hover), transparent 60%),
+          linear-gradient(
+            135deg,
+            var(--color-app-gradient-start) 0%,
+            var(--color-app-gradient-mid) 40%,
+            var(--color-app-gradient-end) 100%
+          );
+        color: var(--color-text-primary);
+        position: relative;
+        isolation: isolate;
+      }
+
+      body.page-autotrader-detail::before,
+      body.page-autotrader-detail::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      body.page-autotrader-detail::before {
+        background: radial-gradient(circle at 18% 12%, var(--color-state-hover), transparent 50%),
+          radial-gradient(circle at 80% 18%, var(--color-state-active), transparent 58%);
+      }
+
+      body.page-autotrader-detail::after {
+        background: radial-gradient(circle at 50% 40%, transparent 0%, var(--color-shadow-deep) 72%);
+      }
+
+      .page-autotrader-detail {
+        --panel-bg: var(--color-surface-panel-strong);
+        --panel-border: var(--color-border-subtle);
+        --panel-muted: var(--color-text-tertiary);
+        --panel-accent: var(--color-action-primary);
+        --panel-danger: var(--color-status-negative);
+        --panel-warning: var(--color-status-negative-text-muted);
+        --panel-radius: 8px;
+        --panel-gap: 12px;
+        --panel-font: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      }
+
+      .page-autotrader-detail .app {
+        font-family: var(--panel-font);
+      }
+
+      .page-autotrader-detail header.section-header {
+        background: var(--color-surface-panel-strong);
+        border-bottom: 1px solid var(--panel-border);
+      }
+
+      .page-autotrader-detail .detail-header {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        padding: 0 18px;
+      }
+
+      .page-autotrader-detail .detail-header-title {
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: var(--color-text-primary);
+      }
+
+      .page-autotrader-detail .main {
+        padding: 16px;
+      }
+
+      .page-autotrader-detail .detail-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+        gap: 14px;
+        height: 100%;
+      }
+
+      .page-autotrader-detail .panel-stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--panel-gap);
+        min-height: 0;
+        height: 100%;
+      }
+
+      .page-autotrader-detail .panel {
+        background: var(--panel-bg);
+        border: 1px solid var(--panel-border);
+        border-radius: var(--panel-radius);
+        padding: 12px 14px;
+        box-shadow: inset 0 1px 0 var(--color-overlay-xxs-strong), 0 10px 18px var(--color-shadow-soft);
+      }
+
+      .page-autotrader-detail .panel-title {
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--color-text-tertiary);
+        margin: 0 0 10px 0;
+      }
+
+      .page-autotrader-detail .identity-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 20px;
+      }
+
+      .page-autotrader-detail .identity-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.78rem;
+      }
+
+      .page-autotrader-detail .identity-row span:first-child {
+        color: var(--panel-muted);
+      }
+
+      .page-autotrader-detail .identity-row strong {
+        font-weight: 500;
+        color: var(--color-text-primary);
+      }
+
+      .page-autotrader-detail .inline-copy {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .page-autotrader-detail .copy-btn {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+        border-radius: 6px;
+        border: 1px solid var(--panel-border);
+        background: var(--color-surface-panel-strong);
+        color: var(--color-text-secondary);
+      }
+
+      .page-autotrader-detail .text-accent {
+        color: var(--panel-accent);
+      }
+
+      .page-autotrader-detail .text-muted {
+        color: var(--panel-muted);
+      }
+
+      .page-autotrader-detail .text-danger {
+        color: var(--panel-danger);
+      }
+
+      .page-autotrader-detail .text-warning {
+        color: var(--panel-warning);
+      }
+
+      .page-autotrader-detail .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 22px;
+      }
+
+      .page-autotrader-detail .stat-block {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.75rem;
+      }
+
+      .page-autotrader-detail .stat-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--color-text-secondary);
+      }
+
+      .page-autotrader-detail .action-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      .page-autotrader-detail .action-btn {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        border: 1px solid var(--panel-border);
+        background: var(--color-surface-panel-strong);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        box-shadow: inset 0 1px 0 var(--color-overlay-xxs-strong);
+      }
+
+      .page-autotrader-detail .action-btn.primary {
+        background: var(--color-state-selected);
+        border-color: var(--color-action-primary-border-strong);
+        color: var(--color-text-primary);
+      }
+
+      .page-autotrader-detail .action-btn.danger {
+        border-color: var(--color-status-negative-border);
+        color: var(--color-status-negative-text);
+        background: var(--color-state-selected);
+      }
+
+      .page-autotrader-detail .table-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .page-autotrader-detail .panel-subtitle {
+        font-size: 0.7rem;
+        color: var(--color-text-disabled);
+        margin-top: -6px;
+        margin-bottom: 10px;
+      }
+
+      .page-autotrader-detail .table-scroll {
+        flex: 1;
+        overflow: auto;
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 6px;
+        background: var(--color-surface-panel-strong);
+      }
+
+      .page-autotrader-detail table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.72rem;
+      }
+
+      .page-autotrader-detail thead th {
+        position: sticky;
+        top: 0;
+        background: var(--color-surface-panel-strong);
+        color: var(--color-text-tertiary);
+        text-align: left;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--panel-border);
+        font-weight: 500;
+      }
+
+      .page-autotrader-detail tbody td {
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--color-border-subtle);
+        color: var(--color-text-secondary);
+      }
+
+      .page-autotrader-detail .view-all {
+        font-size: 0.7rem;
+        color: var(--color-text-tertiary);
+        text-align: right;
+        padding-top: 8px;
+      }
+
+      .page-autotrader-detail .right-panel {
+        display: flex;
+        flex-direction: column;
+        gap: var(--panel-gap);
+        min-height: 0;
+        height: 100%;
+      }
+
+      .page-autotrader-detail .pnl-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        align-items: center;
+      }
+
+      .page-autotrader-detail .pnl-main {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.7rem;
+        color: var(--color-text-tertiary);
+      }
+
+      .page-autotrader-detail .pnl-main strong {
+        font-size: 1.3rem;
+        color: var(--color-text-primary);
+        font-weight: 600;
+      }
+
+      .page-autotrader-detail .pnl-mini {
+        text-align: center;
+        font-size: 0.7rem;
+        color: var(--color-text-tertiary);
+      }
+
+      .page-autotrader-detail .pnl-mini strong {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--panel-accent);
+      }
+
+      .page-autotrader-detail .key-value {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: var(--color-text-secondary);
+      }
+
+      .page-autotrader-detail .risk-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        font-size: 0.75rem;
+      }
+
+      .page-autotrader-detail .risk-metric {
+        display: flex;
+        justify-content: space-between;
+        color: var(--color-text-secondary);
+      }
+
+      .page-autotrader-detail .connections-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+
+      .page-autotrader-detail .connections-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .page-autotrader-detail .connections-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      .page-autotrader-detail .connections-select {
+        background: var(--color-component-dropdown-bg);
+        border: 1px solid var(--color-component-dropdown-border);
+        border-radius: 6px;
+        color: var(--color-component-dropdown-text);
+        font-size: 0.72rem;
+        padding: 6px 8px;
+      }
+
+      .page-autotrader-detail .payload-box {
+        flex: 1;
+        background: var(--color-surface-panel-strong);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 6px;
+        padding: 28px 10px 10px;
+        font-size: 0.7rem;
+        font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+        color: var(--color-text-secondary);
+        overflow: auto;
+        white-space: pre;
+        position: relative;
+        box-shadow: inset 0 1px 0 var(--color-overlay-xxs-strong);
+      }
+
+      .page-autotrader-detail .payload-content {
+        margin: 0;
+        white-space: pre;
+      }
+
+      .page-autotrader-detail .payload-placeholder {
+        color: var(--color-text-disabled);
+        font-size: 0.7rem;
+        white-space: normal;
+      }
+
+      .page-autotrader-detail .payload-copy {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+      }
+
+      .page-autotrader-detail .payload-label {
+        font-size: 0.7rem;
+        color: var(--color-text-tertiary);
+      }
+
+      .page-autotrader-detail .payload-helper {
+        margin-top: 6px;
+        font-size: 0.68rem;
+        color: var(--color-text-disabled);
+      }
+
+      .page-autotrader-detail .mono {
+        font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+      }
+    </style>
+  </head>
+  <body class="page-autotrader-detail">
+    <div id="app" class="app">
+      <header class="header section section--header section-header detail-header">
+        <div class="detail-header-title">Autotrader &gt; Grid Cuanterus</div>
+        <div></div>
+      </header>
+      <div class="app-body">
+        <aside data-sidebar-slot></aside>
+        <main class="main">
+          <div class="detail-grid">
+            <section class="panel-stack">
+              <div class="panel">
+                <h2 class="panel-title">Identity</h2>
+                <div class="identity-grid">
+                  <div class="identity-row">
+                    <span>Autotrader Info</span>
+                    <span class="inline-copy"><strong class="mono">jBJvnsreul39saJGF</strong><button class="copy-btn" type="button">Copy</button></span>
+                  </div>
+                  <div class="identity-row">
+                    <span>Exchange</span>
+                    <strong>Binance</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Status</span>
+                    <strong class="text-accent">Active</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Pair</span>
+                    <strong>BTC / USDT</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Created At</span>
+                    <strong>Jan 02 2026 · 18:00</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Market Type</span>
+                    <strong>Futures</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Capital per trade</span>
+                    <strong>Custom</strong>
+                  </div>
+                  <div class="identity-row">
+                    <span>Leverage</span>
+                    <strong>Isolated 50X</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h2 class="panel-title">PNL Snapshot</h2>
+                <div class="pnl-grid">
+                  <div class="pnl-main">
+                    <strong>$3,680</strong>
+                    <span>Total PnL</span>
+                  </div>
+                  <div class="pnl-mini">
+                    <strong>$68</strong>
+                    <span>7D</span>
+                  </div>
+                  <div class="pnl-mini">
+                    <strong>+$150</strong>
+                    <span>30D</span>
+                  </div>
+                  <div class="pnl-mini">
+                    <strong>+$1,020</strong>
+                    <span>90D</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h2 class="panel-title">Action Button</h2>
+                <div class="action-row">
+                  <button class="action-btn primary" type="button">Stop</button>
+                  <button class="action-btn danger" type="button">Cancel All Pending Orders</button>
+                  <button class="action-btn danger" type="button">Close All Positions</button>
+                </div>
+              </div>
+
+              <div class="panel table-panel">
+                <h2 class="panel-title">Recent Trade Executions</h2>
+                <div class="panel-subtitle">Last 10 execution events for this autotraders</div>
+                <div class="table-scroll">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                        <th>Side</th>
+                        <th>Price</th>
+                        <th>Size</th>
+                        <th>Status</th>
+                        <th>Source</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>13:21:47</td>
+                        <td class="text-accent">BUY</td>
+                        <td>LONG</td>
+                        <td>$67,200</td>
+                        <td>0.250 ETH</td>
+                        <td class="text-accent">OPEN</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:55:08</td>
+                        <td class="text-danger">SELL</td>
+                        <td>LONG</td>
+                        <td>$67,280</td>
+                        <td>0.350 ETH</td>
+                        <td class="text-accent">FILLED</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:16:83</td>
+                        <td class="text-danger">SELL</td>
+                        <td>SHORT</td>
+                        <td>$67,280</td>
+                        <td>0.300 ETH</td>
+                        <td class="text-warning">PARTIAL</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>13:21:47</td>
+                        <td class="text-accent">BUY</td>
+                        <td>LONG</td>
+                        <td>$67,200</td>
+                        <td>0.250 ETH</td>
+                        <td class="text-accent">OPEN</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:55:08</td>
+                        <td class="text-danger">SELL</td>
+                        <td>LONG</td>
+                        <td>$67,280</td>
+                        <td>0.350 ETH</td>
+                        <td class="text-accent">FILLED</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:16:83</td>
+                        <td class="text-danger">SELL</td>
+                        <td>SHORT</td>
+                        <td>$67,280</td>
+                        <td>0.300 ETH</td>
+                        <td class="text-warning">PARTIAL</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:17:88</td>
+                        <td class="text-danger">SELL</td>
+                        <td>LONG</td>
+                        <td>$67,280</td>
+                        <td>0.150 ETH</td>
+                        <td class="text-accent">FILLED</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>12:25:23</td>
+                        <td class="text-danger">CANCEL</td>
+                        <td>SHORT</td>
+                        <td>$67,450</td>
+                        <td>0.300 ETH</td>
+                        <td class="text-danger">FAILED</td>
+                        <td>SYSTEM</td>
+                      </tr>
+                      <tr>
+                        <td>11:54:02</td>
+                        <td class="text-accent">BUY</td>
+                        <td>LONG</td>
+                        <td>$67,105</td>
+                        <td>0.420 ETH</td>
+                        <td class="text-accent">FILLED</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                      <tr>
+                        <td>11:21:45</td>
+                        <td class="text-danger">SELL</td>
+                        <td>SHORT</td>
+                        <td>$67,320</td>
+                        <td>0.280 ETH</td>
+                        <td class="text-warning">PARTIAL</td>
+                        <td>STRATEGY</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="view-all">View all trades →</div>
+              </div>
+            </section>
+
+            <section class="right-panel">
+              <div class="panel">
+                <h2 class="panel-title">Trade Setup</h2>
+                <div class="stat-block">
+                  <div class="stat-row"><span>Total Profit ($)</span><strong class="text-accent">+210,000 USDT</strong></div>
+                  <div class="stat-row"><span>Total Loss ($)</span><strong>42 USDT</strong></div>
+                  <div class="stat-row"><span>Total Trades</span><strong>42</strong></div>
+                  <div class="stat-row"><span>Win Rate</span><strong class="text-accent">42%</strong></div>
+                  <div class="stat-row"><span>Running Positions</span><strong>17</strong></div>
+                  <div class="stat-row"><span>Pending Orders</span><strong>5</strong></div>
+                  <div class="stat-row"><span>Profit Factor</span><strong>2.1</strong></div>
+                  <div class="stat-row"><span>Risk : Riward Ratio</span><strong>1:0.9</strong></div>
+                  <div class="stat-row"><span>Max Capital Used</span><strong>119,000 USDT</strong></div>
+                  <div class="stat-row"><span>Max Concurrent Positions</span><strong>110</strong></div>
+                 </div>
+              </div>
+
+              <div class="panel connections-panel">
+                <div class="connections-header">
+                  <h2 class="panel-title">Json Payload Message</h2>
+                </div>
+                <div class="connections-field">
+                  <label class="payload-label" for="tv-alert-action">TradingView Alert Action</label>
+                  <select class="connections-select" id="tv-alert-action">
+                    <option value="">Select TradingView alert action to generate payload</option>
+                    <option value="create_market">Create SmartTrade (Market)</option>
+                    <option value="create_limit_tp">Create SmartTrade (Limit + TP)</option>
+                    <option value="close_market">Close SmartTrade (Market)</option>
+                    <option value="add_funds">Add Funds</option>
+                    <option value="reduce_funds">Reduce Funds</option>
+                    <option value="force_start">Force Start Trade</option>
+                    <option value="cancel">Cancel SmartTrade</option>
+                    <option value="set_note">Set Note</option>
+                  </select>
+                </div>
+                <div class="payload-box">
+                  <button class="copy-btn payload-copy" type="button">Copy JSON</button>
+                  <pre class="payload-content" id="tv-payload-content"></pre>
+                  <span class="payload-placeholder" id="tv-payload-placeholder">
+                    Select TradingView alert action to generate payload
+                  </span>
+                </div>
+                <div class="payload-helper">
+                  Preview is formatted for readability. Copied JSON is minified for TradingView alerts.
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script>
+      const tvAlertSelect = document.getElementById("tv-alert-action");
+      const payloadContent = document.getElementById("tv-payload-content");
+      const payloadPlaceholder = document.getElementById("tv-payload-placeholder");
+      const payloadCopyButton = document.querySelector(".payload-copy");
+
+      const basePayload = {
+        tv_id: "",
+        trading_plan_id: "GRID_CUANTERUS",
+        crypto: "BTC",
+        market_code: "binance_futures",
+        pair_name: "USDT_BTC",
+        account_id: "all",
+        method: "POST",
+        action: ""
+      };
+
+      const payloadVariants = {
+        create_market: {
+          action: "CREATE",
+          leverage: {
+            enabled: true,
+            type: "user",
+            value: 1
+          },
+          position: {
+            order_type: "market",
+            type: "buy",
+            units: { value: "trade_amount" },
+            price: { value: 0 }
+          },
+          take_profit: { enabled: false },
+          stop_loss: { enabled: false }
+        },
+        create_limit_tp: {
+          action: "CREATE",
+          position: {
+            order_type: "limit",
+            type: "buy",
+            units: { value: "trade_amount" },
+            price: { value: "LIMIT_PRICE" }
+          },
+          take_profit: {
+            enabled: true,
+            steps: [
+              {
+                order_type: "limit",
+                volume: "100",
+                price: { type: "last", value: "TP_PRICE" }
+              }
+            ]
+          },
+          stop_loss: { enabled: false }
+        },
+        close_market: {
+          action: "CLOSE",
+          method: "POST",
+          position: { type: "buy" },
+          status: "waiting_targets"
+        },
+        add_funds: {
+          action: "ADD_FUNDS",
+          order_type: "limit",
+          units: { value: "10" },
+          price: { value: "0.03711" }
+        },
+        reduce_funds: {
+          action: "REDUCE_FUNDS",
+          order_type: "market",
+          units: { value: "5" }
+        },
+        force_start: {
+          action: "FORCE_START",
+          method: "POST"
+        },
+        cancel: {
+          action: "CANCEL",
+          method: "DELETE"
+        },
+        set_note: {
+          action: "SET_NOTE",
+          note: "My custom note from TradingView"
+        }
+      };
+
+      const renderPayload = (value) => {
+        if (!value || !payloadVariants[value]) {
+          payloadContent.textContent = "";
+          payloadPlaceholder.style.display = "block";
+          payloadCopyButton.disabled = true;
+          payloadCopyButton.dataset.payloadMinified = "";
+          payloadCopyButton.dataset.payloadPretty = "";
+          return;
+        }
+
+        const payload = {
+          ...basePayload,
+          ...payloadVariants[value]
+        };
+        const payloadMinified = JSON.stringify(payload);
+        const payloadPretty = JSON.stringify(payload, null, 2);
+        payloadContent.textContent = payloadPretty;
+        payloadPlaceholder.style.display = "none";
+        payloadCopyButton.disabled = false;
+        payloadCopyButton.dataset.payloadMinified = payloadMinified;
+        payloadCopyButton.dataset.payloadPretty = payloadPretty;
+      };
+
+      if (tvAlertSelect && payloadCopyButton) {
+        renderPayload(tvAlertSelect.value);
+        tvAlertSelect.addEventListener("change", (event) => {
+          renderPayload(event.target.value);
+        });
+
+        payloadCopyButton.addEventListener("click", () => {
+          const payloadMinified = payloadCopyButton.dataset.payloadMinified;
+          if (!payloadMinified) {
+            return;
+          }
+          const originalLabel = payloadCopyButton.textContent;
+          navigator.clipboard.writeText(payloadMinified).then(() => {
+            payloadCopyButton.textContent = "Copied";
+            setTimeout(() => {
+              payloadCopyButton.textContent = originalLabel;
+            }, 1800);
+          });
+        });
+      }
+    </script>
+    <script type="module" src="../../src/scripts/main.js"></script>
+  </body>
+</html>
