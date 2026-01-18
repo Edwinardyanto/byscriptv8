@@ -75,3 +75,5 @@ export const fetchDashboardData = async () => {
     tradeHistory: buildTradeHistoryState(derived.tradeHistory),
   };
 };
+
+export const fetchAssetSummary = async (timeframe = "7D") => buildAssetSummary(timeframe);

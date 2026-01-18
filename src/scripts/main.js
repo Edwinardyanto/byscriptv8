@@ -1,5 +1,5 @@
-import { fetchDashboardData } from "./pages/dashboardPage.js";
-import { getState, setState, subscribe } from "./state.js";
+import { fetchAssetSummary, fetchDashboardData } from "./pages/dashboardPage.js";
+import { getState, setSectionStatus, setState, subscribe } from "./state.js";
 import { renderAccountsSummary } from "./render/accountsSummary.js";
 import { renderAlerts } from "./render/alerts.js";
 import { renderTopAutotraders } from "./render/topAutotraders.js";
@@ -55,23 +55,37 @@ const renderDashboard = (state) => {
     dataSource: "dashboard",
     data: state.data.assetSummary,
     status: state.status.assetSummary,
-    onRangeChange: (range) => {
+    onRangeChange: async (range) => {
       const currentState = getState();
       const assetSummary = currentState.data.assetSummary;
       if (!assetSummary?.chart) {
         return;
       }
-      setState({
-        data: {
-          assetSummary: {
-            ...assetSummary,
-            chart: {
-              ...assetSummary.chart,
-              activeRange: range,
-            },
+      const normalizedRange = range === "all" ? "ALL" : String(range || "7D").toUpperCase();
+      setSectionStatus("assetSummary", "loading");
+      try {
+        const updated = await fetchAssetSummary(normalizedRange);
+        setState({
+          data: {
+            assetSummary: updated,
           },
-        },
-      });
+          status: {
+            assetSummary: "ready",
+          },
+          errors: {
+            assetSummary: null,
+          },
+        });
+      } catch (error) {
+        setState({
+          status: {
+            assetSummary: "error",
+          },
+          errors: {
+            assetSummary: error,
+          },
+        });
+      }
     },
   });
   renderAccountsSummary({
