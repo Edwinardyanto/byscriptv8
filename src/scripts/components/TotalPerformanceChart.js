@@ -1,5 +1,3 @@
-import { renderAssetLineChart } from "../charts/assetLineChart.js";
-
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
   <div class="asset-summary-content">
@@ -112,12 +110,21 @@ export const renderTotalPerformanceChart = ({
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
   const isAccountsPage = document.body?.classList.contains("page-accounts");
+  const summaryCard = container.querySelector(".card--summary");
+  const summaryTop = container.querySelector(".card--summary .summary-top");
 
-  if (status === "loading") {
-    setText(container, '[data-field="asset.totalBalance"]', "Loading...");
+  if (summaryCard) {
+    summaryCard.classList.toggle("data-ready", status === "ready" && Boolean(data));
+  }
+  if (summaryTop) {
+    summaryTop.classList.toggle("data-ready", status === "ready" && Boolean(data));
+  }
+
+  if (status === "loading" || status === "idle") {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
     setText(container, '[data-field="asset.change"]', "--");
-    setText(container, '[data-field="asset.changeLabel"]', "Loading...");
-    setChartMessage(chartContainer, "Loading chart...");
+    setText(container, '[data-field="asset.changeLabel"]', "");
+    setChartMessage(chartContainer, "Chart Placeholder");
     return;
   }
 
@@ -150,13 +157,5 @@ export const renderTotalPerformanceChart = ({
   const activeRange = data.chart?.activeRange || "7D";
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  const series =
-    activeRange === "all"
-      ? data.chart?.fullSeries || []
-      : data.chart?.ranges?.[activeRange] || [];
-  if (series.length === 0) {
-    setChartMessage(chartContainer, "No chart data");
-  } else {
-    renderAssetLineChart(chartContainer, series);
-  }
+  setChartMessage(chartContainer, "Chart coming soon");
 };

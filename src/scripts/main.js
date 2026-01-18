@@ -61,9 +61,10 @@ const renderDashboard = (state) => {
       if (!assetSummary?.chart) {
         return;
       }
+      const normalizedRange = range === "all" ? "ALL" : String(range || "7D").toUpperCase();
       setSectionStatus("assetSummary", "loading");
       try {
-        const updated = await fetchAssetSummary(range);
+        const updated = await fetchAssetSummary(normalizedRange);
         setState({
           data: {
             assetSummary: updated,

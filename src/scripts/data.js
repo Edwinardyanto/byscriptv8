@@ -2,7 +2,6 @@ import {
   getAccountsWithSummary,
   getTradeHistory,
   getAccounts,
-  getAccountAssets,
   getAutotradersByAccount,
   loadTrades,
 } from "./dataAccess.js";
@@ -72,14 +71,15 @@ const buildAccountsSummary = async () => {
 };
 
 export const buildAssetSummary = async (timeframe = "7D") => {
-  const summary = await getAssetSummary(timeframe);
+  const normalizedTimeframe = String(timeframe || "7D").toUpperCase();
+  const summary = await getAssetSummary(normalizedTimeframe);
   const totalBalance = Number(summary.total_value_usd || 0);
   const startValue = Math.max(totalBalance * 0.7, totalBalance - 2500);
-  const normalized = summary.timeframe || String(timeframe || "7D").toUpperCase();
+  const normalized = summary.timeframe || normalizedTimeframe;
   const activeRange = normalized === "ALL" ? "all" : normalized;
 
   return {
-    totalBalance: formatCurrency(totalBalance),
+    totalBalance: formatCurrency(totalBalance, 2),
     change: "+3.4%",
     changeLabel: normalized === "ALL" ? "vs all time" : `vs last ${normalized.toLowerCase()}`,
     chart: {
