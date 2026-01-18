@@ -1,4 +1,8 @@
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
+import {
+  applyTimeframe,
+  deriveDailyTotalUSD,
+} from "../utils/assetSummaryData.js";
 
 const setText = (selector, value) => {
   const element = document.querySelector(selector);
@@ -56,13 +60,16 @@ export const renderAssetSummary = (sectionState) => {
   setText('[data-field="asset.change"]', data.change);
   setText('[data-field="asset.changeLabel"]', data.changeLabel);
 
-  const activeRange = data.chart?.activeRange || "7D";
+  const activeRange = data.activeRange || "7D";
   updateTimeframeButtons(activeRange);
 
-  const series =
-    activeRange === "all"
-      ? data.chart?.fullSeries || []
-      : data.chart?.ranges?.[activeRange] || [];
+  const derivedSeries = deriveDailyTotalUSD(data.accountAssetDaily || []);
+  const timeframe =
+    activeRange === "all" ? "ALL" : Number.parseInt(activeRange, 10);
+  const filteredSeries = Number.isFinite(timeframe)
+    ? applyTimeframe(derivedSeries, timeframe)
+    : derivedSeries;
+  const series = filteredSeries.map((point) => point.total_usd);
   if (series.length === 0) {
     setChartMessage(chartContainer, "No chart data");
   } else {

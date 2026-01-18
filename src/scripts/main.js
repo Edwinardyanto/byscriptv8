@@ -58,17 +58,14 @@ const renderDashboard = (state) => {
     onRangeChange: (range) => {
       const currentState = getState();
       const assetSummary = currentState.data.assetSummary;
-      if (!assetSummary?.chart) {
+      if (!assetSummary) {
         return;
       }
       setState({
         data: {
           assetSummary: {
             ...assetSummary,
-            chart: {
-              ...assetSummary.chart,
-              activeRange: range,
-            },
+            activeRange: range,
           },
         },
       });
