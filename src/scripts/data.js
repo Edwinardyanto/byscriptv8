@@ -6,6 +6,7 @@ import {
   getAutotradersByAccount,
   loadTrades,
 } from "./dataAccess.js";
+import { getAssetSummary } from "../data/assetSummary.js";
 import { deriveTradeHistory } from "./derive/deriveTradeHistory.js";
 
 const buildSeries = (points, start, end) => {
@@ -70,27 +71,19 @@ const buildAccountsSummary = async () => {
   };
 };
 
-export const buildAssetSummary = async () => {
-  const accounts = await getAccounts();
-  const accountValues = await Promise.all(
-    accounts.map(async (account) => ({
-      accountId: account.account_id,
-      value: await getAccountAssets(account.account_id),
-    }))
-  );
-  const totalBalance = accountValues.reduce((sum, entry) => {
-    const accountTotal = entry.value.reduce((sub, asset) => sub + Number(asset.usd_value || 0), 0);
-    return sum + accountTotal;
-  }, 0);
-
+export const buildAssetSummary = async (timeframe = "7D") => {
+  const summary = await getAssetSummary(timeframe);
+  const totalBalance = Number(summary.total_value_usd || 0);
   const startValue = Math.max(totalBalance * 0.7, totalBalance - 2500);
+  const normalized = summary.timeframe || String(timeframe || "7D").toUpperCase();
+  const activeRange = normalized === "ALL" ? "all" : normalized;
 
   return {
     totalBalance: formatCurrency(totalBalance),
     change: "+3.4%",
-    changeLabel: "vs last 7 days",
+    changeLabel: normalized === "ALL" ? "vs all time" : `vs last ${normalized.toLowerCase()}`,
     chart: {
-      activeRange: "7D",
+      activeRange,
       fullSeries: buildSeries(120, startValue, totalBalance),
       ranges: {
         "7D": buildSeries(7, startValue * 0.9, totalBalance),
