@@ -36,7 +36,7 @@ export const resolveTimeframe = (timeframe, dates) => {
     return { startDate: null, endDate: null, timeframe: normalized };
   }
 
-  const endDate = normalizedDates[normalizedDates.length - 1];
+  const endDate = formatDate(new Date());
   if (normalized === "ALL") {
     return {
       startDate: normalizedDates[0],

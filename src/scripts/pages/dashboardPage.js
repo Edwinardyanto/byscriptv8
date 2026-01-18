@@ -57,9 +57,9 @@ const buildTradeHistoryState = (tradeHistory) =>
     time: trade.time ? formatRelativeTime(new Date(trade.time)) : "–",
   }));
 
-export const fetchDashboardData = async () => {
+export const fetchDashboardData = async (timeframe = "7D") => {
   const [assetSummary, trades, accounts, autotraders] = await Promise.all([
-    buildAssetSummary(),
+    buildAssetSummary(timeframe),
     loadTrades(),
     loadAccounts(),
     loadAutotraders(),
@@ -75,3 +75,5 @@ export const fetchDashboardData = async () => {
     tradeHistory: buildTradeHistoryState(derived.tradeHistory),
   };
 };
+
+export const fetchAssetSummary = async (timeframe = "7D") => buildAssetSummary(timeframe);
