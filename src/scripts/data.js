@@ -1,83 +1,9 @@
-const ACCOUNT_ASSET_DAILY_INDEX = "/data/account_assets_daily/index.json";
-
-const normalizeAccountAssetDailyEntry = (date, entry) => ({
-  date,
-  accounts: (entry?.accounts || []).map((account) => ({
-    account_id: account.account_id,
-    assets: (account.assets || []).map((asset) => ({
-      asset_id: asset.asset_id,
-      value_usd:
-        typeof asset.value_usd === "number"
-          ? asset.value_usd
-          : typeof asset.value === "number"
-          ? asset.value
-          : 0,
-    })),
-  })),
-});
-
-export const fetchAccountAssetDaily = async () => {
-  try {
-    const response = await fetch(ACCOUNT_ASSET_DAILY_INDEX);
-    if (!response.ok) {
-      throw new Error("Failed to load account asset daily index");
-    }
-    const filenames = await response.json();
-    const sorted = [...filenames].sort();
-    const recent = sorted.slice(-120);
-    const entries = await Promise.all(
-      recent.map(async (filename) => {
-        const dayResponse = await fetch(`/data/account_assets_daily/${filename}`);
-        if (!dayResponse.ok) {
-          return null;
-        }
-        const raw = await dayResponse.json();
-        const date = filename.replace(/\.json$/, "");
-        return normalizeAccountAssetDailyEntry(date, raw);
-      })
-    );
-    return entries.filter(Boolean);
-  } catch (error) {
-    console.warn(error);
-    return [];
-  }
-};
-
-const buildAccountAssetDaily = (points, start, end) => {
-  const totals = buildSeries(points, start, end);
-  const now = new Date();
-  return totals.map((total, index) => {
-    const date = new Date(now);
-    date.setDate(now.getDate() - (totals.length - 1 - index));
-    const primary = total * 0.62;
-    const secondary = total - primary;
-    return {
-      date: date.toISOString().slice(0, 10),
-      accounts: [
-        {
-          assets: [
-            { value_usd: Number((primary * 0.68).toFixed(2)) },
-            { value_usd: Number((primary * 0.32).toFixed(2)) },
-          ],
-        },
-        {
-          assets: [
-            { value_usd: Number((secondary * 0.54).toFixed(2)) },
-            { value_usd: Number((secondary * 0.46).toFixed(2)) },
-          ],
-        },
-      ],
-    };
-  });
-};
-
 export const dashboardData = {
   assetSummary: {
     totalBalance: "$12,430",
     change: "+3.4%",
     changeLabel: "vs last 7 days",
     activeRange: "7D",
-    accountAssetDaily: [],
   },
   exchangesSummary: {
     total: "$21,240",

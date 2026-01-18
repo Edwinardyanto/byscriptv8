@@ -1,4 +1,4 @@
-import { fetchAccountAssetDaily, fetchDashboardData } from "./data.js";
+import { fetchDashboardData } from "./data.js";
 import { getState, setState, subscribe } from "./state.js";
 import { renderExchangesSummary } from "./render/exchangesSummary.js";
 import { renderAlerts } from "./render/alerts.js";
@@ -47,7 +47,7 @@ const evaluateStatus = (data, key) => {
   }
 
   if (key === "assetSummary") {
-    return data.accountAssetDaily?.length ? "ready" : "empty";
+    return data ? "ready" : "empty";
   }
 
   return "ready";
@@ -119,14 +119,7 @@ const bindSidebarToggle = () => {
 const loadDashboardData = async () => {
   setSectionStatuses("loading");
   try {
-    const [data, accountAssetDaily] = await Promise.all([
-      fetchDashboardData(),
-      fetchAccountAssetDaily(),
-    ]);
-    data.assetSummary = {
-      ...data.assetSummary,
-      accountAssetDaily,
-    };
+    const data = await fetchDashboardData();
     const statuses = sectionKeys.reduce((acc, key) => {
       acc[key] = evaluateStatus(data[key], key);
       return acc;

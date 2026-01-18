@@ -1,8 +1,14 @@
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
+import { loadAccountAssetsDaily } from "../data/loadAccountAssetsDaily.js";
 import {
   applyTimeframe,
   deriveDailyTotalUSD,
 } from "../utils/assetSummaryData.js";
+
+let derivedData = [];
+let derivedStatus = "idle";
+let derivedLoadPromise = null;
+let pendingRenderRequest = null;
 
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
@@ -16,10 +22,10 @@ const chartMarkup = `
               <span class="badge badge--positive" data-field="asset.change"></span>
             </div>
             <div class="timeframe-pills" aria-label="Asset summary timeframe">
-              <span class="timeframe-pill timeframe-pill--active">7D</span>
-              <span class="timeframe-pill">30D</span>
-              <span class="timeframe-pill">90D</span>
-              <span class="timeframe-pill">All</span>
+              <span class="timeframe-pill timeframe-pill--active" data-timeframe="7D">7D</span>
+              <span class="timeframe-pill" data-timeframe="30D">30D</span>
+              <span class="timeframe-pill" data-timeframe="90D">90D</span>
+              <span class="timeframe-pill" data-timeframe="ALL">All</span>
             </div>
           </div>
         </div>
@@ -56,7 +62,21 @@ const updateTimeframeButtons = (pillsContainer, activeRange) => {
   });
 };
 
-const bindTimeframeControls = (pillsContainer, onRangeChange) => {
+const setActivePill = (pillsContainer, activePill) => {
+  if (!pillsContainer || !activePill) {
+    return;
+  }
+  const pills = pillsContainer.querySelectorAll(".timeframe-pill");
+  pills.forEach((pill) => {
+    pill.classList.toggle("timeframe-pill--active", pill === activePill);
+  });
+};
+
+const bindTimeframeControls = (
+  pillsContainer,
+  onRangeChange,
+  renderChartWithTimeframe
+) => {
   if (!pillsContainer) {
     return;
   }
@@ -67,8 +87,9 @@ const bindTimeframeControls = (pillsContainer, onRangeChange) => {
     }
     pill.dataset.bound = "true";
     pill.addEventListener("click", () => {
-      const label = pill.textContent.trim();
-      const range = label === "All" ? "ALL" : label;
+      const range = pill.dataset.timeframe || "7D";
+      setActivePill(pillsContainer, pill);
+      renderChartWithTimeframe(range);
       if (typeof onRangeChange === "function") {
         onRangeChange(range);
       }
@@ -88,6 +109,26 @@ const resolveTimeframePills = (container, externalContainer) => {
     internalPills.remove();
   }
   return externalContainer;
+};
+
+const loadDerivedData = async () => {
+  if (derivedLoadPromise) {
+    return derivedLoadPromise;
+  }
+  derivedStatus = "loading";
+  derivedLoadPromise = loadAccountAssetsDaily()
+    .then((accountAssetDaily) => {
+      derivedData = deriveDailyTotalUSD(accountAssetDaily);
+      derivedStatus = "ready";
+      return derivedData;
+    })
+    .catch((error) => {
+      console.warn(error);
+      derivedData = [];
+      derivedStatus = "error";
+      return derivedData;
+    });
+  return derivedLoadPromise;
 };
 
 export const renderTotalPerformanceChart = ({
@@ -111,9 +152,48 @@ export const renderTotalPerformanceChart = ({
     container.dataset.totalPerformanceSource = dataSource;
   }
   const pillsContainer = resolveTimeframePills(container, timeframeContainer);
-  bindTimeframeControls(pillsContainer, onRangeChange);
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
+  const renderChartWithTimeframe = (timeframe) => {
+    if (derivedStatus === "idle") {
+      pendingRenderRequest = {
+        container,
+        dataSource,
+        data,
+        status,
+        onRangeChange,
+        timeframeContainer,
+      };
+      setChartMessage(chartContainer, "Loading chart...");
+      loadDerivedData().then(() => {
+        if (pendingRenderRequest) {
+          const nextRequest = pendingRenderRequest;
+          pendingRenderRequest = null;
+          renderTotalPerformanceChart(nextRequest);
+        }
+      });
+      return;
+    }
+
+    if (derivedStatus === "loading") {
+      setChartMessage(chartContainer, "Loading chart...");
+      return;
+    }
+
+    if (derivedStatus === "error") {
+      setChartMessage(chartContainer, "Chart unavailable");
+      return;
+    }
+
+    const series = applyTimeframe(derivedData, timeframe);
+    if (series.length === 0) {
+      setChartMessage(chartContainer, "No chart data");
+    } else {
+      renderAssetLineChart(chartContainer, series);
+    }
+  };
+
+  bindTimeframeControls(pillsContainer, onRangeChange, renderChartWithTimeframe);
 
   if (status === "loading") {
     setText(container, '[data-field="asset.totalBalance"]', "Loading...");
@@ -146,11 +226,5 @@ export const renderTotalPerformanceChart = ({
   const activeRange = data.activeRange || "7D";
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  const derivedSeries = deriveDailyTotalUSD(data.accountAssetDaily || []);
-  const filteredSeries = applyTimeframe(derivedSeries, activeRange);
-  if (filteredSeries.length === 0) {
-    setChartMessage(chartContainer, "No chart data");
-  } else {
-    renderAssetLineChart(chartContainer, filteredSeries);
-  }
+  renderChartWithTimeframe(activeRange);
 };
