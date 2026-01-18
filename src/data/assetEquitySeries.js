@@ -55,7 +55,8 @@ const normalizeAccountAssetSnapshot = (snapshot, date) => {
   });
 };
 
-const updateLatestByKey = (latestByKey, rows) => {
+const sumLatestValuesForDate = (rows) => {
+  const latestByKey = new Map();
   rows.forEach((row) => {
     if (!row?.account_id || !row?.asset_id) {
       return;
@@ -63,27 +64,7 @@ const updateLatestByKey = (latestByKey, rows) => {
     const key = `${row.account_id}::${row.asset_id}`;
     latestByKey.set(key, Number(row.value_usd ?? row.value ?? row.usd_value ?? 0));
   });
-};
-
-const sumLatestValues = (latestByKey) =>
-  Array.from(latestByKey.values()).reduce((sum, value) => sum + Number(value || 0), 0);
-
-const toUtcDate = (date) => new Date(`${date}T00:00:00Z`);
-
-const formatDate = (date) => date.toISOString().slice(0, 10);
-
-const buildDateRange = (startDate, endDate) => {
-  if (!startDate || !endDate) {
-    return [];
-  }
-  const range = [];
-  const cursor = toUtcDate(startDate);
-  const end = toUtcDate(endDate);
-  while (cursor <= end) {
-    range.push(formatDate(cursor));
-    cursor.setUTCDate(cursor.getUTCDate() + 1);
-  }
-  return range;
+  return Array.from(latestByKey.values()).reduce((sum, value) => sum + Number(value || 0), 0);
 };
 
 export const getAssetEquitySeries = async (timeframe = "7D", availableDates = null) => {
@@ -105,21 +86,14 @@ export const getAssetEquitySeries = async (timeframe = "7D", availableDates = nu
     )
   );
 
-  const snapshotsByDate = new Map(
-    snapshots.map((snapshot, index) => [availableInRange[index], snapshot])
-  );
-  const fullRange = buildDateRange(startDate, endDate);
-  const latestByKey = new Map();
-
-  return fullRange.map((date) => {
-    const snapshot = snapshotsByDate.get(date);
-    if (snapshot) {
+  return snapshots
+    .map((snapshot, index) => {
+      const date = availableInRange[index];
       const rows = normalizeAccountAssetSnapshot(snapshot, date);
-      updateLatestByKey(latestByKey, rows);
-    }
-    return {
-      date,
-      value: sumLatestValues(latestByKey),
-    };
-  });
+      return {
+        date,
+        value: sumLatestValuesForDate(rows),
+      };
+    })
+    .sort((a, b) => a.date.localeCompare(b.date));
 };
