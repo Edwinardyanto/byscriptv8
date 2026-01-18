@@ -1,27 +1,18 @@
-import { loadAccountAssetsDaily } from "../data/loadAccountAssetsDaily.js";
-import { deriveDailyTotalUSD, applyTimeframe } from "../utils/assetSummaryData.js";
+export async function loadAccountAssetsDaily() {
+  const indexRes = await fetch("data/account_assets_daily/index.json");
+  const files = await indexRes.json();
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.querySelector(".chart-placeholder");
-  if (!container) return;
+  const days = [];
 
-  container.innerText = "Loading chart...";
+  for (const file of files) {
+    const res = await fetch(`data/account_assets_daily/${file}`);
+    const accounts = await res.json();
 
-  const accountAssetDaily = await loadAccountAssetsDaily();
-  const derived = deriveDailyTotalUSD(accountAssetDaily);
-  const data = applyTimeframe(derived, "7D");
+    days.push({
+      date: file.replace(".json", ""),
+      accounts,
+    });
+  }
 
-  container.innerHTML = "";
-
-  const ul = document.createElement("ul");
-  ul.style.color = "#68FE1D";
-  ul.style.fontSize = "12px";
-
-  data.forEach(d => {
-    const li = document.createElement("li");
-    li.textContent = `${d.date}: $${d.total_usd}`;
-    ul.appendChild(li);
-  });
-
-  container.appendChild(ul);
-});
+  return days;
+}
