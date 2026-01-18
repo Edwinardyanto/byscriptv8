@@ -51,26 +51,6 @@ const updateTimeframeButtons = (pillsContainer, activeRange) => {
   });
 };
 
-const bindTimeframeControls = (pillsContainer, onRangeChange) => {
-  if (!pillsContainer) {
-    return;
-  }
-  const pills = pillsContainer.querySelectorAll(".timeframe-pill");
-  pills.forEach((pill) => {
-    if (pill.dataset.bound) {
-      return;
-    }
-    pill.dataset.bound = "true";
-    pill.addEventListener("click", () => {
-      const label = pill.textContent.trim();
-      const range = label === "All" ? "all" : label;
-      if (typeof onRangeChange === "function") {
-        onRangeChange(range);
-      }
-    });
-  });
-};
-
 const resolveTimeframePills = (container, externalContainer) => {
   const internalPills = container.querySelector(".timeframe-pills");
   if (!externalContainer) {
@@ -106,7 +86,6 @@ export const renderTotalPerformanceChart = ({
     container.dataset.totalPerformanceSource = dataSource;
   }
   const pillsContainer = resolveTimeframePills(container, timeframeContainer);
-  bindTimeframeControls(pillsContainer, onRangeChange);
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
   const isAccountsPage = document.body?.classList.contains("page-accounts");
