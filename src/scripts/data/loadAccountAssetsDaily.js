@@ -10,7 +10,7 @@ export async function loadAccountAssetsDaily() {
 
     days.push({
       date: file.replace(".json", ""),
-      accounts,
+      accounts
     });
   }
 
