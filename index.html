@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Dashboard</title>
+    <link rel="stylesheet" href="src/styles/color-tokens.css">
+    <link rel="stylesheet" href="src/styles/main.css">
+  </head>
+  <body>
+    <div id="app" class="app">
+      <!-- Header: global dashboard context and title area -->
+      <header class="header section section--header section-header">
+        <div class="section-header">
+          <h1 class="section-title">Dashboard</h1>
+        </div>
+        <div class="section-body">
+          <div class="header-meta">
+            <span class="pill" data-field="header.context"></span>
+            <span class="header-subtitle" data-field="header.subtitle"></span>
+          </div>
+        </div>
+      </header>
+      <div class="app-body">
+        <aside data-sidebar-slot></aside>
+        <main class="main">
+          <!-- Asset summary: primary overview and high-level totals -->
+          <div class="dashboard-row dashboard-row--split">
+            <div class="dashboard-left">
+              <section class="section section--primary">
+                <div class="section-header">
+                  <h2 class="section-title">Asset Summary</h2>
+                </div>
+                <div class="section-body">
+                  <div class="total-performance-chart" data-total-performance="dashboard"></div>
+                </div>
+              </section>
+            </div>
+            <div class="dashboard-right">
+              <section class="section section--secondary section--trade-history">
+                <div class="section-header">
+                  <div>
+                    <h2 class="section-title">Trade History</h2>
+                    <p class="section-subtitle">Latest executed &amp; failed trades</p>
+                  </div>
+                  <a class="button button--ghost" href="pages/activity.html">View All</a>
+                </div>
+                <div class="section-body">
+                  <div class="trade-history-table"><!-- // added -->
+                    <div class="trade-history-header"><!-- // added -->
+                      <div>Pair</div>
+                      <div>Action</div>
+                      <div>Status</div>
+                      <div>Profit</div>
+                      <div>Time</div>
+                    </div>
+                    <div class="trade-history-list scrollable" data-list="tradeHistory"></div><!-- // modified -->
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+          <!-- Middle summary: balances and critical alerts overview -->
+          <div class="dashboard-row dashboard-row--split dashboard-row--summary">
+            <div class="dashboard-left">
+              <section class="section section--secondary">
+                <div class="section-header">
+                  <h2 class="section-title">Accounts Summary</h2>
+                </div>
+                <div class="section-body">
+                  <div class="summary-grid">
+                    <div class="summary-list scrollable" data-list="accounts"></div>
+                    <div class="summary-total">
+                      <div class="stat-label">Total Balance</div>
+                      <div class="stat-value" data-field="accounts.total"></div>
+                      <div class="chart-placeholder">Chart Placeholder</div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="dashboard-right">
+              <section class="section section--secondary section--alerts">
+                <div class="section-header">
+                  <h2 class="section-title">Alerts</h2>
+                  <div class="alerts-controls" aria-label="Alerts navigation">
+                    <button
+                      class="alerts-nav"
+                      type="button"
+                      data-alert-nav="prev"
+                      aria-label="Previous alert"
+                    >
+                      ◀
+                    </button>
+                    <button
+                      class="alerts-nav"
+                      type="button"
+                      data-alert-nav="next"
+                      aria-label="Next alert"
+                    >
+                      ▶
+                    </button>
+                  </div>
+                </div>
+                <div class="section-body">
+                  <div class="alerts-slider">
+                    <div class="alerts-slider__track">
+                      <div class="alert-card">
+                        <div class="alert-title" data-field="alerts.title"></div>
+                        <div class="alert-message" data-field="alerts.message"></div>
+                        <div class="alert-meta">
+                          <span class="badge badge--warning" data-field="alerts.type"></span>
+                          <span class="alert-time" data-field="alerts.time"></span>
+                        </div>
+                        <button
+                          class="button button--ghost"
+                          type="button"
+                          data-field="alerts.cta"
+                        ></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+          <!-- Bottom summary: top strategies and affiliate callout -->
+          <div class="dashboard-row dashboard-row--split dashboard-row--bottom">
+            <div class="dashboard-left">
+              <section class="section section--secondary section--autotraders">
+                <div class="section-header">
+                  <h2 class="section-title">Top Autotraders</h2>
+                </div>
+                <div class="section-body">
+                  <div class="autotraders-list" data-list="topAutotraders"></div>
+                </div>
+              </section>
+            </div>
+            <div class="dashboard-right dashboard-right--stack">
+              <section class="section section--secondary section--affiliate">
+                <div class="section-header">
+                  <h2 class="section-title">Become Affiliate</h2>
+                </div>
+                <div class="section-body">
+                  <div class="affiliate-card">
+                    <p class="affiliate-description">
+                      Earn commissions by referring new users to our platform.
+                    </p>
+                    <button class="button" type="button">Start Earning</button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="src/scripts/main.js"></script>
+  </body>
+</html>
