@@ -1,10 +1,46 @@
-const buildSeries = (points, start, end) => {
-  const trend = (end - start) / Math.max(points - 1, 1);
-  return Array.from({ length: points }, (_, index) => {
-    const base = start + trend * index;
-    const variance = Math.sin(index / 3.5) * 140 + Math.sin(index / 11) * 70;
-    return Math.round(base + variance);
-  });
+const ACCOUNT_ASSET_DAILY_INDEX = "/data/account_assets_daily/index.json";
+
+const normalizeAccountAssetDailyEntry = (date, entry) => ({
+  date,
+  accounts: (entry?.accounts || []).map((account) => ({
+    account_id: account.account_id,
+    assets: (account.assets || []).map((asset) => ({
+      asset_id: asset.asset_id,
+      value_usd:
+        typeof asset.value_usd === "number"
+          ? asset.value_usd
+          : typeof asset.value === "number"
+          ? asset.value
+          : 0,
+    })),
+  })),
+});
+
+export const fetchAccountAssetDaily = async () => {
+  try {
+    const response = await fetch(ACCOUNT_ASSET_DAILY_INDEX);
+    if (!response.ok) {
+      throw new Error("Failed to load account asset daily index");
+    }
+    const filenames = await response.json();
+    const sorted = [...filenames].sort();
+    const recent = sorted.slice(-120);
+    const entries = await Promise.all(
+      recent.map(async (filename) => {
+        const dayResponse = await fetch(`/data/account_assets_daily/${filename}`);
+        if (!dayResponse.ok) {
+          return null;
+        }
+        const raw = await dayResponse.json();
+        const date = filename.replace(/\.json$/, "");
+        return normalizeAccountAssetDailyEntry(date, raw);
+      })
+    );
+    return entries.filter(Boolean);
+  } catch (error) {
+    console.warn(error);
+    return [];
+  }
 };
 
 export const dashboardData = {
@@ -12,15 +48,8 @@ export const dashboardData = {
     totalBalance: "$12,430",
     change: "+3.4%",
     changeLabel: "vs last 7 days",
-    chart: {
-      activeRange: "7D",
-      fullSeries: buildSeries(120, 6000, 12430),
-      ranges: {
-        "7D": buildSeries(7, 10250, 12430),
-        "30D": buildSeries(30, 8200, 12430),
-        "90D": buildSeries(90, 6800, 12430),
-      },
-    },
+    activeRange: "7D",
+    accountAssetDaily: [],
   },
   exchangesSummary: {
     total: "$21,240",

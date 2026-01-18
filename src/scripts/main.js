@@ -1,4 +1,4 @@
-import { fetchDashboardData } from "./data.js";
+import { fetchAccountAssetDaily, fetchDashboardData } from "./data.js";
 import { getState, setState, subscribe } from "./state.js";
 import { renderExchangesSummary } from "./render/exchangesSummary.js";
 import { renderAlerts } from "./render/alerts.js";
@@ -46,6 +46,10 @@ const evaluateStatus = (data, key) => {
     return data.length === 0 ? "empty" : "ready";
   }
 
+  if (key === "assetSummary") {
+    return data.accountAssetDaily?.length ? "ready" : "empty";
+  }
+
   return "ready";
 };
 
@@ -58,17 +62,14 @@ const renderDashboard = (state) => {
     onRangeChange: (range) => {
       const currentState = getState();
       const assetSummary = currentState.data.assetSummary;
-      if (!assetSummary?.chart) {
+      if (!assetSummary) {
         return;
       }
       setState({
         data: {
           assetSummary: {
             ...assetSummary,
-            chart: {
-              ...assetSummary.chart,
-              activeRange: range,
-            },
+            activeRange: range,
           },
         },
       });
@@ -118,7 +119,14 @@ const bindSidebarToggle = () => {
 const loadDashboardData = async () => {
   setSectionStatuses("loading");
   try {
-    const data = await fetchDashboardData();
+    const [data, accountAssetDaily] = await Promise.all([
+      fetchDashboardData(),
+      fetchAccountAssetDaily(),
+    ]);
+    data.assetSummary = {
+      ...data.assetSummary,
+      accountAssetDaily,
+    };
     const statuses = sectionKeys.reduce((acc, key) => {
       acc[key] = evaluateStatus(data[key], key);
       return acc;

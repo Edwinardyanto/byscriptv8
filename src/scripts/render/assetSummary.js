@@ -1,4 +1,8 @@
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
+import {
+  applyTimeframe,
+  deriveDailyTotalUSD,
+} from "../utils/assetSummaryData.js";
 
 const setText = (selector, value) => {
   const element = document.querySelector(selector);
@@ -17,7 +21,7 @@ const setChartMessage = (container, message) => {
 
 const updateTimeframeButtons = (activeRange) => {
   const pills = document.querySelectorAll(".timeframe-pill");
-  const activeLabel = activeRange === "all" ? "All" : activeRange;
+  const activeLabel = activeRange === "ALL" ? "All" : activeRange;
   pills.forEach((pill) => {
     const isActive = pill.textContent.trim() === activeLabel;
     pill.classList.toggle("timeframe-pill--active", isActive);
@@ -56,16 +60,14 @@ export const renderAssetSummary = (sectionState) => {
   setText('[data-field="asset.change"]', data.change);
   setText('[data-field="asset.changeLabel"]', data.changeLabel);
 
-  const activeRange = data.chart?.activeRange || "7D";
+  const activeRange = data.activeRange || "7D";
   updateTimeframeButtons(activeRange);
 
-  const series =
-    activeRange === "all"
-      ? data.chart?.fullSeries || []
-      : data.chart?.ranges?.[activeRange] || [];
-  if (series.length === 0) {
+  const derivedSeries = deriveDailyTotalUSD(data.accountAssetDaily || []);
+  const filteredSeries = applyTimeframe(derivedSeries, activeRange);
+  if (filteredSeries.length === 0) {
     setChartMessage(chartContainer, "No chart data");
   } else {
-    renderAssetLineChart(chartContainer, series);
+    renderAssetLineChart(chartContainer, filteredSeries);
   }
 };
