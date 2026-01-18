@@ -8,7 +8,6 @@ import {
 let derivedData = [];
 let derivedStatus = "idle";
 let derivedLoadPromise = null;
-let pendingRenderRequest = null;
 
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
@@ -116,18 +115,20 @@ const loadDerivedData = async () => {
     return derivedLoadPromise;
   }
   derivedStatus = "loading";
-  derivedLoadPromise = loadAccountAssetsDaily()
-    .then((accountAssetDaily) => {
-      derivedData = deriveDailyTotalUSD(accountAssetDaily);
-      derivedStatus = "ready";
-      return derivedData;
-    })
-    .catch((error) => {
-      console.warn(error);
-      derivedData = [];
-      derivedStatus = "error";
-      return derivedData;
-    });
+  derivedLoadPromise = (async () => {
+    const accountAssetDaily = await loadAccountAssetsDaily();
+    if (!Array.isArray(accountAssetDaily)) {
+      throw new Error("accountAssetDaily must be an array");
+    }
+    derivedData = deriveDailyTotalUSD(accountAssetDaily);
+    derivedStatus = "ready";
+    return derivedData;
+  })().catch((error) => {
+    console.warn(error);
+    derivedData = [];
+    derivedStatus = "error";
+    return derivedData;
+  });
   return derivedLoadPromise;
 };
 
@@ -154,25 +155,10 @@ export const renderTotalPerformanceChart = ({
   const pillsContainer = resolveTimeframePills(container, timeframeContainer);
 
   const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
-  const renderChartWithTimeframe = (timeframe) => {
+  const renderChartWithTimeframe = async (timeframe) => {
     if (derivedStatus === "idle") {
-      pendingRenderRequest = {
-        container,
-        dataSource,
-        data,
-        status,
-        onRangeChange,
-        timeframeContainer,
-      };
       setChartMessage(chartContainer, "Loading chart...");
-      loadDerivedData().then(() => {
-        if (pendingRenderRequest) {
-          const nextRequest = pendingRenderRequest;
-          pendingRenderRequest = null;
-          renderTotalPerformanceChart(nextRequest);
-        }
-      });
-      return;
+      await loadDerivedData();
     }
 
     if (derivedStatus === "loading") {
