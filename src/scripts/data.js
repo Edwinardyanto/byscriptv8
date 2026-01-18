@@ -80,6 +80,7 @@ export const buildAssetSummary = async (timeframe = "7D") => {
 
   return {
     totalBalance: formatCurrency(totalBalance, 2),
+    totalValueUsd: totalBalance,
     change: "+3.4%",
     changeLabel: normalized === "ALL" ? "vs all time" : `vs last ${normalized.toLowerCase()}`,
     chart: {

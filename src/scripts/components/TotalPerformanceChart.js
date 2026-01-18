@@ -39,6 +39,37 @@ const setChartMessage = (container, message) => {
   container.textContent = message;
 };
 
+const renderAssetSummaryChart = (container, { timeframe, totalValueUsd, totalLabel }) => {
+  if (!container) {
+    return;
+  }
+  container.innerHTML = "";
+
+  const label = timeframe === "all" ? "ALL" : String(timeframe || "7D").toUpperCase();
+  const value = Number.isFinite(totalValueUsd) ? totalValueUsd : 0;
+  const valueLabel = totalLabel || "—";
+  const description = document.createElement("div");
+  description.textContent = `Total assets for ${label} timeframe: ${valueLabel}`;
+
+  const bar = document.createElement("div");
+  bar.style.marginTop = "12px";
+  bar.style.height = "10px";
+  bar.style.background = "rgba(255, 255, 255, 0.12)";
+  bar.style.borderRadius = "999px";
+  bar.style.overflow = "hidden";
+
+  const fill = document.createElement("div");
+  const percent = Math.min(100, Math.max(6, (value / (value + 10000)) * 100));
+  fill.style.width = `${percent}%`;
+  fill.style.height = "100%";
+  fill.style.background = "linear-gradient(90deg, #7c3aed, #22c55e)";
+  fill.style.borderRadius = "999px";
+
+  bar.appendChild(fill);
+  container.appendChild(description);
+  container.appendChild(bar);
+};
+
 const updateTimeframeButtons = (pillsContainer, activeRange) => {
   if (!pillsContainer) {
     return;
@@ -136,5 +167,9 @@ export const renderTotalPerformanceChart = ({
   const activeRange = data.chart?.activeRange || "7D";
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  setChartMessage(chartContainer, "Chart coming soon");
+  renderAssetSummaryChart(chartContainer, {
+    timeframe: activeRange,
+    totalValueUsd: data.totalValueUsd,
+    totalLabel: data.totalBalance,
+  });
 };
