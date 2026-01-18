@@ -8,15 +8,6 @@ import {
 import { getAssetSummary } from "../data/assetSummary.js";
 import { deriveTradeHistory } from "./derive/deriveTradeHistory.js";
 
-const buildSeries = (points, start, end) => {
-  const trend = (end - start) / Math.max(points - 1, 1);
-  return Array.from({ length: points }, (_, index) => {
-    const base = start + trend * index;
-    const variance = Math.sin(index / 3.5) * 140 + Math.sin(index / 11) * 70;
-    return Math.round(base + variance);
-  });
-};
-
 const formatCurrency = (value, digits = 0) =>
   new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -74,22 +65,27 @@ export const buildAssetSummary = async (timeframe = "7D") => {
   const normalizedTimeframe = String(timeframe || "7D").toUpperCase();
   const summary = await getAssetSummary(normalizedTimeframe);
   const totalBalance = Number(summary.total_value_usd || 0);
-  const startValue = Math.max(totalBalance * 0.7, totalBalance - 2500);
   const normalized = summary.timeframe || normalizedTimeframe;
   const activeRange = normalized === "ALL" ? "all" : normalized;
+  const seriesValues = Array.isArray(summary.series)
+    ? summary.series.map((point) => Number(point.value || 0))
+    : [];
+  const changeValue = Number(summary.percentage_change || 0);
+  const changePrefix = changeValue > 0 ? "+" : changeValue < 0 ? "-" : "";
+  const changeLabel =
+    normalized === "ALL" ? "vs all time" : `vs last ${normalized.toLowerCase()}`;
 
   return {
     totalBalance: formatCurrency(totalBalance, 2),
     totalValueUsd: totalBalance,
-    change: "+3.4%",
-    changeLabel: normalized === "ALL" ? "vs all time" : `vs last ${normalized.toLowerCase()}`,
+    change: `${changePrefix}${Math.abs(changeValue).toFixed(1)}%`,
+    changeLabel,
     chart: {
       activeRange,
-      fullSeries: buildSeries(120, startValue, totalBalance),
+      series: seriesValues,
+      fullSeries: seriesValues,
       ranges: {
-        "7D": buildSeries(7, startValue * 0.9, totalBalance),
-        "30D": buildSeries(30, startValue * 0.8, totalBalance),
-        "90D": buildSeries(90, startValue * 0.7, totalBalance),
+        [normalized]: seriesValues,
       },
     },
   };
