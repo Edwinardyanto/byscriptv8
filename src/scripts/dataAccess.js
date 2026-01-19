@@ -5,8 +5,8 @@ const DATA_URLS = {
   autotraders: new URL("../../mock-data/data/autotraders.json", import.meta.url),
   tradeHistory: new URL("../../mock-data/data/trade_history.json", import.meta.url),
   tradingPlans: new URL("../../mock-data/data/trading_plans.json", import.meta.url),
-  accountAssetDaily: new URL("../../.data/account_asset_daily/", import.meta.url),
-  assetPriceDaily: new URL("../../.data/asset_price_daily/", import.meta.url),
+  accountAssetDaily: new URL("../../data/account_asset_daily/", import.meta.url),
+  assetPriceDaily: new URL("../../data/asset_price_daily/", import.meta.url),
 };
 
 const dataCache = new Map();
@@ -55,13 +55,43 @@ const fetchDataset = async (key) => {
 };
 
 export const getLatestAccountAssetDaily = async () => {
+  const meta = await fetch(
+    new URL("../../data/meta/latest.json", import.meta.url)
+  ).then((r) => r.json());
+
+  const file = meta.accountAssetDaily;
+  if (!file) {
+    throw new Error("latest accountAssetDaily not defined");
+  }
+
+  const url = new URL(
+    `../../data/account_asset_daily/${file}`,
+    import.meta.url
+  );
+
+  const data = await fetch(url).then((r) => r.json());
+  return cloneData(data);
 };
 
 export const getLatestAssetPriceDaily = async () => {
+  const meta = await fetch(
+    new URL("../../data/meta/latest.json", import.meta.url)
+  ).then((r) => r.json());
+
+  const file = meta.assetPriceDaily;
+  if (!file) {
+    throw new Error("latest assetPriceDaily not defined");
+  }
+
+  const url = new URL(
+    `../../data/asset_price_daily/${file}`,
+    import.meta.url
+  );
+
+  const data = await fetch(url).then((r) => r.json());
+  return cloneData(data);
 };
 
-export const getAccounts = async () => fetchDataset("accounts");
-export const getAccountAssets = async (accountId) => { ... };
 
 export const getAccounts = async () => fetchDataset("accounts");
 
