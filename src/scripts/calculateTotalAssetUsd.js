@@ -1,7 +1,8 @@
 import {
-  getLatestAccountAssetDaily,
-  getLatestAssetPriceDaily,
-} from "./data.js";
+  getAccounts,
+  getAccountAssets,
+} from "./dataAccess.js";
+
 
 export const calculateTotalAssetUsd = async () => {
   const dailyAssets = await getLatestAccountAssetDaily();
