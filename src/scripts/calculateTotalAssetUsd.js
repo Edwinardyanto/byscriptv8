@@ -5,22 +5,14 @@ import {
 
 
 export const calculateTotalAssetUsd = async () => {
-  const dailyAssets = await getLatestAccountAssetDaily();
-  const dailyPrices = await getLatestAssetPriceDaily();
+  const accounts = await getAccounts();
 
   let totalUsd = 0;
 
-  const priceMap = new Map(
-    Object.entries(dailyPrices).map(([assetId, p]) => [
-      assetId,
-      Number(p.price_usd || 0),
-    ])
-  );
-
-  for (const account of dailyAssets.accounts || []) {
-    for (const asset of account.assets || []) {
-      const price = priceMap.get(asset.asset_id) || 0;
-      totalUsd += Number(asset.value || 0) * price;
+  for (const account of accounts) {
+    const assets = await getAccountAssets(account.account_id);
+    for (const asset of assets || []) {
+      totalUsd += Number(asset.usd_value || 0);
     }
   }
 
