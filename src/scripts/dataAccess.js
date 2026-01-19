@@ -5,6 +5,8 @@ const DATA_URLS = {
   autotraders: new URL("../../mock-data/data/autotraders.json", import.meta.url),
   tradeHistory: new URL("../../mock-data/data/trade_history.json", import.meta.url),
   tradingPlans: new URL("../../mock-data/data/trading_plans.json", import.meta.url),
+  accountAssetDaily: new URL("../../.data/account_asset_daily/", import.meta.url),
+  assetPriceDaily: new URL("../../.data/asset_price_daily/", import.meta.url),
 };
 
 const dataCache = new Map();
