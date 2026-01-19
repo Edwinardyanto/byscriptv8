@@ -1,0 +1,91 @@
+{
+  "providers": [
+    "binance",
+    "bybit",
+    "okx",
+    "kucoin",
+    "kraken_spot",
+    "coinbase_advanced",
+    "bitget",
+    "kraken_futures",
+    "coinbase_perpetual",
+    "gate",
+    "htx",
+    "gemini",
+    "binance_us",
+    "bitstamp",
+    "bitfinex",
+    "binance_tr",
+    "hyperliquid"
+  ],
+  "market_types": {
+    "binance": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "bybit": [
+      "spot",
+      "futures"
+    ],
+    "okx": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "kucoin": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "kraken_spot": [
+      "spot",
+      "margin"
+    ],
+    "kraken_futures": [
+      "futures"
+    ],
+    "coinbase_advanced": [
+      "spot",
+      "margin"
+    ],
+    "coinbase_perpetual": [
+      "futures"
+    ],
+    "bitget": [
+      "spot",
+      "futures"
+    ],
+    "gate": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "htx": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "gemini": [
+      "spot",
+      "margin",
+      "futures"
+    ],
+    "binance_us": [
+      "spot"
+    ],
+    "bitstamp": [
+      "spot"
+    ],
+    "bitfinex": [
+      "spot",
+      "margin"
+    ],
+    "binance_tr": [
+      "spot"
+    ],
+    "hyperliquid": [
+      "web3"
+    ]
+  }
+}

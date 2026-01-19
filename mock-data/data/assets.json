@@ -1,0 +1,1352 @@
+[
+  {
+    "asset_id": "0000001",
+    "symbol": "BTC",
+    "name": "Bitcoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f7931a"
+  },
+  {
+    "asset_id": "0000002",
+    "symbol": "ETH",
+    "name": "Ethereum",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#627eea"
+  },
+  {
+    "asset_id": "0000003",
+    "symbol": "BNB",
+    "name": "BNB",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f3ba2f"
+  },
+  {
+    "asset_id": "0000004",
+    "symbol": "SOL",
+    "name": "Solana",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14f195"
+  },
+  {
+    "asset_id": "0000005",
+    "symbol": "XRP",
+    "name": "XRP",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#23292f"
+  },
+  {
+    "asset_id": "0000006",
+    "symbol": "DOGE",
+    "name": "Dogecoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#c2a633"
+  },
+  {
+    "asset_id": "0000007",
+    "symbol": "ADA",
+    "name": "Cardano",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0033ad"
+  },
+  {
+    "asset_id": "0000008",
+    "symbol": "TON",
+    "name": "Toncoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0098ea"
+  },
+  {
+    "asset_id": "0000009",
+    "symbol": "TRX",
+    "name": "TRON",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec0928"
+  },
+  {
+    "asset_id": "0000010",
+    "symbol": "AVAX",
+    "name": "Avalanche",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#e84142"
+  },
+  {
+    "asset_id": "0000011",
+    "symbol": "SHIB",
+    "name": "Shiba Inu",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f00500"
+  },
+  {
+    "asset_id": "0000012",
+    "symbol": "DOT",
+    "name": "Polkadot",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#e6007a"
+  },
+  {
+    "asset_id": "0000013",
+    "symbol": "LINK",
+    "name": "Chainlink",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2a5ada"
+  },
+  {
+    "asset_id": "0000014",
+    "symbol": "MATIC",
+    "name": "Polygon",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8247e5"
+  },
+  {
+    "asset_id": "0000015",
+    "symbol": "BCH",
+    "name": "Bitcoin Cash",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8dc351"
+  },
+  {
+    "asset_id": "0000016",
+    "symbol": "LTC",
+    "name": "Litecoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#345c9c"
+  },
+  {
+    "asset_id": "0000017",
+    "symbol": "NEAR",
+    "name": "NEAR Protocol",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000018",
+    "symbol": "UNI",
+    "name": "Uniswap",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff007a"
+  },
+  {
+    "asset_id": "0000019",
+    "symbol": "ATOM",
+    "name": "Cosmos",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2e3148"
+  },
+  {
+    "asset_id": "0000020",
+    "symbol": "ETC",
+    "name": "Ethereum Classic",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#328332"
+  },
+  {
+    "asset_id": "0000021",
+    "symbol": "XLM",
+    "name": "Stellar",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#08b5e5"
+  },
+  {
+    "asset_id": "0000022",
+    "symbol": "HBAR",
+    "name": "Hedera",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000023",
+    "symbol": "FIL",
+    "name": "Filecoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0090ff"
+  },
+  {
+    "asset_id": "0000024",
+    "symbol": "LDO",
+    "name": "Lido DAO",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00a3ff"
+  },
+  {
+    "asset_id": "0000025",
+    "symbol": "APT",
+    "name": "Aptos",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0e0e0e"
+  },
+  {
+    "asset_id": "0000026",
+    "symbol": "ARB",
+    "name": "Arbitrum",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2d374b"
+  },
+  {
+    "asset_id": "0000027",
+    "symbol": "OP",
+    "name": "Optimism",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff0420"
+  },
+  {
+    "asset_id": "0000028",
+    "symbol": "INJ",
+    "name": "Injective",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#008dd2"
+  },
+  {
+    "asset_id": "0000029",
+    "symbol": "RNDR",
+    "name": "Render",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff4514"
+  },
+  {
+    "asset_id": "0000030",
+    "symbol": "MKR",
+    "name": "Maker",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#1abc9c"
+  },
+  {
+    "asset_id": "0000031",
+    "symbol": "STX",
+    "name": "Stacks",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#5546ff"
+  },
+  {
+    "asset_id": "0000032",
+    "symbol": "KAS",
+    "name": "Kaspa",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2563eb"
+  },
+  {
+    "asset_id": "0000033",
+    "symbol": "OKB",
+    "name": "OKB",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14b8a6"
+  },
+  {
+    "asset_id": "0000034",
+    "symbol": "ICP",
+    "name": "Internet Computer",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b00b9"
+  },
+  {
+    "asset_id": "0000035",
+    "symbol": "SEI",
+    "name": "Sei",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff1f1f"
+  },
+  {
+    "asset_id": "0000036",
+    "symbol": "TIA",
+    "name": "Celestia",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2f80ff"
+  },
+  {
+    "asset_id": "0000037",
+    "symbol": "SUI",
+    "name": "Sui",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#5fcdf6"
+  },
+  {
+    "asset_id": "0000038",
+    "symbol": "GRT",
+    "name": "The Graph",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6f4cff"
+  },
+  {
+    "asset_id": "0000039",
+    "symbol": "RUNE",
+    "name": "THORChain",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b9df9"
+  },
+  {
+    "asset_id": "0000040",
+    "symbol": "TAO",
+    "name": "Bittensor",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f97316"
+  },
+  {
+    "asset_id": "0000041",
+    "symbol": "FET",
+    "name": "Fetch.ai",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#a855f7"
+  },
+  {
+    "asset_id": "0000042",
+    "symbol": "WIF",
+    "name": "dogwifhat",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f2a900"
+  },
+  {
+    "asset_id": "0000043",
+    "symbol": "FLOKI",
+    "name": "Floki",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f7931a"
+  },
+  {
+    "asset_id": "0000044",
+    "symbol": "JUP",
+    "name": "Jupiter",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00d1b2"
+  },
+  {
+    "asset_id": "0000045",
+    "symbol": "BONK",
+    "name": "Bonk",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#fbbf24"
+  },
+  {
+    "asset_id": "0000046",
+    "symbol": "THETA",
+    "name": "Theta Network",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#29b3d1"
+  },
+  {
+    "asset_id": "0000047",
+    "symbol": "ALGO",
+    "name": "Algorand",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000048",
+    "symbol": "XTZ",
+    "name": "Tezos",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2c7df7"
+  },
+  {
+    "asset_id": "0000049",
+    "symbol": "AAVE",
+    "name": "Aave",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#b6509e"
+  },
+  {
+    "asset_id": "0000050",
+    "symbol": "EOS",
+    "name": "EOS",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ffffff"
+  },
+  {
+    "asset_id": "0000051",
+    "symbol": "SAND",
+    "name": "The Sandbox",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00a6ff"
+  },
+  {
+    "asset_id": "0000052",
+    "symbol": "MANA",
+    "name": "Decentraland",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff2d55"
+  },
+  {
+    "asset_id": "0000053",
+    "symbol": "FLOW",
+    "name": "Flow",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00ef8b"
+  },
+  {
+    "asset_id": "0000054",
+    "symbol": "ENA",
+    "name": "Ethena",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec4899"
+  },
+  {
+    "asset_id": "0000055",
+    "symbol": "AR",
+    "name": "Arweave",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#22c55e"
+  },
+  {
+    "asset_id": "0000056",
+    "symbol": "GALA",
+    "name": "Gala",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000057",
+    "symbol": "ZEC",
+    "name": "Zcash",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f4b728"
+  },
+  {
+    "asset_id": "0000058",
+    "symbol": "XMR",
+    "name": "Monero",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff6600"
+  },
+  {
+    "asset_id": "0000059",
+    "symbol": "IOTA",
+    "name": "IOTA",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000060",
+    "symbol": "EGLD",
+    "name": "MultiversX",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#1a1a1a"
+  },
+  {
+    "asset_id": "0000061",
+    "symbol": "GT",
+    "name": "GateToken",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0ea5e9"
+  },
+  {
+    "asset_id": "0000062",
+    "symbol": "QNT",
+    "name": "Quant",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#5a6378"
+  },
+  {
+    "asset_id": "0000063",
+    "symbol": "CRV",
+    "name": "Curve DAO Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff3a3a"
+  },
+  {
+    "asset_id": "0000064",
+    "symbol": "PAXG",
+    "name": "PAX Gold",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#eab308"
+  },
+  {
+    "asset_id": "0000065",
+    "symbol": "ASTR",
+    "name": "Astar",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ef4444"
+  },
+  {
+    "asset_id": "0000066",
+    "symbol": "KCS",
+    "name": "KuCoin Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6366f1"
+  },
+  {
+    "asset_id": "0000067",
+    "symbol": "WLD",
+    "name": "Worldcoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000068",
+    "symbol": "RPL",
+    "name": "Rocket Pool",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#84cc16"
+  },
+  {
+    "asset_id": "0000069",
+    "symbol": "COMP",
+    "name": "Compound",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00d395"
+  },
+  {
+    "asset_id": "0000070",
+    "symbol": "LRC",
+    "name": "Loopring",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2ab6f6"
+  },
+  {
+    "asset_id": "0000071",
+    "symbol": "CHZ",
+    "name": "Chiliz",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#cd0124"
+  },
+  {
+    "asset_id": "0000072",
+    "symbol": "ENJ",
+    "name": "Enjin Coin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#624dbf"
+  },
+  {
+    "asset_id": "0000073",
+    "symbol": "KAVA",
+    "name": "Kava",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff4d4d"
+  },
+  {
+    "asset_id": "0000074",
+    "symbol": "ONE",
+    "name": "Harmony",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00aee9"
+  },
+  {
+    "asset_id": "0000075",
+    "symbol": "BAT",
+    "name": "Basic Attention Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ff5000"
+  },
+  {
+    "asset_id": "0000076",
+    "symbol": "NEO",
+    "name": "Neo",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#58bf00"
+  },
+  {
+    "asset_id": "0000077",
+    "symbol": "DASH",
+    "name": "Dash",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#06b6d4"
+  },
+  {
+    "asset_id": "0000078",
+    "symbol": "ZIL",
+    "name": "Zilliqa",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#49c1bf"
+  },
+  {
+    "asset_id": "0000079",
+    "symbol": "IMX",
+    "name": "Immutable",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3a4de4"
+  },
+  {
+    "asset_id": "0000080",
+    "symbol": "AXS",
+    "name": "Axie Infinity",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0055d5"
+  },
+  {
+    "asset_id": "0000081",
+    "symbol": "ROSE",
+    "name": "Oasis Network",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f43f5e"
+  },
+  {
+    "asset_id": "0000082",
+    "symbol": "IOTX",
+    "name": "IoTeX",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b82f6"
+  },
+  {
+    "asset_id": "0000083",
+    "symbol": "QTUM",
+    "name": "Qtum",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8b5cf6"
+  },
+  {
+    "asset_id": "0000084",
+    "symbol": "HOT",
+    "name": "Holo",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2563eb"
+  },
+  {
+    "asset_id": "0000085",
+    "symbol": "CELO",
+    "name": "Celo",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14b8a6"
+  },
+  {
+    "asset_id": "0000086",
+    "symbol": "MINA",
+    "name": "Mina",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f97316"
+  },
+  {
+    "asset_id": "0000087",
+    "symbol": "GMT",
+    "name": "STEPN",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#a855f7"
+  },
+  {
+    "asset_id": "0000088",
+    "symbol": "RLC",
+    "name": "iExec RLC",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec4899"
+  },
+  {
+    "asset_id": "0000089",
+    "symbol": "CVX",
+    "name": "Convex Finance",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#22c55e"
+  },
+  {
+    "asset_id": "0000090",
+    "symbol": "SNX",
+    "name": "Synthetix",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00d1ff"
+  },
+  {
+    "asset_id": "0000091",
+    "symbol": "KSM",
+    "name": "Kusama",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#000000"
+  },
+  {
+    "asset_id": "0000092",
+    "symbol": "DYDX",
+    "name": "dYdX",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6966ff"
+  },
+  {
+    "asset_id": "0000093",
+    "symbol": "GMX",
+    "name": "GMX",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2f7aff"
+  },
+  {
+    "asset_id": "0000094",
+    "symbol": "YFI",
+    "name": "yearn.finance",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0ea5e9"
+  },
+  {
+    "asset_id": "0000095",
+    "symbol": "OCEAN",
+    "name": "Ocean Protocol",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#eab308"
+  },
+  {
+    "asset_id": "0000096",
+    "symbol": "LPT",
+    "name": "Livepeer",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ef4444"
+  },
+  {
+    "asset_id": "0000097",
+    "symbol": "ANKR",
+    "name": "Ankr",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#00abe7"
+  },
+  {
+    "asset_id": "0000098",
+    "symbol": "1INCH",
+    "name": "1inch",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6366f1"
+  },
+  {
+    "asset_id": "0000099",
+    "symbol": "ZRX",
+    "name": "0x",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#302c2c"
+  },
+  {
+    "asset_id": "0000100",
+    "symbol": "UMA",
+    "name": "UMA",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#84cc16"
+  },
+  {
+    "asset_id": "0000101",
+    "symbol": "SKL",
+    "name": "SKALE",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#06b6d4"
+  },
+  {
+    "asset_id": "0000102",
+    "symbol": "GLM",
+    "name": "Golem",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f43f5e"
+  },
+  {
+    "asset_id": "0000103",
+    "symbol": "MASK",
+    "name": "Mask Network",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b82f6"
+  },
+  {
+    "asset_id": "0000104",
+    "symbol": "ACH",
+    "name": "Alchemy Pay",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8b5cf6"
+  },
+  {
+    "asset_id": "0000105",
+    "symbol": "CFX",
+    "name": "Conflux",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#1e3a8a"
+  },
+  {
+    "asset_id": "0000106",
+    "symbol": "SSV",
+    "name": "SSV Network",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2563eb"
+  },
+  {
+    "asset_id": "0000107",
+    "symbol": "ILV",
+    "name": "Illuvium",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14b8a6"
+  },
+  {
+    "asset_id": "0000108",
+    "symbol": "API3",
+    "name": "API3",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f97316"
+  },
+  {
+    "asset_id": "0000109",
+    "symbol": "BAL",
+    "name": "Balancer",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#a855f7"
+  },
+  {
+    "asset_id": "0000110",
+    "symbol": "BNT",
+    "name": "Bancor",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec4899"
+  },
+  {
+    "asset_id": "0000111",
+    "symbol": "AUDIO",
+    "name": "Audius",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#22c55e"
+  },
+  {
+    "asset_id": "0000112",
+    "symbol": "BAND",
+    "name": "Band Protocol",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0ea5e9"
+  },
+  {
+    "asset_id": "0000113",
+    "symbol": "COTI",
+    "name": "COTI",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#eab308"
+  },
+  {
+    "asset_id": "0000114",
+    "symbol": "CTSI",
+    "name": "Cartesi",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ef4444"
+  },
+  {
+    "asset_id": "0000115",
+    "symbol": "ELF",
+    "name": "aelf",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6366f1"
+  },
+  {
+    "asset_id": "0000116",
+    "symbol": "FTM",
+    "name": "Fantom",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#84cc16"
+  },
+  {
+    "asset_id": "0000117",
+    "symbol": "FLUX",
+    "name": "Flux",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#06b6d4"
+  },
+  {
+    "asset_id": "0000118",
+    "symbol": "GAS",
+    "name": "Gas",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f43f5e"
+  },
+  {
+    "asset_id": "0000119",
+    "symbol": "HIVE",
+    "name": "Hive",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b82f6"
+  },
+  {
+    "asset_id": "0000120",
+    "symbol": "ICX",
+    "name": "ICON",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8b5cf6"
+  },
+  {
+    "asset_id": "0000121",
+    "symbol": "JST",
+    "name": "JUST",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2563eb"
+  },
+  {
+    "asset_id": "0000122",
+    "symbol": "KNC",
+    "name": "Kyber Network Crystal",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#31cb9e"
+  },
+  {
+    "asset_id": "0000123",
+    "symbol": "LSK",
+    "name": "Lisk",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14b8a6"
+  },
+  {
+    "asset_id": "0000124",
+    "symbol": "NMR",
+    "name": "Numeraire",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f97316"
+  },
+  {
+    "asset_id": "0000125",
+    "symbol": "ONG",
+    "name": "Ontology Gas",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#a855f7"
+  },
+  {
+    "asset_id": "0000126",
+    "symbol": "ONT",
+    "name": "Ontology",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec4899"
+  },
+  {
+    "asset_id": "0000127",
+    "symbol": "POLYX",
+    "name": "Polymesh",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#22c55e"
+  },
+  {
+    "asset_id": "0000128",
+    "symbol": "POWR",
+    "name": "Powerledger",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0ea5e9"
+  },
+  {
+    "asset_id": "0000129",
+    "symbol": "PUNDIX",
+    "name": "Pundi X",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#eab308"
+  },
+  {
+    "asset_id": "0000130",
+    "symbol": "RVN",
+    "name": "Ravencoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ef4444"
+  },
+  {
+    "asset_id": "0000131",
+    "symbol": "SC",
+    "name": "Siacoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6366f1"
+  },
+  {
+    "asset_id": "0000132",
+    "symbol": "STORJ",
+    "name": "Storj",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#84cc16"
+  },
+  {
+    "asset_id": "0000133",
+    "symbol": "STPT",
+    "name": "STP",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#06b6d4"
+  },
+  {
+    "asset_id": "0000134",
+    "symbol": "SXP",
+    "name": "Solar",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f43f5e"
+  },
+  {
+    "asset_id": "0000135",
+    "symbol": "SYS",
+    "name": "Syscoin",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#3b82f6"
+  },
+  {
+    "asset_id": "0000136",
+    "symbol": "TWT",
+    "name": "Trust Wallet Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#8b5cf6"
+  },
+  {
+    "asset_id": "0000137",
+    "symbol": "VET",
+    "name": "VeChain",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#15bdff"
+  },
+  {
+    "asset_id": "0000138",
+    "symbol": "WAXP",
+    "name": "WAX",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#2563eb"
+  },
+  {
+    "asset_id": "0000139",
+    "symbol": "XEM",
+    "name": "NEM",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#14b8a6"
+  },
+  {
+    "asset_id": "0000140",
+    "symbol": "XVG",
+    "name": "Verge",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f97316"
+  },
+  {
+    "asset_id": "0000141",
+    "symbol": "YGG",
+    "name": "Yield Guild Games",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#a855f7"
+  },
+  {
+    "asset_id": "0000142",
+    "symbol": "ZEN",
+    "name": "Horizen",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ec4899"
+  },
+  {
+    "asset_id": "0000143",
+    "symbol": "BSV",
+    "name": "Bitcoin SV",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#22c55e"
+  },
+  {
+    "asset_id": "0000144",
+    "symbol": "CRO",
+    "name": "Cronos",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#0ea5e9"
+  },
+  {
+    "asset_id": "0000145",
+    "symbol": "MNT",
+    "name": "Mantle",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#eab308"
+  },
+  {
+    "asset_id": "0000146",
+    "symbol": "BGB",
+    "name": "Bitget Token",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#ef4444"
+  },
+  {
+    "asset_id": "0000147",
+    "symbol": "TFUEL",
+    "name": "Theta Fuel",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#6366f1"
+  },
+  {
+    "asset_id": "0000148",
+    "symbol": "HNT",
+    "name": "Helium",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#84cc16"
+  },
+  {
+    "asset_id": "0000149",
+    "symbol": "XDC",
+    "name": "XDC Network",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#f0b90b"
+  },
+  {
+    "asset_id": "0000150",
+    "symbol": "XEC",
+    "name": "eCash",
+    "type": "crypto",
+    "decimals": 8,
+    "is_active": true,
+    "brand_color": "#06b6d4"
+  }
+]
