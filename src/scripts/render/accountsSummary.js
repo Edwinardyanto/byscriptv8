@@ -1,3 +1,4 @@
+import { calculateTotalAssetUsd } from "../calculateTotalAssetUsd.js";
 import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 
 const setText = (selector, value) => {
@@ -448,11 +449,10 @@ export const renderAccountsSummary = (sectionState) => {
       }));
     };
 
-    const renderDistribution = (filterValue) => {
+    const renderDistribution = async (filterValue) => {
       list.innerHTML = "";
       const { items, total } = normalizeDistribution(buildFilterItems(filterValue), formatCurrency);
-      const totalFormatted = formatCurrency.format(total);
-      totalValue = totalFormatted;
+      const totalUsd = await calculateTotalAssetUsd();
       items.forEach((account, index) => {
         const item = document.createElement("div");
         item.className = "accounts-distribution-item";
@@ -506,7 +506,7 @@ export const renderAccountsSummary = (sectionState) => {
           item.addEventListener("mouseleave", clearActive);
         });
       }
-      setText('[data-field="accounts.total"]', totalFormatted);
+      setText('[data-field="accounts.total"]', formatCurrency.format(totalUsd));
     };
 
     if (filterSelect && !filterSelect.dataset.listenerBound) {
