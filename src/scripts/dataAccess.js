@@ -54,6 +54,15 @@ const fetchDataset = async (key) => {
   return request.then(cloneData);
 };
 
+export const getLatestAccountAssetDaily = async () => {
+};
+
+export const getLatestAssetPriceDaily = async () => {
+};
+
+export const getAccounts = async () => fetchDataset("accounts");
+export const getAccountAssets = async (accountId) => { ... };
+
 export const getAccounts = async () => fetchDataset("accounts");
 
 export const getAccountAssets = async (accountId) => {
