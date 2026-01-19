@@ -317,7 +317,7 @@ const normalizeDistribution = (items, formatCurrency) => {
   };
 };
 
-export const renderAccountsSummary = (sectionState) => {
+export const renderAccountsSummary = async (sectionState) => {
   const { data, status } = sectionState;
   const list = document.querySelector('[data-list="accounts"]');
   const section = list?.closest(".section");
@@ -392,7 +392,6 @@ export const renderAccountsSummary = (sectionState) => {
 
   list.innerHTML = "";
   let accounts = data.accounts;
-  let totalValue = data.total;
   let accountsColors = [];
 
   if (isAccountsPage) {
@@ -530,7 +529,8 @@ export const renderAccountsSummary = (sectionState) => {
       list.appendChild(item);
     });
 
-    setText('[data-field="accounts.total"]', totalValue);
+    const totalUsd = await calculateTotalAssetUsd();
+    setText('[data-field="accounts.total"]', formatCurrency.format(totalUsd));
     renderAccountsDonutChart(chartContainer, accounts);
   }
 };
