@@ -133,6 +133,16 @@ export const getAccountAssets = async (accountId) => {
   return rows.sort((a, b) => Number(b.usd_value || 0) - Number(a.usd_value || 0));
 };
 
+export const getAllStartDate = async () => {
+  const accounts = await getAccounts();
+  if (!accounts.length) return null;
+
+  return accounts
+    .map(a => new Date(a.connected_at))
+    .sort((a, b) => a - b)[0];
+};
+
+
 export const getAccountValue = async (accountId) => {
   const assets = await getAccountAssets(accountId);
   return assets.reduce((sum, entry) => sum + Number(entry.usd_value || 0), 0);
