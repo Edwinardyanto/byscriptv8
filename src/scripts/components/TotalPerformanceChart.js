@@ -16,7 +16,9 @@ const chartMarkup = `
               <span class="stat-status-dot" aria-hidden="true"></span>
               <span class="badge" data-field="asset.change"></span>
             </div>
-            <div class="stat-meta" data-field="asset.changeLabel"></div>
+
+            <!-- NOTE: changeLabel sengaja DIHAPUS -->
+            <!-- <div class="stat-meta" data-field="asset.changeLabel"></div> -->
 
             <div class="timeframe-pills">
               <span class="timeframe-pill timeframe-pill--active">7D</span>
@@ -66,51 +68,68 @@ export const renderTotalPerformanceChart = ({
 }) => {
   if (!container) return;
 
+  /* ---------- INIT MARKUP (ONCE) ---------- */
+
   if (!container.dataset.totalPerformanceReady) {
     container.innerHTML = chartMarkup;
     container.dataset.totalPerformanceReady = "true";
   }
 
+  /* ---------- TIMEFRAME PILLS ---------- */
+
   const pillsContainer = container.querySelector(".timeframe-pills");
+
   pillsContainer?.querySelectorAll(".timeframe-pill").forEach((pill) => {
     if (pill.dataset.bound) return;
     pill.dataset.bound = "true";
+
     pill.addEventListener("click", () => {
       const label = pill.textContent.trim();
       onRangeChange?.(label === "All" ? "ALL" : label);
     });
   });
 
-  const chartContainer = container.querySelector(
-    '[data-field="asset.chartLabel"]'
-  );
+  /* ---------- DATA GUARD ---------- */
 
   if (status !== "ready" || !data) return;
 
   const activeRange = data.chart?.activeRange || "7D";
   const series = data.chart?.ranges?.[activeRange] || [];
+  const labels = data.chart?.labels || [];
 
-  setText(container, '[data-field="asset.totalBalance"]', data.totalBalance);
+  if (!series.length) return;
+
+  /* ---------- HEADER VALUES ---------- */
+
+  setText(
+    container,
+    '[data-field="asset.totalBalance"]',
+    data.totalBalance
+  );
+
   setText(
     container,
     '[data-field="asset.change"]',
     data.changeByRange?.[activeRange] ?? "--"
   );
-  setText(
-    container,
-    '[data-field="asset.changeLabel"]',
-    activeRange === "ALL"
-      ? "Since first account"
-      : "vs previous period"
-  );
+
+  // 🔥 PENTING:
+  // TIDAK ADA "vs previous period"
+  // TIDAK ADA "Since first account"
+  // element-nya bahkan sudah DIHAPUS dari markup
 
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  if (!series.length) return;
+  /* ---------- CHART ---------- */
 
-  // ⬅️ INI PENTING (tanggal utk tooltip)
-  chartContainer.__assetChartDates =
-    data.chart?.labels || [];
+  const chartContainer = container.querySelector(
+    '[data-field="asset.chartLabel"]'
+  );
+
+  if (!chartContainer) return;
+
+  // ⬅️ INI KUNCI AGAR X-AXIS & HOVER DATE BEKERJA
+  chartContainer.__assetChartDates = labels;
 
   renderAssetLineChart(chartContainer, series);
 };
