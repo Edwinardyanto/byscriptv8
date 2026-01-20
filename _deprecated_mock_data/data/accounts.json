@@ -1,0 +1,562 @@
+[
+  {
+    "account_id": "E1H9TF94N6",
+    "account_name": "Binance Spot #1",
+    "provider": "binance",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-15T00:00:00Z"
+  },
+  {
+    "account_id": "Z95Q1R4KBL",
+    "account_name": "Binance Margin #1",
+    "provider": "binance",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-13T00:00:00Z"
+  },
+  {
+    "account_id": "68OHDLMYSL",
+    "account_name": "Binance Margin #2",
+    "provider": "binance",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-10-20T00:00:00Z"
+  },
+  {
+    "account_id": "86OZ52FB9V",
+    "account_name": "Binance Futures #1",
+    "provider": "binance",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-26T00:00:00Z"
+  },
+  {
+    "account_id": "WFJ5JW215K",
+    "account_name": "Binance Futures #2",
+    "provider": "binance",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-26T00:00:00Z"
+  },
+  {
+    "account_id": "YCXZYZ3UJ6",
+    "account_name": "Bybit Spot #1",
+    "provider": "bybit",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-23T00:00:00Z"
+  },
+  {
+    "account_id": "LOD7638GEO",
+    "account_name": "Bybit Spot #2",
+    "provider": "bybit",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-31T00:00:00Z"
+  },
+  {
+    "account_id": "OB4TOE8NHF",
+    "account_name": "Bybit Futures #1",
+    "provider": "bybit",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-10-15T00:00:00Z"
+  },
+  {
+    "account_id": "KPOYVM71H2",
+    "account_name": "Okx Spot #1",
+    "provider": "okx",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-03T00:00:00Z"
+  },
+  {
+    "account_id": "SKFYPFW5LT",
+    "account_name": "Okx Spot #2",
+    "provider": "okx",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-11-20T00:00:00Z"
+  },
+  {
+    "account_id": "D6K0SEY7OD",
+    "account_name": "Okx Margin #1",
+    "provider": "okx",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-08T00:00:00Z"
+  },
+  {
+    "account_id": "P7SL5A9BTQ",
+    "account_name": "Okx Margin #2",
+    "provider": "okx",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-28T00:00:00Z"
+  },
+  {
+    "account_id": "RJLM26575S",
+    "account_name": "Okx Futures #1",
+    "provider": "okx",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-27T00:00:00Z"
+  },
+  {
+    "account_id": "SK0EJB8JKJ",
+    "account_name": "Okx Futures #2",
+    "provider": "okx",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-14T00:00:00Z"
+  },
+  {
+    "account_id": "V0S4HRIS3A",
+    "account_name": "Okx Futures #3",
+    "provider": "okx",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-06T00:00:00Z"
+  },
+  {
+    "account_id": "JZC0PWP3GT",
+    "account_name": "Kucoin Spot #1",
+    "provider": "kucoin",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-12T00:00:00Z"
+  },
+  {
+    "account_id": "413CNTR690",
+    "account_name": "Kucoin Spot #2",
+    "provider": "kucoin",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-20T00:00:00Z"
+  },
+  {
+    "account_id": "6DVP5IIYJO",
+    "account_name": "Kucoin Margin #1",
+    "provider": "kucoin",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-07T00:00:00Z"
+  },
+  {
+    "account_id": "325I15885Y",
+    "account_name": "Kucoin Futures #1",
+    "provider": "kucoin",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-10-02T00:00:00Z"
+  },
+  {
+    "account_id": "VJJZLWK6WZ",
+    "account_name": "Kucoin Futures #2",
+    "provider": "kucoin",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-22T00:00:00Z"
+  },
+  {
+    "account_id": "RN1TNLZNBH",
+    "account_name": "Kucoin Futures #3",
+    "provider": "kucoin",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-10-05T00:00:00Z"
+  },
+  {
+    "account_id": "53MOOZEU6Z",
+    "account_name": "Kraken Spot Spot #1",
+    "provider": "kraken_spot",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-30T00:00:00Z"
+  },
+  {
+    "account_id": "CQKRN43CEZ",
+    "account_name": "Kraken Spot Spot #2",
+    "provider": "kraken_spot",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-18T00:00:00Z"
+  },
+  {
+    "account_id": "SP57ZXD39P",
+    "account_name": "Kraken Spot Margin #1",
+    "provider": "kraken_spot",
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-11-30T00:00:00Z"
+  },
+  {
+    "account_id": "LBCNSVKKQ5",
+    "account_name": "Kraken Futures Futures #1",
+    "provider": "kraken_futures",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-04T00:00:00Z"
+  },
+  {
+    "account_id": "XUJG5GYQGV",
+    "account_name": "Kraken Futures Futures #2",
+    "provider": "kraken_futures",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-25T00:00:00Z"
+  },
+  {
+    "account_id": "F3EY6QTTJK",
+    "account_name": "Kraken Futures Futures #3",
+    "provider": "kraken_futures",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-11-08T00:00:00Z"
+  },
+  {
+    "account_id": "ME329PLYED",
+    "account_name": "Coinbase Advanced Spot #1",
+    "provider": "coinbase_advanced",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-11-22T00:00:00Z"
+  },
+  {
+    "account_id": "F4UE3KP674",
+    "account_name": "Coinbase Advanced Spot #2",
+    "provider": "coinbase_advanced",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-31T00:00:00Z"
+  },
+  {
+    "account_id": "UPWT8SUFMD",
+    "account_name": "Coinbase Advanced Spot #3",
+    "provider": "coinbase_advanced",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-11-05T00:00:00Z"
+  },
+  {
+    "account_id": "3D0YA6XGK5",
+    "account_name": "Coinbase Advanced Margin #1",
+    "provider": "coinbase_advanced",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-28T00:00:00Z"
+  },
+  {
+    "account_id": "EGGHN0L06Z",
+    "account_name": "Coinbase Advanced Margin #2",
+    "provider": "coinbase_advanced",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-10-11T00:00:00Z"
+  },
+  {
+    "account_id": "KDLQ7ZOD9U",
+    "account_name": "Coinbase Perpetual Futures #1",
+    "provider": "coinbase_perpetual",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-06T00:00:00Z"
+  },
+  {
+    "account_id": "ZQ2FJVQG4D",
+    "account_name": "Coinbase Perpetual Futures #2",
+    "provider": "coinbase_perpetual",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-03T00:00:00Z"
+  },
+  {
+    "account_id": "86MJ3DZ0TA",
+    "account_name": "Coinbase Perpetual Futures #3",
+    "provider": "coinbase_perpetual",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-17T00:00:00Z"
+  },
+  {
+    "account_id": "CAH6R1YYDD",
+    "account_name": "Bitget Spot #1",
+    "provider": "bitget",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-18T00:00:00Z"
+  },
+  {
+    "account_id": "H6KCHPMC58",
+    "account_name": "Bitget Spot #2",
+    "provider": "bitget",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-19T00:00:00Z"
+  },
+  {
+    "account_id": "A17T0D2DGW",
+    "account_name": "Bitget Futures #1",
+    "provider": "bitget",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-10-13T00:00:00Z"
+  },
+  {
+    "account_id": "8OEER56PGZ",
+    "account_name": "Bitget Futures #2",
+    "provider": "bitget",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-31T00:00:00Z"
+  },
+  {
+    "account_id": "ZWONOJANFT",
+    "account_name": "Gate Spot #1",
+    "provider": "gate",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-02T00:00:00Z"
+  },
+  {
+    "account_id": "E3YCLYU97X",
+    "account_name": "Gate Spot #2",
+    "provider": "gate",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-13T00:00:00Z"
+  },
+  {
+    "account_id": "O981R8W84S",
+    "account_name": "Gate Spot #3",
+    "provider": "gate",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-08T00:00:00Z"
+  },
+  {
+    "account_id": "PLROIZD5GM",
+    "account_name": "Gate Margin #1",
+    "provider": "gate",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-02T00:00:00Z"
+  },
+  {
+    "account_id": "6YJOS2GWCO",
+    "account_name": "Gate Margin #2",
+    "provider": "gate",
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-10-09T00:00:00Z"
+  },
+  {
+    "account_id": "8DQKFXTM3L",
+    "account_name": "Gate Margin #3",
+    "provider": "gate",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-26T00:00:00Z"
+  },
+  {
+    "account_id": "I8FEXZKKCV",
+    "account_name": "Gate Futures #1",
+    "provider": "gate",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-02T00:00:00Z"
+  },
+  {
+    "account_id": "H2HVPFFZKP",
+    "account_name": "Gate Futures #2",
+    "provider": "gate",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-10-11T00:00:00Z"
+  },
+  {
+    "account_id": "4BNCFMBAKK",
+    "account_name": "Htx Spot #1",
+    "provider": "htx",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-04T00:00:00Z"
+  },
+  {
+    "account_id": "ZNQUJ7BF4H",
+    "account_name": "Htx Spot #2",
+    "provider": "htx",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-18T00:00:00Z"
+  },
+  {
+    "account_id": "YAGSBSBSNN",
+    "account_name": "Htx Margin #1",
+    "provider": "htx",
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-11-06T00:00:00Z"
+  },
+  {
+    "account_id": "GDJEWJT1AC",
+    "account_name": "Htx Futures #1",
+    "provider": "htx",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-12T00:00:00Z"
+  },
+  {
+    "account_id": "KRVRRIQF6J",
+    "account_name": "Htx Futures #2",
+    "provider": "htx",
+    "market_type": "futures",
+    "status": "inactive",
+    "created_at": "2024-11-20T00:00:00Z"
+  },
+  {
+    "account_id": "GRS7YEYGIE",
+    "account_name": "Gemini Spot #1",
+    "provider": "gemini",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-02T00:00:00Z"
+  },
+  {
+    "account_id": "ON8K8BAQ69",
+    "account_name": "Gemini Margin #1",
+    "provider": "gemini",
+    "market_type": "margin",
+    "status": "inactive",
+    "created_at": "2024-10-15T00:00:00Z"
+  },
+  {
+    "account_id": "U1FKEXMP5V",
+    "account_name": "Gemini Margin #2",
+    "provider": "gemini",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-28T00:00:00Z"
+  },
+  {
+    "account_id": "FJ2JW0W0RI",
+    "account_name": "Gemini Margin #3",
+    "provider": "gemini",
+    "market_type": "margin",
+    "status": "suspended",
+    "created_at": "2024-11-03T00:00:00Z"
+  },
+  {
+    "account_id": "PSCWFS8UAO",
+    "account_name": "Gemini Futures #1",
+    "provider": "gemini",
+    "market_type": "futures",
+    "status": "suspended",
+    "created_at": "2024-11-28T00:00:00Z"
+  },
+  {
+    "account_id": "F021P2YZYX",
+    "account_name": "Gemini Futures #2",
+    "provider": "gemini",
+    "market_type": "futures",
+    "status": "active",
+    "created_at": "2024-10-07T00:00:00Z"
+  },
+  {
+    "account_id": "VFM54Y3CHJ",
+    "account_name": "Binance Us Spot #1",
+    "provider": "binance_us",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-10T00:00:00Z"
+  },
+  {
+    "account_id": "95N48LY1A7",
+    "account_name": "Binance Us Spot #2",
+    "provider": "binance_us",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-11T00:00:00Z"
+  },
+  {
+    "account_id": "YUQV7SSCEV",
+    "account_name": "Binance Us Spot #3",
+    "provider": "binance_us",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-22T00:00:00Z"
+  },
+  {
+    "account_id": "4AMCADRH6H",
+    "account_name": "Bitstamp Spot #1",
+    "provider": "bitstamp",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-09T00:00:00Z"
+  },
+  {
+    "account_id": "YGUE9TKITE",
+    "account_name": "Bitfinex Spot #1",
+    "provider": "bitfinex",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-10-01T00:00:00Z"
+  },
+  {
+    "account_id": "FBMTUBVIFL",
+    "account_name": "Bitfinex Spot #2",
+    "provider": "bitfinex",
+    "market_type": "spot",
+    "status": "inactive",
+    "created_at": "2024-10-11T00:00:00Z"
+  },
+  {
+    "account_id": "QUWG25L3HY",
+    "account_name": "Bitfinex Spot #3",
+    "provider": "bitfinex",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-06T00:00:00Z"
+  },
+  {
+    "account_id": "PIBXIIIZRR",
+    "account_name": "Bitfinex Margin #1",
+    "provider": "bitfinex",
+    "market_type": "margin",
+    "status": "active",
+    "created_at": "2024-11-20T00:00:00Z"
+  },
+  {
+    "account_id": "TA1Z7B4363",
+    "account_name": "Binance Tr Spot #1",
+    "provider": "binance_tr",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-11-19T00:00:00Z"
+  },
+  {
+    "account_id": "DPTA1HRODG",
+    "account_name": "Binance Tr Spot #2",
+    "provider": "binance_tr",
+    "market_type": "spot",
+    "status": "active",
+    "created_at": "2024-10-03T00:00:00Z"
+  },
+  {
+    "account_id": "0W9NXBWEF3",
+    "account_name": "Binance Tr Spot #3",
+    "provider": "binance_tr",
+    "market_type": "spot",
+    "status": "suspended",
+    "created_at": "2024-11-27T00:00:00Z"
+  },
+  {
+    "account_id": "H77IQQF5M3",
+    "account_name": "Hyperliquid Web3 #1",
+    "provider": "hyperliquid",
+    "market_type": "web3",
+    "status": "suspended",
+    "created_at": "2024-10-30T00:00:00Z"
+  }
+]
