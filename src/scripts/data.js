@@ -1,9 +1,10 @@
 import {
+  getAssetEquitySeries,
+  getAllStartDate,
+  getLatestDate,
   getAccountsWithSummary,
   getAccounts,
-  getAccountAssets,
   getAutotradersByAccount,
-  getAssetEquitySeries,
 } from "./dataAccess.js";
 
 /* ----------------------------------
@@ -23,38 +24,80 @@ const formatCurrency = (value, digits = 0) =>
  * ---------------------------------- */
 
 const buildAssetSummary = async () => {
-  const series7D = await getAssetEquitySeries(7);
-  const series30D = await getAssetEquitySeries(30);
-  const series90D = await getAssetEquitySeries(90);
+  // ----- PREDEFINED RANGES -----
+  const seriesMap = {
+    "7D": await getAssetEquitySeries(7),
+    "30D": await getAssetEquitySeries(30),
+    "90D": await getAssetEquitySeries(90),
+  };
 
-  const firstValue = series7D.length ? series7D[0].value : 0;
-  const latestValue = series7D.length
-    ? series7D[series7D.length - 1].value
-    : 0;
+  // ----- ALL RANGE (FROM OLDEST ACCOUNT) -----
+  const allStartDate = await getAllStartDate();
+  const latestDate = await getLatestDate();
 
-  let changePct = "—";
+  if (allStartDate && latestDate) {
+    const daysAll =
+      Math.ceil(
+        (new Date(latestDate) - new Date(allStartDate)) /
+          (1000 * 60 * 60 * 24)
+      ) + 1;
 
-  if (firstValue > 0) {
-    const pct = ((latestValue - firstValue) / firstValue) * 100;
-    changePct = `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
+    seriesMap["ALL"] =
+      daysAll > 0 ? await getAssetEquitySeries(daysAll) : [];
+  } else {
+    seriesMap["ALL"] = [];
   }
 
+  // ----- % CHANGE CALCULATOR -----
+  const buildChange = (series) => {
+    if (!series || series.length < 2) return "—";
+
+    const first = Number(series[0].value || 0);
+    const last = Number(series[series.length - 1].value || 0);
+
+    if (first <= 0) return "—";
+
+    const pct = ((last - first) / first) * 100;
+    return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
+  };
+
+  // ----- DEFAULT ACTIVE RANGE -----
+  const activeRange = "7D";
+  const activeSeries = seriesMap[activeRange] || [];
+
   return {
-    totalBalance: formatCurrency(latestValue),
-    change: changePct,
-    changeLabel: "vs last 7 days",
+    totalBalance: formatCurrency(
+      activeSeries.length
+        ? activeSeries[activeSeries.length - 1].value
+        : 0
+    ),
+
+    // ⬅️ WAJIB: nilai change AKTIF (dipakai UI)
+    change: buildChange(activeSeries),
+
+    // ⬅️ dipakai saat user ganti range
+    changeByRange: {
+      "7D": buildChange(seriesMap["7D"]),
+      "30D": buildChange(seriesMap["30D"]),
+      "90D": buildChange(seriesMap["90D"]),
+      "ALL": buildChange(seriesMap["ALL"]),
+    },
+
+    // ⬅️ UI yang tentukan wording
+    changeLabel: "vs previous period",
+
     chart: {
-      activeRange: "7D",
-      labels: series7D.map((p) => p.date),
+      activeRange,
+      labels: activeSeries.map((p) => p.date),
       ranges: {
-        "7D": series7D.map((p) => p.value),
-        "30D": series30D.map((p) => p.value),
-        "90D": series90D.map((p) => p.value),
+        "7D": seriesMap["7D"].map((p) => p.value),
+        "30D": seriesMap["30D"].map((p) => p.value),
+        "90D": seriesMap["90D"].map((p) => p.value),
+        "ALL": seriesMap["ALL"].map((p) => p.value),
       },
     },
   };
 };
-
 
 /* ----------------------------------
  * Accounts Summary
@@ -68,7 +111,7 @@ const buildAccountsSummary = async () => {
       name: account.account_name || account.account_id,
       amount: Number(account.totalValueUsd || 0),
       value: formatCurrency(account.totalValueUsd || 0),
-      brandColor: "", // reserved for future asset distribution
+      brandColor: "",
     }))
     .sort((a, b) => b.amount - a.amount);
 
@@ -95,18 +138,16 @@ const buildTopAutotraders = async () => {
 
   const autotraders = autotradersByAccount.flat();
 
-  // Trade history intentionally disabled → safe placeholders
   return autotraders
     .map((autotrader) => {
       const pnlValue = Number(autotrader.pnl_percent || 0);
-      const pnlPrefix =
-        pnlValue > 0 ? "+" : pnlValue < 0 ? "-" : "";
+      const sign = pnlValue > 0 ? "+" : pnlValue < 0 ? "-" : "";
 
       return {
         name: autotrader.tradingPlanName || "Autotrader",
         pair: "—",
         runtime: autotrader.status === "active" ? "Running" : "Stopped",
-        pnl: `${pnlPrefix}${Math.abs(pnlValue).toFixed(1)}%`,
+        pnl: `${sign}${Math.abs(pnlValue).toFixed(1)}%`,
         sortKey: Math.abs(pnlValue),
       };
     })
@@ -115,16 +156,15 @@ const buildTopAutotraders = async () => {
 };
 
 /* ----------------------------------
- * Trade History (DEPRECATED)
+ * Trade History (DISABLED)
  * ---------------------------------- */
 
 const buildTradeHistory = async () => {
-  // Trade history is intentionally disabled
   return [];
 };
 
 /* ----------------------------------
- * Alerts (STATIC FOR NOW)
+ * Alerts (STATIC)
  * ---------------------------------- */
 
 const alerts = [
