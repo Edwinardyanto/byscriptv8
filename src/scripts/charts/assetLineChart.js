@@ -40,18 +40,7 @@ const getLabelIndices = (length) => {
 export const renderAssetLineChart = (container, series) => {
   if (!container || !Array.isArray(series) || !series.length) return;
 
-  /* ---------- PERF GUARDS ---------- */
-
-  container.__chartCache ||= {};
-  const cacheKey = series.join("|");
-
-  if (container.__chartCache[cacheKey]) {
-    container.innerHTML = "";
-    container.appendChild(
-      container.__chartCache[cacheKey].cloneNode(true)
-    );
-    return;
-  }
+  /* ---------- RESIZE GUARD ---------- */
 
   container.__assetChartSeries = series;
 
@@ -111,6 +100,23 @@ export const renderAssetLineChart = (container, series) => {
   path.setAttribute("stroke-width", "4");
   path.setAttribute("stroke-linecap", "round");
 
+  /* ---------- HOVER ELEMENTS ---------- */
+
+  const hoverLine = createSvgElement("line");
+  hoverLine.setAttribute("y1", 0);
+  hoverLine.setAttribute("y2", height);
+  hoverLine.setAttribute("stroke", cssVar("--color-border-neutral"));
+  hoverLine.setAttribute("stroke-width", "1");
+  hoverLine.setAttribute("stroke-dasharray", "4 6");
+  hoverLine.style.opacity = "0";
+
+  const hoverDot = createSvgElement("circle");
+  hoverDot.setAttribute("r", "4");
+  hoverDot.setAttribute("fill", cssVar("--color-chart-accent-primary"));
+  hoverDot.setAttribute("stroke", cssVar("--color-bg-surface"));
+  hoverDot.setAttribute("stroke-width", "2");
+  hoverDot.style.opacity = "0";
+
   /* ---------- X LABELS ---------- */
 
   const labelGroup = createSvgElement("g");
@@ -165,7 +171,9 @@ export const renderAssetLineChart = (container, series) => {
       Math.max(0, Math.round((x - paddingX) / stepX))
     );
 
+    const point = points[index];
     const value = values[index];
+
     const dateText =
       Array.isArray(dates) && dates[index]
         ? new Date(dates[index]).toLocaleDateString(undefined, {
@@ -175,6 +183,14 @@ export const renderAssetLineChart = (container, series) => {
           })
         : "";
 
+    hoverLine.setAttribute("x1", point.x);
+    hoverLine.setAttribute("x2", point.x);
+    hoverLine.style.opacity = "1";
+
+    hoverDot.setAttribute("cx", point.x);
+    hoverDot.setAttribute("cy", point.y);
+    hoverDot.style.opacity = "1";
+
     tooltip.innerHTML = `
       <strong>${value.toLocaleString(undefined, {
         maximumFractionDigits: 2,
@@ -183,12 +199,14 @@ export const renderAssetLineChart = (container, series) => {
     `;
 
     tooltip.style.opacity = "1";
-    tooltip.style.left = `${points[index].x}px`;
-    tooltip.style.top = `${points[index].y - 12}px`;
+    tooltip.style.left = `${point.x}px`;
+    tooltip.style.top = `${point.y - 12}px`;
   });
 
   overlay.addEventListener("mouseleave", () => {
     tooltip.style.opacity = "0";
+    hoverLine.style.opacity = "0";
+    hoverDot.style.opacity = "0";
   });
 
   /* ---------- MOUNT ---------- */
@@ -198,12 +216,9 @@ export const renderAssetLineChart = (container, series) => {
 
   container.appendChild(tooltip);
   svg.appendChild(path);
+  svg.appendChild(hoverLine);
+  svg.appendChild(hoverDot);
   svg.appendChild(labelGroup);
   svg.appendChild(overlay);
   container.appendChild(svg);
-
-  /* ---------- CACHE ---------- */
-
-  const snapshot = svg.cloneNode(true);
-  container.__chartCache[cacheKey] = snapshot;
 };
