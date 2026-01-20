@@ -1,14 +1,19 @@
 import { fetchDashboardData } from "./data.js";
 import { getState, setState, subscribe } from "./state.js";
+
 import { renderAccountsSummary } from "./render/accountsSummary.js";
 import { renderAlerts } from "./render/alerts.js";
 import { renderTopAutotraders } from "./render/topAutotraders.js";
 import { renderTradeHistory } from "./render/tradeHistory.js";
 import { renderTotalPerformanceChart } from "./components/TotalPerformanceChart.js";
+
 import { initSidebar } from "./sidebar.js";
 
 const appRoot = document.getElementById("app");
 
+/**
+ * Dashboard sections controlled by state
+ */
 const sectionKeys = [
   "assetSummary",
   "accountsSummary",
@@ -17,6 +22,9 @@ const sectionKeys = [
   "tradeHistory",
 ];
 
+/**
+ * Helper: set same status to all sections
+ */
 const setSectionStatuses = (status) => {
   const statuses = sectionKeys.reduce((acc, key) => {
     acc[key] = status;
@@ -25,10 +33,11 @@ const setSectionStatuses = (status) => {
   setState({ status: statuses });
 };
 
+/**
+ * Determine section readiness based on data shape
+ */
 const evaluateStatus = (data, key) => {
-  if (!data) {
-    return "empty";
-  }
+  if (!data) return "empty";
 
   if (key === "topAutotraders") {
     return data.length === 0 ? "empty" : "ready";
@@ -49,7 +58,11 @@ const evaluateStatus = (data, key) => {
   return "ready";
 };
 
+/**
+ * Render dashboard based on current state
+ */
 const renderDashboard = (state) => {
+  // Asset Summary (line chart + range selector)
   renderTotalPerformanceChart({
     container: document.querySelector('[data-total-performance="dashboard"]'),
     dataSource: "dashboard",
@@ -58,9 +71,9 @@ const renderDashboard = (state) => {
     onRangeChange: (range) => {
       const currentState = getState();
       const assetSummary = currentState.data.assetSummary;
-      if (!assetSummary?.chart) {
-        return;
-      }
+
+      if (!assetSummary?.chart) return;
+
       setState({
         data: {
           assetSummary: {
@@ -74,27 +87,41 @@ const renderDashboard = (state) => {
       });
     },
   });
+
+  // Accounts Summary
   renderAccountsSummary({
     data: state.data.accountsSummary,
     status: state.status.accountsSummary,
   });
-  renderAlerts({ data: state.data.alerts, status: state.status.alerts });
+
+  // Alerts
+  renderAlerts({
+    data: state.data.alerts,
+    status: state.status.alerts,
+  });
+
+  // Top Autotraders
   renderTopAutotraders({
     data: state.data.topAutotraders,
     status: state.status.topAutotraders,
   });
+
+  // Trade History
   renderTradeHistory({
     data: state.data.tradeHistory,
     status: state.status.tradeHistory,
   });
 };
 
+/**
+ * Sidebar collapse / expand handling
+ */
 const bindSidebarToggle = () => {
   const toggle = document.querySelector(".sidebar-toggle");
-  if (!toggle) {
-    return;
-  }
+  if (!toggle) return;
+
   const tooltip = toggle.querySelector(".sidebar-toggle-tooltip");
+
   const syncSidebarState = () => {
     const isCollapsed = appRoot?.classList.contains("has-sidebar-collapsed");
     document.body.classList.toggle("sidebar-collapsed", Boolean(isCollapsed));
@@ -105,6 +132,7 @@ const bindSidebarToggle = () => {
   };
 
   syncSidebarState();
+
   toggle.addEventListener("click", () => {
     const isCollapsed = appRoot?.classList.toggle("has-sidebar-collapsed");
     document.body.classList.toggle("sidebar-collapsed", Boolean(isCollapsed));
@@ -115,10 +143,15 @@ const bindSidebarToggle = () => {
   });
 };
 
+/**
+ * Load dashboard data via state system ONLY
+ */
 const loadDashboardData = async () => {
   setSectionStatuses("loading");
+
   try {
     const data = await fetchDashboardData();
+
     const statuses = sectionKeys.reduce((acc, key) => {
       acc[key] = evaluateStatus(data[key], key);
       return acc;
@@ -130,19 +163,31 @@ const loadDashboardData = async () => {
       acc[key] = "error";
       return acc;
     }, {});
+
     const errors = sectionKeys.reduce((acc, key) => {
       acc[key] = error;
       return acc;
     }, {});
+
     setState({ status: statuses, errors });
   }
 };
 
+/**
+ * App bootstrap
+ */
 if (appRoot) {
   appRoot.dataset.ready = "true";
+
   initSidebar(appRoot);
+
   subscribe(renderDashboard);
+
   bindSidebarToggle();
+
+  // Initial render with empty state
   renderDashboard(getState());
+
+  // Load real data
   loadDashboardData();
 }
