@@ -27,14 +27,22 @@ const buildAssetSummary = async () => {
   const series30D = await getAssetEquitySeries(30);
   const series90D = await getAssetEquitySeries(90);
 
+  const firstValue = series7D.length ? series7D[0].value : 0;
   const latestValue = series7D.length
     ? series7D[series7D.length - 1].value
     : 0;
 
+  let changePct = "—";
+
+  if (firstValue > 0) {
+    const pct = ((latestValue - firstValue) / firstValue) * 100;
+    changePct = `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
+  }
+
   return {
     totalBalance: formatCurrency(latestValue),
-    change: "—",
-    changeLabel: "vs previous period",
+    change: changePct,
+    changeLabel: "vs last 7 days",
     chart: {
       activeRange: "7D",
       labels: series7D.map((p) => p.date),
@@ -46,6 +54,7 @@ const buildAssetSummary = async () => {
     },
   };
 };
+
 
 /* ----------------------------------
  * Accounts Summary
