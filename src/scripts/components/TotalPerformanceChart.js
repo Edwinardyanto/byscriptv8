@@ -1,5 +1,9 @@
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
 
+/* ----------------------------------
+ * Markup
+ * ---------------------------------- */
+
 const chartMarkup = `
   <div class="asset-summary-bg"></div>
   <div class="asset-summary-content">
@@ -10,8 +14,10 @@ const chartMarkup = `
             <div class="stat-value-row">
               <div class="stat-value" data-field="asset.totalBalance"></div>
               <span class="stat-status-dot" aria-hidden="true"></span>
-              <span class="badge badge--positive" data-field="asset.change"></span>
+              <span class="badge" data-field="asset.change"></span>
             </div>
+            <div class="stat-meta" data-field="asset.changeLabel"></div>
+
             <div class="timeframe-pills" aria-label="Asset summary timeframe">
               <span class="timeframe-pill timeframe-pill--active">7D</span>
               <span class="timeframe-pill">30D</span>
@@ -21,51 +27,54 @@ const chartMarkup = `
           </div>
         </div>
       </div>
-      <div class="chart-placeholder" data-field="asset.chartLabel">Chart Placeholder</div>
+
+      <div class="chart-placeholder" data-field="asset.chartLabel"></div>
     </div>
   </div>
 `;
 
+/* ----------------------------------
+ * Helpers
+ * ---------------------------------- */
+
 const setText = (container, selector, value) => {
-  const element = container?.querySelector(selector);
-  if (element) {
-    element.textContent = value;
-  }
+  const el = container?.querySelector(selector);
+  if (el) el.textContent = value ?? "";
 };
 
 const setChartMessage = (container, message) => {
-  if (!container) {
-    return;
-  }
+  if (!container) return;
   container.innerHTML = "";
   container.textContent = message;
 };
 
 const updateTimeframeButtons = (pillsContainer, activeRange) => {
-  if (!pillsContainer) {
-    return;
-  }
+  if (!pillsContainer) return;
+
   const pills = pillsContainer.querySelectorAll(".timeframe-pill");
-  const activeLabel = activeRange === "all" ? "All" : activeRange;
+  const activeLabel = activeRange === "ALL" ? "All" : activeRange;
+
   pills.forEach((pill) => {
-    const isActive = pill.textContent.trim() === activeLabel;
-    pill.classList.toggle("timeframe-pill--active", isActive);
+    pill.classList.toggle(
+      "timeframe-pill--active",
+      pill.textContent.trim() === activeLabel
+    );
   });
 };
 
 const bindTimeframeControls = (pillsContainer, onRangeChange) => {
-  if (!pillsContainer) {
-    return;
-  }
+  if (!pillsContainer) return;
+
   const pills = pillsContainer.querySelectorAll(".timeframe-pill");
+
   pills.forEach((pill) => {
-    if (pill.dataset.bound) {
-      return;
-    }
+    if (pill.dataset.bound) return;
     pill.dataset.bound = "true";
+
     pill.addEventListener("click", () => {
       const label = pill.textContent.trim();
-      const range = label === "All" ? "all" : label;
+      const range = label === "All" ? "ALL" : label;
+
       if (typeof onRangeChange === "function") {
         onRangeChange(range);
       }
@@ -74,18 +83,21 @@ const bindTimeframeControls = (pillsContainer, onRangeChange) => {
 };
 
 const resolveTimeframePills = (container, externalContainer) => {
-  const internalPills = container.querySelector(".timeframe-pills");
-  if (!externalContainer) {
-    return internalPills;
-  }
-  if (internalPills && !externalContainer.contains(internalPills)) {
-    while (internalPills.firstChild) {
-      externalContainer.appendChild(internalPills.firstChild);
+  const internal = container.querySelector(".timeframe-pills");
+  if (!externalContainer) return internal;
+
+  if (internal && !externalContainer.contains(internal)) {
+    while (internal.firstChild) {
+      externalContainer.appendChild(internal.firstChild);
     }
-    internalPills.remove();
+    internal.remove();
   }
   return externalContainer;
 };
+
+/* ----------------------------------
+ * Renderer
+ * ---------------------------------- */
 
 export const renderTotalPerformanceChart = ({
   container,
@@ -95,10 +107,9 @@ export const renderTotalPerformanceChart = ({
   onRangeChange,
   timeframeContainer,
 }) => {
-  if (!container) {
-    return;
-  }
+  if (!container) return;
 
+  // Mount once
   if (!container.dataset.totalPerformanceReady) {
     container.innerHTML = chartMarkup;
     container.dataset.totalPerformanceReady = "true";
@@ -107,11 +118,15 @@ export const renderTotalPerformanceChart = ({
   if (dataSource) {
     container.dataset.totalPerformanceSource = dataSource;
   }
+
   const pillsContainer = resolveTimeframePills(container, timeframeContainer);
   bindTimeframeControls(pillsContainer, onRangeChange);
 
-  const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
-  const isAccountsPage = document.body?.classList.contains("page-accounts");
+  const chartContainer = container.querySelector(
+    '[data-field="asset.chartLabel"]'
+  );
+
+  /* ---------- STATE HANDLING ---------- */
 
   if (status === "loading") {
     setText(container, '[data-field="asset.totalBalance"]', "Loading...");
@@ -137,26 +152,57 @@ export const renderTotalPerformanceChart = ({
     return;
   }
 
-  if (isAccountsPage) {
-    setText(container, '[data-field="asset.totalBalance"]', "--");
-    setText(container, '[data-field="asset.change"]', "");
-    setText(container, '[data-field="asset.changeLabel"]', "");
-  } else {
-    setText(container, '[data-field="asset.totalBalance"]', data.totalBalance);
-    setText(container, '[data-field="asset.change"]', data.change);
-    setText(container, '[data-field="asset.changeLabel"]', data.changeLabel);
-  }
+  /* ---------- DATA ---------- */
 
   const activeRange = data.chart?.activeRange || "7D";
+  const series = data.chart?.ranges?.[activeRange] || [];
+
+  const changeValue =
+    data.changeByRange?.[activeRange] ?? data.change ?? "--";
+
+  const changeLabel =
+    activeRange === "ALL"
+      ? "Since first account"
+      : "vs previous period";
+
+  // Text
+  setText(
+    container,
+    '[data-field="asset.totalBalance"]',
+    data.totalBalance
+  );
+
+  setText(container, '[data-field="asset.change"]', changeValue);
+  setText(container, '[data-field="asset.changeLabel"]', changeLabel);
+
+  // Badge color
+  const badge = container.querySelector('[data-field="asset.change"]');
+  if (badge) {
+    badge.classList.remove(
+      "badge--positive",
+      "badge--negative",
+      "badge--neutral"
+    );
+
+    if (typeof changeValue === "string" && changeValue.startsWith("-")) {
+      badge.classList.add("badge--negative");
+    } else if (
+      typeof changeValue === "string" &&
+      changeValue !== "—"
+    ) {
+      badge.classList.add("badge--positive");
+    } else {
+      badge.classList.add("badge--neutral");
+    }
+  }
+
   updateTimeframeButtons(pillsContainer, activeRange);
 
-  const series =
-    activeRange === "all"
-      ? data.chart?.fullSeries || []
-      : data.chart?.ranges?.[activeRange] || [];
-  if (series.length === 0) {
+  // Chart
+  if (!series.length) {
     setChartMessage(chartContainer, "No chart data");
-  } else {
-    renderAssetLineChart(chartContainer, series);
+    return;
   }
+
+  renderAssetLineChart(chartContainer, series);
 };
