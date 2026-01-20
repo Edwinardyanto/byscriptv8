@@ -8,7 +8,6 @@ const createSvgElement = (tag) =>
   document.createElementNS("http://www.w3.org/2000/svg", tag);
 
 const getLabelIndices = (length) => {
-  // ONLY show labels for 7D
   if (length === 7) return [0, 3, 6];
   return [];
 };
@@ -21,7 +20,11 @@ export const renderAssetLineChart = (container, series) => {
   if (!container || !Array.isArray(series) || !series.length) return;
 
   const values = series.map(Number);
-  const dates = container.__assetChartDates || [];
+
+  let dates = container.__assetChartDates;
+  if (!Array.isArray(dates) || dates.length !== values.length) {
+    dates = [];
+  }
 
   const width = container.clientWidth;
   if (!width) return;
@@ -65,8 +68,7 @@ export const renderAssetLineChart = (container, series) => {
   const labelIndices = getLabelIndices(values.length);
 
   labelIndices.forEach((i) => {
-    const date = dates[i];
-    if (!date) return;
+    if (!dates[i]) return;
 
     const label = createSvgElement("text");
     label.setAttribute("x", points[i].x);
@@ -74,7 +76,7 @@ export const renderAssetLineChart = (container, series) => {
     label.setAttribute("fill", cssVar("--color-text-subtle"));
     label.setAttribute("font-size", "11");
     label.setAttribute("text-anchor", "middle");
-    label.textContent = new Date(date).toLocaleDateString(undefined, {
+    label.textContent = new Date(dates[i]).toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
     });
@@ -109,7 +111,6 @@ export const renderAssetLineChart = (container, series) => {
   tooltip.style.padding = "6px 10px";
   tooltip.style.borderRadius = "999px";
   tooltip.style.fontSize = "0.8rem";
-  tooltip.style.whiteSpace = "nowrap";
 
   /* ---------- OVERLAY ---------- */
 
