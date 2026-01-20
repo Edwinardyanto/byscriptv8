@@ -165,3 +165,51 @@ export const getAutotradersByAccount = async (accountId) => {
 
 // temporary: Trade History still from mock-data (will migrate later)
 export const getTradeHistory = async () => fetchDataset("tradeHistory");
+
+
+// ---- Asset Equity (Daily) ----
+export const getAssetEquitySeries = async (days = 7) => {
+  const meta = await fetchJson(DATA_URLS.latestMeta);
+  const latestDate = meta.accountAssetDaily.replace(".json", "");
+  const end = new Date(latestDate);
+  const start = new Date(end);
+  start.setDate(end.getDate() - (days - 1));
+
+  const series = [];
+
+  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+    const dateStr = d.toISOString().slice(0, 10);
+
+    try {
+      const [accountDaily, priceDaily] = await Promise.all([
+        fetchJson(
+          new URL(`${dateStr}.json`, DATA_URLS.accountAssetsDailyDir)
+        ),
+        fetchJson(
+          new URL(`${dateStr}.json`, DATA_URLS.assetPriceDailyDir)
+        ),
+      ]);
+
+      let totalUsd = 0;
+      const priceMap = new Map(
+        priceDaily.prices.map(p => [p.asset_id, Number(p.price_usd || 0)])
+      );
+
+      for (const acc of accountDaily.accounts) {
+        for (const asset of acc.assets) {
+          const price = priceMap.get(asset.asset_id) || 0;
+          totalUsd += Number(asset.value || 0) * price;
+        }
+      }
+
+      series.push({
+        date: dateStr,
+        value: totalUsd,
+      });
+    } catch (e) {
+      // missing day → skip (safe)
+    }
+  }
+
+  return series;
+};
