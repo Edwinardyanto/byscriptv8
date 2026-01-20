@@ -17,9 +17,6 @@ const chartMarkup = `
               <span class="badge" data-field="asset.change"></span>
             </div>
 
-            <!-- NOTE: changeLabel sengaja DIHAPUS -->
-            <!-- <div class="stat-meta" data-field="asset.changeLabel"></div> -->
-
             <div class="timeframe-pills">
               <span class="timeframe-pill timeframe-pill--active">7D</span>
               <span class="timeframe-pill">30D</span>
@@ -30,7 +27,7 @@ const chartMarkup = `
         </div>
       </div>
 
-      <div class="chart-placeholder" data-field="asset.chartLabel"></div>
+      <div class="chart-placeholder" data-field="asset.chart"></div>
     </div>
   </div>
 `;
@@ -44,16 +41,15 @@ const setText = (container, selector, value) => {
   if (el) el.textContent = value ?? "";
 };
 
-const updateTimeframeButtons = (pillsContainer, activeRange) => {
-  const pills = pillsContainer?.querySelectorAll(".timeframe-pill") || [];
-  const activeLabel = activeRange === "ALL" ? "All" : activeRange;
-
-  pills.forEach((pill) => {
-    pill.classList.toggle(
-      "timeframe-pill--active",
-      pill.textContent.trim() === activeLabel
-    );
-  });
+const updateTimeframeButtons = (container, activeRange) => {
+  container
+    .querySelectorAll(".timeframe-pill")
+    .forEach((pill) => {
+      pill.classList.toggle(
+        "timeframe-pill--active",
+        pill.textContent.trim() === (activeRange === "ALL" ? "All" : activeRange)
+      );
+    });
 };
 
 /* ----------------------------------
@@ -68,18 +64,19 @@ export const renderTotalPerformanceChart = ({
 }) => {
   if (!container) return;
 
-  /* ---------- INIT MARKUP (ONCE) ---------- */
+  /* ---------- INIT MARKUP ---------- */
 
-  if (!container.dataset.totalPerformanceReady) {
+  if (!container.dataset.ready) {
     container.innerHTML = chartMarkup;
-    container.dataset.totalPerformanceReady = "true";
+    container.dataset.ready = "true";
   }
 
-  /* ---------- TIMEFRAME PILLS ---------- */
-
   const pillsContainer = container.querySelector(".timeframe-pills");
+  const chartContainer = container.querySelector('[data-field="asset.chart"]');
 
-  pillsContainer?.querySelectorAll(".timeframe-pill").forEach((pill) => {
+  /* ---------- BIND TIMEFRAME ---------- */
+
+  pillsContainer.querySelectorAll(".timeframe-pill").forEach((pill) => {
     if (pill.dataset.bound) return;
     pill.dataset.bound = "true";
 
@@ -89,46 +86,36 @@ export const renderTotalPerformanceChart = ({
     });
   });
 
-  /* ---------- DATA GUARD ---------- */
+  if (status !== "ready" || !data?.chart?.ranges) return;
 
-  if (status !== "ready" || !data) return;
+  /* ---------- RESOLVE RANGE ---------- */
 
-  const activeRange = data.chart?.activeRange || "7D";
-  const series = data.chart?.ranges?.[activeRange] || [];
-  const labels = data.chart?.labels || [];
+  const activeRange = data.chart.activeRange || "7D";
+  const rangeData = data.chart.ranges[activeRange];
 
-  if (!series.length) return;
+  if (!rangeData) return;
 
-  /* ---------- HEADER VALUES ---------- */
+  const { series = [], labels = [] } = rangeData;
 
-  setText(
-    container,
-    '[data-field="asset.totalBalance"]',
-    data.totalBalance
-  );
+  if (!series.length || !labels.length) return;
 
+  /* ---------- HEADER ---------- */
+
+  setText(container, '[data-field="asset.totalBalance"]', data.totalBalance);
   setText(
     container,
     '[data-field="asset.change"]',
     data.changeByRange?.[activeRange] ?? "--"
   );
 
-  // 🔥 PENTING:
-  // TIDAK ADA "vs previous period"
-  // TIDAK ADA "Since first account"
-  // element-nya bahkan sudah DIHAPUS dari markup
+  // ⛔️ HAPUS TOTAL:
+  // - "vs previous period"
+  // - "Since first account"
 
   updateTimeframeButtons(pillsContainer, activeRange);
 
   /* ---------- CHART ---------- */
 
-  const chartContainer = container.querySelector(
-    '[data-field="asset.chartLabel"]'
-  );
-
-  if (!chartContainer) return;
-
-  // ⬅️ INI KUNCI AGAR X-AXIS & HOVER DATE BEKERJA
   chartContainer.__assetChartDates = labels;
 
   renderAssetLineChart(chartContainer, series);
