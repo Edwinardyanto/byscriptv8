@@ -7,19 +7,10 @@ import { cssVar } from "./cssVar.js";
 const createSvgElement = (tag) =>
   document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const buildLabelIndices = (length, count) => {
-  const indices = new Set();
-  for (let i = 0; i < count; i++) {
-    indices.add(Math.round((i * (length - 1)) / (count - 1)));
-  }
-  return [...indices].sort((a, b) => a - b);
-};
-
 const getLabelIndices = (length) => {
+  // ONLY show labels for 7D
   if (length === 7) return [0, 3, 6];
-  if (length === 30) return buildLabelIndices(length, 5);
-  if (length === 90) return buildLabelIndices(length, 4);
-  return buildLabelIndices(length, 3);
+  return [];
 };
 
 /* ----------------------------------
@@ -68,6 +59,28 @@ export const renderAssetLineChart = (container, series) => {
   path.setAttribute("stroke-width", "4");
   path.setAttribute("stroke-linecap", "round");
 
+  /* ---------- X AXIS LABELS (7D ONLY) ---------- */
+
+  const labelGroup = createSvgElement("g");
+  const labelIndices = getLabelIndices(values.length);
+
+  labelIndices.forEach((i) => {
+    const date = dates[i];
+    if (!date) return;
+
+    const label = createSvgElement("text");
+    label.setAttribute("x", points[i].x);
+    label.setAttribute("y", baselineY + 16);
+    label.setAttribute("fill", cssVar("--color-text-subtle"));
+    label.setAttribute("font-size", "11");
+    label.setAttribute("text-anchor", "middle");
+    label.textContent = new Date(date).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+    });
+    labelGroup.appendChild(label);
+  });
+
   /* ---------- HOVER ELEMENTS ---------- */
 
   const hoverLine = createSvgElement("line");
@@ -85,36 +98,6 @@ export const renderAssetLineChart = (container, series) => {
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
-  /* ---------- X AXIS LABELS ---------- */
-
-  const labelGroup = createSvgElement("g");
-  const labelIndices = getLabelIndices(values.length);
-
-  labelIndices.forEach((i) => {
-    if (!dates[i]) return;
-
-    const label = createSvgElement("text");
-    label.setAttribute("x", points[i].x);
-    label.setAttribute("y", baselineY + 16);
-    label.setAttribute("fill", cssVar("--color-text-subtle"));
-    label.setAttribute("font-size", "11");
-    label.setAttribute("text-anchor", "middle");
-    label.textContent = new Date(dates[i]).toLocaleDateString(undefined, {
-      month: "short",
-      day: "numeric",
-    });
-    labelGroup.appendChild(label);
-  });
-
-  /* ---------- HOVER DATE LABEL (X AXIS) ---------- */
-
-  const hoverDateLabel = createSvgElement("text");
-  hoverDateLabel.setAttribute("y", baselineY + 16);
-  hoverDateLabel.setAttribute("fill", cssVar("--color-text-primary"));
-  hoverDateLabel.setAttribute("font-size", "11");
-  hoverDateLabel.setAttribute("text-anchor", "middle");
-  hoverDateLabel.style.opacity = "0";
-
   /* ---------- TOOLTIP (VALUE ONLY) ---------- */
 
   const tooltip = document.createElement("div");
@@ -127,7 +110,6 @@ export const renderAssetLineChart = (container, series) => {
   tooltip.style.borderRadius = "999px";
   tooltip.style.fontSize = "0.8rem";
   tooltip.style.whiteSpace = "nowrap";
-  tooltip.style.transition = "opacity 0.1s ease";
 
   /* ---------- OVERLAY ---------- */
 
@@ -150,14 +132,6 @@ export const renderAssetLineChart = (container, series) => {
     const point = points[index];
     const value = values[index];
 
-    const dateText =
-      dates[index]
-        ? new Date(dates[index]).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          })
-        : "";
-
     hoverLine.setAttribute("x1", point.x);
     hoverLine.setAttribute("x2", point.x);
     hoverLine.style.opacity = "1";
@@ -166,15 +140,9 @@ export const renderAssetLineChart = (container, series) => {
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
-    hoverDateLabel.setAttribute("x", point.x);
-    hoverDateLabel.textContent = dateText;
-    hoverDateLabel.style.opacity = "1";
-
-    tooltip.innerHTML = `
-      <strong>${value.toLocaleString(undefined, {
-        maximumFractionDigits: 2,
-      })}</strong>
-    `;
+    tooltip.textContent = value.toLocaleString(undefined, {
+      maximumFractionDigits: 2,
+    });
 
     tooltip.style.opacity = "1";
     tooltip.style.left = `${point.x}px`;
@@ -185,7 +153,6 @@ export const renderAssetLineChart = (container, series) => {
     tooltip.style.opacity = "0";
     hoverLine.style.opacity = "0";
     hoverDot.style.opacity = "0";
-    hoverDateLabel.style.opacity = "0";
   });
 
   /* ---------- MOUNT ---------- */
@@ -198,7 +165,6 @@ export const renderAssetLineChart = (container, series) => {
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
   svg.appendChild(labelGroup);
-  svg.appendChild(hoverDateLabel);
   svg.appendChild(overlay);
   container.appendChild(svg);
 };
