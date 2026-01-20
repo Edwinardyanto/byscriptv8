@@ -94,25 +94,38 @@ export const renderAssetLineChart = (container, series) => {
   overlay.setAttribute("height", height);
   overlay.setAttribute("fill", "transparent");
 
-  overlay.addEventListener("mousemove", (e) => {
-    const rect = svg.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * width;
-    const index = Math.min(
-      values.length - 1,
-      Math.max(0, Math.round((x - paddingX) / stepX))
-    );
+overlay.addEventListener("mousemove", (e) => {
+  const rect = svg.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width) * width;
+  const index = Math.min(
+    values.length - 1,
+    Math.max(0, Math.round((x - paddingX) / stepX))
+  );
 
-    const date = dates[index];
-    tooltip.innerHTML = `
-      <strong>${values[index].toLocaleString()}</strong><br/>
-      <span style="opacity:.7">
-        ${date ? new Date(date).toLocaleDateString() : ""}
-      </span>
-    `;
-    tooltip.style.opacity = "1";
-    tooltip.style.left = `${points[index].x}px`;
-    tooltip.style.top = `${points[index].y - 12}px`;
-  });
+  const value = values[index];
+  const dates = container.__assetChartDates;
+
+  const dateText =
+    Array.isArray(dates) && dates[index]
+      ? new Date(dates[index]).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })
+      : "";
+
+  tooltip.innerHTML = `
+    <strong>${value.toLocaleString(undefined, {
+      maximumFractionDigits: 2,
+    })}</strong><br/>
+    <span style="opacity:.7">${dateText}</span>
+  `;
+
+  tooltip.style.opacity = "1";
+  tooltip.style.left = `${points[index].x}px`;
+  tooltip.style.top = `${points[index].y - 12}px`;
+});
+
 
   overlay.addEventListener("mouseleave", () => {
     tooltip.style.opacity = "0";
