@@ -7,17 +7,6 @@ import { cssVar } from "./cssVar.js";
 const createSvgElement = (tag) =>
   document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const withRAF = (fn) => {
-  let raf = null;
-  return (...args) => {
-    if (raf) return;
-    raf = requestAnimationFrame(() => {
-      raf = null;
-      fn(...args);
-    });
-  };
-};
-
 const buildLabelIndices = (length, count) => {
   const indices = new Set();
   for (let i = 0; i < count; i++) {
@@ -39,27 +28,6 @@ const getLabelIndices = (length) => {
 
 export const renderAssetLineChart = (container, series) => {
   if (!container || !Array.isArray(series) || !series.length) return;
-
-  /* ---------- RESIZE GUARD ---------- */
-
-  container.__assetChartSeries = series;
-
-  if (!container.__assetChartResizeHandler) {
-    const handleResize = withRAF(() => {
-      renderAssetLineChart(container, container.__assetChartSeries);
-    });
-
-    if (typeof ResizeObserver !== "undefined") {
-      const observer = new ResizeObserver(handleResize);
-      observer.observe(container);
-      container.__assetChartResizeObserver = observer;
-    }
-
-    window.addEventListener("resize", handleResize);
-    container.__assetChartResizeHandler = handleResize;
-  }
-
-  /* ---------- DATA ---------- */
 
   const values = series.map(Number);
   const dates = container.__assetChartDates || [];
@@ -117,14 +85,13 @@ export const renderAssetLineChart = (container, series) => {
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
-  /* ---------- X LABELS ---------- */
+  /* ---------- X AXIS LABELS ---------- */
 
   const labelGroup = createSvgElement("g");
   const labelIndices = getLabelIndices(values.length);
 
   labelIndices.forEach((i) => {
-    const date = dates[i];
-    if (!date) return;
+    if (!dates[i]) return;
 
     const label = createSvgElement("text");
     label.setAttribute("x", points[i].x);
@@ -132,14 +99,23 @@ export const renderAssetLineChart = (container, series) => {
     label.setAttribute("fill", cssVar("--color-text-subtle"));
     label.setAttribute("font-size", "11");
     label.setAttribute("text-anchor", "middle");
-    label.textContent = new Date(date).toLocaleDateString(undefined, {
+    label.textContent = new Date(dates[i]).toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
     });
     labelGroup.appendChild(label);
   });
 
-  /* ---------- TOOLTIP ---------- */
+  /* ---------- HOVER DATE LABEL (X AXIS) ---------- */
+
+  const hoverDateLabel = createSvgElement("text");
+  hoverDateLabel.setAttribute("y", baselineY + 16);
+  hoverDateLabel.setAttribute("fill", cssVar("--color-text-primary"));
+  hoverDateLabel.setAttribute("font-size", "11");
+  hoverDateLabel.setAttribute("text-anchor", "middle");
+  hoverDateLabel.style.opacity = "0";
+
+  /* ---------- TOOLTIP (VALUE ONLY) ---------- */
 
   const tooltip = document.createElement("div");
   tooltip.style.position = "absolute";
@@ -175,11 +151,10 @@ export const renderAssetLineChart = (container, series) => {
     const value = values[index];
 
     const dateText =
-      Array.isArray(dates) && dates[index]
+      dates[index]
         ? new Date(dates[index]).toLocaleDateString(undefined, {
             month: "short",
             day: "numeric",
-            year: "numeric",
           })
         : "";
 
@@ -191,22 +166,26 @@ export const renderAssetLineChart = (container, series) => {
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
+    hoverDateLabel.setAttribute("x", point.x);
+    hoverDateLabel.textContent = dateText;
+    hoverDateLabel.style.opacity = "1";
+
     tooltip.innerHTML = `
       <strong>${value.toLocaleString(undefined, {
         maximumFractionDigits: 2,
-      })}</strong><br/>
-      <span style="opacity:.7">${dateText}</span>
+      })}</strong>
     `;
 
     tooltip.style.opacity = "1";
     tooltip.style.left = `${point.x}px`;
-    tooltip.style.top = `${point.y - 12}px`;
+    tooltip.style.top = `${point.y - 14}px`;
   });
 
   overlay.addEventListener("mouseleave", () => {
     tooltip.style.opacity = "0";
     hoverLine.style.opacity = "0";
     hoverDot.style.opacity = "0";
+    hoverDateLabel.style.opacity = "0";
   });
 
   /* ---------- MOUNT ---------- */
@@ -219,6 +198,7 @@ export const renderAssetLineChart = (container, series) => {
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
   svg.appendChild(labelGroup);
+  svg.appendChild(hoverDateLabel);
   svg.appendChild(overlay);
   container.appendChild(svg);
 };
