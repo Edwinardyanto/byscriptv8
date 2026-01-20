@@ -2,7 +2,7 @@
 // Data-first access layer:
 // - Accounts + Assets -> from /data
 // - Account assets summary -> computed from account_assets_daily + asset_price_daily (latest)
-// - Trade history sementara tetap dari mock-data agar page lain tidak rusak
+// - Trade history is intentionally deprecated (throws error)
 
 const DATA_URLS = {
   // data (real)
@@ -17,11 +17,9 @@ const DATA_URLS = {
   // daily (real)
   accountAssetsDailyDir: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceDailyDir: new URL("../../data/asset_price_daily/", import.meta.url),
-
-  // mock (temporary fallback for Trade History page)
-  tradeHistory: new URL("../../mock-data/data/trade_history.json", import.meta.url),
 };
 
+  
 const dataCache = new Map();
 const inflight = new Map();
 
@@ -78,6 +76,15 @@ export const getLatestAssetPriceDaily = async () => {
   const url = new URL(file, DATA_URLS.assetPriceDailyDir);
   return fetchJson(url, `daily:asset_price:${file}`);
 };
+
+export const getLatestDate = async () => {
+  const meta = await getLatestMeta();
+  if (!meta?.accountAssetDaily) {
+    throw new Error("latestMeta missing accountAssetDaily");
+  }
+  return meta.accountAssetDaily.replace(".json", "");
+};
+
 
 // ---------------------------
 // Public APIs (used by UI)
@@ -163,14 +170,14 @@ export const getAutotradersByAccount = async (accountId) => {
     });
 };
 
-// temporary: Trade History still from mock-data (will migrate later)
-export const getTradeHistory = async () => fetchDataset("tradeHistory");
-
+// mock (temporary fallback for Trade History page)
+export const getTradeHistory = async () => {
+    throw new Error("Trade History still deprecated");
+  };
 
 // ---- Asset Equity (Daily) ----
 export const getAssetEquitySeries = async (days = 7) => {
-  const meta = await fetchJson(DATA_URLS.latestMeta);
-  const latestDate = meta.accountAssetDaily.replace(".json", "");
+  const latestDate = await getLatestDate();
   const end = new Date(latestDate);
   const start = new Date(end);
   start.setDate(end.getDate() - (days - 1));
