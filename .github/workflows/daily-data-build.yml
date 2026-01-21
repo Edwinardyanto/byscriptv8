@@ -2,7 +2,7 @@ name: Daily Data Build
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"   # Runs every day at 00:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -10,24 +10,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3. Build daily equity data
       - name: Build daily equity
         run: node scripts/buildEquityDaily.mjs
 
+      # 4. Build latest meta (latest.json, pointers, dsb)
       - name: Build latest meta
         run: node scripts/buildLatestMeta.mjs
 
+      # 5. Commit & push data changes (SAFE)
       - name: Commit data changes
         run: |
           git config user.name "byscript-bot"
           git config user.email "bot@byscript.io"
+
           git add data
-          git commit -m "chore(data): daily derived update" || echo "No changes"
-          git push
+
+          if git diff --cached --quiet; then
+            echo "No data changes to commit"
+          else
+            git commit -m "chore(data): daily derived update"
+            git push origin HEAD:main
+          fi
