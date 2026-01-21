@@ -1,176 +1,149 @@
 // src/scripts/dataAccess.js
 // Data-first access layer (AUTHORITATIVE SOURCE)
-//
-// Principles:
-// - UI never guesses date
-// - Chart never generates labels
-// - Range logic lives here (7D / 30D / 90D / ALL)
-// - Missing daily files are SAFE to skip
-// - latestMeta is the single source of truth
-
-/* ----------------------------------
- * DATA URLS
- * ---------------------------------- */
 
 const DATA_URLS = {
-  // core datasets
   accounts: new URL("../../data/accounts.json", import.meta.url),
   assets: new URL("../../data/assets.json", import.meta.url),
   autotraders: new URL("../../data/autotraders.json", import.meta.url),
   tradingPlans: new URL("../../data/trading_plans.json", import.meta.url),
 
-  // meta (no .json extension by design)
   latestMeta: new URL("../../data/meta/latest", import.meta.url),
 
-  // daily snapshots
-  accountAssetsDailyDir: new URL("../../data/account_assets_daily/", import.meta.url),
-  assetPriceDailyDir: new URL("../../data/asset_price_daily/", import.meta.url),
+  accountAssetsDailyDir: new URL(
+    "../../data/account_assets_daily/",
+    import.meta.url
+  ),
+  assetPriceDailyDir: new URL(
+    "../../data/asset_price_daily/",
+    import.meta.url
+  ),
 };
 
 /* ----------------------------------
- * CACHE LAYER
+ * CACHE
  * ---------------------------------- */
 
-const dataCache = new Map();
+const cache = new Map();
 const inflight = new Map();
 
-const cloneData = (data) => {
-  if (typeof structuredClone === "function") return structuredClone(data);
-  return JSON.parse(JSON.stringify(data));
-};
+const clone = (d) =>
+  typeof structuredClone === "function"
+    ? structuredClone(d)
+    : JSON.parse(JSON.stringify(d));
 
-const fetchJson = async (url, cacheKey = "") => {
-  if (cacheKey && dataCache.has(cacheKey)) {
-    return cloneData(dataCache.get(cacheKey));
-  }
-
-  if (cacheKey && inflight.has(cacheKey)) {
-    return inflight.get(cacheKey).then(cloneData);
-  }
+const fetchJson = async (url, key = "") => {
+  if (key && cache.has(key)) return clone(cache.get(key));
+  if (key && inflight.has(key)) return inflight.get(key).then(clone);
 
   const req = fetch(url)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Failed to load: ${url}`);
-      return res.json();
+    .then((r) => {
+      if (!r.ok) throw new Error(`Failed to load ${url}`);
+      return r.json();
     })
-    .then((data) => {
-      if (cacheKey) dataCache.set(cacheKey, data);
-      inflight.delete(cacheKey);
-      return data;
+    .then((d) => {
+      if (key) cache.set(key, d);
+      inflight.delete(key);
+      return d;
     })
-    .catch((err) => {
-      inflight.delete(cacheKey);
-      throw err;
+    .catch((e) => {
+      inflight.delete(key);
+      throw e;
     });
 
-  if (cacheKey) inflight.set(cacheKey, req);
-  return req.then(cloneData);
+  if (key) inflight.set(key, req);
+  return req.then(clone);
 };
 
-const fetchDataset = async (key) => {
-  const url = DATA_URLS[key];
-  if (!url) throw new Error(`Unknown dataset: ${key}`);
-  return fetchJson(url, `dataset:${key}`);
-};
+const fetchDataset = (k) => fetchJson(DATA_URLS[k], `dataset:${k}`);
 
 /* ----------------------------------
  * META
  * ---------------------------------- */
 
-const getLatestMeta = async () =>
+const getLatestMeta = () =>
   fetchJson(DATA_URLS.latestMeta, "meta:latest");
 
 export const getLatestDate = async () => {
   const meta = await getLatestMeta();
-  if (!meta?.accountAssetDaily) {
-    throw new Error("latestMeta missing accountAssetDaily");
-  }
   return meta.accountAssetDaily.replace(".json", "");
 };
 
 /* ----------------------------------
- * CORE DATASETS
+ * CORE DATA
  * ---------------------------------- */
 
-export const getAccounts = async () => fetchDataset("accounts");
-export const getAssets = async () => fetchDataset("assets");
-export const getAutotraders = async () => fetchDataset("autotraders");
-export const getTradingPlans = async () => fetchDataset("tradingPlans");
+export const getAccounts = () => fetchDataset("accounts");
+export const getAssets = () => fetchDataset("assets");
+export const getAutotraders = () => fetchDataset("autotraders");
+export const getTradingPlans = () => fetchDataset("tradingPlans");
 
 /* ----------------------------------
- * DAILY SNAPSHOTS (LATEST)
+ * AUTOTRADERS BY ACCOUNT
+ * ---------------------------------- */
+
+export const getAutotradersByAccount = async (accountId) => {
+  const autotraders = await getAutotraders();
+  return autotraders.filter((a) => a.account_id === accountId);
+};
+
+/* ----------------------------------
+ * LATEST DAILY SNAPSHOT
  * ---------------------------------- */
 
 export const getLatestAccountAssetsDaily = async () => {
   const meta = await getLatestMeta();
-  const file = meta.accountAssetDaily;
-  if (!file) throw new Error("latest meta missing: accountAssetDaily");
-
   return fetchJson(
-    new URL(file, DATA_URLS.accountAssetsDailyDir),
-    `daily:account_assets:${file}`
+    new URL(meta.accountAssetDaily, DATA_URLS.accountAssetsDailyDir),
+    `daily:account:${meta.accountAssetDaily}`
   );
 };
 
 export const getLatestAssetPriceDaily = async () => {
   const meta = await getLatestMeta();
-  const file = meta.assetPriceDaily;
-  if (!file) throw new Error("latest meta missing: assetPriceDaily");
-
   return fetchJson(
-    new URL(file, DATA_URLS.assetPriceDailyDir),
-    `daily:asset_price:${file}`
+    new URL(meta.assetPriceDaily, DATA_URLS.assetPriceDailyDir),
+    `daily:price:${meta.assetPriceDaily}`
   );
 };
 
 /* ----------------------------------
- * ACCOUNT VALUE (USD)
+ * ACCOUNT VALUE
  * ---------------------------------- */
 
 export const getAccountAssets = async (accountId) => {
-  const [assets, accountDaily, priceDaily] = await Promise.all([
+  const [assets, daily, prices] = await Promise.all([
     getAssets(),
     getLatestAccountAssetsDaily(),
     getLatestAssetPriceDaily(),
   ]);
 
-  const assetsById = new Map(assets.map((a) => [a.asset_id, a]));
-  const priceByAssetId = new Map(
-    (priceDaily.prices || []).map((p) => [
-      p.asset_id,
-      Number(p.price_usd || 0),
-    ])
+  const priceMap = new Map(
+    prices.prices.map((p) => [p.asset_id, Number(p.price_usd || 0)])
   );
 
-  const accountRow = (accountDaily.accounts || []).find(
-    (a) => a.account_id === accountId
-  );
+  const assetMap = new Map(assets.map((a) => [a.asset_id, a]));
 
-  const rows = (accountRow?.assets || []).map((entry) => {
-    const asset = assetsById.get(entry.asset_id);
-    const price = priceByAssetId.get(entry.asset_id) || 0;
-    const value = Number(entry.value || 0);
+  const row = daily.accounts.find((a) => a.account_id === accountId);
+  if (!row) return [];
 
-    return {
-      account_id: accountId,
-      asset_id: entry.asset_id,
-      value,
-      price_usd: price,
-      usd_value: value * price,
-
-      // compatibility fields
-      asset,
-      assetSymbol: asset?.asset_symbol,
-      assetName: asset?.asset_name,
-    };
-  });
-
-  return rows.sort((a, b) => b.usd_value - a.usd_value);
+  return row.assets
+    .map((a) => {
+      const price = priceMap.get(a.asset_id) || 0;
+      return {
+        account_id: accountId,
+        asset_id: a.asset_id,
+        value: Number(a.value || 0),
+        price_usd: price,
+        usd_value: Number(a.value || 0) * price,
+        asset: assetMap.get(a.asset_id),
+      };
+    })
+    .sort((a, b) => b.usd_value - a.usd_value);
 };
 
 export const getAccountValue = async (accountId) => {
-  const assets = await getAccountAssets(accountId);
-  return assets.reduce((sum, a) => sum + a.usd_value, 0);
+  const rows = await getAccountAssets(accountId);
+  return rows.reduce((s, r) => s + r.usd_value, 0);
 };
 
 export const getAccountsWithSummary = async () => {
@@ -186,20 +159,19 @@ export const getAccountsWithSummary = async () => {
 };
 
 /* ----------------------------------
- * ACCOUNT START DATE (FOR ALL RANGE)
+ * ALL RANGE START DATE
  * ---------------------------------- */
 
 export const getAllStartDate = async () => {
   const accounts = await getAccounts();
   if (!accounts.length) return null;
-
   return accounts
     .map((a) => new Date(a.connected_at))
     .sort((a, b) => a - b)[0];
 };
 
 /* ----------------------------------
- * ASSET EQUITY SERIES (FINAL, RANGE-BASED)
+ * ASSET EQUITY BY RANGE
  * ---------------------------------- */
 
 const RANGE_DAYS = {
@@ -209,62 +181,56 @@ const RANGE_DAYS = {
 };
 
 export const getAssetEquityByRange = async (range = "7D") => {
-  const latestDateStr = await getLatestDate();
-  const latestDate = new Date(latestDateStr);
+  const latestStr = await getLatestDate();
+  const latest = new Date(latestStr);
 
-  let startDate;
-
+  let start;
   if (range === "ALL") {
     const allStart = await getAllStartDate();
     if (!allStart) return { labels: [], series: [] };
-    startDate = new Date(allStart);
+    start = new Date(allStart);
   } else {
     const days = RANGE_DAYS[range] || 7;
-    startDate = new Date(latestDate);
-    startDate.setDate(latestDate.getDate() - (days - 1));
+    start = new Date(latest);
+    start.setDate(latest.getDate() - (days - 1));
   }
 
   const labels = [];
   const series = [];
 
-  for (
-    let d = new Date(startDate);
-    d <= latestDate;
-    d.setDate(d.getDate() + 1)
-  ) {
-    const dateStr = d.toISOString().slice(0, 10);
+  for (let d = new Date(start); d <= latest; d.setDate(d.getDate() + 1)) {
+    const ds = d.toISOString().slice(0, 10);
 
     try {
-      const [accountDaily, priceDaily] = await Promise.all([
-      fetchJson(
-        new URL(`${dateStr}.json`, DATA_URLS.accountAssetsDailyDir),
-        `daily:account_assets:${dateStr}`
-      ),
-      fetchJson(
-        new URL(`${dateStr}.json`, DATA_URLS.assetPriceDailyDir),
-        `daily:asset_price:${dateStr}`
-      ),
+      const [acc, price] = await Promise.all([
+        fetchJson(
+          new URL(`${ds}.json`, DATA_URLS.accountAssetsDailyDir),
+          `daily:acc:${ds}`
+        ),
+        fetchJson(
+          new URL(`${ds}.json`, DATA_URLS.assetPriceDailyDir),
+          `daily:price:${ds}`
+        ),
       ]);
 
-      let totalUsd = 0;
       const priceMap = new Map(
-        priceDaily.prices.map((p) => [
-          p.asset_id,
-          Number(p.price_usd || 0),
-        ])
+        price.prices.map((p) => [p.asset_id, Number(p.price_usd || 0)])
       );
 
-      for (const acc of accountDaily.accounts) {
-        for (const asset of acc.assets) {
-          const price = priceMap.get(asset.asset_id) || 0;
-          totalUsd += Number(asset.value || 0) * price;
+      let total = 0;
+      for (const a of acc.accounts) {
+        for (const as of a.assets) {
+          total +=
+            Number(as.value || 0) *
+            (priceMap.get(as.asset_id) || 0);
         }
       }
 
-      labels.push(dateStr);
-      series.push(totalUsd);
+      labels.push(ds);
+      series.push(total);
     } catch {
-      // missing day → SAFE SKIP
+      labels.push(ds);
+      series.push(0);
     }
   }
 
@@ -272,9 +238,9 @@ export const getAssetEquityByRange = async (range = "7D") => {
 };
 
 /* ----------------------------------
- * DEPRECATED / NOT SUPPORTED
+ * NOT SUPPORTED
  * ---------------------------------- */
 
 export const getTradeHistory = async () => {
-  throw new Error("Trade History is deprecated");
+  throw new Error("Trade history not supported");
 };
