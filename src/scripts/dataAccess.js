@@ -1,25 +1,36 @@
 // src/scripts/dataAccess.js
-// Data-first access layer:
-// - Accounts + Assets -> from /data
-// - Account assets summary -> computed from account_assets_daily + asset_price_daily (latest)
-// - Trade history is intentionally deprecated (throws error)
+// Data-first access layer (AUTHORITATIVE SOURCE)
+//
+// Principles:
+// - UI never guesses date
+// - Chart never generates labels
+// - Range logic lives here (7D / 30D / 90D / ALL)
+// - Missing daily files are SAFE to skip
+// - latestMeta is the single source of truth
+
+/* ----------------------------------
+ * DATA URLS
+ * ---------------------------------- */
 
 const DATA_URLS = {
-  // data (real)
+  // core datasets
   accounts: new URL("../../data/accounts.json", import.meta.url),
   assets: new URL("../../data/assets.json", import.meta.url),
   autotraders: new URL("../../data/autotraders.json", import.meta.url),
   tradingPlans: new URL("../../data/trading_plans.json", import.meta.url),
 
-  // meta (real) -> NOTE: in your zip it's "data/meta/latest" (no .json)
+  // meta (no .json extension by design)
   latestMeta: new URL("../../data/meta/latest", import.meta.url),
 
-  // daily (real)
+  // daily snapshots
   accountAssetsDailyDir: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceDailyDir: new URL("../../data/asset_price_daily/", import.meta.url),
 };
 
-  
+/* ----------------------------------
+ * CACHE LAYER
+ * ---------------------------------- */
+
 const dataCache = new Map();
 const inflight = new Map();
 
@@ -29,8 +40,13 @@ const cloneData = (data) => {
 };
 
 const fetchJson = async (url, cacheKey = "") => {
-  if (cacheKey && dataCache.has(cacheKey)) return cloneData(dataCache.get(cacheKey));
-  if (cacheKey && inflight.has(cacheKey)) return inflight.get(cacheKey).then(cloneData);
+  if (cacheKey && dataCache.has(cacheKey)) {
+    return cloneData(dataCache.get(cacheKey));
+  }
+
+  if (cacheKey && inflight.has(cacheKey)) {
+    return inflight.get(cacheKey).then(cloneData);
+  }
 
   const req = fetch(url)
     .then((res) => {
@@ -39,11 +55,11 @@ const fetchJson = async (url, cacheKey = "") => {
     })
     .then((data) => {
       if (cacheKey) dataCache.set(cacheKey, data);
-      if (cacheKey) inflight.delete(cacheKey);
+      inflight.delete(cacheKey);
       return data;
     })
     .catch((err) => {
-      if (cacheKey) inflight.delete(cacheKey);
+      inflight.delete(cacheKey);
       throw err;
     });
 
@@ -57,25 +73,12 @@ const fetchDataset = async (key) => {
   return fetchJson(url, `dataset:${key}`);
 };
 
-const getLatestMeta = async () => fetchJson(DATA_URLS.latestMeta, "meta:latest");
+/* ----------------------------------
+ * META
+ * ---------------------------------- */
 
-export const getLatestAccountAssetsDaily = async () => {
-  const meta = await getLatestMeta();
-  const file = meta.accountAssetDaily;
-  if (!file) throw new Error("latest meta missing: accountAssetDaily");
-
-  const url = new URL(file, DATA_URLS.accountAssetsDailyDir);
-  return fetchJson(url, `daily:account_assets:${file}`);
-};
-
-export const getLatestAssetPriceDaily = async () => {
-  const meta = await getLatestMeta();
-  const file = meta.assetPriceDaily;
-  if (!file) throw new Error("latest meta missing: assetPriceDaily");
-
-  const url = new URL(file, DATA_URLS.assetPriceDailyDir);
-  return fetchJson(url, `daily:asset_price:${file}`);
-};
+const getLatestMeta = async () =>
+  fetchJson(DATA_URLS.latestMeta, "meta:latest");
 
 export const getLatestDate = async () => {
   const meta = await getLatestMeta();
@@ -85,28 +88,61 @@ export const getLatestDate = async () => {
   return meta.accountAssetDaily.replace(".json", "");
 };
 
-
-// ---------------------------
-// Public APIs (used by UI)
-// ---------------------------
+/* ----------------------------------
+ * CORE DATASETS
+ * ---------------------------------- */
 
 export const getAccounts = async () => fetchDataset("accounts");
 export const getAssets = async () => fetchDataset("assets");
+export const getAutotraders = async () => fetchDataset("autotraders");
+export const getTradingPlans = async () => fetchDataset("tradingPlans");
 
-// IMPORTANT: this now returns computed usd_value based on daily snapshot + daily price
+/* ----------------------------------
+ * DAILY SNAPSHOTS (LATEST)
+ * ---------------------------------- */
+
+export const getLatestAccountAssetsDaily = async () => {
+  const meta = await getLatestMeta();
+  const file = meta.accountAssetDaily;
+  if (!file) throw new Error("latest meta missing: accountAssetDaily");
+
+  return fetchJson(
+    new URL(file, DATA_URLS.accountAssetsDailyDir),
+    `daily:account_assets:${file}`
+  );
+};
+
+export const getLatestAssetPriceDaily = async () => {
+  const meta = await getLatestMeta();
+  const file = meta.assetPriceDaily;
+  if (!file) throw new Error("latest meta missing: assetPriceDaily");
+
+  return fetchJson(
+    new URL(file, DATA_URLS.assetPriceDailyDir),
+    `daily:asset_price:${file}`
+  );
+};
+
+/* ----------------------------------
+ * ACCOUNT VALUE (USD)
+ * ---------------------------------- */
+
 export const getAccountAssets = async (accountId) => {
-  const [assets, latestAccountAssetsDaily, latestAssetPriceDaily] = await Promise.all([
-    fetchDataset("assets"),
+  const [assets, accountDaily, priceDaily] = await Promise.all([
+    getAssets(),
     getLatestAccountAssetsDaily(),
     getLatestAssetPriceDaily(),
   ]);
 
   const assetsById = new Map(assets.map((a) => [a.asset_id, a]));
   const priceByAssetId = new Map(
-    (latestAssetPriceDaily?.prices || []).map((p) => [p.asset_id, Number(p.price_usd || 0)])
+    (priceDaily.prices || []).map((p) => [
+      p.asset_id,
+      Number(p.price_usd || 0),
+    ])
   );
 
-  const accountRow = (latestAccountAssetsDaily?.accounts || []).find(
+  const accountRow = (accountDaily.accounts || []).find(
     (a) => a.account_id === accountId
   );
 
@@ -114,102 +150,108 @@ export const getAccountAssets = async (accountId) => {
     const asset = assetsById.get(entry.asset_id);
     const price = priceByAssetId.get(entry.asset_id) || 0;
     const value = Number(entry.value || 0);
-    const usd_value = value * price;
 
     return {
       account_id: accountId,
       asset_id: entry.asset_id,
       value,
       price_usd: price,
-      usd_value,
+      usd_value: value * price,
 
-      // keep compatibility with existing UI code
+      // compatibility fields
       asset,
       assetSymbol: asset?.asset_symbol,
       assetName: asset?.asset_name,
     };
   });
 
-  return rows.sort((a, b) => Number(b.usd_value || 0) - Number(a.usd_value || 0));
+  return rows.sort((a, b) => b.usd_value - a.usd_value);
 };
+
+export const getAccountValue = async (accountId) => {
+  const assets = await getAccountAssets(accountId);
+  return assets.reduce((sum, a) => sum + a.usd_value, 0);
+};
+
+export const getAccountsWithSummary = async () => {
+  const accounts = await getAccounts();
+  const values = await Promise.all(
+    accounts.map((a) => getAccountValue(a.account_id))
+  );
+
+  return accounts.map((a, i) => ({
+    ...a,
+    totalValueUsd: values[i] || 0,
+  }));
+};
+
+/* ----------------------------------
+ * ACCOUNT START DATE (FOR ALL RANGE)
+ * ---------------------------------- */
 
 export const getAllStartDate = async () => {
   const accounts = await getAccounts();
   if (!accounts.length) return null;
 
   return accounts
-    .map(a => new Date(a.connected_at))
+    .map((a) => new Date(a.connected_at))
     .sort((a, b) => a - b)[0];
 };
 
+/* ----------------------------------
+ * ASSET EQUITY SERIES (FINAL, RANGE-BASED)
+ * ---------------------------------- */
 
-export const getAccountValue = async (accountId) => {
-  const assets = await getAccountAssets(accountId);
-  return assets.reduce((sum, entry) => sum + Number(entry.usd_value || 0), 0);
+const RANGE_DAYS = {
+  "7D": 7,
+  "30D": 30,
+  "90D": 90,
 };
 
-export const getAccountsWithSummary = async () => {
-  const accounts = await getAccounts();
-  const values = await Promise.all(accounts.map((a) => getAccountValue(a.account_id)));
+export const getAssetEquityByRange = async (range = "7D") => {
+  const latestDateStr = await getLatestDate();
+  const latestDate = new Date(latestDateStr);
 
-  return accounts.map((account, idx) => ({
-    ...account,
-    totalValueUsd: values[idx] || 0,
-  }));
-};
+  let startDate;
 
-// keep existing exports used elsewhere (data-backed)
-export const getAutotradersByAccount = async (accountId) => {
-  const [autotraders, tradingPlans] = await Promise.all([
-    fetchDataset("autotraders"),
-    fetchDataset("tradingPlans"),
-  ]);
+  if (range === "ALL") {
+    const allStart = await getAllStartDate();
+    if (!allStart) return { labels: [], series: [] };
+    startDate = new Date(allStart);
+  } else {
+    const days = RANGE_DAYS[range] || 7;
+    startDate = new Date(latestDate);
+    startDate.setDate(latestDate.getDate() - (days - 1));
+  }
 
-  const plansById = new Map(tradingPlans.map((p) => [p.plan_id, p]));
-
-  return autotraders
-    .filter((a) => a.account_id === accountId)
-    .map((a) => {
-      const plan = plansById.get(a.plan_id);
-      return {
-        ...a,
-        tradingPlan: plan,
-        tradingPlanName: plan?.plan_name || plan?.name,
-        marketType: plan?.market_type,
-      };
-    });
-};
-
-// mock (temporary fallback for Trade History page)
-export const getTradeHistory = async () => {
-    throw new Error("Trade History still deprecated");
-  };
-
-// ---- Asset Equity (Daily) ----
-export const getAssetEquitySeries = async (days = 7) => {
-  const latestDate = await getLatestDate();
-  const end = new Date(latestDate);
-  const start = new Date(end);
-  start.setDate(end.getDate() - (days - 1));
-
+  const labels = [];
   const series = [];
 
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+  for (
+    let d = new Date(startDate);
+    d <= latestDate;
+    d.setDate(d.getDate() + 1)
+  ) {
     const dateStr = d.toISOString().slice(0, 10);
 
     try {
       const [accountDaily, priceDaily] = await Promise.all([
-        fetchJson(
-          new URL(`${dateStr}.json`, DATA_URLS.accountAssetsDailyDir)
-        ),
-        fetchJson(
-          new URL(`${dateStr}.json`, DATA_URLS.assetPriceDailyDir)
-        ),
+      fetchJson(
+        new URL(`${dateStr}.json`, DATA_URLS.accountAssetsDailyDir),
+        `daily:account_assets:${dateStr}`
+      ),
+      fetchJson(
+        new URL(`${dateStr}.json`, DATA_URLS.assetPriceDailyDir),
+        `daily:asset_price:${dateStr}`
+      ),
       ]);
 
       let totalUsd = 0;
       const priceMap = new Map(
-        priceDaily.prices.map(p => [p.asset_id, Number(p.price_usd || 0)])
+        priceDaily.prices.map((p) => [
+          p.asset_id,
+          Number(p.price_usd || 0),
+        ])
       );
 
       for (const acc of accountDaily.accounts) {
@@ -219,14 +261,20 @@ export const getAssetEquitySeries = async (days = 7) => {
         }
       }
 
-      series.push({
-        date: dateStr,
-        value: totalUsd,
-      });
-    } catch (e) {
-      // missing day → skip (safe)
+      labels.push(dateStr);
+      series.push(totalUsd);
+    } catch {
+      // missing day → SAFE SKIP
     }
   }
 
-  return series;
+  return { labels, series };
+};
+
+/* ----------------------------------
+ * DEPRECATED / NOT SUPPORTED
+ * ---------------------------------- */
+
+export const getTradeHistory = async () => {
+  throw new Error("Trade History is deprecated");
 };
