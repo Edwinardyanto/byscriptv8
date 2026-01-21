@@ -2,21 +2,18 @@
 // Data-first access layer (AUTHORITATIVE SOURCE)
 
 const DATA_URLS = {
+  // core datasets
   accounts: new URL("../../data/accounts.json", import.meta.url),
   assets: new URL("../../data/assets.json", import.meta.url),
   autotraders: new URL("../../data/autotraders.json", import.meta.url),
   tradingPlans: new URL("../../data/trading_plans.json", import.meta.url),
 
+  // meta (no .json extension by design)
   latestMeta: new URL("../../data/meta/latest", import.meta.url),
 
-  accountAssetsDailyDir: new URL(
-    "../../data/account_assets_daily/",
-    import.meta.url
-  ),
-  assetPriceDailyDir: new URL(
-    "../../data/asset_price_daily/",
-    import.meta.url
-  ),
+  // daily snapshots (directories)
+  accountAssetsDailyDir: new URL("../../data/account_assets_daily/", import.meta.url),
+  assetPriceDailyDir: new URL("../../data/asset_price_daily/", import.meta.url),
 };
 
 /* ----------------------------------
@@ -31,13 +28,18 @@ const clone = (d) =>
     ? structuredClone(d)
     : JSON.parse(JSON.stringify(d));
 
-const fetchJson = async (url, key = "") => {
+const fetchJson = async (url, key = "", opts = {}) => {
+  const { allowMissing = false } = opts;
+
   if (key && cache.has(key)) return clone(cache.get(key));
   if (key && inflight.has(key)) return inflight.get(key).then(clone);
 
   const req = fetch(url)
-    .then((r) => {
-      if (!r.ok) throw new Error(`Failed to load ${url}`);
+    .then(async (r) => {
+      if (!r.ok) {
+        if (allowMissing) return null;
+        throw new Error(`Failed to load ${url}`);
+      }
       return r.json();
     })
     .then((d) => {
@@ -47,6 +49,7 @@ const fetchJson = async (url, key = "") => {
     })
     .catch((e) => {
       inflight.delete(key);
+      if (allowMissing) return null;
       throw e;
     });
 
@@ -54,17 +57,21 @@ const fetchJson = async (url, key = "") => {
   return req.then(clone);
 };
 
-const fetchDataset = (k) => fetchJson(DATA_URLS[k], `dataset:${k}`);
+const fetchDataset = (k) => {
+  const url = DATA_URLS[k];
+  if (!url) throw new Error(`Unknown dataset: ${k}`);
+  return fetchJson(url, `dataset:${k}`);
+};
 
 /* ----------------------------------
  * META
  * ---------------------------------- */
 
-const getLatestMeta = () =>
-  fetchJson(DATA_URLS.latestMeta, "meta:latest");
+const getLatestMeta = () => fetchJson(DATA_URLS.latestMeta, "meta:latest");
 
 export const getLatestDate = async () => {
   const meta = await getLatestMeta();
+  if (!meta?.accountAssetDaily) throw new Error("latestMeta missing accountAssetDaily");
   return meta.accountAssetDaily.replace(".json", "");
 };
 
@@ -78,12 +85,28 @@ export const getAutotraders = () => fetchDataset("autotraders");
 export const getTradingPlans = () => fetchDataset("tradingPlans");
 
 /* ----------------------------------
- * AUTOTRADERS BY ACCOUNT
+ * AUTOTRADERS BY ACCOUNT (ENRICHED)
  * ---------------------------------- */
 
 export const getAutotradersByAccount = async (accountId) => {
-  const autotraders = await getAutotraders();
-  return autotraders.filter((a) => a.account_id === accountId);
+  const [autotraders, tradingPlans] = await Promise.all([
+    getAutotraders(),
+    getTradingPlans(),
+  ]);
+
+  const plansById = new Map((tradingPlans || []).map((p) => [p.plan_id, p]));
+
+  return (autotraders || [])
+    .filter((a) => a.account_id === accountId)
+    .map((a) => {
+      const plan = plansById.get(a.plan_id);
+      return {
+        ...a,
+        tradingPlan: plan,
+        tradingPlanName: plan?.plan_name || plan?.name || "",
+        marketType: plan?.market_type || "",
+      };
+    });
 };
 
 /* ----------------------------------
@@ -92,6 +115,7 @@ export const getAutotradersByAccount = async (accountId) => {
 
 export const getLatestAccountAssetsDaily = async () => {
   const meta = await getLatestMeta();
+  if (!meta?.accountAssetDaily) throw new Error("latest meta missing: accountAssetDaily");
   return fetchJson(
     new URL(meta.accountAssetDaily, DATA_URLS.accountAssetsDailyDir),
     `daily:account:${meta.accountAssetDaily}`
@@ -100,6 +124,7 @@ export const getLatestAccountAssetsDaily = async () => {
 
 export const getLatestAssetPriceDaily = async () => {
   const meta = await getLatestMeta();
+  if (!meta?.assetPriceDaily) throw new Error("latest meta missing: assetPriceDaily");
   return fetchJson(
     new URL(meta.assetPriceDaily, DATA_URLS.assetPriceDailyDir),
     `daily:price:${meta.assetPriceDaily}`
@@ -107,7 +132,7 @@ export const getLatestAssetPriceDaily = async () => {
 };
 
 /* ----------------------------------
- * ACCOUNT VALUE
+ * ACCOUNT VALUE (USD)
  * ---------------------------------- */
 
 export const getAccountAssets = async (accountId) => {
@@ -118,60 +143,103 @@ export const getAccountAssets = async (accountId) => {
   ]);
 
   const priceMap = new Map(
-    prices.prices.map((p) => [p.asset_id, Number(p.price_usd || 0)])
+    ((prices?.prices || [])).map((p) => [p.asset_id, Number(p.price_usd || 0)])
   );
 
-  const assetMap = new Map(assets.map((a) => [a.asset_id, a]));
+  const assetMap = new Map((assets || []).map((a) => [a.asset_id, a]));
 
-  const row = daily.accounts.find((a) => a.account_id === accountId);
+  const row = (daily?.accounts || []).find((a) => a.account_id === accountId);
   if (!row) return [];
 
-  return row.assets
+  return (row.assets || [])
     .map((a) => {
+      const asset = assetMap.get(a.asset_id);
       const price = priceMap.get(a.asset_id) || 0;
+      const value = Number(a.value || 0);
+      const usd = value * price;
+
       return {
         account_id: accountId,
         asset_id: a.asset_id,
-        value: Number(a.value || 0),
+        value,
         price_usd: price,
-        usd_value: Number(a.value || 0) * price,
-        asset: assetMap.get(a.asset_id),
+        usd_value: usd,
+
+        asset,
+        assetSymbol: asset?.asset_symbol,
+        assetName: asset?.asset_name,
       };
     })
-    .sort((a, b) => b.usd_value - a.usd_value);
+    .sort((x, y) => Number(y.usd_value || 0) - Number(x.usd_value || 0));
 };
 
 export const getAccountValue = async (accountId) => {
   const rows = await getAccountAssets(accountId);
-  return rows.reduce((s, r) => s + r.usd_value, 0);
+  return rows.reduce((s, r) => s + Number(r.usd_value || 0), 0);
 };
 
 export const getAccountsWithSummary = async () => {
   const accounts = await getAccounts();
-  const values = await Promise.all(
-    accounts.map((a) => getAccountValue(a.account_id))
-  );
+  const values = await Promise.all((accounts || []).map((a) => getAccountValue(a.account_id)));
 
-  return accounts.map((a, i) => ({
+  return (accounts || []).map((a, i) => ({
     ...a,
     totalValueUsd: values[i] || 0,
   }));
 };
 
 /* ----------------------------------
- * ALL RANGE START DATE
+ * ALL RANGE START DATE (CLAMP TO AVAILABLE DAILY WINDOW)
  * ---------------------------------- */
 
+// your dataset is a fixed daily window (not "since connected_at")
+const AVAILABLE_DAILY_DAYS = 380;
+
 export const getAllStartDate = async () => {
-  const accounts = await getAccounts();
-  if (!accounts.length) return null;
-  return accounts
-    .map((a) => new Date(a.connected_at))
-    .sort((a, b) => a - b)[0];
+  const latestStr = await getLatestDate();
+  const latest = new Date(latestStr);
+  const start = new Date(latest);
+  start.setDate(latest.getDate() - (AVAILABLE_DAILY_DAYS - 1));
+  return start;
 };
 
 /* ----------------------------------
- * ASSET EQUITY BY RANGE
+ * EQUITY HELPERS
+ * ---------------------------------- */
+
+const computeEquityForDate = async (dateStr) => {
+  const [acc, price] = await Promise.all([
+    fetchJson(
+      new URL(`${dateStr}.json`, DATA_URLS.accountAssetsDailyDir),
+      `daily:acc:${dateStr}`,
+      { allowMissing: true }
+    ),
+    fetchJson(
+      new URL(`${dateStr}.json`, DATA_URLS.assetPriceDailyDir),
+      `daily:price:${dateStr}`,
+      { allowMissing: true }
+    ),
+  ]);
+
+  if (!acc || !price) return 0;
+
+  const priceMap = new Map(
+    (price.prices || []).map((p) => [p.asset_id, Number(p.price_usd || 0)])
+  );
+
+  let total = 0;
+
+  for (const a of (acc.accounts || [])) {
+    for (const as of (a.assets || [])) {
+      total += Number(as.value || 0) * (priceMap.get(as.asset_id) || 0);
+    }
+  }
+
+  return total;
+};
+
+/* ----------------------------------
+ * ASSET EQUITY (RANGE)
  * ---------------------------------- */
 
 const RANGE_DAYS = {
@@ -185,10 +253,9 @@ export const getAssetEquityByRange = async (range = "7D") => {
   const latest = new Date(latestStr);
 
   let start;
+
   if (range === "ALL") {
-    const allStart = await getAllStartDate();
-    if (!allStart) return { labels: [], series: [] };
-    start = new Date(allStart);
+    start = await getAllStartDate();
   } else {
     const days = RANGE_DAYS[range] || 7;
     start = new Date(latest);
@@ -200,41 +267,36 @@ export const getAssetEquityByRange = async (range = "7D") => {
 
   for (let d = new Date(start); d <= latest; d.setDate(d.getDate() + 1)) {
     const ds = d.toISOString().slice(0, 10);
-
-    try {
-      const [acc, price] = await Promise.all([
-        fetchJson(
-          new URL(`${ds}.json`, DATA_URLS.accountAssetsDailyDir),
-          `daily:acc:${ds}`
-        ),
-        fetchJson(
-          new URL(`${ds}.json`, DATA_URLS.assetPriceDailyDir),
-          `daily:price:${ds}`
-        ),
-      ]);
-
-      const priceMap = new Map(
-        price.prices.map((p) => [p.asset_id, Number(p.price_usd || 0)])
-      );
-
-      let total = 0;
-      for (const a of acc.accounts) {
-        for (const as of a.assets) {
-          total +=
-            Number(as.value || 0) *
-            (priceMap.get(as.asset_id) || 0);
-        }
-      }
-
-      labels.push(ds);
-      series.push(total);
-    } catch {
-      labels.push(ds);
-      series.push(0);
-    }
+    labels.push(ds);
+    series.push(await computeEquityForDate(ds));
   }
 
   return { labels, series };
+};
+
+/* ----------------------------------
+ * BACKWARD COMPAT (OLD DASHBOARD API)
+ * returns [{ date, value }]
+ * ---------------------------------- */
+
+export const getAssetEquitySeries = async (days = 7) => {
+  const latestStr = await getLatestDate();
+  const latest = new Date(latestStr);
+
+  const start = new Date(latest);
+  start.setDate(latest.getDate() - (Number(days || 7) - 1));
+
+  const out = [];
+
+  for (let d = new Date(start); d <= latest; d.setDate(d.getDate() + 1)) {
+    const ds = d.toISOString().slice(0, 10);
+    out.push({
+      date: ds,
+      value: await computeEquityForDate(ds),
+    });
+  }
+
+  return out;
 };
 
 /* ----------------------------------
