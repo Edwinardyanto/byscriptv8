@@ -1,7 +1,5 @@
 import {
-  getAssetEquitySeries,
-  getAllStartDate,
-  getLatestDate,
+  getAssetEquityByRange,
   getAccountsWithSummary,
   getAccounts,
   getAutotradersByAccount,
@@ -24,77 +22,41 @@ const formatCurrency = (value, digits = 0) =>
  * ---------------------------------- */
 
 const buildAssetSummary = async () => {
-  // ----- PREDEFINED RANGES -----
-  const seriesMap = {
-    "7D": await getAssetEquitySeries(7),
-    "30D": await getAssetEquitySeries(30),
-    "90D": await getAssetEquitySeries(90),
-  };
+  const ranges = ["7D", "30D", "90D", "ALL"];
 
-  // ----- ALL RANGE (FROM OLDEST ACCOUNT) -----
-  const allStartDate = await getAllStartDate();
-  const latestDate = await getLatestDate();
+  const rangeMap = Object.fromEntries(
+    await Promise.all(
+      ranges.map(async (r) => [r, await getAssetEquityByRange(r)])
+    )
+  );
 
-  if (allStartDate && latestDate) {
-    const daysAll =
-      Math.ceil(
-        (new Date(latestDate) - new Date(allStartDate)) /
-          (1000 * 60 * 60 * 24)
-      ) + 1;
+  const activeRange = "7D";
+  const active = rangeMap[activeRange];
 
-    seriesMap["ALL"] =
-      daysAll > 0 ? await getAssetEquitySeries(daysAll) : [];
-  } else {
-    seriesMap["ALL"] = [];
-  }
-
-  // ----- % CHANGE CALCULATOR -----
   const buildChange = (series) => {
-    if (!series || series.length < 2) return "—";
-
-    const first = Number(series[0].value || 0);
-    const last = Number(series[series.length - 1].value || 0);
-
+    if (!Array.isArray(series) || series.length < 2) return "—";
+    const first = series[0];
+    const last = series[series.length - 1];
     if (first <= 0) return "—";
-
     const pct = ((last - first) / first) * 100;
     return `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
   };
 
-  // ----- DEFAULT ACTIVE RANGE -----
-  const activeRange = "7D";
-  const activeSeries = seriesMap[activeRange] || [];
-
   return {
     totalBalance: formatCurrency(
-      activeSeries.length
-        ? activeSeries[activeSeries.length - 1].value
+      active.series.length
+        ? active.series[active.series.length - 1]
         : 0
     ),
 
-    // ⬅️ WAJIB: nilai change AKTIF (dipakai UI)
-    change: buildChange(activeSeries),
-
-    // ⬅️ dipakai saat user ganti range
-    changeByRange: {
-      "7D": buildChange(seriesMap["7D"]),
-      "30D": buildChange(seriesMap["30D"]),
-      "90D": buildChange(seriesMap["90D"]),
-      "ALL": buildChange(seriesMap["ALL"]),
-    },
-
-    // ⬅️ UI yang tentukan wording
-    changeLabel: "vs previous period",
+    change: buildChange(active.series),
 
     chart: {
       activeRange,
-      labels: activeSeries.map((p) => p.date),
-      ranges: {
-        "7D": seriesMap["7D"].map((p) => p.value),
-        "30D": seriesMap["30D"].map((p) => p.value),
-        "90D": seriesMap["90D"].map((p) => p.value),
-        "ALL": seriesMap["ALL"].map((p) => p.value),
-      },
+      labels: active.labels,
+      ranges: Object.fromEntries(
+        ranges.map((r) => [r, rangeMap[r].series])
+      ),
     },
   };
 };
@@ -130,13 +92,13 @@ const buildAccountsSummary = async () => {
 const buildTopAutotraders = async () => {
   const accounts = await getAccounts();
 
-  const autotradersByAccount = await Promise.all(
-    accounts.map((account) =>
-      getAutotradersByAccount(account.account_id)
+  const autotraders = (
+    await Promise.all(
+      accounts.map((account) =>
+        getAutotradersByAccount(account.account_id)
+      )
     )
-  );
-
-  const autotraders = autotradersByAccount.flat();
+  ).flat();
 
   return autotraders
     .map((autotrader) => {
@@ -159,9 +121,7 @@ const buildTopAutotraders = async () => {
  * Trade History (DISABLED)
  * ---------------------------------- */
 
-const buildTradeHistory = async () => {
-  return [];
-};
+const buildTradeHistory = async () => [];
 
 /* ----------------------------------
  * Alerts (STATIC)
@@ -189,7 +149,7 @@ const alerts = [
 ];
 
 /* ----------------------------------
- * Dashboard Data (STATE ENTRY POINT)
+ * Dashboard Data (ENTRY POINT)
  * ---------------------------------- */
 
 export const fetchDashboardData = async () => {
