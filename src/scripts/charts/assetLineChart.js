@@ -13,7 +13,7 @@ const getLabelIndices = (length) => {
 };
 
 /* ----------------------------------
- * Chart Renderer (STEP 7 CONTRACT)
+ * Chart Renderer (FIXED CONTRACT)
  * ---------------------------------- */
 /**
  * @param {Object} params
@@ -26,9 +26,6 @@ export const renderAssetLineChart = ({
   series,
   labels,
 }) => {
-  // ======================
-  // VALIDATION (WAJIB)
-  // ======================
   if (
     !container ||
     !Array.isArray(series) ||
@@ -39,42 +36,32 @@ export const renderAssetLineChart = ({
     return;
   }
 
-  const values = series;
-  const dates = labels;
-
   const width = container.clientWidth;
   if (!width) return;
 
-  // ======================
-  // CHART METRICS
-  // ======================
   const height = 220;
   const paddingX = 24;
   const plotHeight = 180;
   const baselineY = plotHeight + 16;
 
-  const min = Math.min(...values);
-  const max = Math.max(...values);
+  const min = Math.min(...series);
+  const max = Math.max(...series);
   const range = max - min || 1;
 
-  const stepX = (width - paddingX * 2) / (values.length - 1 || 1);
+  const stepX = (width - paddingX * 2) / (series.length - 1 || 1);
 
-  const points = values.map((v, i) => ({
+  const points = series.map((v, i) => ({
     x: paddingX + i * stepX,
     y: baselineY - ((v - min) / range) * plotHeight,
   }));
 
-  // ======================
-  // SVG ROOT
-  // ======================
+  /* ---------- SVG ---------- */
+
   const svg = createSvgElement("svg");
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.style.width = "100%";
   svg.style.height = "100%";
 
-  // ======================
-  // LINE PATH
-  // ======================
   const path = createSvgElement("path");
   path.setAttribute(
     "d",
@@ -85,11 +72,10 @@ export const renderAssetLineChart = ({
   path.setAttribute("stroke-width", "4");
   path.setAttribute("stroke-linecap", "round");
 
-  // ======================
-  // X AXIS LABELS
-  // ======================
+  /* ---------- X AXIS LABELS ---------- */
+
   const labelGroup = createSvgElement("g");
-  const labelIndices = getLabelIndices(values.length);
+  const labelIndices = getLabelIndices(series.length);
 
   labelIndices.forEach((i) => {
     const label = createSvgElement("text");
@@ -98,16 +84,15 @@ export const renderAssetLineChart = ({
     label.setAttribute("fill", cssVar("--color-text-subtle"));
     label.setAttribute("font-size", "11");
     label.setAttribute("text-anchor", "middle");
-    label.textContent = new Date(dates[i]).toLocaleDateString(undefined, {
+    label.textContent = new Date(labels[i]).toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
     });
     labelGroup.appendChild(label);
   });
 
-  // ======================
-  // HOVER ELEMENTS
-  // ======================
+  /* ---------- HOVER ---------- */
+
   const hoverLine = createSvgElement("line");
   hoverLine.setAttribute("stroke", cssVar("--color-border-neutral"));
   hoverLine.setAttribute("stroke-width", "1");
@@ -139,9 +124,6 @@ export const renderAssetLineChart = ({
   tooltip.style.fontSize = "0.8rem";
   tooltip.style.whiteSpace = "nowrap";
 
-  // ======================
-  // INTERACTION OVERLAY
-  // ======================
   const overlay = createSvgElement("rect");
   overlay.setAttribute("x", paddingX);
   overlay.setAttribute("y", 0);
@@ -154,7 +136,7 @@ export const renderAssetLineChart = ({
     const x = ((e.clientX - rect.left) / rect.width) * width;
 
     const index = Math.min(
-      values.length - 1,
+      series.length - 1,
       Math.max(0, Math.round((x - paddingX) / stepX))
     );
 
@@ -171,13 +153,13 @@ export const renderAssetLineChart = ({
     hoverDot.style.opacity = "1";
 
     hoverXLabel.setAttribute("x", point.x);
-    hoverXLabel.textContent = new Date(dates[index]).toLocaleDateString(
+    hoverXLabel.textContent = new Date(labels[index]).toLocaleDateString(
       undefined,
       { month: "short", day: "numeric" }
     );
     hoverXLabel.style.opacity = "1";
 
-    tooltip.textContent = values[index].toLocaleString(undefined, {
+    tooltip.textContent = series[index].toLocaleString(undefined, {
       maximumFractionDigits: 2,
     });
     tooltip.style.opacity = "1";
@@ -192,9 +174,8 @@ export const renderAssetLineChart = ({
     hoverXLabel.style.opacity = "0";
   });
 
-  // ======================
-  // MOUNT
-  // ======================
+  /* ---------- MOUNT ---------- */
+
   container.innerHTML = "";
   container.style.position = "relative";
 
