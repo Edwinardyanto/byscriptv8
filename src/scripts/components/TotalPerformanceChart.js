@@ -6,13 +6,14 @@ const setText = (selector, value) => {
   if (el) el.textContent = value;
 };
 
-const setActivePill = (range) => {
-  document.querySelectorAll(".timeframe-pill").forEach((pill) => {
-    pill.classList.toggle(
-      "active",
-      pill.dataset.bound === range
-    );
-  });
+const setBadge = (percent) => {
+  const el = document.querySelector('[data-field="asset.change"]');
+  if (!el) return;
+
+  const isPositive = percent >= 0;
+  el.textContent = `${percent.toFixed(2)}%`;
+  el.classList.toggle("positive", isPositive);
+  el.classList.toggle("negative", !isPositive);
 };
 
 export const renderTotalPerformanceChart = ({
@@ -23,9 +24,10 @@ export const renderTotalPerformanceChart = ({
 }) => {
   if (!container) return;
 
-  // ======================
-  // STATUS HANDLING
-  // ======================
+  /* -----------------------------
+   * STATUS
+   * ----------------------------- */
+
   if (status === "loading") {
     setText('[data-field="asset.totalBalance"]', "Loading...");
     setText('[data-field="asset.change"]', "--");
@@ -38,35 +40,32 @@ export const renderTotalPerformanceChart = ({
     return;
   }
 
-  if (!data.chart) return;
+  /* -----------------------------
+   * VALUE + BADGE
+   * ----------------------------- */
 
-  // ======================
-  // TOTAL & CHANGE
-  // ======================
-  setText('[data-field="asset.totalBalance"]', data.totalBalance);
-  setText('[data-field="asset.change"]', data.change);
+  setText('[data-field="asset.totalBalance"]', data.totalValue);
+  setBadge(data.percent);
 
-  // ======================
-  // RANGE & PILLS
-  // ======================
-  const activeRange = data.chart.activeRange || "7D";
-  setActivePill(activeRange);
+  /* -----------------------------
+   * TIMEFRAME PILLS (STATE ONLY)
+   * ----------------------------- */
 
-  document.querySelectorAll(".timeframe-pill").forEach((pill) => {
-    if (pill.dataset.bound) {
-      pill.onclick = () => {
-        onRangeChange?.(pill.dataset.bound);
+  document
+    .querySelectorAll(".asset-summary-pills button")
+    .forEach((btn) => {
+      btn.onclick = () => {
+        onRangeChange?.(btn.dataset.range);
       };
-    }
-  });
+    });
 
-  // ======================
-  // CHART
-  // ======================
-  const labels = data.chart.labels || [];
-  const series = data.chart.ranges?.[activeRange] || [];
+  /* -----------------------------
+   * CHART (BLACK BOX)
+   * ----------------------------- */
 
-  if (!Array.isArray(labels) || !Array.isArray(series) || series.length === 0) {
+  const { series = [], labels = [] } = data.chart || {};
+
+  if (!series.length) {
     container.textContent = "No chart data";
     return;
   }
@@ -76,5 +75,4 @@ export const renderTotalPerformanceChart = ({
     series,
     labels,
   });
-
 };
