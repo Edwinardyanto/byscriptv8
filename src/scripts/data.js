@@ -1,6 +1,6 @@
 // src/scripts/data.js
 // ======================================================
-// DATA ORCHESTRATION LAYER (LOCKED)
+// DATA ORCHESTRATION LAYER (STEP 6 & 7 — LOCKED)
 // ======================================================
 
 import {
@@ -29,35 +29,36 @@ const formatCurrency = (value, digits = 0) =>
 let activeRange = "ALL";
 
 /* ------------------------------------------------------
- * COMPUTE HELPERS (STEP 7 PREP)
+ * COMPUTE (STEP 7 — LOCKED)
  * ------------------------------------------------------ */
 
-const computeChangePercent = (series = []) => {
-  if (series.length < 2) return "—";
+const computeSummary = (series = []) => {
+  if (series.length < 2) {
+    return { totalValue: 0, percent: 0 };
+  }
 
-  const first = series[0] ?? 0;
-  const last = series[series.length - 1] ?? 0;
+  const first = series[0]?.value ?? 0;
+  const last = series.at(-1)?.value ?? 0;
 
-  if (first <= 0) return "—";
+  const percent =
+    first === 0 ? 0 : ((last - first) / first) * 100;
 
-  const percent = ((last - first) / first) * 100;
-  return `${percent.toFixed(2)}%`;
+  return { totalValue: last, percent };
 };
 
 /* ------------------------------------------------------
- * ASSET SUMMARY (SINGLE RANGE ONLY)
+ * ASSET SUMMARY (SINGLE ACTIVE RANGE ONLY)
  * ------------------------------------------------------ */
 
 const buildAssetSummary = async (range) => {
-  const { series = [], labels = [] } = await getAssetEquityByRange(range);
+  const { series = [], labels = [] } =
+    await getAssetEquityByRange(range);
 
-  const lastValue = series.length
-    ? series[series.length - 1]
-    : 0;
+  const { totalValue, percent } = computeSummary(series);
 
   return {
-    totalBalance: formatCurrency(lastValue),
-    change: computeChangePercent(series),
+    totalValue: formatCurrency(totalValue),
+    percent,
     chart: {
       series,
       labels,
@@ -66,7 +67,7 @@ const buildAssetSummary = async (range) => {
 };
 
 /* ------------------------------------------------------
- * STATE CONTROLLER (STEP 6 — LOCKED)
+ * RANGE CONTROLLER (STEP 6)
  * ------------------------------------------------------ */
 
 export const setAssetRange = async (range) => {
@@ -87,7 +88,7 @@ const buildAccountsSummary = async () => {
     value: formatCurrency(a.totalValueUsd || 0),
   }));
 
-  const total = list.reduce((sum, a) => sum + a.amount, 0);
+  const total = list.reduce((s, a) => s + a.amount, 0);
 
   return {
     total: formatCurrency(total),
