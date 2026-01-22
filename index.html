@@ -32,8 +32,31 @@
                   <h2 class="section-title">Asset Summary</h2>
                 </div>
                 <div class="section-body">
-                  <div class="total-performance-chart" data-total-performance="dashboard"></div>
+                  <!-- Asset Summary Metrics -->
+                  <div class="asset-summary-header">
+                    <div class="asset-summary-metrics">
+                      <div class="stat-label">Total Balance</div>
+                      <div class="stat-value" data-field="asset.totalBalance">$0</div>
+                      <span class="stat-badge" data-field="asset.change">—</span>
+                    </div>
+                
+                    <!-- Timeframe Pills -->
+                    <div class="timeframe-pills">
+                      <span class="timeframe-pill active" data-bound="7D">7D</span>
+                      <span class="timeframe-pill" data-bound="30D">30D</span>
+                      <span class="timeframe-pill" data-bound="90D">90D</span>
+                      <span class="timeframe-pill" data-bound="ALL">All</span>
+                    </div>
+                  </div>
+                
+                  <!-- Chart Container -->
+                  <div
+                    class="total-performance-chart"
+                    data-total-performance="dashboard"
+                    style="position: relative;"
+                  ></div>
                 </div>
+
               </section>
             </div>
             <div class="dashboard-right">
