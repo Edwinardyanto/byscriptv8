@@ -13,27 +13,41 @@ const getLabelIndices = (length) => {
 };
 
 /* ----------------------------------
- * Chart Renderer (FIXED CONTRACT)
+ * Chart Renderer (STEP 7 CONTRACT)
  * ---------------------------------- */
 /**
- * @param {HTMLElement} container
- * @param {number[]} values
- * @param {string[]} dates - ISO date strings (YYYY-MM-DD)
+ * @param {Object} params
+ * @param {HTMLElement} params.container
+ * @param {number[]} params.series
+ * @param {string[]} params.labels - ISO date strings (YYYY-MM-DD)
  */
-export const renderAssetLineChart = (container, values, dates) => {
+export const renderAssetLineChart = ({
+  container,
+  series,
+  labels,
+}) => {
+  // ======================
+  // VALIDATION (WAJIB)
+  // ======================
   if (
     !container ||
-    !Array.isArray(values) ||
-    !Array.isArray(dates) ||
-    values.length === 0 ||
-    values.length !== dates.length
+    !Array.isArray(series) ||
+    !Array.isArray(labels) ||
+    series.length === 0 ||
+    series.length !== labels.length
   ) {
     return;
   }
 
+  const values = series;
+  const dates = labels;
+
   const width = container.clientWidth;
   if (!width) return;
 
+  // ======================
+  // CHART METRICS
+  // ======================
   const height = 220;
   const paddingX = 24;
   const plotHeight = 180;
@@ -50,13 +64,17 @@ export const renderAssetLineChart = (container, values, dates) => {
     y: baselineY - ((v - min) / range) * plotHeight,
   }));
 
-  /* ---------- SVG ---------- */
-
+  // ======================
+  // SVG ROOT
+  // ======================
   const svg = createSvgElement("svg");
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.style.width = "100%";
   svg.style.height = "100%";
 
+  // ======================
+  // LINE PATH
+  // ======================
   const path = createSvgElement("path");
   path.setAttribute(
     "d",
@@ -67,8 +85,9 @@ export const renderAssetLineChart = (container, values, dates) => {
   path.setAttribute("stroke-width", "4");
   path.setAttribute("stroke-linecap", "round");
 
-  /* ---------- X AXIS LABELS ---------- */
-
+  // ======================
+  // X AXIS LABELS
+  // ======================
   const labelGroup = createSvgElement("g");
   const labelIndices = getLabelIndices(values.length);
 
@@ -86,8 +105,9 @@ export const renderAssetLineChart = (container, values, dates) => {
     labelGroup.appendChild(label);
   });
 
-  /* ---------- HOVER ---------- */
-
+  // ======================
+  // HOVER ELEMENTS
+  // ======================
   const hoverLine = createSvgElement("line");
   hoverLine.setAttribute("stroke", cssVar("--color-border-neutral"));
   hoverLine.setAttribute("stroke-width", "1");
@@ -119,6 +139,9 @@ export const renderAssetLineChart = (container, values, dates) => {
   tooltip.style.fontSize = "0.8rem";
   tooltip.style.whiteSpace = "nowrap";
 
+  // ======================
+  // INTERACTION OVERLAY
+  // ======================
   const overlay = createSvgElement("rect");
   overlay.setAttribute("x", paddingX);
   overlay.setAttribute("y", 0);
@@ -169,8 +192,9 @@ export const renderAssetLineChart = (container, values, dates) => {
     hoverXLabel.style.opacity = "0";
   });
 
-  /* ---------- MOUNT ---------- */
-
+  // ======================
+  // MOUNT
+  // ======================
   container.innerHTML = "";
   container.style.position = "relative";
 
