@@ -1,10 +1,18 @@
 // src/scripts/data.js
+// ======================================================
+// DATA ORCHESTRATION LAYER (LOCKED)
+// ======================================================
+
 import {
   getAssetEquityByRange,
   getAccountsWithSummary,
   getAccounts,
   getAutotradersByAccount,
 } from "./dataAccess.js";
+
+/* ------------------------------------------------------
+ * Utils
+ * ------------------------------------------------------ */
 
 const formatCurrency = (value, digits = 0) =>
   new Intl.NumberFormat("en-US", {
@@ -14,63 +22,62 @@ const formatCurrency = (value, digits = 0) =>
     maximumFractionDigits: digits,
   }).format(value);
 
-/**
- * Helper: compute balance & change from a series
- */
-const computeSummaryFromSeries = (series = []) => {
-  if (!series.length) {
-    return { totalBalance: formatCurrency(0), change: "—" };
-  }
+/* ------------------------------------------------------
+ * STATE (STEP 6 — LOCKED)
+ * ------------------------------------------------------ */
 
-  const first = series[0] || 0;
-  const last = series[series.length - 1] || 0;
+let activeRange = "ALL";
 
-  const change =
-    first > 0 ? `${(((last - first) / first) * 100).toFixed(2)}%` : "—";
+/* ------------------------------------------------------
+ * COMPUTE HELPERS (STEP 7 PREP)
+ * ------------------------------------------------------ */
 
-  return {
-    totalBalance: formatCurrency(last),
-    change,
-  };
+const computeChangePercent = (series = []) => {
+  if (series.length < 2) return "—";
+
+  const first = series[0] ?? 0;
+  const last = series[series.length - 1] ?? 0;
+
+  if (first <= 0) return "—";
+
+  const percent = ((last - first) / first) * 100;
+  return `${percent.toFixed(2)}%`;
 };
 
-/**
- * Asset Summary (ALL RANGES STORED)
- */
-const buildAssetSummary = async () => {
-  const ranges = ["7D", "30D", "90D", "ALL"];
+/* ------------------------------------------------------
+ * ASSET SUMMARY (SINGLE RANGE ONLY)
+ * ------------------------------------------------------ */
 
-  const rangeMap = Object.fromEntries(
-    await Promise.all(
-      ranges.map(async (r) => {
-        const data = await getAssetEquityByRange(r);
-        return [r, data];
-      })
-    )
-  );
+const buildAssetSummary = async (range) => {
+  const { series = [], labels = [] } = await getAssetEquityByRange(range);
 
-  const activeRange = "7D";
-  const activeSeries = rangeMap[activeRange]?.series || [];
-
-  const { totalBalance, change } =
-    computeSummaryFromSeries(activeSeries);
+  const lastValue = series.length
+    ? series[series.length - 1]
+    : 0;
 
   return {
-    totalBalance,
-    change,
+    totalBalance: formatCurrency(lastValue),
+    change: computeChangePercent(series),
     chart: {
-      activeRange,
-      labels: rangeMap[activeRange]?.labels || [],
-      ranges: Object.fromEntries(
-        ranges.map((r) => [r, rangeMap[r]?.series || []])
-      ),
+      series,
+      labels,
     },
   };
 };
 
-/**
- * Accounts Summary
- */
+/* ------------------------------------------------------
+ * STATE CONTROLLER (STEP 6 — LOCKED)
+ * ------------------------------------------------------ */
+
+export const setAssetRange = async (range) => {
+  activeRange = range;
+  return buildAssetSummary(activeRange);
+};
+
+/* ------------------------------------------------------
+ * ACCOUNTS SUMMARY
+ * ------------------------------------------------------ */
+
 const buildAccountsSummary = async () => {
   const accounts = await getAccountsWithSummary();
 
@@ -80,7 +87,7 @@ const buildAccountsSummary = async () => {
     value: formatCurrency(a.totalValueUsd || 0),
   }));
 
-  const total = list.reduce((s, a) => s + a.amount, 0);
+  const total = list.reduce((sum, a) => sum + a.amount, 0);
 
   return {
     total: formatCurrency(total),
@@ -88,13 +95,16 @@ const buildAccountsSummary = async () => {
   };
 };
 
-/**
- * Top Autotraders
- */
+/* ------------------------------------------------------
+ * TOP AUTOTRADERS
+ * ------------------------------------------------------ */
+
 const buildTopAutotraders = async () => {
   const accounts = await getAccounts();
   const traders = (
-    await Promise.all(accounts.map((a) => getAutotradersByAccount(a.account_id)))
+    await Promise.all(
+      accounts.map((a) => getAutotradersByAccount(a.account_id))
+    )
   ).flat();
 
   return traders.slice(0, 3).map((t) => ({
@@ -104,15 +114,17 @@ const buildTopAutotraders = async () => {
   }));
 };
 
-/**
- * Dashboard Fetch (SINGLE SOURCE OF TRUTH)
- */
+/* ------------------------------------------------------
+ * DASHBOARD FETCH (SINGLE SOURCE OF TRUTH)
+ * ------------------------------------------------------ */
+
 export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders] = await Promise.all([
-    buildAssetSummary(),
-    buildAccountsSummary(),
-    buildTopAutotraders(),
-  ]);
+  const [assetSummary, accountsSummary, topAutotraders] =
+    await Promise.all([
+      buildAssetSummary(activeRange),
+      buildAccountsSummary(),
+      buildTopAutotraders(),
+    ]);
 
   return {
     assetSummary,
