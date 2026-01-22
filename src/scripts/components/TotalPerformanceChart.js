@@ -71,5 +71,10 @@ export const renderTotalPerformanceChart = ({
     return;
   }
 
-  renderAssetLineChart(container, series, labels);
+  renderAssetLineChart({
+    container,
+    series,
+    labels,
+  });
+
 };
