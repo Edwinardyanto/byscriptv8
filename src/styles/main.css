@@ -2083,3 +2083,30 @@ main {
   box-shadow: inset 0 0 10px var(--color-overlay-md),
               0 0 16px var(--color-shadow-soft);
 }
+
+/* Asset Summary Badge (Status Signal) */
+.asset-summary-metric .badge {
+  margin-left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Positive */
+.asset-summary-metric .badge.positive {
+  background: rgba(0, 255, 0, 0.12);
+  color: #2ecc71;
+}
+
+/* Negative */
+.asset-summary-metric .badge.negative {
+  background: rgba(255, 0, 0, 0.12);
+  color: #e74c3c;
+}
+
+/* Asset Summary Chart Area */
+.asset-summary-chart {
+  margin-top: 16px;
+  position: relative;
+}
