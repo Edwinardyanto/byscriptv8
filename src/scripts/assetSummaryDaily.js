@@ -5,7 +5,7 @@ export const renderAssetSummaryDaily = async (days = 7) => {
   const series = await getAssetEquitySeries(days);
 
   renderAssetLineChart(
-    "#asset-summary-line-chart",
+    '[data-total-performance="dashboard"]',
     series.map(p => p.value),
     series.map(p => p.date)
   );
