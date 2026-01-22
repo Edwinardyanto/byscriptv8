@@ -15,5 +15,8 @@ export const renderTotalPerformanceChart = ({
 
   if (!series || !labels || !series.length) return;
 
-  renderAssetLineChart(container.querySelector('[data-field="asset.chart"]'), series);
-};
+renderAssetLineChart(
+  container,
+  data.chart.ranges[data.chart.activeRange],
+  data.chart.labels
+);
