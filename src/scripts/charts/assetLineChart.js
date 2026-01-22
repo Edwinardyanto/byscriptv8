@@ -13,19 +13,15 @@ const getLabelIndices = (length) => {
 };
 
 /* ----------------------------------
- * Chart Renderer (FIXED CONTRACT)
+ * Chart Renderer (FINAL CONTRACT)
  * ---------------------------------- */
 /**
  * @param {Object} params
  * @param {HTMLElement} params.container
  * @param {number[]} params.series
- * @param {string[]} params.labels - ISO date strings (YYYY-MM-DD)
+ * @param {string[]} params.labels
  */
-export const renderAssetLineChart = ({
-  container,
-  series,
-  labels,
-}) => {
+export const renderAssetLineChart = ({ container, series, labels }) => {
   if (
     !container ||
     !Array.isArray(series) ||
@@ -106,13 +102,6 @@ export const renderAssetLineChart = ({
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
-  const hoverXLabel = createSvgElement("text");
-  hoverXLabel.setAttribute("y", baselineY + 18);
-  hoverXLabel.setAttribute("fill", cssVar("--color-text-primary"));
-  hoverXLabel.setAttribute("font-size", "11");
-  hoverXLabel.setAttribute("text-anchor", "middle");
-  hoverXLabel.style.opacity = "0";
-
   const tooltip = document.createElement("div");
   tooltip.style.position = "absolute";
   tooltip.style.opacity = "0";
@@ -152,16 +141,7 @@ export const renderAssetLineChart = ({
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
-    hoverXLabel.setAttribute("x", point.x);
-    hoverXLabel.textContent = new Date(labels[index]).toLocaleDateString(
-      undefined,
-      { month: "short", day: "numeric" }
-    );
-    hoverXLabel.style.opacity = "1";
-
-    tooltip.textContent = series[index].toLocaleString(undefined, {
-      maximumFractionDigits: 2,
-    });
+    tooltip.textContent = series[index].toLocaleString();
     tooltip.style.opacity = "1";
     tooltip.style.left = `${point.x}px`;
     tooltip.style.top = `${point.y - 18}px`;
@@ -171,7 +151,6 @@ export const renderAssetLineChart = ({
     tooltip.style.opacity = "0";
     hoverLine.style.opacity = "0";
     hoverDot.style.opacity = "0";
-    hoverXLabel.style.opacity = "0";
   });
 
   /* ---------- MOUNT ---------- */
@@ -184,7 +163,6 @@ export const renderAssetLineChart = ({
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
   svg.appendChild(labelGroup);
-  svg.appendChild(hoverXLabel);
   svg.appendChild(overlay);
   container.appendChild(svg);
 };
