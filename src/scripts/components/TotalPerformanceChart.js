@@ -7,16 +7,19 @@ export const renderTotalPerformanceChart = ({
   status = "ready",
   onRangeChange,
 }) => {
-  if (!container || status !== "ready") return;
+  if (!container || status !== "ready" || !data?.chart) return;
 
   const activeRange = data.chart.activeRange || "7D";
-  const series = data.chart.ranges[activeRange];
+  const series = data.chart.ranges?.[activeRange];
   const labels = data.chart.labels;
 
-  if (!series || !labels || !series.length) return;
+  if (!Array.isArray(series) || !Array.isArray(labels) || series.length === 0) {
+    return;
+  }
 
-renderAssetLineChart(
-  container,
-  data.chart.ranges[data.chart.activeRange],
-  data.chart.labels
-);
+  renderAssetLineChart(
+    container,
+    series,
+    labels
+  );
+};
