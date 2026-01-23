@@ -4,7 +4,7 @@
 // ======================================================
 
 import {
-  getEquityDaily,
+  getAssetEquityByRange,
   getAccountsWithSummary,
   getAccounts,
   getAutotradersByAccount,
@@ -26,90 +26,56 @@ const formatCurrency = (value, digits = 0) =>
  * STATE (SINGLE SOURCE OF TRUTH)
  * ------------------------------------------------------ */
 
-let equityDaily = null;      // FULL daily equity (loaded once)
-let activeRange = "ALL";    // "7D" | "30D" | "90D" | "ALL"
+let activeRange = "ALL"; // "7D" | "30D" | "90D" | "ALL"
 
 /* ------------------------------------------------------
- * INIT (STEP 2 — LOAD ONCE)
- * ------------------------------------------------------ */
-
-export const initDashboardData = async () => {
-  if (equityDaily !== null) return;
-  equityDaily = await getEquityDaily();
-};
-
-/* ------------------------------------------------------
- * INTERNAL GUARD
- * ------------------------------------------------------ */
-
-const requireEquity = () => {
-  if (!Array.isArray(equityDaily)) {
-    throw new Error(
-      "equityDaily not initialized. Call initDashboardData() first."
-    );
-  }
-};
-
-/* ------------------------------------------------------
- * STEP 3 — FILTER TIMEFRAME (DATA LAYER)
- * ------------------------------------------------------ */
-
-const filterByRange = (data, range) => {
-  const days =
-    range === "7D" ? 7 :
-    range === "30D" ? 30 :
-    range === "90D" ? 90 :
-    data.length; // ALL
-
-  return data.slice(-days);
-};
-
-/* ------------------------------------------------------
- * STEP 4 — COMPUTE TOTAL & PERCENT
+ * COMPUTE SUMMARY
  * ------------------------------------------------------ */
 
 const computeSummary = (series) => {
-  if (series.length < 2) {
+  if (!series || series.length < 2) {
     return { totalValue: 0, percent: 0 };
   }
 
   const first = series[0]?.value ?? 0;
-  const last  = series.at(-1)?.value ?? 0;
+  const last = series.at(-1)?.value ?? 0;
 
   const percent =
     first > 0 ? ((last - first) / first) * 100 : 0;
 
-  return { totalValue: last, percent };
+  return {
+    totalValue: last,
+    percent,
+  };
 };
 
 /* ------------------------------------------------------
- * STEP 5 & 6 — ASSET SUMMARY (HEADER + CHART INPUT)
+ * ASSET SUMMARY (HEADER + CHART INPUT)
  * ------------------------------------------------------ */
 
-const buildAssetSummary = () => {
-  requireEquity();
+const buildAssetSummary = async () => {
+  const series = await getAssetEquityByRange(activeRange);
 
-  const series = filterByRange(equityDaily, activeRange);
   const { totalValue, percent } = computeSummary(series);
 
   return {
-    // HEADER DATA (STEP 5)
+    // HEADER
     totalValue: formatCurrency(totalValue),
     percent,
 
-    // CHART DATA (STEP 6)
+    // CHART
     chart: {
-      series: series.map(d => d.value),
-      labels: series.map(d => d.date),
+      series: series.map((d) => d.value),
+      labels: series.map((d) => d.date),
     },
   };
 };
 
 /* ------------------------------------------------------
- * STEP 7 — RANGE CONTROLLER (TRIGGER RECOMPUTE)
+ * RANGE CONTROLLER (TIMEFRAME PILLS)
  * ------------------------------------------------------ */
 
-export const setAssetRange = (range) => {
+export const setAssetRange = async (range) => {
   activeRange = range;
   return buildAssetSummary();
 };
@@ -159,15 +125,15 @@ const buildTopAutotraders = async () => {
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  await initDashboardData();
-
-  const [accountsSummary, topAutotraders] = await Promise.all([
-    buildAccountsSummary(),
-    buildTopAutotraders(),
-  ]);
+  const [assetSummary, accountsSummary, topAutotraders] =
+    await Promise.all([
+      buildAssetSummary(),
+      buildAccountsSummary(),
+      buildTopAutotraders(),
+    ]);
 
   return {
-    assetSummary: buildAssetSummary(), // STEP 4–6 applied
+    assetSummary,
     accountsSummary,
     topAutotraders,
     alerts: [],
