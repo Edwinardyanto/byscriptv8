@@ -52,8 +52,37 @@ export const getTradingPlans = async () =>
    DERIVED EQUITY (SINGLE SOURCE)
 ========================= */
 
-export const getEquityDaily = async () =>
-  fetchJson(DATA_URLS.equityDaily, "derive:equity");
+export const getEquityDaily = async () => {
+  const data = await fetchJson(DATA_URLS.equityDaily, "derive:equity");
+
+  if (!Array.isArray(data)) return [];
+
+  // enforce ASC sort by date
+  return data
+    .filter((d) => d && d.date && typeof d.value === "number")
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+};
+
+/* =========================
+   EQUITY BY RANGE (FOR CHART)
+========================= */
+
+export const getAssetEquityByRange = async (range = "ALL") => {
+  const series = await getEquityDaily();
+  if (!series.length) return [];
+
+  switch (range) {
+    case "7D":
+      return series.slice(-7);
+    case "30D":
+      return series.slice(-30);
+    case "90D":
+      return series.slice(-90);
+    case "ALL":
+    default:
+      return series;
+  }
+};
 
 /* =========================
    AUTOTRADERS BY ACCOUNT
