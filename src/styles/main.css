@@ -573,8 +573,6 @@ main {
 }
 
 .asset-summary-content {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -2021,7 +2019,8 @@ main {
 .asset-summary-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  flex: 0 0 auto;
 }
 
 /* Pastikan metric kiri rapi */
@@ -2096,13 +2095,22 @@ main {
 }
 
 .asset-summary-chart {
-  position: relative;
-  flex: 1;        /* WAJIB */
-  min-height: 0; /* WAJIB */
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
 }
 
 .asset-summary .chart-placeholder {
-  min-height: 0;
-  padding-bottom: 0;
   flex: 1;
+  min-height: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-end;
+}
+
+.asset-summary .chart-placeholder svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
