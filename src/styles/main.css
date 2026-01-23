@@ -793,12 +793,6 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 144px;
-  height: 144px;
-  border-radius: var(--radius-md);
-  border: 1px dashed var(--color-overlay-xxxl);
-  background: radial-gradient(circle at 20% 20%, var(--color-state-hover), transparent 45%),
-    linear-gradient(160deg, var(--color-surface-panel-strong), var(--color-surface-panel-muted));
   color: var(--color-muted);
   font-size: 0.85rem;
   position: relative;
@@ -830,7 +824,6 @@ main {
   top: 38%;
   width: 46px;
   height: 46px;
-  background: radial-gradient(circle, var(--color-state-selected), var(--color-state-hover) 45%, transparent 70%);
   filter: blur(2px);
   opacity: 0.85;
   pointer-events: none;
@@ -2105,8 +2098,16 @@ main {
   color: #e74c3c;
 }
 
-/* Asset Summary Chart Area */
 .asset-summary-chart {
   margin-top: 16px;
   position: relative;
+  flex: 1;        /* WAJIB */
+  min-height: 0; /* WAJIB */
+}
+
+.asset-summary .chart-placeholder {
+  height: auto;
+  min-height: 0;
+  padding-bottom: 0;
+  flex: 1;
 }
