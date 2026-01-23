@@ -15,12 +15,7 @@ const getLabelIndices = (length) => {
 /* ----------------------------------
  * Chart Renderer (FINAL CONTRACT)
  * ---------------------------------- */
-/**
- * @param {Object} params
- * @param {HTMLElement} params.container
- * @param {number[]} params.series
- * @param {string[]} params.labels
- */
+
 export const renderAssetLineChart = ({ container, series, labels }) => {
   if (
     !container ||
@@ -33,11 +28,11 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   }
 
   const width = container.clientWidth;
-  if (!width) return;
+  const height = container.clientHeight || 320;
+  if (!width || !height) return;
 
-  const height = 220;
   const paddingX = 24;
-  const plotHeight = 180;
+  const plotHeight = height - 40;
   const baselineY = plotHeight + 16;
 
   const min = Math.min(...series);
