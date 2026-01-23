@@ -181,3 +181,34 @@ export const getAssetEquityByRange = async (range = "7D") => {
 
   return { labels, series };
 };
+
+/* =========================
+   ASSET SUMMARY (FINAL)
+========================= */
+
+export const getAssetSummaryByRange = async (range = "7D") => {
+  const { labels, series } = await getAssetEquityByRange(range);
+
+  if (!series.length) {
+    return {
+      labels: [],
+      series: [],
+      totalValueUsd: 0,
+      percentChange: 0,
+    };
+  }
+
+  const first = series[0] ?? 0;
+  const last = series[series.length - 1] ?? 0;
+
+  const percentChange =
+    first > 0 ? ((last - first) / first) * 100 : 0;
+
+  return {
+    labels,
+    series,
+    totalValueUsd: last,
+    percentChange,
+  };
+};
+
