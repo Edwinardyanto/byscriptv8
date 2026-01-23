@@ -75,14 +75,16 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     label.setAttribute("fill", cssVar("--color-text-subtle"));
     label.setAttribute("font-size", "11");
     label.setAttribute("text-anchor", "middle");
+
     label.textContent = new Date(labels[i]).toLocaleDateString(undefined, {
       month: "short",
       day: "numeric",
     });
+
     labelGroup.appendChild(label);
   });
 
-  /* ---------- HOVER ---------- */
+  /* ---------- HOVER ELEMENTS ---------- */
 
   const hoverLine = createSvgElement("line");
   hoverLine.setAttribute("stroke", cssVar("--color-border-neutral"));
@@ -97,6 +99,8 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
+  /* ---------- TOOLTIP VALUE (TOP) ---------- */
+
   const tooltip = document.createElement("div");
   tooltip.style.position = "absolute";
   tooltip.style.opacity = "0";
@@ -107,6 +111,22 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   tooltip.style.borderRadius = "999px";
   tooltip.style.fontSize = "0.8rem";
   tooltip.style.whiteSpace = "nowrap";
+
+  /* ---------- ✅ NEW: HOVER DATE LABEL (BOTTOM AXIS) ---------- */
+
+  const hoverDate = document.createElement("div");
+  hoverDate.style.position = "absolute";
+  hoverDate.style.opacity = "0";
+  hoverDate.style.pointerEvents = "none";
+  hoverDate.style.color = cssVar("--color-text-subtle");
+  hoverDate.style.fontSize = "11px";
+  hoverDate.style.whiteSpace = "nowrap";
+  hoverDate.style.transform = "translateX(-50%)";
+
+  // ✅ anchor exactly where x-axis ticks are
+  hoverDate.style.bottom = "6px";
+
+  /* ---------- OVERLAY CAPTURE ---------- */
 
   const overlay = createSvgElement("rect");
   overlay.setAttribute("x", paddingX);
@@ -126,24 +146,37 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
 
     const point = points[index];
 
+    /* ✅ Hover Line */
     hoverLine.setAttribute("x1", point.x);
     hoverLine.setAttribute("x2", point.x);
     hoverLine.setAttribute("y1", point.y);
     hoverLine.setAttribute("y2", baselineY);
     hoverLine.style.opacity = "1";
 
+    /* ✅ Hover Dot */
     hoverDot.setAttribute("cx", point.x);
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
+    /* ✅ Tooltip Value */
     tooltip.textContent = series[index].toLocaleString();
     tooltip.style.opacity = "1";
     tooltip.style.left = `${point.x}px`;
     tooltip.style.top = `${point.y - 18}px`;
+
+    /* ✅ NEW: Hover Date aligned with axis ticks */
+    hoverDate.textContent = new Date(labels[index]).toLocaleDateString(
+      undefined,
+      { month: "short", day: "numeric" }
+    );
+
+    hoverDate.style.opacity = "1";
+    hoverDate.style.left = `${point.x}px`;
   });
 
   overlay.addEventListener("mouseleave", () => {
     tooltip.style.opacity = "0";
+    hoverDate.style.opacity = "0";
     hoverLine.style.opacity = "0";
     hoverDot.style.opacity = "0";
   });
@@ -154,10 +187,13 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   container.style.position = "relative";
 
   container.appendChild(tooltip);
+  container.appendChild(hoverDate);
+
   svg.appendChild(path);
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
   svg.appendChild(labelGroup);
   svg.appendChild(overlay);
+
   container.appendChild(svg);
 };
