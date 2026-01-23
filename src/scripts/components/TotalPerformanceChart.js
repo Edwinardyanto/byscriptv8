@@ -1,84 +1,79 @@
 // src/scripts/components/TotalPerformanceChart.js
 // ======================================================
-// TOTAL PERFORMANCE CHART (TIMEFRAME READY)
+// TOTAL PERFORMANCE CHART (STATE CONTROLLED)
 // ======================================================
 
-import { setAssetRange, getActiveRange } from "../data.js";
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
 
 /* ------------------------------------------------------
- * DOM Helpers
+ * Component Renderer
  * ------------------------------------------------------ */
 
-const setText = (selector, value) => {
-  const el = document.querySelector(selector);
-  if (el) el.textContent = value;
-};
+export const renderTotalPerformanceChart = ({
+  container,
+  data,
+  status,
+  onRangeChange,
+}) => {
+  if (!container) return;
 
-const setActivePill = (range) => {
-  document.querySelectorAll("[data-range]").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.range === range);
-  });
-};
+  // ===============================
+  // Loading / Empty Guards
+  // ===============================
+  if (status === "loading") {
+    container.innerHTML = "Loading...";
+    return;
+  }
 
-/* ------------------------------------------------------
- * MAIN RENDER
- * ------------------------------------------------------ */
+  if (!data?.chart) {
+    container.innerHTML = "No data";
+    return;
+  }
 
-const renderAssetSummaryUI = (summary) => {
-  // HEADER
-  setText("#asset-total-value", summary.totalValue);
-
-  const pct = summary.percent || 0;
-  setText(
-    "#asset-total-percent",
-    `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`
+  // ===============================
+  // HEADER FIELDS (match index.html)
+  // ===============================
+  const totalField = document.querySelector(
+    "[data-field='asset.totalBalance']"
   );
 
-  // CHART
-  const container = document.querySelector("#asset-chart");
-  if (!container) return;
+  const changeField = document.querySelector(
+    "[data-field='asset.change']"
+  );
+
+  if (totalField) totalField.textContent = data.totalValue;
+
+  if (changeField) {
+    const pct = data.percent || 0;
+    changeField.textContent = `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
+
+    changeField.classList.toggle("positive", pct >= 0);
+    changeField.classList.toggle("negative", pct < 0);
+  }
+
+  // ===============================
+  // TIMEFRAME PILLS (controlled)
+  // ===============================
+  const pills = document.querySelectorAll("[data-range]");
+  pills.forEach((btn) => {
+    btn.classList.toggle(
+      "active",
+      btn.dataset.range === data.chart.activeRange
+    );
+
+    btn.onclick = () => {
+      if (onRangeChange) onRangeChange(btn.dataset.range);
+    };
+  });
+
+  // ===============================
+  // CHART RENDER (SVG)
+  // ===============================
+  container.innerHTML = "";
 
   renderAssetLineChart({
     container,
-    series: summary.chart.series,
-    labels: summary.chart.labels,
+    series: data.chart.series,
+    labels: data.chart.labels,
   });
-};
-
-/* ------------------------------------------------------
- * INIT TIMEFRAME EVENTS
- * ------------------------------------------------------ */
-
-const initTimeframePills = () => {
-  document.querySelectorAll("[data-range]").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      const range = btn.dataset.range;
-
-      // ✅ update state + rebuild sliced series
-      const nextSummary = await setAssetRange(range);
-
-      // ✅ update pill UI
-      setActivePill(range);
-
-      // ✅ rerender header + chart
-      renderAssetSummaryUI(nextSummary);
-    });
-  });
-};
-
-/* ------------------------------------------------------
- * PUBLIC ENTRY
- * ------------------------------------------------------ */
-
-export const initTotalPerformanceChart = async () => {
-  // ✅ initial render
-  const range = getActiveRange();
-  const summary = await setAssetRange(range);
-
-  setActivePill(range);
-  renderAssetSummaryUI(summary);
-
-  // ✅ enable pills
-  initTimeframePills();
 };
