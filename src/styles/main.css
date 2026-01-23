@@ -794,7 +794,6 @@ main {
   color: var(--color-muted);
   font-size: 0.85rem;
   position: relative;
-  padding-bottom: 24px;
 }
 
 .card--summary .chart-placeholder {
@@ -2097,15 +2096,15 @@ main {
 }
 
 .asset-summary-chart {
-  flex: 1 1 auto;     /* WAJIB */
+  flex: 1 0 auto;     /* WAJIB */
   min-height: 0;      /* WAJIB */
   display: flex;
 }
 
 .asset-summary .chart-placeholder {
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   min-height: 0;
-  height: 100%;
+  height: auto;
   padding: 0;
   display: flex;
 }
