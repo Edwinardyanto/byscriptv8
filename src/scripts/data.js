@@ -1,6 +1,6 @@
 // src/scripts/data.js
 // ======================================================
-// DATA ORCHESTRATION LAYER (STEP 4–7 — LOCKED)
+// DATA ORCHESTRATION LAYER (STEP 2–6 — LOCKED)
 // ======================================================
 
 import {
@@ -23,13 +23,33 @@ const formatCurrency = (value, digits = 0) =>
   }).format(value);
 
 /* ------------------------------------------------------
- * STATE (SINGLE SOURCE OF TRUTH)
+ * STATE (SINGLE SOURCE OF TRUTH)  — STEP 2
  * ------------------------------------------------------ */
 
-let activeRange = "ALL"; // "7D" | "30D" | "90D" | "ALL"
+let activeRange = "7D"; // "7D" | "30D" | "90D" | "ALL"
+
+const RANGE_DAYS = {
+  "7D": 7,
+  "30D": 30,
+  "90D": 90,
+  "ALL": "ALL",
+};
 
 /* ------------------------------------------------------
- * COMPUTE SUMMARY
+ * RANGE SLICE HELPER — STEP 3
+ * ------------------------------------------------------ */
+
+const sliceSeriesByRange = (series = [], range) => {
+  if (!series.length) return [];
+
+  if (range === "ALL") return series;
+
+  const days = RANGE_DAYS[range];
+  return series.slice(-days);
+};
+
+/* ------------------------------------------------------
+ * COMPUTE SUMMARY — STEP 6
  * ------------------------------------------------------ */
 
 const computeSummary = (series) => {
@@ -37,11 +57,10 @@ const computeSummary = (series) => {
     return { totalValue: 0, percent: 0 };
   }
 
-  const first = series[0]?.value ?? 0;
-  const last = series.at(-1)?.value ?? 0;
+  const first = series[0].value;
+  const last = series[series.length - 1].value;
 
-  const percent =
-    first > 0 ? ((last - first) / first) * 100 : 0;
+  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
 
   return {
     totalValue: last,
@@ -50,13 +69,16 @@ const computeSummary = (series) => {
 };
 
 /* ------------------------------------------------------
- * ASSET SUMMARY (HEADER + CHART INPUT)
+ * ASSET SUMMARY (HEADER + CHART INPUT) — STEP 5
  * ------------------------------------------------------ */
 
 const buildAssetSummary = async () => {
-  const series = await getAssetEquityByRange(activeRange);
+  // ALWAYS fetch ALL, slice locally
+  const rawSeries = await getAssetEquityByRange("ALL");
 
-  const { totalValue, percent } = computeSummary(series);
+  const slicedSeries = sliceSeriesByRange(rawSeries, activeRange);
+
+  const { totalValue, percent } = computeSummary(slicedSeries);
 
   return {
     // HEADER
@@ -65,14 +87,14 @@ const buildAssetSummary = async () => {
 
     // CHART
     chart: {
-      series: series.map((d) => d.value),
-      labels: series.map((d) => d.date),
+      series: slicedSeries.map((d) => d.value),
+      labels: slicedSeries.map((d) => d.date),
     },
   };
 };
 
 /* ------------------------------------------------------
- * RANGE CONTROLLER (TIMEFRAME PILLS)
+ * RANGE CONTROLLER (TIMEFRAME PILLS) — STEP 4
  * ------------------------------------------------------ */
 
 export const setAssetRange = async (range) => {
