@@ -16,6 +16,35 @@ const setBadge = (percent) => {
   el.classList.toggle("negative", !isPositive);
 };
 
+/* --------------------------------
+ * TIMEFRAME PILLS (INIT ONCE)
+ * -------------------------------- */
+
+const initTimeframePills = (onRangeChange) => {
+  const buttons = document.querySelectorAll(
+    ".asset-summary-pills button"
+  );
+
+  buttons.forEach((btn) => {
+    btn.onclick = () => {
+      const range = btn.dataset.range;
+      if (!range) return;
+
+      // active state
+      buttons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      onRangeChange?.(range);
+    };
+  });
+};
+
+let pillsInitialized = false;
+
+/* --------------------------------
+ * MAIN RENDER
+ * -------------------------------- */
+
 export const renderTotalPerformanceChart = ({
   container,
   data,
@@ -48,22 +77,21 @@ export const renderTotalPerformanceChart = ({
   setBadge(data.percent);
 
   /* -----------------------------
-   * TIMEFRAME PILLS (STATE ONLY)
+   * TIMEFRAME PILLS
    * ----------------------------- */
 
-  document
-    .querySelectorAll(".asset-summary-pills button")
-    .forEach((btn) => {
-      btn.onclick = () => {
-        onRangeChange?.(btn.dataset.range);
-      };
-    });
+  if (!pillsInitialized) {
+    initTimeframePills(onRangeChange);
+    pillsInitialized = true;
+  }
 
   /* -----------------------------
-   * CHART (BLACK BOX)
+   * CHART (RENDER CLEAN)
    * ----------------------------- */
 
   const { series = [], labels = [] } = data.chart || {};
+
+  container.innerHTML = "";
 
   if (!series.length) {
     container.textContent = "No chart data";
