@@ -1,6 +1,6 @@
 // src/scripts/data.js
 // ======================================================
-// DATA ORCHESTRATION LAYER (LOCKED)
+// DATA ORCHESTRATION LAYER (STEP 2 — LOCKED)
 // ======================================================
 
 import {
@@ -26,7 +26,7 @@ const formatCurrency = (value, digits = 0) =>
  * STATE (SINGLE SOURCE OF TRUTH)
  * ------------------------------------------------------ */
 
-let equityDaily = [];
+let equityDaily = null; // ⬅️ null = BELUM INIT
 let activeRange = "ALL";
 
 /* ------------------------------------------------------
@@ -34,7 +34,20 @@ let activeRange = "ALL";
  * ------------------------------------------------------ */
 
 export const initDashboardData = async () => {
+  if (equityDaily !== null) return; // ⬅️ guard: load 1x saja
   equityDaily = await getEquityDaily();
+};
+
+/* ------------------------------------------------------
+ * INTERNAL GUARD
+ * ------------------------------------------------------ */
+
+const requireEquity = () => {
+  if (!Array.isArray(equityDaily)) {
+    throw new Error(
+      "equityDaily is not initialized. Call initDashboardData() first."
+    );
+  }
 };
 
 /* ------------------------------------------------------
@@ -66,10 +79,12 @@ const computeSummary = (series) => {
 };
 
 /* ------------------------------------------------------
- * ASSET SUMMARY (LOCKED FLOW)
+ * ASSET SUMMARY (STEP 2 — LOCKED FLOW)
  * ------------------------------------------------------ */
 
 const buildAssetSummary = () => {
+  requireEquity(); // ⬅️ WAJIB lewat sini
+
   const series = filterByRange(equityDaily, activeRange);
   const { totalValue, percent } = computeSummary(series);
 
@@ -133,13 +148,11 @@ const buildTopAutotraders = async () => {
 };
 
 /* ------------------------------------------------------
- * DASHBOARD FETCH (FINAL)
+ * DASHBOARD FETCH (FINAL & SAFE)
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  if (!equityDaily.length) {
-    await initDashboardData();
-  }
+  await initDashboardData(); // ⬅️ dipastikan 1x load
 
   const [accountsSummary, topAutotraders] = await Promise.all([
     buildAccountsSummary(),
