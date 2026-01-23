@@ -124,7 +124,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDate.style.transform = "translateX(-50%)";
 
   // ✅ anchor exactly where x-axis ticks are
-  hoverDate.style.bottom = "6px";
+  hoverDate.style.bottom = "1px";
 
   /* ---------- OVERLAY CAPTURE ---------- */
 
