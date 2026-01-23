@@ -1,6 +1,6 @@
 // src/scripts/data.js
 // ======================================================
-// DATA ORCHESTRATION LAYER (STEP 2 — LOCKED)
+// DATA ORCHESTRATION LAYER (STEP 4–7 — LOCKED)
 // ======================================================
 
 import {
@@ -26,15 +26,15 @@ const formatCurrency = (value, digits = 0) =>
  * STATE (SINGLE SOURCE OF TRUTH)
  * ------------------------------------------------------ */
 
-let equityDaily = null; // ⬅️ null = BELUM INIT
-let activeRange = "ALL";
+let equityDaily = null;      // FULL daily equity (loaded once)
+let activeRange = "ALL";    // "7D" | "30D" | "90D" | "ALL"
 
 /* ------------------------------------------------------
- * INIT (WAJIB DIPANGGIL SEKALI)
+ * INIT (STEP 2 — LOAD ONCE)
  * ------------------------------------------------------ */
 
 export const initDashboardData = async () => {
-  if (equityDaily !== null) return; // ⬅️ guard: load 1x saja
+  if (equityDaily !== null) return;
   equityDaily = await getEquityDaily();
 };
 
@@ -45,13 +45,13 @@ export const initDashboardData = async () => {
 const requireEquity = () => {
   if (!Array.isArray(equityDaily)) {
     throw new Error(
-      "equityDaily is not initialized. Call initDashboardData() first."
+      "equityDaily not initialized. Call initDashboardData() first."
     );
   }
 };
 
 /* ------------------------------------------------------
- * HELPERS
+ * STEP 3 — FILTER TIMEFRAME (DATA LAYER)
  * ------------------------------------------------------ */
 
 const filterByRange = (data, range) => {
@@ -59,10 +59,14 @@ const filterByRange = (data, range) => {
     range === "7D" ? 7 :
     range === "30D" ? 30 :
     range === "90D" ? 90 :
-    data.length;
+    data.length; // ALL
 
   return data.slice(-days);
 };
+
+/* ------------------------------------------------------
+ * STEP 4 — COMPUTE TOTAL & PERCENT
+ * ------------------------------------------------------ */
 
 const computeSummary = (series) => {
   if (series.length < 2) {
@@ -79,18 +83,21 @@ const computeSummary = (series) => {
 };
 
 /* ------------------------------------------------------
- * ASSET SUMMARY (STEP 2 — LOCKED FLOW)
+ * STEP 5 & 6 — ASSET SUMMARY (HEADER + CHART INPUT)
  * ------------------------------------------------------ */
 
 const buildAssetSummary = () => {
-  requireEquity(); // ⬅️ WAJIB lewat sini
+  requireEquity();
 
   const series = filterByRange(equityDaily, activeRange);
   const { totalValue, percent } = computeSummary(series);
 
   return {
+    // HEADER DATA (STEP 5)
     totalValue: formatCurrency(totalValue),
     percent,
+
+    // CHART DATA (STEP 6)
     chart: {
       series: series.map(d => d.value),
       labels: series.map(d => d.date),
@@ -99,7 +106,7 @@ const buildAssetSummary = () => {
 };
 
 /* ------------------------------------------------------
- * RANGE CONTROLLER
+ * STEP 7 — RANGE CONTROLLER (TRIGGER RECOMPUTE)
  * ------------------------------------------------------ */
 
 export const setAssetRange = (range) => {
@@ -148,11 +155,11 @@ const buildTopAutotraders = async () => {
 };
 
 /* ------------------------------------------------------
- * DASHBOARD FETCH (FINAL & SAFE)
+ * DASHBOARD FETCH (FINAL ENTRY POINT)
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  await initDashboardData(); // ⬅️ dipastikan 1x load
+  await initDashboardData();
 
   const [accountsSummary, topAutotraders] = await Promise.all([
     buildAccountsSummary(),
@@ -160,7 +167,7 @@ export const fetchDashboardData = async () => {
   ]);
 
   return {
-    assetSummary: buildAssetSummary(),
+    assetSummary: buildAssetSummary(), // STEP 4–6 applied
     accountsSummary,
     topAutotraders,
     alerts: [],
