@@ -51,24 +51,18 @@
                       </h1>
                     </div>
 
-                    <!-- TIMEFRAME PILLS -->
                     <div class="asset-summary-pills">
-                      <button class="time-pill" data-range="7D">7D</button>
-                      <button class="time-pill" data-range="30D">30D</button>
-                      <button class="time-pill" data-range="90D">90D</button>
-                      <button
-                        class="time-pill active"
-                        data-range="ALL"
-                      >
-                        ALL
-                      </button>
+                      <button data-range="7D">7D</button>
+                      <button data-range="30D">30D</button>
+                      <button data-range="90D">90D</button>
+                      <button data-range="ALL" class="active">ALL</button>
                     </div>
                   </div>
 
                   <!-- CHART -->
                   <div
-                    id="asset-summary-chart"
-                    class="asset-summary-chart total-performance-chart"
+                    class="asset-summary-chart total-performance-chart chart-placeholder"
+                    data-total-performance="dashboard"
                     data-field="asset.chart"
                   ></div>
 
@@ -217,7 +211,6 @@
       </div>
     </div>
 
-    <!-- ENTRY SCRIPT -->
     <script type="module" src="src/scripts/main.js"></script>
   </body>
 </html>
