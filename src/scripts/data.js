@@ -23,10 +23,20 @@ const formatCurrency = (value, digits = 0) =>
   }).format(value);
 
 /* ------------------------------------------------------
- * STATE (SINGLE SOURCE OF TRUTH)  — STEP 2
+ * STATE (SINGLE SOURCE OF TRUTH) — STEP 2
  * ------------------------------------------------------ */
 
-let activeRange = "7D"; // "7D" | "30D" | "90D" | "ALL"
+let activeRange = "7D";
+
+export const setActiveRange = (range) => {
+  activeRange = range;
+};
+
+export const getActiveRange = () => activeRange;
+
+/* ------------------------------------------------------
+ * RANGE CONFIG — STEP 3
+ * ------------------------------------------------------ */
 
 const RANGE_DAYS = {
   "7D": 7,
@@ -45,6 +55,10 @@ const sliceSeriesByRange = (series = [], range) => {
   if (range === "ALL") return series;
 
   const days = RANGE_DAYS[range];
+
+  // ✅ Guard: kalau range invalid → fallback ALL
+  if (!days) return series;
+
   return series.slice(-days);
 };
 
@@ -54,13 +68,17 @@ const sliceSeriesByRange = (series = [], range) => {
 
 const computeSummary = (series) => {
   if (!series || series.length < 2) {
-    return { totalValue: 0, percent: 0 };
+    return {
+      totalValue: 0,
+      percent: 0,
+    };
   }
 
-  const first = series[0].value;
-  const last = series[series.length - 1].value;
+  const first = Number(series[0]?.value || 0);
+  const last = Number(series[series.length - 1]?.value || 0);
 
-  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
+  const percent =
+    first > 0 ? ((last - first) / first) * 100 : 0;
 
   return {
     totalValue: last,
@@ -73,11 +91,13 @@ const computeSummary = (series) => {
  * ------------------------------------------------------ */
 
 const buildAssetSummary = async () => {
-  // ALWAYS fetch ALL, slice locally
+  // ✅ Always fetch ALL series first
   const rawSeries = await getAssetEquityByRange("ALL");
 
+  // ✅ Slice locally based on activeRange
   const slicedSeries = sliceSeriesByRange(rawSeries, activeRange);
 
+  // ✅ Compute header numbers
   const { totalValue, percent } = computeSummary(slicedSeries);
 
   return {
@@ -85,9 +105,9 @@ const buildAssetSummary = async () => {
     totalValue: formatCurrency(totalValue),
     percent,
 
-    // CHART
+    // CHART INPUT (render-ready)
     chart: {
-      series: slicedSeries.map((d) => d.value),
+      series: slicedSeries.map((d) => Number(d.value || 0)),
       labels: slicedSeries.map((d) => d.date),
     },
   };
@@ -115,7 +135,7 @@ const buildAccountsSummary = async () => {
     value: formatCurrency(a.totalValueUsd || 0),
   }));
 
-  const total = list.reduce((s, a) => s + a.amount, 0);
+  const total = list.reduce((sum, x) => sum + x.amount, 0);
 
   return {
     total: formatCurrency(total),
@@ -129,6 +149,7 @@ const buildAccountsSummary = async () => {
 
 const buildTopAutotraders = async () => {
   const accounts = await getAccounts();
+
   const traders = (
     await Promise.all(
       accounts.map((a) => getAutotradersByAccount(a.account_id))
