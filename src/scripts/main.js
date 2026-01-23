@@ -9,6 +9,9 @@ import { renderTradeHistory } from "./render/tradeHistory.js";
 
 import { initSidebar } from "./sidebar.js";
 
+import { setAssetRange } from "./data.js";
+
+
 const appRoot = document.getElementById("app");
 
 /**
@@ -74,25 +77,22 @@ const renderDashboard = (state) => {
     dataSource: "dashboard",
     data: state.data.assetSummary,
     status: state.status.assetSummary,
-    onRangeChange: (range) => {
-      const current = getState();
-      const assetSummary = current.data.assetSummary;
-
-      if (!assetSummary?.chart) return;
-
-      // Update state only, render akan otomatis dipanggil ulang via subscribe
-      setState({
-        data: {
-          assetSummary: {
-            ...assetSummary,
-            chart: {
-              ...assetSummary.chart,
-              activeRange: range,
-            },
+    onRangeChange: async (range) => {
+    const next = await setAssetRange(range);
+  
+    setState({
+      data: {
+        ...getState().data,
+        assetSummary: {
+          ...next,
+          chart: {
+            ...next.chart,
+            activeRange: range,
           },
         },
-      });
-    },
+      },
+    });
+  },
   });
 
   // ===============================
