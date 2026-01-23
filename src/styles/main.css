@@ -837,10 +837,8 @@ main {
   border-radius: 999px;
   background: var(--color-overlay-xs);
   border: 1px solid var(--color-overlay-md);
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  transform: translateX(-50%);
+  position: static;
+  transform: none;
 }
 
 .autotraders-performance .section-header .timeframe-pills {
@@ -2099,14 +2097,12 @@ main {
 }
 
 .asset-summary-chart {
-  margin-top: 16px;
   position: relative;
   flex: 1;        /* WAJIB */
   min-height: 0; /* WAJIB */
 }
 
 .asset-summary .chart-placeholder {
-  height: auto;
   min-height: 0;
   padding-bottom: 0;
   flex: 1;
