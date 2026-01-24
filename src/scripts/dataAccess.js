@@ -11,7 +11,15 @@ const DATA_URLS = {
 
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
-  accountAssetsIndex: new URL("../../data/account_assets_daily/index.json", import.meta.url),
+
+  accountAssetsIndex: new URL(
+    "../../data/account_assets_daily/index.json",
+    import.meta.url
+  ),
+  assetPriceIndex: new URL(
+    "../../data/asset_price_daily/index.json",
+    import.meta.url
+  ),
 };
 
 /* =========================
@@ -53,7 +61,7 @@ export const getTradingPlans = async () =>
   fetchJson(DATA_URLS.tradingPlans, "plans");
 
 /* =========================
-   DERIVED EQUITY (SINGLE SOURCE)
+   DERIVED EQUITY
 ========================= */
 
 export const getEquityDaily = async () => {
@@ -106,17 +114,6 @@ export const getAutotradersByAccount = async (accountId) => {
    DAILY SNAPSHOTS (PER DATE)
 ========================= */
 
-const getLatestAccountAssetsDate = async () => {
-  const files = await fetchJson(DATA_URLS.accountAssetsIndex, "index:account_assets_daily");
-  if (!Array.isArray(files) || files.length === 0) return null;
-
-  // index.json sudah urut dari awal ke akhir, ambil paling akhir
-  const last = files[files.length - 1]; // "2026-01-17.json"
-  if (typeof last !== "string") return null;
-
-  return last.replace(".json", "");
-};
-
 export const getAccountAssetsDailyByDate = async (date) => {
   const url = new URL(`${date}.json`, DATA_URLS.accountAssetsBase);
   return fetchJson(url, `account_assets_daily:${date}`);
@@ -128,38 +125,39 @@ export const getAssetPriceDailyByDate = async (date) => {
 };
 
 /* =========================
+   ✅ LATEST COMMON DATE
+   account_assets_daily + asset_price_daily MUST MATCH
+========================= */
+
+const getLatestCommonSnapshotDate = async () => {
+  const [assetFiles, priceFiles] = await Promise.all([
+    fetchJson(DATA_URLS.accountAssetsIndex, "index:account_assets"),
+    fetchJson(DATA_URLS.assetPriceIndex, "index:asset_prices"),
+  ]);
+
+  if (!Array.isArray(assetFiles) || !Array.isArray(priceFiles)) return null;
+
+  const assetSet = new Set(assetFiles.map((f) => f.replace(".json", "")));
+
+  const commonDates = priceFiles
+    .map((f) => f.replace(".json", ""))
+    .filter((d) => assetSet.has(d));
+
+  if (!commonDates.length) return null;
+
+  // latest = last
+  return commonDates[commonDates.length - 1];
+};
+
+/* =========================
    ✅ ACCOUNTS SUMMARY (FINAL)
-   level = ACCOUNT (bukan provider)
-   source = latest daily snapshot
+   level = ACCOUNT
+   source = latest common daily snapshot
 ========================= */
 
 export const getAccountsWithSummary = async () => {
-  const [accounts, latestDate] = await Promise.all([
-    getAccounts(),
-    getLatestAccountAssetsDate(),
-  ]);
-
-  if (!latestDate) {
-    return accounts.map((a) => ({
-      ...a,
-      name: a.account_name || a.name || "Account",
-      amount: 0,
-      value: "$0",
-    }));
-  }
-
-  const [assetsSnap, priceSnap] = await Promise.all([
-    getAccountAssetsDailyByDate(latestDate),
-    getAssetPriceDailyByDate(latestDate),
-  ]);
-
-  const priceMap = new Map(
-    (priceSnap?.prices || []).map((p) => [p.asset_id, Number(p.price_usd || 0)])
-  );
-
-  const assetsByAccount = new Map(
-    (assetsSnap?.accounts || []).map((x) => [x.account_id, x.assets || []])
-  );
+  const accounts = await getAccounts();
+  const latestDate = await getLatestCommonSnapshotDate();
 
   const fmt = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -167,20 +165,51 @@ export const getAccountsWithSummary = async () => {
     maximumFractionDigits: 0,
   });
 
-  return accounts.map((a) => {
-    const accId = a.account_id;
-    const list = assetsByAccount.get(accId) || [];
+  // fallback jika tidak ada snapshot match
+  if (!latestDate) {
+    return accounts.map((a) => ({
+      account_id: a.account_id,
+      name: a.account_name || a.name || "Account",
+      amount: 0,
+      value: "$0",
+    }));
+  }
+
+  // load snapshots
+  const [assetsSnap, priceSnap] = await Promise.all([
+    getAccountAssetsDailyByDate(latestDate),
+    getAssetPriceDailyByDate(latestDate),
+  ]);
+
+  // build price map
+  const priceMap = new Map(
+    (priceSnap?.prices || []).map((p) => [
+      p.asset_id,
+      Number(p.price_usd || 0),
+    ])
+  );
+
+  // build account -> assets map
+  const assetsByAccount = new Map(
+    (assetsSnap?.accounts || []).map((x) => [x.account_id, x.assets || []])
+  );
+
+  // compute equity per account
+  return accounts.map((acc) => {
+    const accId = acc.account_id;
+    const assetList = assetsByAccount.get(accId) || [];
 
     let totalUsd = 0;
-    for (const it of list) {
+
+    for (const it of assetList) {
       const qty = Number(it?.value || 0);
       const px = priceMap.get(it?.asset_id) || 0;
       totalUsd += qty * px;
     }
 
     return {
-      ...a,
-      name: a.account_name || a.name || "Account",
+      account_id: accId,
+      name: acc.account_name || acc.name || "Account",
       amount: totalUsd,
       value: fmt.format(totalUsd),
       snapshot_date: latestDate,
