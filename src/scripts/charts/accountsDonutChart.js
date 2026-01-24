@@ -7,28 +7,50 @@ import { cssVar } from "./cssVar.js";
 const createSvgElement = (tag) =>
   document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const polarToCartesian = (cx, cy, r, angle) => {
-  const rad = ((angle - 90) * Math.PI) / 180;
+const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+  const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
   return {
-    x: cx + r * Math.cos(rad),
-    y: cy + r * Math.sin(rad),
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians),
   };
 };
 
-const describeArc = (x, y, r, startAngle, endAngle) => {
-  const start = polarToCartesian(x, y, r, endAngle);
-  const end = polarToCartesian(x, y, r, startAngle);
+const describeArc = (x, y, radius, startAngle, endAngle) => {
+  const start = polarToCartesian(x, y, radius, endAngle);
+  const end = polarToCartesian(x, y, radius, startAngle);
 
   const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
-  return `
-    M ${start.x} ${start.y}
-    A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}
-  `;
+  return [
+    "M",
+    start.x,
+    start.y,
+    "A",
+    radius,
+    radius,
+    0,
+    largeArcFlag,
+    0,
+    end.x,
+    end.y,
+  ].join(" ");
 };
 
 /* ============================================
- * Donut Renderer (FINAL)
+ * Color Palette (byScript Accent Set)
+ * ============================================ */
+
+const DONUT_COLORS = [
+  "#68FE1D", // Hyper Lime
+  "#00F7D5", // Cyan Signal
+  "#AFFF5C", // Lime Pulse
+  "#3D2C8D", // Code Purple
+  "#FF5F5F", // Neon Coral
+  "#2A2F3A", // Dark Steel
+];
+
+/* ============================================
+ * Donut Renderer (Colored Segments)
  * ============================================ */
 
 export const renderAccountsDonutChart = ({ container, accounts }) => {
@@ -37,54 +59,66 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
   const width = 214;
   const height = 214;
   const strokeWidth = 18;
+
   const radius = (Math.min(width, height) - strokeWidth) / 2;
 
   const total =
-    accounts.reduce(
-      (sum, a) => sum + Number(a.totalValueUsd || 0),
-      0
-    ) || 1;
+    accounts.reduce((sum, item) => sum + Number(item.totalValueUsd || 0), 0) ||
+    1;
 
-  const formatUsd = new Intl.NumberFormat("en-US", {
+  const formatCurrency = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
     maximumFractionDigits: 0,
   });
 
-  const svg = createSvgElement("svg");
-  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-  svg.setAttribute("width", width);
-  svg.setAttribute("height", height);
+  /* ----------------------------------
+   * SVG Root
+   * ---------------------------------- */
 
-  /* Center Hover Label */
+  const svg = createSvgElement("svg");
+  svg.setAttribute("width", `${width}`);
+  svg.setAttribute("height", `${height}`);
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+  /* ----------------------------------
+   * Hover Label
+   * ---------------------------------- */
+
   const labelGroup = createSvgElement("g");
   labelGroup.style.visibility = "hidden";
 
   const labelName = createSvgElement("text");
-  labelName.setAttribute("x", width / 2);
-  labelName.setAttribute("y", height / 2 - 6);
+  labelName.setAttribute("x", `${width / 2}`);
+  labelName.setAttribute("y", `${height / 2 - 6}`);
   labelName.setAttribute("text-anchor", "middle");
   labelName.setAttribute("class", "donut-label donut-label__name");
 
   const labelValue = createSvgElement("text");
-  labelValue.setAttribute("x", width / 2);
-  labelValue.setAttribute("y", height / 2 + 16);
+  labelValue.setAttribute("x", `${width / 2}`);
+  labelValue.setAttribute("y", `${height / 2 + 16}`);
   labelValue.setAttribute("text-anchor", "middle");
   labelValue.setAttribute("class", "donut-label donut-label__value");
 
   labelGroup.appendChild(labelName);
   labelGroup.appendChild(labelValue);
 
-  /* Segments */
+  /* ----------------------------------
+   * Segments
+   * ---------------------------------- */
+
   let currentAngle = 0;
 
-  accounts.forEach((acc) => {
-    const value = Number(acc.totalValueUsd || 0);
+  accounts.forEach((account, index) => {
+    const value = Number(account.totalValueUsd || 0);
     const angle = (value / total) * 360;
 
-    if (angle <= 0) return;
-
     const arc = createSvgElement("path");
+
+    const color =
+      account.brand_color ||
+      account.brandColor ||
+      DONUT_COLORS[index % DONUT_COLORS.length];
 
     arc.setAttribute(
       "d",
@@ -98,25 +132,24 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
     );
 
     arc.setAttribute("fill", "none");
-    arc.setAttribute("stroke-width", strokeWidth);
+    arc.setAttribute("stroke", color);
+    arc.setAttribute("stroke-width", `${strokeWidth}`);
     arc.setAttribute("stroke-linecap", "butt");
-    arc.setAttribute("opacity", "0.9");
-
-    arc.setAttribute(
-      "stroke",
-      acc.brand_color || cssVar("--color-chart-muted")
-    );
+    arc.setAttribute("opacity", "0.95");
 
     arc.style.cursor = "pointer";
 
     arc.addEventListener("mouseenter", () => {
-      labelName.textContent = acc.account_name;
-      labelValue.textContent = formatUsd.format(value);
+      labelName.textContent = account.account_name;
+      labelValue.textContent = formatCurrency.format(value);
+
       labelGroup.style.visibility = "visible";
+      arc.setAttribute("opacity", "1");
     });
 
     arc.addEventListener("mouseleave", () => {
       labelGroup.style.visibility = "hidden";
+      arc.setAttribute("opacity", "0.95");
     });
 
     svg.appendChild(arc);
@@ -124,15 +157,22 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
     currentAngle += angle;
   });
 
-  /* Inner Circle */
+  /* ----------------------------------
+   * Center Circle
+   * ---------------------------------- */
+
   const center = createSvgElement("circle");
-  center.setAttribute("cx", width / 2);
-  center.setAttribute("cy", height / 2);
-  center.setAttribute("r", radius - strokeWidth / 2);
+  center.setAttribute("cx", `${width / 2}`);
+  center.setAttribute("cy", `${height / 2}`);
+  center.setAttribute("r", `${radius - strokeWidth / 2}`);
   center.setAttribute("fill", cssVar("--color-bg-surface"));
 
   svg.appendChild(center);
   svg.appendChild(labelGroup);
+
+  /* ----------------------------------
+   * Mount
+   * ---------------------------------- */
 
   container.innerHTML = "";
   container.appendChild(svg);
