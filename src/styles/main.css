@@ -2118,22 +2118,10 @@ main {
   height: 100%;
 }
 
-/* .donut-center-label {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
+.accounts-donut-segment {
+  transition: opacity 0.2s ease;
 }
 
-.donut-name {
-  font-size: 13px;
-  opacity: 0.6;
+.accounts-donut-segment:hover {
+  opacity: 1 !important;
 }
-
-.donut-value {
-  font-size: 18px;
-  font-weight: 700;
-} */
