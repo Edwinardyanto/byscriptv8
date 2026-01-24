@@ -2118,13 +2118,23 @@ main {
   height: 100%;
 }
 
-
-/*.chart-hover-date {
+.donut-center-label {
   position: absolute;
-  bottom: 10px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.65);
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
   pointer-events: none;
-  transform: translateX(-50%);
-  transition: opacity 0.15s ease;
-}*/
+}
+
+.donut-name {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.donut-value {
+  font-size: 18px;
+  color: white;
+}
