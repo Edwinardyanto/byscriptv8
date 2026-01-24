@@ -16,10 +16,6 @@ const DATA_URLS = {
     "../../data/account_assets_daily/index.json",
     import.meta.url
   ),
-  assetPriceIndex: new URL(
-    "../../data/asset_price_daily/index.json",
-    import.meta.url
-  ),
 };
 
 /* =========================
@@ -51,67 +47,8 @@ const fetchJson = async (url, key) => {
 export const getAccounts = async () =>
   fetchJson(DATA_URLS.accounts, "accounts");
 
-export const getAssets = async () =>
-  fetchJson(DATA_URLS.assets, "assets");
-
-export const getAutotraders = async () =>
-  fetchJson(DATA_URLS.autotraders, "autotraders");
-
-export const getTradingPlans = async () =>
-  fetchJson(DATA_URLS.tradingPlans, "plans");
-
 /* =========================
-   DERIVED EQUITY
-========================= */
-
-export const getEquityDaily = async () => {
-  const data = await fetchJson(DATA_URLS.equityDaily, "derive:equity");
-  if (!Array.isArray(data)) return [];
-
-  return data
-    .filter((d) => d && d.date && typeof d.value === "number")
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
-};
-
-export const getAssetEquityByRange = async (range = "ALL") => {
-  const series = await getEquityDaily();
-  if (!series.length) return [];
-
-  switch (range) {
-    case "7D":
-      return series.slice(-7);
-    case "30D":
-      return series.slice(-30);
-    case "90D":
-      return series.slice(-90);
-    case "ALL":
-    default:
-      return series;
-  }
-};
-
-/* =========================
-   AUTOTRADERS BY ACCOUNT
-========================= */
-
-export const getAutotradersByAccount = async (accountId) => {
-  const [autotraders, plans] = await Promise.all([
-    getAutotraders(),
-    getTradingPlans(),
-  ]);
-
-  const planMap = new Map(plans.map((p) => [p.plan_id, p]));
-
-  return autotraders
-    .filter((a) => a.account_id === accountId)
-    .map((a) => ({
-      ...a,
-      tradingPlanName: planMap.get(a.plan_id)?.plan_name || "",
-    }));
-};
-
-/* =========================
-   DAILY SNAPSHOTS (PER DATE)
+   DAILY SNAPSHOTS
 ========================= */
 
 export const getAccountAssetsDailyByDate = async (date) => {
@@ -125,39 +62,41 @@ export const getAssetPriceDailyByDate = async (date) => {
 };
 
 /* =========================
-   ✅ LATEST COMMON DATE
-   account_assets_daily + asset_price_daily MUST MATCH
+   ✅ FIND LATEST VALID DATE
+   use account_assets_daily/index.json only
 ========================= */
 
-const getLatestCommonSnapshotDate = async () => {
-  const [assetFiles, priceFiles] = await Promise.all([
-    fetchJson(DATA_URLS.accountAssetsIndex, "index:account_assets"),
-    fetchJson(DATA_URLS.assetPriceIndex, "index:asset_prices"),
-  ]);
+const getLatestValidSnapshotDate = async () => {
+  const files = await fetchJson(
+    DATA_URLS.accountAssetsIndex,
+    "index:account_assets"
+  );
 
-  if (!Array.isArray(assetFiles) || !Array.isArray(priceFiles)) return null;
+  if (!Array.isArray(files) || files.length === 0) return null;
 
-  const assetSet = new Set(assetFiles.map((f) => f.replace(".json", "")));
+  // ambil dari belakang, cari yang punya price juga
+  for (let i = files.length - 1; i >= 0; i--) {
+    const date = files[i].replace(".json", "");
 
-  const commonDates = priceFiles
-    .map((f) => f.replace(".json", ""))
-    .filter((d) => assetSet.has(d));
+    try {
+      // test price file exists
+      await getAssetPriceDailyByDate(date);
+      return date;
+    } catch (err) {
+      continue; // skip missing price date
+    }
+  }
 
-  if (!commonDates.length) return null;
-
-  // latest = last
-  return commonDates[commonDates.length - 1];
+  return null;
 };
 
 /* =========================
    ✅ ACCOUNTS SUMMARY (FINAL)
-   level = ACCOUNT
-   source = latest common daily snapshot
 ========================= */
 
 export const getAccountsWithSummary = async () => {
   const accounts = await getAccounts();
-  const latestDate = await getLatestCommonSnapshotDate();
+  const latestDate = await getLatestValidSnapshotDate();
 
   const fmt = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -165,7 +104,6 @@ export const getAccountsWithSummary = async () => {
     maximumFractionDigits: 0,
   });
 
-  // fallback jika tidak ada snapshot match
   if (!latestDate) {
     return accounts.map((a) => ({
       account_id: a.account_id,
@@ -175,13 +113,11 @@ export const getAccountsWithSummary = async () => {
     }));
   }
 
-  // load snapshots
   const [assetsSnap, priceSnap] = await Promise.all([
     getAccountAssetsDailyByDate(latestDate),
     getAssetPriceDailyByDate(latestDate),
   ]);
 
-  // build price map
   const priceMap = new Map(
     (priceSnap?.prices || []).map((p) => [
       p.asset_id,
@@ -189,12 +125,10 @@ export const getAccountsWithSummary = async () => {
     ])
   );
 
-  // build account -> assets map
   const assetsByAccount = new Map(
     (assetsSnap?.accounts || []).map((x) => [x.account_id, x.assets || []])
   );
 
-  // compute equity per account
   return accounts.map((acc) => {
     const accId = acc.account_id;
     const assetList = assetsByAccount.get(accId) || [];
