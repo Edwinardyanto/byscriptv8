@@ -7,7 +7,6 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
   container.style.position = "relative";
 
   const total = accounts.reduce((sum, a) => sum + a.totalValueUsd, 0);
-
   if (!total) return;
 
   /* =========================
@@ -16,12 +15,16 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
 
   const size = 180;
   const radius = 70;
-  const stroke = 16;
+  const stroke = 18;
   const center = size / 2;
+  const circumference = 2 * Math.PI * radius;
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("width", size);
   svg.setAttribute("height", size);
+
+  // rotate so start from top
+  svg.style.transform = "rotate(-90deg)";
 
   container.appendChild(svg);
 
@@ -34,44 +37,40 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
   container.appendChild(centerLabel);
 
   /* =========================
-     Donut Slices
+     Donut Slices (Circle Stroke)
   ========================= */
 
-  let angleStart = 0;
+  let offset = 0;
 
   accounts.forEach((acc, i) => {
     const portion = acc.totalValueUsd / total;
-    const angle = portion * Math.PI * 2;
-    const angleEnd = angleStart + angle;
+    const dash = portion * circumference;
 
-    const x1 = center + radius * Math.cos(angleStart);
-    const y1 = center + radius * Math.sin(angleStart);
-
-    const x2 = center + radius * Math.cos(angleEnd);
-    const y2 = center + radius * Math.sin(angleEnd);
-
-    const largeArc = angle > Math.PI ? 1 : 0;
-
-    const pathData = `
-      M ${x1} ${y1}
-      A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}
-    `;
-
-    const path = document.createElementNS(
+    const circle = document.createElementNS(
       "http://www.w3.org/2000/svg",
-      "path"
+      "circle"
     );
 
-    path.setAttribute("d", pathData);
-    path.setAttribute("fill", "none");
-    path.setAttribute("stroke-width", stroke);
-    path.setAttribute("stroke-linecap", "round");
+    circle.setAttribute("cx", center);
+    circle.setAttribute("cy", center);
+    circle.setAttribute("r", radius);
 
-    // simple rotating color variation
-    path.setAttribute("stroke", `hsl(${i * 55},90%,55%)`);
+    circle.setAttribute("fill", "none");
+    circle.setAttribute("stroke-width", stroke);
 
-    // Hover display
-    path.addEventListener("mouseenter", () => {
+    circle.setAttribute(
+      "stroke-dasharray",
+      `${dash} ${circumference - dash}`
+    );
+
+    circle.setAttribute("stroke-dashoffset", -offset);
+
+    // color variation
+    circle.setAttribute("stroke", `hsl(${i * 55},90%,55%)`);
+    circle.style.cursor = "pointer";
+
+    // Hover label
+    circle.addEventListener("mouseenter", () => {
       centerLabel.innerHTML = `
         <div class="donut-name">${acc.account_name}</div>
         <div class="donut-value">
@@ -80,12 +79,12 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
       `;
     });
 
-    path.addEventListener("mouseleave", () => {
+    circle.addEventListener("mouseleave", () => {
       centerLabel.innerHTML = "";
     });
 
-    svg.appendChild(path);
+    svg.appendChild(circle);
 
-    angleStart = angleEnd;
+    offset += dash;
   });
 };
