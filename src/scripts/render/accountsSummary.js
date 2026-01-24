@@ -1,9 +1,14 @@
-import { getAccountsWithSummary } from "../dataAccess.js";
 import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 
-/* ---------------- helpers ---------------- */
+/* ---------------- utils ---------------- */
+
+const setText = (selector, value) => {
+  const element = document.querySelector(selector);
+  if (element) element.textContent = value;
+};
 
 const setListMessage = (list, message) => {
+  if (!list) return;
   list.innerHTML = "";
   const item = document.createElement("div");
   item.className = "summary-item";
@@ -11,57 +16,111 @@ const setListMessage = (list, message) => {
   list.appendChild(item);
 };
 
-/* =========================
-   ✅ MAIN RENDER
-========================= */
+const toMoney = (n) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(Number(n || 0));
 
-export const renderAccountsSummary = async () => {
+const pickName = (a) => a?.name || a?.account_name || "Account";
+const pickAmount = (a) =>
+  typeof a?.amount === "number"
+    ? a.amount
+    : Number(a?.totalValueUsd || 0) || 0;
+
+const pickValueText = (a) => a?.value || toMoney(pickAmount(a));
+
+/* ---------------- main render ---------------- */
+
+export const renderAccountsSummary = async (sectionState) => {
+  const { data, status } = sectionState;
+
   const list = document.querySelector('[data-list="accounts"]');
   const section = list?.closest(".section");
-
   const chartContainer =
+    section?.querySelector('[data-accounts-donut] .chart-placeholder') ||
     section?.querySelector(".summary-total .chart-placeholder");
 
-  if (!list || !chartContainer) return;
+  const isAccountsPage =
+    document.body?.classList.contains("page-accounts");
 
   /* ---------- loading ---------- */
 
-  setListMessage(list, "Loading accounts...");
-
-  /* ---------- fetch ---------- */
-
-  const accounts = await getAccountsWithSummary();
-
-  if (!accounts.length) {
-    setListMessage(list, "No accounts found");
-    chartContainer.textContent = "No chart data";
+  if (status === "loading") {
+    if (list) setListMessage(list, "Loading accounts...");
+    if (chartContainer) chartContainer.textContent = "Loading chart...";
+    setText('[data-field="accounts.total"]', "--");
     return;
   }
+
+  /* ---------- error ---------- */
+
+  if (status === "error") {
+    if (list) setListMessage(list, "Unable to load accounts");
+    if (chartContainer) chartContainer.textContent = "Chart unavailable";
+    setText('[data-field="accounts.total"]', "--");
+    return;
+  }
+
+  /* ---------- empty ---------- */
+
+  if (!data || !Array.isArray(data.accounts) || data.accounts.length === 0) {
+    if (list) setListMessage(list, "No accounts data");
+    if (chartContainer) chartContainer.textContent = "No chart data";
+    setText('[data-field="accounts.total"]', "--");
+    return;
+  }
+
+  const accounts = data.accounts.map((a) => ({
+    ...a,
+    name: pickName(a),
+    amount: pickAmount(a),
+    value: pickValueText(a),
+  }));
+
+  const totalUsd = accounts.reduce((s, a) => s + Number(a.amount || 0), 0);
+  const totalText = data?.accountsSummary?.total || toMoney(totalUsd);
 
   /* =========================
      ✅ LIST SCROLL RAPi
   ========================= */
 
-  list.innerHTML = "";
-  list.style.maxHeight = "180px";
-  list.style.overflowY = "auto";
-  list.style.paddingRight = "6px";
+  if (list) {
+    list.innerHTML = "";
 
-  accounts.forEach((acc) => {
-    const row = document.createElement("div");
-    row.className = "summary-item";
+    // scroll rapi tanpa ngacak layout
+    list.style.maxHeight = "168px";
+    list.style.overflowY = "auto";
+    list.style.paddingRight = "6px";
 
-    row.innerHTML = `
-      <span class="summary-item-name">${acc.name}</span>
-      <span class="summary-item-value">${acc.value}</span>
-    `;
+    accounts.forEach((account) => {
+      const item = document.createElement("div");
+      item.className = isAccountsPage ? "accounts-distribution-item" : "summary-item";
 
-    list.appendChild(row);
-  });
+      item.innerHTML = isAccountsPage
+        ? `
+          <div class="accounts-distribution-item-header">
+            <span>${account.name}</span>
+            <span>${account.value}</span>
+          </div>
+        `
+        : `
+          <span class="summary-item-name">${account.name}</span>
+          <span class="summary-item-value">${account.value}</span>
+        `;
+
+      list.appendChild(item);
+    });
+  }
 
   /* =========================
-     ✅ DONUT PER ACCOUNT
+     ✅ DONUT SLICE PER ACCOUNT
   ========================= */
 
-  renderAccountsDonutChart(chartContainer, accounts);
+  if (chartContainer) {
+    renderAccountsDonutChart(chartContainer, accounts);
+  }
+
+  setText('[data-field="accounts.total"]', totalText);
 };
