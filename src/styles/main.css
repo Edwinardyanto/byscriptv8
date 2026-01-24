@@ -2026,8 +2026,6 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 48px;          /* KUNCI */
-  flex: 0 0 48px;        /* KUNCI */
 }
 
 
