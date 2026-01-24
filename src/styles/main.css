@@ -2121,7 +2121,7 @@ main {
 }
 
 
-.chart-hover-date {
+/*.chart-hover-date {
   position: absolute;
   bottom: 10px;
   font-size: 12px;
@@ -2129,4 +2129,4 @@ main {
   pointer-events: none;
   transform: translateX(-50%);
   transition: opacity 0.15s ease;
-}
+}*/
