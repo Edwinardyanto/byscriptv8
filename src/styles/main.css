@@ -2125,16 +2125,15 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-weight: 600;
   pointer-events: none;
 }
 
 .donut-name {
   font-size: 13px;
-  color: var(--color-muted);
+  opacity: 0.6;
 }
 
 .donut-value {
   font-size: 18px;
-  color: white;
+  font-weight: 700;
 }
