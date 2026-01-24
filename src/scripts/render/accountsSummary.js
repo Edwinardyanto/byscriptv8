@@ -1,5 +1,3 @@
-// src/scripts/render/accountsSummary.js
-
 import { getAccountsWithSummary } from "../dataAccess.js";
 import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 
@@ -19,7 +17,6 @@ export const renderAccountsSummary = async () => {
 
   const accounts = await getAccountsWithSummary();
 
-  // ✅ Render List
   list.innerHTML = "";
 
   for (const acc of accounts) {
@@ -34,7 +31,6 @@ export const renderAccountsSummary = async () => {
     list.appendChild(row);
   }
 
-  // ✅ Render Donut ke placeholder kanan
   renderAccountsDonutChart({
     container: donutContainer,
     accounts,
