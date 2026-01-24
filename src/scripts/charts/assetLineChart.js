@@ -116,23 +116,24 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
-  /* ---------- Tooltip Value (HTML overlay ok) ---------- */
+  /* ============================================
+   * ✅ Hover Value Text (SVG + Stroke Outline)
+   * ============================================ */
 
-  const tooltip = document.createElement("div");
-  tooltip.style.position = "absolute";
-  tooltip.style.opacity = "0";
-  tooltip.style.pointerEvents = "none";
-  tooltip.style.background = cssVar("--color-bg-surface");
-  tooltip.style.color = cssVar("--color-text-primary");
-  tooltip.style.padding = "6px 10px";
-  tooltip.style.borderRadius = "999px";
-  tooltip.style.fontSize = "0.8rem";
-  tooltip.style.whiteSpace = "nowrap";
-  tooltip.style.transform = "translateX(-50%)";
+  const hoverValueText = createSvgElement("text");
+  hoverValueText.setAttribute("fill", "#ffffff");
+  hoverValueText.setAttribute("font-size", "13");
+  hoverValueText.setAttribute("font-weight", "600");
+  hoverValueText.setAttribute("text-anchor", "middle");
+  hoverValueText.style.opacity = "0";
+
+  /* Stroke outline supaya kebaca di atas line */
+  hoverValueText.setAttribute("stroke", "rgba(0,0,0,0.75)");
+  hoverValueText.setAttribute("stroke-width", "4");
+  hoverValueText.setAttribute("paint-order", "stroke");
 
   /* ============================================
-   * ✅ FIX: Hover Date must be SVG text
-   * (so it scales exactly like baseline labels)
+   * ✅ Hover Date Text (Baseline aligned)
    * ============================================ */
 
   const hoverDateText = createSvgElement("text");
@@ -174,15 +175,11 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
-    /* Tooltip Value (HTML) */
-    tooltip.textContent = series[index].toLocaleString();
-    tooltip.style.opacity = "1";
-
-    const pxX = (point.x / width) * rect.width;
-    const pxY = (point.y / height) * rect.height;
-
-    tooltip.style.left = `${pxX}px`;
-    tooltip.style.top = `${pxY - 18}px`;
+    /* ✅ Hover Value Text */
+    hoverValueText.textContent = series[index].toLocaleString();
+    hoverValueText.setAttribute("x", point.x);
+    hoverValueText.setAttribute("y", point.y - 14);
+    hoverValueText.style.opacity = "1";
 
     /* ✅ Hover Date EXACT baseline position */
     hoverDateText.textContent = new Date(labels[index]).toLocaleDateString(
@@ -196,9 +193,9 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   });
 
   overlay.addEventListener("mouseleave", () => {
-    tooltip.style.opacity = "0";
     hoverLine.style.opacity = "0";
     hoverDot.style.opacity = "0";
+    hoverValueText.style.opacity = "0";
     hoverDateText.style.opacity = "0";
   });
 
@@ -207,13 +204,13 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   container.innerHTML = "";
   container.style.position = "relative";
 
-  container.appendChild(tooltip);
-
   svg.appendChild(path);
   svg.appendChild(labelGroup);
 
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
+
+  svg.appendChild(hoverValueText); // ✅ always above line
   svg.appendChild(hoverDateText);
 
   svg.appendChild(overlay);
