@@ -2118,7 +2118,7 @@ main {
   height: 100%;
 }
 
-.donut-center-label {
+/* .donut-center-label {
   position: absolute;
   inset: 0;
   display: flex;
@@ -2136,4 +2136,4 @@ main {
 .donut-value {
   font-size: 18px;
   font-weight: 700;
-}
+} */
