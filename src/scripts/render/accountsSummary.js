@@ -3,33 +3,25 @@
 import { getAccountsWithSummary } from "../dataAccess.js";
 import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 
-/* -----------------------------
-   Helpers
------------------------------ */
-
 const formatUsd = (v) =>
   "$" +
   Number(v || 0).toLocaleString("en-US", {
     maximumFractionDigits: 0,
   });
 
-/* -----------------------------
-   Renderer
------------------------------ */
-
 export const renderAccountsSummary = async () => {
   const list = document.querySelector(".summary-list");
-  const donut = document.querySelector(".accounts-donut");
+  const donutContainer = document.querySelector(
+    ".summary-total .chart-placeholder"
+  );
 
-  if (!list || !donut) return;
+  if (!list || !donutContainer) return;
 
-  // Load computed accounts equity
   const accounts = await getAccountsWithSummary();
 
-  // Reset list
+  // ✅ Render List
   list.innerHTML = "";
 
-  // Render list rows
   for (const acc of accounts) {
     const row = document.createElement("div");
     row.className = "summary-item";
@@ -42,9 +34,9 @@ export const renderAccountsSummary = async () => {
     list.appendChild(row);
   }
 
-  // Render donut chart
+  // ✅ Render Donut ke placeholder kanan
   renderAccountsDonutChart({
-    container: donut,
+    container: donutContainer,
     accounts,
   });
 };
