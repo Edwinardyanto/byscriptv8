@@ -6,7 +6,9 @@ const DATA_URLS = {
   assets: new URL("../../data/assets.json", import.meta.url),
   autotraders: new URL("../../data/autotraders.json", import.meta.url),
   tradingPlans: new URL("../../data/trading_plans.json", import.meta.url),
+
   equityDaily: new URL("../../data/derive/asset_equity_daily.json", import.meta.url),
+
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
 };
 
@@ -49,6 +51,15 @@ export const getTradingPlans = async () =>
   fetchJson(DATA_URLS.tradingPlans, "plans");
 
 /* =========================
+   ACCOUNT ASSETS (PER ACCOUNT)
+========================= */
+
+export const getAccountAssets = async (accountId) => {
+  const url = new URL(`${accountId}.json`, DATA_URLS.accountAssetsBase);
+  return fetchJson(url, `accountAssets:${accountId}`);
+};
+
+/* =========================
    DERIVED EQUITY (SINGLE SOURCE)
 ========================= */
 
@@ -57,15 +68,10 @@ export const getEquityDaily = async () => {
 
   if (!Array.isArray(data)) return [];
 
-  // enforce ASC sort by date
   return data
     .filter((d) => d && d.date && typeof d.value === "number")
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
-
-/* =========================
-   EQUITY BY RANGE (FOR CHART)
-========================= */
 
 export const getAssetEquityByRange = async (range = "ALL") => {
   const series = await getEquityDaily();
@@ -105,13 +111,39 @@ export const getAutotradersByAccount = async (accountId) => {
 };
 
 /* =========================
-   ACCOUNTS SUMMARY (SIMPLE)
+   ✅ ACCOUNTS SUMMARY (FINAL)
+   1 account = 1 slice
 ========================= */
 
 export const getAccountsWithSummary = async () => {
   const accounts = await getAccounts();
-  return accounts.map((a) => ({
-    ...a,
-    totalValueUsd: Number(a.totalValueUsd || 0),
-  }));
+
+  const result = [];
+
+  for (const acc of accounts) {
+    let totalUsd = 0;
+
+    try {
+      const assets = await getAccountAssets(acc.account_id);
+
+      for (const a of assets || []) {
+        totalUsd += Number(a.usd_value || 0);
+      }
+    } catch {
+      totalUsd = 0; // fallback jika file kosong
+    }
+
+    result.push({
+      account_id: acc.account_id,
+      name: acc.name,
+      amount: totalUsd,
+      value: new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      }).format(totalUsd),
+    });
+  }
+
+  return result;
 };
