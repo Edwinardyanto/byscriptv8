@@ -3,8 +3,8 @@ import { renderAccountsDonutChart } from "../charts/accountsDonutChart.js";
 /* ---------------- utils ---------------- */
 
 const setText = (selector, value) => {
-  const element = document.querySelector(selector);
-  if (element) element.textContent = value;
+  const el = document.querySelector(selector);
+  if (el) el.textContent = value;
 };
 
 const setListMessage = (list, message) => {
@@ -23,14 +23,6 @@ const toMoney = (n) =>
     maximumFractionDigits: 0,
   }).format(Number(n || 0));
 
-const pickName = (a) => a?.name || a?.account_name || "Account";
-const pickAmount = (a) =>
-  typeof a?.amount === "number"
-    ? a.amount
-    : Number(a?.totalValueUsd || 0) || 0;
-
-const pickValueText = (a) => a?.value || toMoney(pickAmount(a));
-
 /* ---------------- main render ---------------- */
 
 export const renderAccountsSummary = async (sectionState) => {
@@ -38,18 +30,15 @@ export const renderAccountsSummary = async (sectionState) => {
 
   const list = document.querySelector('[data-list="accounts"]');
   const section = list?.closest(".section");
-  const chartContainer =
-    section?.querySelector('[data-accounts-donut] .chart-placeholder') ||
-    section?.querySelector(".summary-total .chart-placeholder");
 
-  const isAccountsPage =
-    document.body?.classList.contains("page-accounts");
+  const chartContainer =
+    section?.querySelector(".summary-total .chart-placeholder");
 
   /* ---------- loading ---------- */
 
   if (status === "loading") {
     if (list) setListMessage(list, "Loading accounts...");
-    if (chartContainer) chartContainer.textContent = "Loading chart...";
+    if (chartContainer) chartContainer.textContent = "";
     setText('[data-field="accounts.total"]', "--");
     return;
   }
@@ -58,7 +47,6 @@ export const renderAccountsSummary = async (sectionState) => {
 
   if (status === "error") {
     if (list) setListMessage(list, "Unable to load accounts");
-    if (chartContainer) chartContainer.textContent = "Chart unavailable";
     setText('[data-field="accounts.total"]', "--");
     return;
   }
@@ -67,60 +55,44 @@ export const renderAccountsSummary = async (sectionState) => {
 
   if (!data || !Array.isArray(data.accounts) || data.accounts.length === 0) {
     if (list) setListMessage(list, "No accounts data");
-    if (chartContainer) chartContainer.textContent = "No chart data";
     setText('[data-field="accounts.total"]', "--");
     return;
   }
 
+  /* ---------- normalize ---------- */
+
   const accounts = data.accounts.map((a) => ({
-    ...a,
-    name: pickName(a),
-    amount: pickAmount(a),
-    value: pickValueText(a),
+    name: a.name || a.account_name || "Account",
+    amount: Number(a.amount || 0),
+    value: a.value || toMoney(a.amount),
   }));
 
-  const totalUsd = accounts.reduce((s, a) => s + Number(a.amount || 0), 0);
-  const totalText = data?.accountsSummary?.total || toMoney(totalUsd);
+  /* ---------- total ---------- */
 
-  /* =========================
-     ✅ LIST SCROLL RAPi
-  ========================= */
+  const totalUsd = accounts.reduce((s, a) => s + a.amount, 0);
+  setText('[data-field="accounts.total"]', toMoney(totalUsd));
+
+  /* ---------- list ---------- */
 
   if (list) {
     list.innerHTML = "";
 
-    // scroll rapi tanpa ngacak layout
-    list.style.maxHeight = "168px";
-    list.style.overflowY = "auto";
-    list.style.paddingRight = "6px";
-
-    accounts.forEach((account) => {
+    accounts.forEach((acc) => {
       const item = document.createElement("div");
-      item.className = isAccountsPage ? "accounts-distribution-item" : "summary-item";
+      item.className = "summary-item";
 
-      item.innerHTML = isAccountsPage
-        ? `
-          <div class="accounts-distribution-item-header">
-            <span>${account.name}</span>
-            <span>${account.value}</span>
-          </div>
-        `
-        : `
-          <span class="summary-item-name">${account.name}</span>
-          <span class="summary-item-value">${account.value}</span>
-        `;
+      item.innerHTML = `
+        <span class="summary-item-name">${acc.name}</span>
+        <span class="summary-item-value">${acc.value}</span>
+      `;
 
       list.appendChild(item);
     });
   }
 
-  /* =========================
-     ✅ DONUT SLICE PER ACCOUNT
-  ========================= */
+  /* ---------- donut ---------- */
 
   if (chartContainer) {
     renderAccountsDonutChart(chartContainer, accounts);
   }
-
-  setText('[data-field="accounts.total"]', totalText);
 };
