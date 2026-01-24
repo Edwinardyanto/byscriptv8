@@ -6,8 +6,11 @@ const DATA_URLS = {
   assets: new URL("../../data/assets.json", import.meta.url),
   autotraders: new URL("../../data/autotraders.json", import.meta.url),
   tradingPlans: new URL("../../data/trading_plans.json", import.meta.url),
+
   equityDaily: new URL("../../data/derive/asset_equity_daily.json", import.meta.url),
+
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
+  assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
 };
 
 /* =========================
@@ -49,7 +52,7 @@ export const getTradingPlans = async () =>
   fetchJson(DATA_URLS.tradingPlans, "plans");
 
 /* =========================
-   DERIVED EQUITY (SINGLE SOURCE)
+   DERIVED EQUITY (CHART SOURCE)
 ========================= */
 
 export const getEquityDaily = async () => {
@@ -57,15 +60,10 @@ export const getEquityDaily = async () => {
 
   if (!Array.isArray(data)) return [];
 
-  // enforce ASC sort by date
   return data
     .filter((d) => d && d.date && typeof d.value === "number")
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
-
-/* =========================
-   EQUITY BY RANGE (FOR CHART)
-========================= */
 
 export const getAssetEquityByRange = async (range = "ALL") => {
   const series = await getEquityDaily();
@@ -105,13 +103,63 @@ export const getAutotradersByAccount = async (accountId) => {
 };
 
 /* =========================
-   ACCOUNTS SUMMARY (SIMPLE)
+   ACCOUNTS SUMMARY (REAL USD)
+========================= */
+
+export const getAccountsSummaryByDate = async (date) => {
+  const accounts = await getAccounts();
+  const accountMap = new Map(accounts.map((a) => [a.account_id, a]));
+
+  // load account asset snapshot
+  const dailyAssets = await fetchJson(
+    new URL(`${date}.json`, DATA_URLS.accountAssetsBase),
+    `accountAssets-${date}`
+  );
+
+  // load asset price snapshot
+  const dailyPrices = await fetchJson(
+    new URL(`${date}.json`, DATA_URLS.assetPriceBase),
+    `assetPrices-${date}`
+  );
+
+  // build price map
+  const priceMap = new Map();
+  for (const p of dailyPrices.prices || []) {
+    priceMap.set(p.asset_id, Number(p.price_usd || 0));
+  }
+
+  // compute per account equity
+  const accountValues = [];
+
+  for (const acc of dailyAssets.accounts || []) {
+    let totalUsd = 0;
+
+    for (const asset of acc.assets || []) {
+      const price = priceMap.get(asset.asset_id) || 0;
+      totalUsd += Number(asset.value || 0) * price;
+    }
+
+    const meta = accountMap.get(acc.account_id);
+
+    accountValues.push({
+      account_id: acc.account_id,
+      account_name: meta?.account_name || acc.account_id,
+      totalValueUsd: totalUsd,
+    });
+  }
+
+  // sort DESC
+  accountValues.sort((a, b) => b.totalValueUsd - a.totalValueUsd);
+
+  return accountValues;
+};
+
+/* =========================
+   LATEST ACCOUNTS SUMMARY
 ========================= */
 
 export const getAccountsWithSummary = async () => {
-  const accounts = await getAccounts();
-  return accounts.map((a) => ({
-    ...a,
-    totalValueUsd: Number(a.totalValueUsd || 0),
-  }));
+  // TEMP: hardcode latest snapshot date dulu
+  const date = "2025-01-03";
+  return getAccountsSummaryByDate(date);
 };
