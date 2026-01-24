@@ -1,3 +1,4 @@
+// src/scripts/charts/assetLineChart.js
 import { cssVar } from "./cssVar.js";
 
 /* ----------------------------------
@@ -63,9 +64,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   svg.style.width = "100%";
   svg.style.height = "100%";
   svg.style.display = "block";
-
-  /* ✅ FIX: jangan izinkan text keluar */
-  svg.style.overflow = "hidden";
+  svg.style.overflow = "hidden"; // ✅ enforce clipping
 
   /* ---------- Line Path ---------- */
 
@@ -143,7 +142,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDateText.style.opacity = "0";
 
   /* ============================================
-   * ✅ Overlay Capture
+   * ✅ Overlay Capture Area
    * ============================================ */
 
   const overlay = createSvgElement("rect");
@@ -154,7 +153,19 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   overlay.setAttribute("fill", "transparent");
 
   /* ============================================
-   * ✅ Hover Move Logic (WITH CLAMP)
+   * ✅ Hover Clamp Helpers
+   * ============================================ */
+
+  const clamp = (value, min, max) =>
+    Math.max(min, Math.min(max, value));
+
+  /* Estimate text width safely */
+  const estimateTextWidth = (text) => {
+    return text.length * 7.5; // approx px per char
+  };
+
+  /* ============================================
+   * ✅ Hover Move Logic (CLAMP LEFT/RIGHT SAFE)
    * ============================================ */
 
   overlay.addEventListener("mousemove", (e) => {
@@ -180,20 +191,30 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
-    /* ✅ Hover Value Text (CLAMP TOP SAFE) */
-    hoverValueText.textContent = series[index].toLocaleString();
-    hoverValueText.setAttribute("x", point.x);
+    /* ✅ Hover Value Text */
+    const valueText = series[index].toLocaleString();
+    hoverValueText.textContent = valueText;
 
+    /* --- Clamp X so text never clips --- */
+    const textHalfWidth = estimateTextWidth(valueText) / 2;
+
+    const safeX = clamp(
+      point.x,
+      paddingX + textHalfWidth,
+      width - paddingX - textHalfWidth
+    );
+
+    hoverValueText.setAttribute("x", safeX);
+
+    /* --- Clamp Y so never goes outside top --- */
     let valueY = point.y - 16;
-
-    /* ✅ FIX: jangan pernah keluar dari atas plot */
     const minY = paddingTop + 14;
     if (valueY < minY) valueY = minY;
 
     hoverValueText.setAttribute("y", valueY);
     hoverValueText.style.opacity = "1";
 
-    /* Hover Date */
+    /* Hover Date Text */
     hoverDateText.textContent = new Date(labels[index]).toLocaleDateString(
       undefined,
       { month: "short", day: "numeric" }
