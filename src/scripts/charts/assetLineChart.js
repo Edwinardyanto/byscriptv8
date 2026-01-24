@@ -141,6 +141,10 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDateText.setAttribute("text-anchor", "middle");
   hoverDateText.style.opacity = "0";
 
+  hoverDateText.setAttribute("stroke", "rgba(0,0,0,0.75)");
+  hoverDateText.setAttribute("stroke-width", "4");
+  hoverDateText.setAttribute("paint-order", "stroke");
+
   /* ============================================
    * ✅ Overlay Capture Area
    * ============================================ */
