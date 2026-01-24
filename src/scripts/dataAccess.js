@@ -10,6 +10,8 @@ const DATA_URLS = {
   equityDaily: new URL("../../data/derive/asset_equity_daily.json", import.meta.url),
 
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
+  assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
+  accountAssetsIndex: new URL("../../data/account_assets_daily/index.json", import.meta.url),
 };
 
 /* =========================
@@ -51,21 +53,11 @@ export const getTradingPlans = async () =>
   fetchJson(DATA_URLS.tradingPlans, "plans");
 
 /* =========================
-   ACCOUNT ASSETS (PER ACCOUNT)
-========================= */
-
-export const getAccountAssets = async (accountId) => {
-  const url = new URL(`${accountId}.json`, DATA_URLS.accountAssetsBase);
-  return fetchJson(url, `accountAssets:${accountId}`);
-};
-
-/* =========================
    DERIVED EQUITY (SINGLE SOURCE)
 ========================= */
 
 export const getEquityDaily = async () => {
   const data = await fetchJson(DATA_URLS.equityDaily, "derive:equity");
-
   if (!Array.isArray(data)) return [];
 
   return data
@@ -111,39 +103,87 @@ export const getAutotradersByAccount = async (accountId) => {
 };
 
 /* =========================
+   DAILY SNAPSHOTS (PER DATE)
+========================= */
+
+const getLatestAccountAssetsDate = async () => {
+  const files = await fetchJson(DATA_URLS.accountAssetsIndex, "index:account_assets_daily");
+  if (!Array.isArray(files) || files.length === 0) return null;
+
+  // index.json sudah urut dari awal ke akhir, ambil paling akhir
+  const last = files[files.length - 1]; // "2026-01-17.json"
+  if (typeof last !== "string") return null;
+
+  return last.replace(".json", "");
+};
+
+export const getAccountAssetsDailyByDate = async (date) => {
+  const url = new URL(`${date}.json`, DATA_URLS.accountAssetsBase);
+  return fetchJson(url, `account_assets_daily:${date}`);
+};
+
+export const getAssetPriceDailyByDate = async (date) => {
+  const url = new URL(`${date}.json`, DATA_URLS.assetPriceBase);
+  return fetchJson(url, `asset_price_daily:${date}`);
+};
+
+/* =========================
    ✅ ACCOUNTS SUMMARY (FINAL)
-   1 account = 1 slice
+   level = ACCOUNT (bukan provider)
+   source = latest daily snapshot
 ========================= */
 
 export const getAccountsWithSummary = async () => {
-  const accounts = await getAccounts();
+  const [accounts, latestDate] = await Promise.all([
+    getAccounts(),
+    getLatestAccountAssetsDate(),
+  ]);
 
-  const result = [];
-
-  for (const acc of accounts) {
-    let totalUsd = 0;
-
-    try {
-      const assets = await getAccountAssets(acc.account_id);
-
-      for (const a of assets || []) {
-        totalUsd += Number(a.usd_value || 0);
-      }
-    } catch {
-      totalUsd = 0; // fallback jika file kosong
-    }
-
-    result.push({
-      account_id: acc.account_id,
-      name: acc.name,
-      amount: totalUsd,
-      value: new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      }).format(totalUsd),
-    });
+  if (!latestDate) {
+    return accounts.map((a) => ({
+      ...a,
+      name: a.account_name || a.name || "Account",
+      amount: 0,
+      value: "$0",
+    }));
   }
 
-  return result;
+  const [assetsSnap, priceSnap] = await Promise.all([
+    getAccountAssetsDailyByDate(latestDate),
+    getAssetPriceDailyByDate(latestDate),
+  ]);
+
+  const priceMap = new Map(
+    (priceSnap?.prices || []).map((p) => [p.asset_id, Number(p.price_usd || 0)])
+  );
+
+  const assetsByAccount = new Map(
+    (assetsSnap?.accounts || []).map((x) => [x.account_id, x.assets || []])
+  );
+
+  const fmt = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+
+  return accounts.map((a) => {
+    const accId = a.account_id;
+    const list = assetsByAccount.get(accId) || [];
+
+    let totalUsd = 0;
+    for (const it of list) {
+      const qty = Number(it?.value || 0);
+      const px = priceMap.get(it?.asset_id) || 0;
+      totalUsd += qty * px;
+    }
+
+    return {
+      ...a,
+      name: a.account_name || a.name || "Account",
+      amount: totalUsd,
+      value: fmt.format(totalUsd),
+      snapshot_date: latestDate,
+    };
+  });
 };
