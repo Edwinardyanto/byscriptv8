@@ -13,7 +13,7 @@ const getLabelIndices = (length) => {
 };
 
 /* ----------------------------------
- * Chart Renderer (FINAL CONTRACT)
+ * Chart Renderer (FINAL + CLAMP SAFE)
  * ---------------------------------- */
 
 export const renderAssetLineChart = ({ container, series, labels }) => {
@@ -28,14 +28,14 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   }
 
   /* ============================================
-   * ✅ FIXED SVG COORDINATE SYSTEM (Responsive)
+   * ✅ FIXED SVG SYSTEM
    * ============================================ */
 
   const width = 1000;
   const height = 320;
 
   const paddingX = 40;
-  const paddingTop = 20;
+  const paddingTop = 24;
   const paddingBottom = 50;
 
   const plotHeight = height - paddingTop - paddingBottom;
@@ -54,13 +54,18 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     y: baselineY - ((v - min) / range) * plotHeight,
   }));
 
-  /* ---------- SVG ROOT ---------- */
+  /* ============================================
+   * ✅ SVG ROOT (CLIP SAFE)
+   * ============================================ */
 
   const svg = createSvgElement("svg");
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
   svg.style.width = "100%";
   svg.style.height = "100%";
   svg.style.display = "block";
+
+  /* ✅ FIX: jangan izinkan text keluar */
+  svg.style.overflow = "hidden";
 
   /* ---------- Line Path ---------- */
 
@@ -76,7 +81,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   path.setAttribute("stroke-linecap", "round");
   path.setAttribute("stroke-linejoin", "round");
 
-  /* ---------- X Axis Labels ---------- */
+  /* ---------- X Labels ---------- */
 
   const labelGroup = createSvgElement("g");
   const labelIndices = getLabelIndices(series.length);
@@ -86,7 +91,6 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
 
     label.setAttribute("x", points[i].x);
     label.setAttribute("y", baselineY + 28);
-
     label.setAttribute("fill", cssVar("--color-text-subtle"));
     label.setAttribute("font-size", "11");
     label.setAttribute("text-anchor", "middle");
@@ -116,9 +120,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDot.setAttribute("stroke-width", "2");
   hoverDot.style.opacity = "0";
 
-  /* ============================================
-   * ✅ Hover Value Text (SVG + Stroke Outline)
-   * ============================================ */
+  /* ---------- Hover Value Text ---------- */
 
   const hoverValueText = createSvgElement("text");
   hoverValueText.setAttribute("fill", "#ffffff");
@@ -127,14 +129,12 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverValueText.setAttribute("text-anchor", "middle");
   hoverValueText.style.opacity = "0";
 
-  /* Stroke outline supaya kebaca di atas line */
+  /* Outline biar jelas */
   hoverValueText.setAttribute("stroke", "rgba(0,0,0,0.75)");
   hoverValueText.setAttribute("stroke-width", "4");
   hoverValueText.setAttribute("paint-order", "stroke");
 
-  /* ============================================
-   * ✅ Hover Date Text (Baseline aligned)
-   * ============================================ */
+  /* ---------- Hover Date Text ---------- */
 
   const hoverDateText = createSvgElement("text");
   hoverDateText.setAttribute("fill", cssVar("--color-text-subtle"));
@@ -142,7 +142,9 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   hoverDateText.setAttribute("text-anchor", "middle");
   hoverDateText.style.opacity = "0";
 
-  /* ---------- Overlay Capture ---------- */
+  /* ============================================
+   * ✅ Overlay Capture
+   * ============================================ */
 
   const overlay = createSvgElement("rect");
   overlay.setAttribute("x", paddingX);
@@ -151,9 +153,12 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   overlay.setAttribute("height", plotHeight);
   overlay.setAttribute("fill", "transparent");
 
+  /* ============================================
+   * ✅ Hover Move Logic (WITH CLAMP)
+   * ============================================ */
+
   overlay.addEventListener("mousemove", (e) => {
     const rect = svg.getBoundingClientRect();
-
     const mouseX = ((e.clientX - rect.left) / rect.width) * width;
 
     const index = Math.min(
@@ -175,13 +180,20 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     hoverDot.setAttribute("cy", point.y);
     hoverDot.style.opacity = "1";
 
-    /* ✅ Hover Value Text */
+    /* ✅ Hover Value Text (CLAMP TOP SAFE) */
     hoverValueText.textContent = series[index].toLocaleString();
     hoverValueText.setAttribute("x", point.x);
-    hoverValueText.setAttribute("y", point.y - 14);
+
+    let valueY = point.y - 16;
+
+    /* ✅ FIX: jangan pernah keluar dari atas plot */
+    const minY = paddingTop + 14;
+    if (valueY < minY) valueY = minY;
+
+    hoverValueText.setAttribute("y", valueY);
     hoverValueText.style.opacity = "1";
 
-    /* ✅ Hover Date EXACT baseline position */
+    /* Hover Date */
     hoverDateText.textContent = new Date(labels[index]).toLocaleDateString(
       undefined,
       { month: "short", day: "numeric" }
@@ -199,10 +211,13 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
     hoverDateText.style.opacity = "0";
   });
 
-  /* ---------- Mount ---------- */
+  /* ============================================
+   * ✅ Mount
+   * ============================================ */
 
   container.innerHTML = "";
   container.style.position = "relative";
+  container.style.overflow = "hidden";
 
   svg.appendChild(path);
   svg.appendChild(labelGroup);
@@ -210,7 +225,7 @@ export const renderAssetLineChart = ({ container, series, labels }) => {
   svg.appendChild(hoverLine);
   svg.appendChild(hoverDot);
 
-  svg.appendChild(hoverValueText); // ✅ always above line
+  svg.appendChild(hoverValueText);
   svg.appendChild(hoverDateText);
 
   svg.appendChild(overlay);
