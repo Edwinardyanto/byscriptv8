@@ -12,6 +12,7 @@ const DATA_URLS = {
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
   trades: new URL("../../data/trades.json", import.meta.url),
+  assets: new URL("../../data/assets.json", import.meta.url),
 };
 
 /* =========================
