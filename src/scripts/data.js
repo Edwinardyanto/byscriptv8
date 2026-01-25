@@ -9,6 +9,7 @@ import {
   getAccounts,
   getAutotradersByAccount,
   getTrades,
+  getAssets,
 } from "./dataAccess.js";
 
 /* ------------------------------------------------------
@@ -168,7 +169,6 @@ const buildTopAutotraders = async () => {
  * TRADE HISTORY (REAL DATA)
  * ------------------------------------------------------ */
 
-import { getTrades, getAssets } from "./dataAccess.js";
 
 const buildTradeHistory = async () => {
   const [trades, assets] = await Promise.all([
@@ -176,27 +176,21 @@ const buildTradeHistory = async () => {
     getAssets(),
   ]);
 
-  // Map asset_id → symbol
   const assetMap = new Map(
     assets.map((a) => [a.asset_id, a.symbol.toLowerCase()])
   );
 
   return trades.slice(0, 20).map((t) => {
     const symbol = assetMap.get(t.asset_id) || "unknown";
-
     const notional = t.price_usd * t.size;
 
     return {
       pair: [symbol, "usdt"],
-
-      action: t.side.toUpperCase(), // BUY / SELL
+      action: t.side.toUpperCase(),
       status: "FILLED",
-
       profitUsd: `$${notional.toFixed(2)}`,
       profitPct: "—",
-
       profitState: "neutral",
-
       time: new Date(t.filled_at * 1000).toLocaleTimeString(
         [],
         { hour: "2-digit", minute: "2-digit" }
