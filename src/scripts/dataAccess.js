@@ -168,5 +168,9 @@ export const getAccountsWithSummary = async () => {
 /* =========================
    TRADES
 ========================= */
+
+export const getAssets = async () =>
+  fetchJson(DATA_URLS.assets, "assets");
+
 export const getTrades = async () =>
   fetchJson(DATA_URLS.trades, "trades");
