@@ -11,6 +11,7 @@ const DATA_URLS = {
 
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
+  trades: new URL("../../data/trades.json", import.meta.url),
 };
 
 /* =========================
@@ -163,3 +164,9 @@ export const getAccountsWithSummary = async () => {
   const date = "2025-01-03";
   return getAccountsSummaryByDate(date);
 };
+
+/* =========================
+   TRADES
+========================= */
+export const getTrades = async () =>
+  fetchJson(DATA_URLS.trades, "trades");
