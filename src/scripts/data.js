@@ -1,6 +1,6 @@
 // src/scripts/data.js
 // ======================================================
-// DATA ORCHESTRATION LAYER
+// DATA ORCHESTRATION LAYER (STEP 2–6 — LOCKED)
 // ======================================================
 
 import {
@@ -8,7 +8,6 @@ import {
   getAccountsWithSummary,
   getAccounts,
   getAutotradersByAccount,
-  getTrades,
 } from "./dataAccess.js";
 
 /* ------------------------------------------------------
@@ -24,7 +23,7 @@ const formatCurrency = (value, digits = 0) =>
   }).format(value);
 
 /* ------------------------------------------------------
- * STATE (SINGLE SOURCE OF TRUTH)
+ * STATE (SINGLE SOURCE OF TRUTH) — STEP 2
  * ------------------------------------------------------ */
 
 let activeRange = "7D";
@@ -165,65 +164,22 @@ const buildTopAutotraders = async () => {
 };
 
 /* ------------------------------------------------------
- * TRADE HISTORY (REAL DATA)
- * ------------------------------------------------------ */
-
-import { getTrades, getAssets } from "./dataAccess.js";
-
-const buildTradeHistory = async () => {
-  const [trades, assets] = await Promise.all([
-    getTrades(),
-    getAssets(),
-  ]);
-
-  // Map asset_id → symbol
-  const assetMap = new Map(
-    assets.map((a) => [a.asset_id, a.symbol.toLowerCase()])
-  );
-
-  return trades.slice(0, 20).map((t) => {
-    const symbol = assetMap.get(t.asset_id) || "unknown";
-
-    const notional = t.price_usd * t.size;
-
-    return {
-      pair: [symbol, "usdt"],
-
-      action: t.side.toUpperCase(), // BUY / SELL
-      status: "FILLED",
-
-      profitUsd: `$${notional.toFixed(2)}`,
-      profitPct: "—",
-
-      profitState: "neutral",
-
-      time: new Date(t.filled_at * 1000).toLocaleTimeString(
-        [],
-        { hour: "2-digit", minute: "2-digit" }
-      ),
-    };
-  });
-};
-
-
-/* ------------------------------------------------------
  * DASHBOARD FETCH (FINAL ENTRY POINT)
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-const [assetSummary, accountsSummary, topAutotraders, tradeHistory] =
-  await Promise.all([
-    buildAssetSummary(),
-    buildAccountsSummary(),
-    buildTopAutotraders(),
-    buildTradeHistory(),
-  ]);
+  const [assetSummary, accountsSummary, topAutotraders] =
+    await Promise.all([
+      buildAssetSummary(),
+      buildAccountsSummary(),
+      buildTopAutotraders(),
+    ]);
 
   return {
     assetSummary,
     accountsSummary,
     topAutotraders,
     alerts: [],
-    tradeHistory,
+    tradeHistory: [],
   };
 };
