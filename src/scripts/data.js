@@ -8,6 +8,7 @@ import {
   getAccountsWithSummary,
   getAccounts,
   getAutotradersByAccount,
+  getTrades,
 } from "./dataAccess.js";
 
 /* ------------------------------------------------------
@@ -164,22 +165,44 @@ const buildTopAutotraders = async () => {
 };
 
 /* ------------------------------------------------------
+ * TRADE HISTORY (LAST 20)
+ * ------------------------------------------------------ */
+
+const buildTradeHistory = async () => {
+  const trades = await getTrades();
+
+  return trades.slice(0, 20).map((t) => ({
+    pair: t.pair || ["btc", "usdt"],
+    action: t.action || "BUY",
+    status: t.status || "FILLED",
+    profitUsd: t.profitUsd || "+$0.00",
+    profitPct: t.profitPct || "+0.0%",
+    profitState: t.profitState || "neutral",
+    time: t.time || "—",
+  }));
+};
+
+
+
+/* ------------------------------------------------------
  * DASHBOARD FETCH (FINAL ENTRY POINT)
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders] =
-    await Promise.all([
-      buildAssetSummary(),
-      buildAccountsSummary(),
-      buildTopAutotraders(),
-    ]);
+const [assetSummary, accountsSummary, topAutotraders, tradeHistory] =
+  await Promise.all([
+    buildAssetSummary(),
+    buildAccountsSummary(),
+    buildTopAutotraders(),
+    buildTradeHistory(),
+  ]);
 
   return {
     assetSummary,
     accountsSummary,
     topAutotraders,
     alerts: [],
-    tradeHistory: [],
+    tradeHistory,
   };
 };
+
