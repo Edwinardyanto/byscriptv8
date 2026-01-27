@@ -11,6 +11,8 @@ const DATA_URLS = {
 
   accountAssetsBase: new URL("../../data/account_assets_daily/", import.meta.url),
   assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
+
+  trades: new URL("../../data/trades.json", import.meta.url),
 };
 
 /* =========================
@@ -50,6 +52,18 @@ export const getAutotraders = async () =>
 
 export const getTradingPlans = async () =>
   fetchJson(DATA_URLS.tradingPlans, "plans");
+
+export const getTrades = async () =>
+  fetchJson(DATA_URLS.trades, "trades");
+
+export const getAssetSymbolMap = async () => {
+  const assets = await getAssets();
+  const map = new Map();
+  for (const a of assets) {
+    map.set(a.asset_id, a.asset_symbol);
+  }
+  return map;
+};
 
 /* =========================
    DERIVED EQUITY (CHART SOURCE)
