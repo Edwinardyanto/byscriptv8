@@ -2245,20 +2245,7 @@ main {
   width: 12px;
   height: 12px;
   border-radius: 3px;
-  background: var(--color-overlay-md);
+  object-fit: contain;
+  background: transparent;
   display: inline-block;
-}
-
-/* Placeholder exchange themes */
-.exchange-icon--binance {
-  background: #f3ba2f;
-}
-.exchange-icon--okx {
-  background: white;
-}
-.exchange-icon--bybit {
-  background: orange;
-}
-.exchange-icon--bitfinex {
-  background: lime;
 }
