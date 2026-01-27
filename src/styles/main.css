@@ -2218,3 +2218,47 @@ main {
   font-size: 13px;
   opacity: 0.6;
 }
+
+.trade-history-asset {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.1;
+}
+
+.trade-history-asset-symbol {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--color-text);
+}
+
+.trade-history-asset-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  color: var(--color-muted);
+}
+
+/* Exchange icon kecil */
+.exchange-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--color-overlay-md);
+  display: inline-block;
+}
+
+/* Placeholder exchange themes */
+.exchange-icon--binance {
+  background: #f3ba2f;
+}
+.exchange-icon--okx {
+  background: white;
+}
+.exchange-icon--bybit {
+  background: orange;
+}
+.exchange-icon--bitfinex {
+  background: lime;
+}
