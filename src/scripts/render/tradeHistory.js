@@ -67,7 +67,7 @@ export const renderTradeHistory = async (sectionState) => {
     setListMessage(list, "No recent trades");
     return;
   }
-
+  
   const assetMap = await getAssetSymbolMap();
   const accountMap = await getAccountMetaMap();
 
@@ -83,6 +83,8 @@ export const renderTradeHistory = async (sectionState) => {
       exchange: "exchange",
     };
 
+    const iconUrl = `assets/exchanges/${accountMeta.exchange}.svg`;
+    
     const action = t.reduce_only
       ? "Close"
       : t.side === "buy"
@@ -110,7 +112,7 @@ export const renderTradeHistory = async (sectionState) => {
       <div class="trade-history-asset">
         <div class="trade-history-asset-symbol">${symbol}</div>
         <div class="trade-history-asset-meta">
-          <span class="exchange-icon exchange-icon--${accountMeta.exchange}"></span>
+          <img class="exchange-icon" src="${iconUrl}" alt="${accountMeta.exchange}" />
           <span>${accountMeta.name}</span>
         </div>
       </div>
