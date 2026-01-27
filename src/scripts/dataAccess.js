@@ -187,3 +187,17 @@ export const getAccountsWithSummary = async () => {
 
 export const getProviderRules = async () =>
   fetchJson(DATA_URLS.providerRules, "providerRules");
+
+export const getAccountMetaMap = async () => {
+  const accounts = await getAccounts();
+  const map = new Map();
+
+  for (const a of accounts) {
+    map.set(a.account_id, {
+      name: a.account_name,
+      exchange: a.exchange,
+    });
+  }
+
+  return map;
+};
