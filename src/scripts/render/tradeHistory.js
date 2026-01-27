@@ -13,6 +13,7 @@ import {
 const setListMessage = (list, message) => {
   if (!list) return;
   list.innerHTML = "";
+
   const item = document.createElement("div");
   item.className = "trade-history-row";
   item.textContent = message;
@@ -20,24 +21,26 @@ const setListMessage = (list, message) => {
 };
 
 /* =========================
-   TIME AGO FORMAT
+   TIME AGO FORMAT (VIRTUAL CLOCK)
 ========================= */
 
-const formatTimeAgo = (timestamp) => {
+const formatTimeAgo = (timestamp, now) => {
   const t = new Date(timestamp).getTime();
   if (!t) return "-";
 
-  const diff = Math.max(0, Date.now() - t);
+  const diff = Math.max(0, now - t);
 
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
 
   if (days >= 1) return `${days}d ago`;
+
   if (hours >= 1) {
     const remM = mins % 60;
     return remM > 0 ? `${hours}h ${remM}m ago` : `${hours}h ago`;
   }
+
   return `${mins}m ago`;
 };
 
@@ -51,6 +54,10 @@ export const renderTradeHistory = async (sectionState) => {
   const list = document.querySelector('[data-list="tradeHistory"]');
   if (!list) return;
 
+  /* -------------------------
+     STATUS STATES
+  ------------------------- */
+
   if (status === "loading") {
     setListMessage(list, "Loading trade history...");
     return;
@@ -61,17 +68,38 @@ export const renderTradeHistory = async (sectionState) => {
     return;
   }
 
+  /* -------------------------
+     LOAD TRADES
+  ------------------------- */
+
   const trades = await getTrades();
 
   if (!Array.isArray(trades) || trades.length === 0) {
     setListMessage(list, "No recent trades");
     return;
   }
-  
+
   const assetMap = await getAssetSymbolMap();
   const accountMap = await getAccountMetaMap();
 
+  /* -------------------------
+     ONLY SHOW LAST 20
+  ------------------------- */
+
   const latestTrades = trades.slice(-20).reverse();
+
+  /* -------------------------
+     ✅ VIRTUAL "NOW"
+     Based on newest trade timestamp
+  ------------------------- */
+
+  const latestNow = Math.max(
+    ...latestTrades.map((t) => new Date(t.filled_at).getTime())
+  );
+
+  /* -------------------------
+     RENDER LIST
+  ------------------------- */
 
   list.innerHTML = "";
 
@@ -84,12 +112,20 @@ export const renderTradeHistory = async (sectionState) => {
     };
 
     const iconUrl = `assets/exchanges/${accountMeta.exchange}.svg`;
-    
+
+    /* -------------------------
+       ACTION LABEL
+    ------------------------- */
+
     const action = t.reduce_only
       ? "Close"
       : t.side === "buy"
       ? "Buy"
       : "Sell";
+
+    /* -------------------------
+       PNL FORMAT
+    ------------------------- */
 
     const pnlUsd = `$${Number(t.pnl_usd || 0).toFixed(2)}`;
     const pnlPct = `${Number(t.pnl_percent || 0).toFixed(2)}%`;
@@ -101,18 +137,30 @@ export const renderTradeHistory = async (sectionState) => {
         ? "negative"
         : "neutral";
 
-    const timeAgo = formatTimeAgo(t.filled_at);
+    /* -------------------------
+       ✅ TIME AGO (VIRTUAL)
+    ------------------------- */
+
+    const timeAgo = formatTimeAgo(t.filled_at, latestNow);
+
+    /* -------------------------
+       BUILD ROW
+    ------------------------- */
 
     const row = document.createElement("a");
     row.className = "trade-history-row";
     row.href = "pages/activity.html";
 
     row.innerHTML = `
-      <!-- ASSET CELL (2 LINES) -->
+      <!-- ASSET -->
       <div class="trade-history-asset">
         <div class="trade-history-asset-symbol">${symbol}</div>
         <div class="trade-history-asset-meta">
-          <img class="exchange-icon" src="${iconUrl}" alt="${accountMeta.exchange}" />
+          <img
+            class="exchange-icon"
+            src="${iconUrl}"
+            alt="${accountMeta.exchange}"
+          />
           <span>${accountMeta.name}</span>
         </div>
       </div>
@@ -136,6 +184,10 @@ export const renderTradeHistory = async (sectionState) => {
         Share
       </button>
     `;
+
+    /* -------------------------
+       SHARE CLICK
+    ------------------------- */
 
     row.querySelector(".trade-history-share").onclick = (e) => {
       e.preventDefault();
