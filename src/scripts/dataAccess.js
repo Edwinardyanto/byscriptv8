@@ -61,7 +61,7 @@ export const getEquityDaily = async () => {
   if (!Array.isArray(data)) return [];
 
   return data
-    .filter((d) => d && d.date && typeof d.value === "number")
+    .filter((d) => d && d.date && typeof d.equity_usd === "number")
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
 
