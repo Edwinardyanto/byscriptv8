@@ -13,21 +13,24 @@ import {
 const setListMessage = (list, message) => {
   if (!list) return;
   list.innerHTML = "";
+
   const item = document.createElement("div");
   item.className = "trade-history-row";
   item.textContent = message;
+
   list.appendChild(item);
 };
 
 /* =========================
-   TIME AGO FORMAT (REALTIME)
+   TIME AGO FORMAT (UNIX SEC → REALTIME)
 ========================= */
 
-const formatTimeAgo = (timestamp) => {
-  const t = new Date(timestamp).getTime();
-  if (!t) return "-";
+const formatTimeAgo = (timestampSec) => {
+  if (!timestampSec) return "-";
 
-  // ✅ realtime now
+  // ✅ trades.json timestamp = UNIX seconds → convert to ms
+  const t = timestampSec * 1000;
+
   const diff = Math.max(0, Date.now() - t);
 
   const mins = Math.floor(diff / 60000);
@@ -35,10 +38,12 @@ const formatTimeAgo = (timestamp) => {
   const days = Math.floor(diff / 86400000);
 
   if (days >= 1) return `${days}d ago`;
+
   if (hours >= 1) {
     const remM = mins % 60;
     return remM > 0 ? `${hours}h ${remM}m ago` : `${hours}h ago`;
   }
+
   return `${mins}m ago`;
 };
 
@@ -46,11 +51,15 @@ const formatTimeAgo = (timestamp) => {
    MAIN RENDER
 ========================= */
 
+let refreshTimer = null;
+
 export const renderTradeHistory = async (sectionState) => {
   const { status } = sectionState;
 
   const list = document.querySelector('[data-list="tradeHistory"]');
   if (!list) return;
+
+  /* ---------- STATES ---------- */
 
   if (status === "loading") {
     setListMessage(list, "Loading trade history...");
@@ -62,6 +71,8 @@ export const renderTradeHistory = async (sectionState) => {
     return;
   }
 
+  /* ---------- LOAD DATA ---------- */
+
   const trades = await getTrades();
 
   if (!Array.isArray(trades) || trades.length === 0) {
@@ -72,15 +83,14 @@ export const renderTradeHistory = async (sectionState) => {
   const assetMap = await getAssetSymbolMap();
   const accountMap = await getAccountMetaMap();
 
-  /* ✅ FIX: sort by filled_at timestamp (newest first) */
+  /* ---------- ✅ SORT NEWEST FIRST ---------- */
+
   const latestTrades = trades
     .slice()
-    .sort(
-      (a, b) =>
-        new Date(b.filled_at).getTime() -
-        new Date(a.filled_at).getTime()
-    )
+    .sort((a, b) => (b.filled_at * 1000) - (a.filled_at * 1000))
     .slice(0, 20);
+
+  /* ---------- RENDER ---------- */
 
   list.innerHTML = "";
 
@@ -117,30 +127,40 @@ export const renderTradeHistory = async (sectionState) => {
     row.href = "pages/activity.html";
 
     row.innerHTML = `
+      <!-- ASSET -->
       <div class="trade-history-asset">
         <div class="trade-history-asset-symbol">${symbol}</div>
         <div class="trade-history-asset-meta">
-          <img class="exchange-icon" src="${iconUrl}" alt="${accountMeta.exchange}" />
+          <img
+            class="exchange-icon"
+            src="${iconUrl}"
+            alt="${accountMeta.exchange}"
+          />
           <span>${accountMeta.name}</span>
         </div>
       </div>
 
+      <!-- ACTION -->
       <div class="trade-history-action trade-history-action--${action.toLowerCase()}">
         ${action}
       </div>
 
+      <!-- PROFIT -->
       <div class="trade-history-profit trade-history-profit--${profitState}">
         <span>${pnlUsd}</span>
         <span>${pnlPct}</span>
       </div>
 
+      <!-- TIME -->
       <div class="trade-history-time">${timeAgo}</div>
 
+      <!-- SHARE -->
       <button class="trade-history-share" type="button">
         Share
       </button>
     `;
 
+    /* ✅ Share button safe click */
     row.querySelector(".trade-history-share").onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -150,8 +170,11 @@ export const renderTradeHistory = async (sectionState) => {
     list.appendChild(row);
   });
 
-  /* ✅ OPTIONAL: auto-refresh time label every 30s */
-  setTimeout(() => {
+  /* ---------- ✅ AUTO REFRESH TIME LABEL ONLY ---------- */
+
+  if (refreshTimer) clearTimeout(refreshTimer);
+
+  refreshTimer = setTimeout(() => {
     renderTradeHistory({ status: "ready" });
   }, 30000);
 };
