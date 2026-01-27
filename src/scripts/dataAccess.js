@@ -13,6 +13,7 @@ const DATA_URLS = {
   assetPriceBase: new URL("../../data/asset_price_daily/", import.meta.url),
 
   trades: new URL("../../data/trades.json", import.meta.url),
+  providerRules: new URL("../../data/provider_market_rules.json", import.meta.url),
 };
 
 /* =========================
@@ -317,3 +318,5 @@ export const getAccountsWithSummary = async () => {
   return getAccountsSummaryByDate(latestDate);
 };
 
+export const getProviderRules = async () =>
+  fetchJson(DATA_URLS.providerRules, "providerRules");
