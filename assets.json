@@ -1,0 +1,754 @@
+[
+  {
+    "asset_id": "0000001",
+    "asset_symbol": "BTC",
+    "asset_name": "Bitcoin",
+    "type": "crypto",
+    "decimals": 8,
+    "asset_color": "#826d9f"
+  },
+  {
+    "asset_id": "0000002",
+    "asset_symbol": "ETH",
+    "asset_name": "Ethereum",
+    "type": "crypto",
+    "decimals": 8,
+    "asset_color": "#bf8fa1"
+  },
+  {
+    "asset_id": "0000003",
+    "asset_symbol": "USDT",
+    "asset_name": "USDT",
+    "type": "crypto",
+    "decimals": 6,
+    "asset_color": "#ff12e1"
+  },
+  {
+    "asset_id": "0000004",
+    "asset_symbol": "BNB",
+    "asset_name": "BNB",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#4d36dc"
+  },
+  {
+    "asset_id": "0000005",
+    "asset_symbol": "SOL",
+    "asset_name": "SOL",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9cda8d"
+  },
+  {
+    "asset_id": "0000006",
+    "asset_symbol": "USDC",
+    "asset_name": "USDC",
+    "type": "crypto",
+    "decimals": 6,
+    "asset_color": "#a6c8d9"
+  },
+  {
+    "asset_id": "0000007",
+    "asset_symbol": "XRP",
+    "asset_name": "XRP",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#0a6499"
+  },
+  {
+    "asset_id": "0000008",
+    "asset_symbol": "DOGE",
+    "asset_name": "DOGE",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#ddc197"
+  },
+  {
+    "asset_id": "0000009",
+    "asset_symbol": "ADA",
+    "asset_name": "ADA",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#51c64f"
+  },
+  {
+    "asset_id": "0000010",
+    "asset_symbol": "AVAX",
+    "asset_name": "AVAX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#c04dbd"
+  },
+  {
+    "asset_id": "0000011",
+    "asset_symbol": "TRX",
+    "asset_name": "TRX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9243fa"
+  },
+  {
+    "asset_id": "0000012",
+    "asset_symbol": "DOT",
+    "asset_name": "DOT",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#aec6b3"
+  },
+  {
+    "asset_id": "0000013",
+    "asset_symbol": "MATIC",
+    "asset_name": "MATIC",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#990e60"
+  },
+  {
+    "asset_id": "0000014",
+    "asset_symbol": "TON",
+    "asset_name": "TON",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#98a95c"
+  },
+  {
+    "asset_id": "0000015",
+    "asset_symbol": "LINK",
+    "asset_name": "LINK",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#163706"
+  },
+  {
+    "asset_id": "0000016",
+    "asset_symbol": "SHIB",
+    "asset_name": "SHIB",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#8df61a"
+  },
+  {
+    "asset_id": "0000017",
+    "asset_symbol": "BCH",
+    "asset_name": "BCH",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#60701f"
+  },
+  {
+    "asset_id": "0000018",
+    "asset_symbol": "LTC",
+    "asset_name": "LTC",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9c1b0c"
+  },
+  {
+    "asset_id": "0000019",
+    "asset_symbol": "ICP",
+    "asset_name": "ICP",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#a3f30f"
+  },
+  {
+    "asset_id": "0000020",
+    "asset_symbol": "UNI",
+    "asset_name": "UNI",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#36d9f8"
+  },
+  {
+    "asset_id": "0000021",
+    "asset_symbol": "ATOM",
+    "asset_name": "ATOM",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#ddfad4"
+  },
+  {
+    "asset_id": "0000022",
+    "asset_symbol": "ETC",
+    "asset_name": "ETC",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#af2ffa"
+  },
+  {
+    "asset_id": "0000023",
+    "asset_symbol": "HBAR",
+    "asset_name": "HBAR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1d1780"
+  },
+  {
+    "asset_id": "0000024",
+    "asset_symbol": "XLM",
+    "asset_name": "XLM",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#822c41"
+  },
+  {
+    "asset_id": "0000025",
+    "asset_symbol": "NEAR",
+    "asset_name": "NEAR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#e5565f"
+  },
+  {
+    "asset_id": "0000026",
+    "asset_symbol": "APT",
+    "asset_name": "APT",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#75afca"
+  },
+  {
+    "asset_id": "0000027",
+    "asset_symbol": "OP",
+    "asset_name": "OP",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#7ec852"
+  },
+  {
+    "asset_id": "0000028",
+    "asset_symbol": "ARB",
+    "asset_name": "ARB",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#d0553f"
+  },
+  {
+    "asset_id": "0000029",
+    "asset_symbol": "FIL",
+    "asset_name": "FIL",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#0bed22"
+  },
+  {
+    "asset_id": "0000030",
+    "asset_symbol": "INJ",
+    "asset_name": "INJ",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#30f63b"
+  },
+  {
+    "asset_id": "0000031",
+    "asset_symbol": "RNDR",
+    "asset_name": "RNDR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#23f4be"
+  },
+  {
+    "asset_id": "0000032",
+    "asset_symbol": "IMX",
+    "asset_name": "IMX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#a29ca3"
+  },
+  {
+    "asset_id": "0000033",
+    "asset_symbol": "GRT",
+    "asset_name": "GRT",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#f88244"
+  },
+  {
+    "asset_id": "0000034",
+    "asset_symbol": "AAVE",
+    "asset_name": "AAVE",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#e492a7"
+  },
+  {
+    "asset_id": "0000035",
+    "asset_symbol": "FLOW",
+    "asset_name": "FLOW",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#88d6bd"
+  },
+  {
+    "asset_id": "0000036",
+    "asset_symbol": "MKR",
+    "asset_name": "MKR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#03b315"
+  },
+  {
+    "asset_id": "0000037",
+    "asset_symbol": "ALGO",
+    "asset_name": "ALGO",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#ade353"
+  },
+  {
+    "asset_id": "0000038",
+    "asset_symbol": "SAND",
+    "asset_name": "SAND",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#91600c"
+  },
+  {
+    "asset_id": "0000039",
+    "asset_symbol": "EGLD",
+    "asset_name": "EGLD",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#28a046"
+  },
+  {
+    "asset_id": "0000040",
+    "asset_symbol": "THETA",
+    "asset_name": "THETA",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#2d598d"
+  },
+  {
+    "asset_id": "0000041",
+    "asset_symbol": "AXS",
+    "asset_name": "AXS",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#dad46e"
+  },
+  {
+    "asset_id": "0000042",
+    "asset_symbol": "XTZ",
+    "asset_name": "XTZ",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#79fe46"
+  },
+  {
+    "asset_id": "0000043",
+    "asset_symbol": "KLAY",
+    "asset_name": "KLAY",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#3edd46"
+  },
+  {
+    "asset_id": "0000044",
+    "asset_symbol": "NEO",
+    "asset_name": "NEO",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#90292c"
+  },
+  {
+    "asset_id": "0000045",
+    "asset_symbol": "FTM",
+    "asset_name": "FTM",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#67e65f"
+  },
+  {
+    "asset_id": "0000046",
+    "asset_symbol": "RUNE",
+    "asset_name": "RUNE",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#de1fd0"
+  },
+  {
+    "asset_id": "0000047",
+    "asset_symbol": "PEPE",
+    "asset_name": "PEPE",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#01ee7a"
+  },
+  {
+    "asset_id": "0000048",
+    "asset_symbol": "WLD",
+    "asset_name": "WLD",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#cd9f72"
+  },
+  {
+    "asset_id": "0000049",
+    "asset_symbol": "TIA",
+    "asset_name": "TIA",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#6e5b21"
+  },
+  {
+    "asset_id": "0000050",
+    "asset_symbol": "STX",
+    "asset_name": "STX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#f365b4"
+  },
+  {
+    "asset_id": "0000051",
+    "asset_symbol": "KAS",
+    "asset_name": "KAS",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9de77d"
+  },
+  {
+    "asset_id": "0000052",
+    "asset_symbol": "SEI",
+    "asset_name": "SEI",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#b74e16"
+  },
+  {
+    "asset_id": "0000053",
+    "asset_symbol": "MINA",
+    "asset_name": "MINA",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#b39824"
+  },
+  {
+    "asset_id": "0000054",
+    "asset_symbol": "CRV",
+    "asset_name": "CRV",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#3cc8cf"
+  },
+  {
+    "asset_id": "0000055",
+    "asset_symbol": "DYDX",
+    "asset_name": "DYDX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#18c4d9"
+  },
+  {
+    "asset_id": "0000056",
+    "asset_symbol": "SNX",
+    "asset_name": "SNX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#7823db"
+  },
+  {
+    "asset_id": "0000057",
+    "asset_symbol": "ENS",
+    "asset_name": "ENS",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1e1e92"
+  },
+  {
+    "asset_id": "0000058",
+    "asset_symbol": "LDO",
+    "asset_name": "LDO",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#7fa222"
+  },
+  {
+    "asset_id": "0000059",
+    "asset_symbol": "GMX",
+    "asset_name": "GMX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#396b47"
+  },
+  {
+    "asset_id": "0000060",
+    "asset_symbol": "ILV",
+    "asset_name": "ILV",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#a12405"
+  },
+  {
+    "asset_id": "0000061",
+    "asset_symbol": "CAKE",
+    "asset_name": "CAKE",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#5b88d0"
+  },
+  {
+    "asset_id": "0000062",
+    "asset_symbol": "COMP",
+    "asset_name": "COMP",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#45b8e0"
+  },
+  {
+    "asset_id": "0000063",
+    "asset_symbol": "ZEC",
+    "asset_name": "ZEC",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#6ec774"
+  },
+  {
+    "asset_id": "0000064",
+    "asset_symbol": "DASH",
+    "asset_name": "DASH",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#df1b32"
+  },
+  {
+    "asset_id": "0000065",
+    "asset_symbol": "BAT",
+    "asset_name": "BAT",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#178048"
+  },
+  {
+    "asset_id": "0000066",
+    "asset_symbol": "1INCH",
+    "asset_name": "1INCH",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#3fedd1"
+  },
+  {
+    "asset_id": "0000067",
+    "asset_symbol": "CHZ",
+    "asset_name": "CHZ",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#04e990"
+  },
+  {
+    "asset_id": "0000068",
+    "asset_symbol": "ENJ",
+    "asset_name": "ENJ",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1e3d42"
+  },
+  {
+    "asset_id": "0000069",
+    "asset_symbol": "ANKR",
+    "asset_name": "ANKR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1673e4"
+  },
+  {
+    "asset_id": "0000070",
+    "asset_symbol": "OCEAN",
+    "asset_name": "OCEAN",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#c12cbf"
+  },
+  {
+    "asset_id": "0000071",
+    "asset_symbol": "MASK",
+    "asset_name": "MASK",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#8aca80"
+  },
+  {
+    "asset_id": "0000072",
+    "asset_symbol": "YFI",
+    "asset_name": "YFI",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9566dd"
+  },
+  {
+    "asset_id": "0000073",
+    "asset_symbol": "SUSHI",
+    "asset_name": "SUSHI",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#0c4e3c"
+  },
+  {
+    "asset_id": "0000074",
+    "asset_symbol": "CELR",
+    "asset_name": "CELR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#9aff84"
+  },
+  {
+    "asset_id": "0000075",
+    "asset_symbol": "HOT",
+    "asset_name": "HOT",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#54f8cb"
+  },
+  {
+    "asset_id": "0000076",
+    "asset_symbol": "QTUM",
+    "asset_name": "QTUM",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#f87be9"
+  },
+  {
+    "asset_id": "0000077",
+    "asset_symbol": "ZRX",
+    "asset_name": "ZRX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#c07565"
+  },
+  {
+    "asset_id": "0000078",
+    "asset_symbol": "OMG",
+    "asset_name": "OMG",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#615002"
+  },
+  {
+    "asset_id": "0000079",
+    "asset_symbol": "ICX",
+    "asset_name": "ICX",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#6e5ae7"
+  },
+  {
+    "asset_id": "0000080",
+    "asset_symbol": "WAVES",
+    "asset_name": "WAVES",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#247b2a"
+  },
+  {
+    "asset_id": "0000081",
+    "asset_symbol": "RSR",
+    "asset_name": "RSR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1cbf57"
+  },
+  {
+    "asset_id": "0000082",
+    "asset_symbol": "BAL",
+    "asset_name": "BAL",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#185cea"
+  },
+  {
+    "asset_id": "0000083",
+    "asset_symbol": "GLM",
+    "asset_name": "GLM",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1d856c"
+  },
+  {
+    "asset_id": "0000084",
+    "asset_symbol": "KNC",
+    "asset_name": "KNC",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#5e00cf"
+  },
+  {
+    "asset_id": "0000085",
+    "asset_symbol": "SKL",
+    "asset_name": "SKL",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#eb5893"
+  },
+  {
+    "asset_id": "0000086",
+    "asset_symbol": "API3",
+    "asset_name": "API3",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#ebbdbc"
+  },
+  {
+    "asset_id": "0000087",
+    "asset_symbol": "STORJ",
+    "asset_name": "STORJ",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#044a39"
+  },
+  {
+    "asset_id": "0000088",
+    "asset_symbol": "BAND",
+    "asset_name": "BAND",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#54ff47"
+  },
+  {
+    "asset_id": "0000089",
+    "asset_symbol": "NMR",
+    "asset_name": "NMR",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#fa1c33"
+  },
+  {
+    "asset_id": "0000090",
+    "asset_symbol": "PAXG",
+    "asset_name": "PAXG",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#1f4e1c"
+  },
+  {
+    "asset_id": "0000091",
+    "asset_symbol": "TUSD",
+    "asset_name": "TUSD",
+    "type": "crypto",
+    "decimals": 6,
+    "asset_color": "#e47881"
+  },
+  {
+    "asset_id": "0000092",
+    "asset_symbol": "BUSD",
+    "asset_name": "BUSD",
+    "type": "crypto",
+    "decimals": 6,
+    "asset_color": "#0f50ab"
+  },
+  {
+    "asset_id": "0000093",
+    "asset_symbol": "FDUSD",
+    "asset_name": "FDUSD",
+    "type": "crypto",
+    "decimals": 6,
+    "asset_color": "#a2b3b7"
+  },
+  {
+    "asset_id": "0000094",
+    "asset_symbol": "DAI",
+    "asset_name": "DAI",
+    "type": "crypto",
+    "decimals": 18,
+    "asset_color": "#e4300f"
+  }
+]
