@@ -159,7 +159,18 @@ export const getAccountsSummaryByDate = async (date) => {
 ========================= */
 
 export const getAccountsWithSummary = async () => {
-  // TEMP: hardcode latest snapshot date dulu
-  const date = "2025-01-03";
-  return getAccountsSummaryByDate(date);
+  // ambil semua snapshot file yang tersedia
+  const res = await fetch(DATA_URLS.accountAssetsBase);
+  if (!res.ok) throw new Error("Cannot list account_assets_daily folder");
+
+  // fallback manual: scan via known equityDaily index
+  const equity = await getEquityDaily();
+  if (!Array.isArray(equity) || equity.length === 0) {
+    return getAccountsSummaryByDate("2025-01-03");
+  }
+
+  // tanggal terakhir dari equity series
+  const latestDate = equity[equity.length - 1].date;
+
+  return getAccountsSummaryByDate(latestDate);
 };
