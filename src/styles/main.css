@@ -2125,3 +2125,96 @@ main {
 .accounts-donut-segment:hover {
   opacity: 1 !important;
 }
+
+
+.trade-history-share {
+  border: 1px solid rgba(104, 254, 29, 0.35);
+  background: rgba(104, 254, 29, 0.12);
+  color: #68fe1d;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.trade-history-share:hover {
+  background: rgba(104, 254, 29, 0.22);
+}
+
+/* SHARE POPUP */
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.share-modal {
+  position: relative;
+}
+
+.share-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: #222;
+  color: white;
+  cursor: pointer;
+}
+
+.share-card {
+  width: 360px;
+  height: 640px; /* 9:16 */
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #111, #000);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  text-align: center;
+  font-family: Inter, sans-serif;
+}
+
+.share-title {
+  opacity: 0.65;
+  font-size: 14px;
+}
+
+.share-pair {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.share-action {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.share-profit {
+  font-size: 26px;
+  font-weight: 700;
+  color: #68fe1d;
+}
+
+.share-profit span {
+  display: block;
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.share-time {
+  font-size: 13px;
+  opacity: 0.6;
+}
