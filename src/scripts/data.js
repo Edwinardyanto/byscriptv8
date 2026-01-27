@@ -74,8 +74,8 @@ const computeSummary = (series) => {
     };
   }
 
-  const first = Number(series[0]?.value || 0);
-  const last = Number(series[series.length - 1]?.value || 0);
+  const first = Number(series[0]?.equity_usd || 0);
+  const last = Number(series[series.length - 1]?.equity_usd || 0);
 
   const percent =
     first > 0 ? ((last - first) / first) * 100 : 0;
@@ -107,7 +107,7 @@ const buildAssetSummary = async () => {
 
     // CHART INPUT (render-ready)
     chart: {
-      series: slicedSeries.map((d) => Number(d.value || 0)),
+      series: slicedSeries.map((d) => Number(d.equity_usd || 0)),
       labels: slicedSeries.map((d) => d.date),
     },
   };
