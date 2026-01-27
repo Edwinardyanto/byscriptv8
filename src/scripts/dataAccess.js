@@ -136,7 +136,7 @@ export const getAccountsSummaryByDate = async (date) => {
 
     for (const asset of acc.assets || []) {
       const price = priceMap.get(asset.asset_id) || 0;
-      totalUsd += Number(asset.value || 0) * price;
+      totalUsd += Number(asset.value || 0);
     }
 
     const meta = accountMap.get(acc.account_id);
@@ -159,18 +159,14 @@ export const getAccountsSummaryByDate = async (date) => {
 ========================= */
 
 export const getAccountsWithSummary = async () => {
-  // ambil semua snapshot file yang tersedia
-  const res = await fetch(DATA_URLS.accountAssetsBase);
-  if (!res.ok) throw new Error("Cannot list account_assets_daily folder");
-
-  // fallback manual: scan via known equityDaily index
   const equity = await getEquityDaily();
+
   if (!Array.isArray(equity) || equity.length === 0) {
     return getAccountsSummaryByDate("2025-01-03");
   }
 
-  // tanggal terakhir dari equity series
   const latestDate = equity[equity.length - 1].date;
 
   return getAccountsSummaryByDate(latestDate);
 };
+
