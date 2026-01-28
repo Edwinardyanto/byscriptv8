@@ -1343,6 +1343,13 @@ main {
   color: var(--color-muted);
 }
 
+/* Center header columns */
+.trade-history-header div:nth-child(2),
+.trade-history-header div:nth-child(4),
+.trade-history-header div:nth-child(5) {
+text-align: center;
+}
+
 /* // modified */
 .trade-history-list {
   display: flex;
@@ -1398,7 +1405,7 @@ main {
   font-weight: 600;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
-  justify-content: center;
+  text-align: center;
 }
 
 .trade-history-action--buy {
@@ -1459,7 +1466,7 @@ main {
   font-size: 0.75rem;
   color: var(--color-muted);
   text-align: center;
-  justify-content: center;
+  text-align: center;
 }
 
 .autotraders-left {
@@ -2114,6 +2121,7 @@ main {
   font-weight: 600;
   padding: 6px 10px;
   cursor: pointer;
+  justify-self: center;
 }
 
 .trade-history-share:hover {
