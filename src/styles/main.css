@@ -1398,6 +1398,7 @@ main {
   font-weight: 600;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
+  justify-content: center;
 }
 
 .trade-history-action--buy {
