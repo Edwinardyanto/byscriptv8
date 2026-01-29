@@ -1,0 +1,564 @@
+{
+  "timestamp": 1752192000,
+  "accounts": [
+    {
+      "account_id": "JZDE8GXD6N",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 4755.528248
+        },
+        {
+          "asset_id": "0000063",
+          "value": 1.719616
+        },
+        {
+          "asset_id": "0000077",
+          "value": 25516.786403
+        },
+        {
+          "asset_id": "0000078",
+          "value": 0.297594
+        },
+        {
+          "asset_id": "0000079",
+          "value": 808539.358971
+        }
+      ]
+    },
+    {
+      "account_id": "0EPF91DHOD",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 5781.912978
+        },
+        {
+          "asset_id": "0000138",
+          "value": 10720.394187
+        },
+        {
+          "asset_id": "0000063",
+          "value": 4.361233
+        },
+        {
+          "asset_id": "0000115",
+          "value": 4.345229
+        }
+      ]
+    },
+    {
+      "account_id": "DOC9IS0J8H",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 1154.49767
+        },
+        {
+          "asset_id": "0000137",
+          "value": 2.363219
+        },
+        {
+          "asset_id": "0000043",
+          "value": 9.099968
+        },
+        {
+          "asset_id": "0000078",
+          "value": 1.658367
+        }
+      ]
+    },
+    {
+      "account_id": "LGMXG9EDN5",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 4414.204545
+        },
+        {
+          "asset_id": "0000028",
+          "value": 16.744364
+        },
+        {
+          "asset_id": "0000040",
+          "value": 801.233697
+        },
+        {
+          "asset_id": "0000042",
+          "value": 633.054646
+        },
+        {
+          "asset_id": "0000116",
+          "value": 1517.280838
+        }
+      ]
+    },
+    {
+      "account_id": "U33XTPLPFT",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 1035.183354
+        },
+        {
+          "asset_id": "0000046",
+          "value": 20.15022
+        },
+        {
+          "asset_id": "0000076",
+          "value": 767.855699
+        },
+        {
+          "asset_id": "0000063",
+          "value": 0.385971
+        },
+        {
+          "asset_id": "0000130",
+          "value": 499.029716
+        }
+      ]
+    },
+    {
+      "account_id": "2SEH60KVJ5",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 6743.141978
+        },
+        {
+          "asset_id": "0000046",
+          "value": 267.724084
+        },
+        {
+          "asset_id": "0000129",
+          "value": 652.21119
+        },
+        {
+          "asset_id": "0000151",
+          "value": 35455.906065
+        },
+        {
+          "asset_id": "0000132",
+          "value": 531.076379
+        }
+      ]
+    },
+    {
+      "account_id": "E9UVW53EFR",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 2238.608744
+        },
+        {
+          "asset_id": "0000034",
+          "value": 22147.544405
+        },
+        {
+          "asset_id": "0000012",
+          "value": 1458.590314
+        },
+        {
+          "asset_id": "0000130",
+          "value": 1835.664035
+        },
+        {
+          "asset_id": "0000024",
+          "value": 2.868361
+        },
+        {
+          "asset_id": "0000004",
+          "value": 48.980424
+        },
+        {
+          "asset_id": "0000069",
+          "value": 20.455263
+        }
+      ]
+    },
+    {
+      "account_id": "EDT2SYWB3W",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 466.55134
+        },
+        {
+          "asset_id": "0000143",
+          "value": 6.640986
+        },
+        {
+          "asset_id": "0000116",
+          "value": 6139.503415
+        },
+        {
+          "asset_id": "0000019",
+          "value": 0.135804
+        },
+        {
+          "asset_id": "0000032",
+          "value": 1930.633799
+        }
+      ]
+    },
+    {
+      "account_id": "5DNSIPZZ5F",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 3398.323287
+        },
+        {
+          "asset_id": "0000143",
+          "value": 35.278459
+        },
+        {
+          "asset_id": "0000115",
+          "value": 44.503906
+        },
+        {
+          "asset_id": "0000073",
+          "value": 18545.903298
+        },
+        {
+          "asset_id": "0000133",
+          "value": 6270.423929
+        },
+        {
+          "asset_id": "0000098",
+          "value": 5.582306
+        },
+        {
+          "asset_id": "0000010",
+          "value": 9.424299
+        }
+      ]
+    },
+    {
+      "account_id": "9RI19R0WYO",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 5557.218915
+        },
+        {
+          "asset_id": "0000065",
+          "value": 782.001888
+        },
+        {
+          "asset_id": "0000124",
+          "value": 6.565296
+        },
+        {
+          "asset_id": "0000116",
+          "value": 195658.55952
+        }
+      ]
+    },
+    {
+      "account_id": "JOOA5LQSAJ",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 277.136868
+        }
+      ]
+    },
+    {
+      "account_id": "UI6D39ZZZZ",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 5468.93647
+        }
+      ]
+    },
+    {
+      "account_id": "DMEN2KHVDG",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 7816.706219
+        }
+      ]
+    },
+    {
+      "account_id": "8GXBENYJQW",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 6324.61236
+        }
+      ]
+    },
+    {
+      "account_id": "HH5344TFJG",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 2560.835667
+        }
+      ]
+    },
+    {
+      "account_id": "4K7BN7XJ8B",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 2245.604936
+        }
+      ]
+    },
+    {
+      "account_id": "Q7XKWO886V",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 2907.610831
+        }
+      ]
+    },
+    {
+      "account_id": "MPZOM75WBB",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 244.911247
+        }
+      ]
+    },
+    {
+      "account_id": "MW2WXFOGO4",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 7647.632522
+        }
+      ]
+    },
+    {
+      "account_id": "4A4WFHYM4L",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 6265.73256
+        }
+      ]
+    },
+    {
+      "account_id": "FZ3ZFKKIBJ",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 2557.139399
+        }
+      ]
+    },
+    {
+      "account_id": "4WJ99IBAG7",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 4415.300998
+        }
+      ]
+    },
+    {
+      "account_id": "NBQNS6PUQ8",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 956.023266
+        }
+      ]
+    },
+    {
+      "account_id": "W3706I8J76",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 7969.039112
+        }
+      ]
+    },
+    {
+      "account_id": "AJLJ4H9DU7",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 521.258153
+        }
+      ]
+    },
+    {
+      "account_id": "4G9DPMRCG6",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 787.492751
+        },
+        {
+          "asset_id": "0000125",
+          "value": 17.96117
+        },
+        {
+          "asset_id": "0000107",
+          "value": 4.65973
+        },
+        {
+          "asset_id": "0000014",
+          "value": 2.435757
+        },
+        {
+          "asset_id": "0000057",
+          "value": 451.492269
+        },
+        {
+          "asset_id": "0000048",
+          "value": 80.952951
+        },
+        {
+          "asset_id": "0000085",
+          "value": 110.069509
+        },
+        {
+          "asset_id": "0000150",
+          "value": 44944.586653
+        }
+      ]
+    },
+    {
+      "account_id": "BE2U66MR26",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 2721.655045
+        },
+        {
+          "asset_id": "0000150",
+          "value": 254820.23367
+        },
+        {
+          "asset_id": "0000024",
+          "value": 2.08864
+        },
+        {
+          "asset_id": "0000021",
+          "value": 2.597862
+        },
+        {
+          "asset_id": "0000038",
+          "value": 61.543733
+        },
+        {
+          "asset_id": "0000007",
+          "value": 96.87515
+        },
+        {
+          "asset_id": "0000144",
+          "value": 30.973037
+        }
+      ]
+    },
+    {
+      "account_id": "6P7Q9M2I0H",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 3428.839182
+        },
+        {
+          "asset_id": "0000015",
+          "value": 104.798046
+        },
+        {
+          "asset_id": "0000029",
+          "value": 362.401922
+        },
+        {
+          "asset_id": "0000136",
+          "value": 4.3751
+        },
+        {
+          "asset_id": "0000055",
+          "value": 158669.070204
+        },
+        {
+          "asset_id": "0000093",
+          "value": 4.544239
+        },
+        {
+          "asset_id": "0000005",
+          "value": 47.810018
+        },
+        {
+          "asset_id": "0000120",
+          "value": 49.415511
+        }
+      ]
+    },
+    {
+      "account_id": "UEP1ENTHJX",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 342.135256
+        }
+      ]
+    },
+    {
+      "account_id": "I3OGZ5KOK1",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 371.547224
+        }
+      ]
+    },
+    {
+      "account_id": "V0MWUFXBV9",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 3229.956128
+        }
+      ]
+    },
+    {
+      "account_id": "BYV7S6EHOG",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 4421.958732
+        }
+      ]
+    },
+    {
+      "account_id": "RCLRI1QZJ8",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 440.236076
+        }
+      ]
+    },
+    {
+      "account_id": "5UFRDL1ERB",
+      "assets": [
+        {
+          "asset_id": "0000003",
+          "value": 1524.336733
+        }
+      ]
+    },
+    {
+      "account_id": "QFOEQH3AV9",
+      "assets": [
+        {
+          "asset_id": "0000004",
+          "value": 3138.192988
+        }
+      ]
+    }
+  ]
+}
