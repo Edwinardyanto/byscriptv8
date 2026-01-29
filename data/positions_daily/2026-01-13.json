@@ -1,0 +1,1295 @@
+{
+  "timestamp": 1768262400,
+  "accounts": [
+    {
+      "account_id": "JZDE8GXD6N",
+      "positions": []
+    },
+    {
+      "account_id": "0EPF91DHOD",
+      "positions": []
+    },
+    {
+      "account_id": "DOC9IS0J8H",
+      "positions": []
+    },
+    {
+      "account_id": "LGMXG9EDN5",
+      "positions": []
+    },
+    {
+      "account_id": "U33XTPLPFT",
+      "positions": []
+    },
+    {
+      "account_id": "2SEH60KVJ5",
+      "positions": []
+    },
+    {
+      "account_id": "E9UVW53EFR",
+      "positions": []
+    },
+    {
+      "account_id": "EDT2SYWB3W",
+      "positions": []
+    },
+    {
+      "account_id": "5DNSIPZZ5F",
+      "positions": []
+    },
+    {
+      "account_id": "9RI19R0WYO",
+      "positions": []
+    },
+    {
+      "account_id": "JOOA5LQSAJ",
+      "positions": [
+        {
+          "asset_id": "0000126",
+          "side": "long",
+          "size": 155.095923,
+          "entry_price": 12.6615,
+          "mark_price": 11.3496,
+          "unrealized_pnl": 37.5
+        },
+        {
+          "asset_id": "0000011",
+          "side": "short",
+          "size": 1.554374,
+          "entry_price": 235.8947,
+          "mark_price": 706.5862,
+          "unrealized_pnl": -31.1
+        },
+        {
+          "asset_id": "0000089",
+          "side": "long",
+          "size": 84329.377895,
+          "entry_price": 0.0234,
+          "mark_price": 0.0199,
+          "unrealized_pnl": -80.44
+        },
+        {
+          "asset_id": "0000110",
+          "side": "short",
+          "size": 692.030577,
+          "entry_price": 1.7434,
+          "mark_price": 0.9052,
+          "unrealized_pnl": 587.34
+        },
+        {
+          "asset_id": "0000014",
+          "side": "long",
+          "size": 103.137879,
+          "entry_price": 14.2921,
+          "mark_price": 4.2351,
+          "unrealized_pnl": -98.55
+        },
+        {
+          "asset_id": "0000071",
+          "side": "long",
+          "size": 903.240945,
+          "entry_price": 1.7106,
+          "mark_price": 1.6209,
+          "unrealized_pnl": 5.96
+        },
+        {
+          "asset_id": "0000081",
+          "side": "long",
+          "size": 9517.064913,
+          "entry_price": 0.0286,
+          "mark_price": 0.0252,
+          "unrealized_pnl": 9.77
+        },
+        {
+          "asset_id": "0000145",
+          "side": "short",
+          "size": 25604.710947,
+          "entry_price": 0.0131,
+          "mark_price": 0.0213,
+          "unrealized_pnl": -16.1
+        }
+      ]
+    },
+    {
+      "account_id": "UI6D39ZZZZ",
+      "positions": [
+        {
+          "asset_id": "0000130",
+          "side": "long",
+          "size": 2590.385812,
+          "entry_price": 0.1062,
+          "mark_price": 0.0937,
+          "unrealized_pnl": -8.17
+        },
+        {
+          "asset_id": "0000003",
+          "side": "short",
+          "size": 10736.577011,
+          "entry_price": 1.0,
+          "mark_price": 1.0,
+          "unrealized_pnl": 0.0
+        },
+        {
+          "asset_id": "0000105",
+          "side": "long",
+          "size": 8286.450913,
+          "entry_price": 0.7275,
+          "mark_price": 1.0481,
+          "unrealized_pnl": 2658.14
+        },
+        {
+          "asset_id": "0000123",
+          "side": "long",
+          "size": 408.55709,
+          "entry_price": 2.4313,
+          "mark_price": 1.3271,
+          "unrealized_pnl": -104.96
+        },
+        {
+          "asset_id": "0000041",
+          "side": "long",
+          "size": 79705.405582,
+          "entry_price": 0.0027,
+          "mark_price": 0.0019,
+          "unrealized_pnl": -12.95
+        }
+      ]
+    },
+    {
+      "account_id": "DMEN2KHVDG",
+      "positions": [
+        {
+          "asset_id": "0000011",
+          "side": "short",
+          "size": 98.613447,
+          "entry_price": 169.7464,
+          "mark_price": 706.5862,
+          "unrealized_pnl": -1144.22
+        },
+        {
+          "asset_id": "0000087",
+          "side": "long",
+          "size": 10899.419559,
+          "entry_price": 1.4753,
+          "mark_price": 1.7617,
+          "unrealized_pnl": 7056.44
+        },
+        {
+          "asset_id": "0000140",
+          "side": "long",
+          "size": 157.607267,
+          "entry_price": 16.5528,
+          "mark_price": 13.8498,
+          "unrealized_pnl": -126.64
+        },
+        {
+          "asset_id": "0000066",
+          "side": "short",
+          "size": 350201.890537,
+          "entry_price": 0.0029,
+          "mark_price": 0.0009,
+          "unrealized_pnl": 711.74
+        },
+        {
+          "asset_id": "0000114",
+          "side": "long",
+          "size": 493980.978604,
+          "entry_price": 0.0015,
+          "mark_price": 0.0017,
+          "unrealized_pnl": 85.34
+        },
+        {
+          "asset_id": "0000070",
+          "side": "long",
+          "size": 66834.396914,
+          "entry_price": 0.0796,
+          "mark_price": 0.106,
+          "unrealized_pnl": 1960.29
+        }
+      ]
+    },
+    {
+      "account_id": "8GXBENYJQW",
+      "positions": [
+        {
+          "asset_id": "0000149",
+          "side": "long",
+          "size": 7529025.533058,
+          "entry_price": 0.0006,
+          "mark_price": 0.0003,
+          "unrealized_pnl": -293.29
+        },
+        {
+          "asset_id": "0000101",
+          "side": "short",
+          "size": 19.405095,
+          "entry_price": 103.6511,
+          "mark_price": 92.0489,
+          "unrealized_pnl": 291.17
+        },
+        {
+          "asset_id": "0000060",
+          "side": "short",
+          "size": 959189.169742,
+          "entry_price": 0.0044,
+          "mark_price": 0.0087,
+          "unrealized_pnl": -329.18
+        },
+        {
+          "asset_id": "0000074",
+          "side": "long",
+          "size": 3289212.635429,
+          "entry_price": 0.0012,
+          "mark_price": 0.0015,
+          "unrealized_pnl": 1044.76
+        },
+        {
+          "asset_id": "0000147",
+          "side": "long",
+          "size": 1722294.767857,
+          "entry_price": 0.0075,
+          "mark_price": 0.0027,
+          "unrealized_pnl": -703.14
+        },
+        {
+          "asset_id": "0000035",
+          "side": "short",
+          "size": 2006.341688,
+          "entry_price": 1.0944,
+          "mark_price": 1.5102,
+          "unrealized_pnl": 287.8
+        },
+        {
+          "asset_id": "0000065",
+          "side": "long",
+          "size": 5866.056065,
+          "entry_price": 0.7511,
+          "mark_price": 2.1142,
+          "unrealized_pnl": 7996.14
+        },
+        {
+          "asset_id": "0000141",
+          "side": "long",
+          "size": 65.841122,
+          "entry_price": 29.6077,
+          "mark_price": 32.6934,
+          "unrealized_pnl": 203.57
+        },
+        {
+          "asset_id": "0000083",
+          "side": "short",
+          "size": 305336.059904,
+          "entry_price": 0.0083,
+          "mark_price": 0.006,
+          "unrealized_pnl": 815.32
+        }
+      ]
+    },
+    {
+      "account_id": "HH5344TFJG",
+      "positions": [
+        {
+          "asset_id": "0000075",
+          "side": "long",
+          "size": 1817803365.662058,
+          "entry_price": 0.0,
+          "mark_price": 0.0,
+          "unrealized_pnl": -544.96
+        },
+        {
+          "asset_id": "0000051",
+          "side": "short",
+          "size": 13312.7128,
+          "entry_price": 0.0504,
+          "mark_price": 0.0498,
+          "unrealized_pnl": 17.68
+        },
+        {
+          "asset_id": "0000142",
+          "side": "long",
+          "size": 3796.69194,
+          "entry_price": 0.2392,
+          "mark_price": 0.2524,
+          "unrealized_pnl": 103.21
+        },
+        {
+          "asset_id": "0000062",
+          "side": "short",
+          "size": 7737.212896,
+          "entry_price": 0.338,
+          "mark_price": 0.4037,
+          "unrealized_pnl": -98.83
+        }
+      ]
+    },
+    {
+      "account_id": "4K7BN7XJ8B",
+      "positions": [
+        {
+          "asset_id": "0000059",
+          "side": "short",
+          "size": 339.978933,
+          "entry_price": 4.8792,
+          "mark_price": 4.4638,
+          "unrealized_pnl": 212.43
+        },
+        {
+          "asset_id": "0000121",
+          "side": "long",
+          "size": 98351.453008,
+          "entry_price": 0.0372,
+          "mark_price": 0.0657,
+          "unrealized_pnl": 2900.2
+        },
+        {
+          "asset_id": "0000072",
+          "side": "long",
+          "size": 195101.510153,
+          "entry_price": 0.001,
+          "mark_price": 0.0052,
+          "unrealized_pnl": 803.02
+        },
+        {
+          "asset_id": "0000142",
+          "side": "long",
+          "size": 1431.009637,
+          "entry_price": 0.1978,
+          "mark_price": 0.2524,
+          "unrealized_pnl": 78.06
+        }
+      ]
+    },
+    {
+      "account_id": "Q7XKWO886V",
+      "positions": [
+        {
+          "asset_id": "0000058",
+          "side": "long",
+          "size": 218.514708,
+          "entry_price": 20.6775,
+          "mark_price": 24.9392,
+          "unrealized_pnl": 1145.45
+        },
+        {
+          "asset_id": "0000026",
+          "side": "long",
+          "size": 899.283914,
+          "entry_price": 8.623,
+          "mark_price": 9.1954,
+          "unrealized_pnl": 649.91
+        },
+        {
+          "asset_id": "0000049",
+          "side": "short",
+          "size": 2971.52041,
+          "entry_price": 3.1602,
+          "mark_price": 1.4491,
+          "unrealized_pnl": 5084.62
+        },
+        {
+          "asset_id": "0000092",
+          "side": "long",
+          "size": 23415.02473,
+          "entry_price": 0.2084,
+          "mark_price": 0.1914,
+          "unrealized_pnl": 274.53
+        },
+        {
+          "asset_id": "0000002",
+          "side": "short",
+          "size": 0.346132,
+          "entry_price": 5935.1488,
+          "mark_price": 6562.49,
+          "unrealized_pnl": -61.96
+        },
+        {
+          "asset_id": "0000061",
+          "side": "short",
+          "size": 413.421392,
+          "entry_price": 12.0501,
+          "mark_price": 4.8156,
+          "unrealized_pnl": 2990.91
+        },
+        {
+          "asset_id": "0000037",
+          "side": "short",
+          "size": 5166.366392,
+          "entry_price": 0.2066,
+          "mark_price": 0.0298,
+          "unrealized_pnl": 917.27
+        },
+        {
+          "asset_id": "0000053",
+          "side": "long",
+          "size": 32295.454585,
+          "entry_price": 0.0438,
+          "mark_price": 0.0199,
+          "unrealized_pnl": -74.39
+        },
+        {
+          "asset_id": "0000086",
+          "side": "long",
+          "size": 2331289.181427,
+          "entry_price": 0.0016,
+          "mark_price": 0.0012,
+          "unrealized_pnl": -158.48
+        },
+        {
+          "asset_id": "0000022",
+          "side": "short",
+          "size": 8956.720089,
+          "entry_price": 0.0206,
+          "mark_price": 0.0185,
+          "unrealized_pnl": 19.51
+        },
+        {
+          "asset_id": "0000084",
+          "side": "long",
+          "size": 0.519522,
+          "entry_price": 318.6588,
+          "mark_price": 410.8036,
+          "unrealized_pnl": 47.87
+        }
+      ]
+    },
+    {
+      "account_id": "MPZOM75WBB",
+      "positions": [
+        {
+          "asset_id": "0000001",
+          "side": "short",
+          "size": 0.003422,
+          "entry_price": 80662.8622,
+          "mark_price": 106652.1895,
+          "unrealized_pnl": 7.44
+        },
+        {
+          "asset_id": "0000027",
+          "side": "short",
+          "size": 9357.329217,
+          "entry_price": 0.3083,
+          "mark_price": 0.5427,
+          "unrealized_pnl": -164.69
+        },
+        {
+          "asset_id": "0000067",
+          "side": "long",
+          "size": 1827.913848,
+          "entry_price": 0.6654,
+          "mark_price": 0.6916,
+          "unrealized_pnl": 73.24
+        },
+        {
+          "asset_id": "0000109",
+          "side": "long",
+          "size": 387.390708,
+          "entry_price": 3.9876,
+          "mark_price": 6.4875,
+          "unrealized_pnl": 968.42
+        },
+        {
+          "asset_id": "0000071",
+          "side": "long",
+          "size": 369.775079,
+          "entry_price": 1.5248,
+          "mark_price": 1.6209,
+          "unrealized_pnl": 40.94
+        },
+        {
+          "asset_id": "0000119",
+          "side": "long",
+          "size": 87.574016,
+          "entry_price": 9.6941,
+          "mark_price": 24.3406,
+          "unrealized_pnl": 1282.65
+        },
+        {
+          "asset_id": "0000002",
+          "side": "long",
+          "size": 0.032667,
+          "entry_price": 6438.0012,
+          "mark_price": 6562.49,
+          "unrealized_pnl": 5.22
+        }
+      ]
+    },
+    {
+      "account_id": "MW2WXFOGO4",
+      "positions": [
+        {
+          "asset_id": "0000128",
+          "side": "long",
+          "size": 10696.541351,
+          "entry_price": 0.904,
+          "mark_price": 0.4011,
+          "unrealized_pnl": -685.85
+        },
+        {
+          "asset_id": "0000118",
+          "side": "long",
+          "size": 5096560.244539,
+          "entry_price": 0.0034,
+          "mark_price": 0.0031,
+          "unrealized_pnl": -522.14
+        },
+        {
+          "asset_id": "0000106",
+          "side": "short",
+          "size": 483.380064,
+          "entry_price": 26.8729,
+          "mark_price": 25.0002,
+          "unrealized_pnl": 1984.69
+        },
+        {
+          "asset_id": "0000045",
+          "side": "long",
+          "size": 20205.830424,
+          "entry_price": 0.2968,
+          "mark_price": 0.3232,
+          "unrealized_pnl": 1550.74
+        },
+        {
+          "asset_id": "0000111",
+          "side": "long",
+          "size": 155.691432,
+          "entry_price": 12.6648,
+          "mark_price": 6.3405,
+          "unrealized_pnl": -139.69
+        }
+      ]
+    },
+    {
+      "account_id": "4A4WFHYM4L",
+      "positions": [
+        {
+          "asset_id": "0000008",
+          "side": "long",
+          "size": 4.489901,
+          "entry_price": 1299.8016,
+          "mark_price": 2389.7327,
+          "unrealized_pnl": 5238.98
+        },
+        {
+          "asset_id": "0000113",
+          "side": "short",
+          "size": 5068803.508719,
+          "entry_price": 0.0017,
+          "mark_price": 0.001,
+          "unrealized_pnl": 3690.92
+        },
+        {
+          "asset_id": "0000094",
+          "side": "long",
+          "size": 629322.818571,
+          "entry_price": 0.004,
+          "mark_price": 0.0044,
+          "unrealized_pnl": 260.48
+        },
+        {
+          "asset_id": "0000112",
+          "side": "long",
+          "size": 538.671497,
+          "entry_price": 18.851,
+          "mark_price": 33.2484,
+          "unrealized_pnl": 7755.5
+        },
+        {
+          "asset_id": "0000030",
+          "side": "long",
+          "size": 75.726228,
+          "entry_price": 200.1076,
+          "mark_price": 211.8724,
+          "unrealized_pnl": 1370.96
+        },
+        {
+          "asset_id": "0000053",
+          "side": "long",
+          "size": 50506.878228,
+          "entry_price": 0.0419,
+          "mark_price": 0.0199,
+          "unrealized_pnl": -170.02
+        },
+        {
+          "asset_id": "0000131",
+          "side": "long",
+          "size": 56022.350448,
+          "entry_price": 0.0625,
+          "mark_price": 0.0416,
+          "unrealized_pnl": -135.58
+        },
+        {
+          "asset_id": "0000095",
+          "side": "long",
+          "size": 3512661.27423,
+          "entry_price": 0.0009,
+          "mark_price": 0.0008,
+          "unrealized_pnl": -179.7
+        },
+        {
+          "asset_id": "0000088",
+          "side": "long",
+          "size": 251.489427,
+          "entry_price": 20.7396,
+          "mark_price": 8.5559,
+          "unrealized_pnl": -293.41
+        },
+        {
+          "asset_id": "0000068",
+          "side": "short",
+          "size": 49.569171,
+          "entry_price": 38.5357,
+          "mark_price": 8.8832,
+          "unrealized_pnl": 1469.85
+        },
+        {
+          "asset_id": "0000013",
+          "side": "short",
+          "size": 2.427782,
+          "entry_price": 53.9572,
+          "mark_price": 176.9226,
+          "unrealized_pnl": -15.33
+        }
+      ]
+    },
+    {
+      "account_id": "FZ3ZFKKIBJ",
+      "positions": [
+        {
+          "asset_id": "0000006",
+          "side": "long",
+          "size": 458.449159,
+          "entry_price": 19.6522,
+          "mark_price": 28.3349,
+          "unrealized_pnl": 5047.33
+        },
+        {
+          "asset_id": "0000025",
+          "side": "long",
+          "size": 89708.263542,
+          "entry_price": 0.0503,
+          "mark_price": 0.0304,
+          "unrealized_pnl": -289.16
+        },
+        {
+          "asset_id": "0000017",
+          "side": "long",
+          "size": 99.168792,
+          "entry_price": 19.2894,
+          "mark_price": 123.783,
+          "unrealized_pnl": 10362.51
+        },
+        {
+          "asset_id": "0000016",
+          "side": "long",
+          "size": 17989.399803,
+          "entry_price": 0.3884,
+          "mark_price": 0.1854,
+          "unrealized_pnl": -455.22
+        },
+        {
+          "asset_id": "0000039",
+          "side": "long",
+          "size": 78323.22319,
+          "entry_price": 0.1425,
+          "mark_price": 0.2438,
+          "unrealized_pnl": 8280.2
+        },
+        {
+          "asset_id": "0000099",
+          "side": "long",
+          "size": 6386.180585,
+          "entry_price": 0.1851,
+          "mark_price": 0.21,
+          "unrealized_pnl": 168.82
+        },
+        {
+          "asset_id": "0000103",
+          "side": "long",
+          "size": 52.024699,
+          "entry_price": 26.3343,
+          "mark_price": 23.4583,
+          "unrealized_pnl": 5.83
+        },
+        {
+          "asset_id": "0000020",
+          "side": "long",
+          "size": 13.444141,
+          "entry_price": 20.3444,
+          "mark_price": 24.763,
+          "unrealized_pnl": 73.65
+        },
+        {
+          "asset_id": "0000074",
+          "side": "long",
+          "size": 3199038.406213,
+          "entry_price": 0.0012,
+          "mark_price": 0.0015,
+          "unrealized_pnl": 1155.88
+        },
+        {
+          "asset_id": "0000018",
+          "side": "short",
+          "size": 113.917631,
+          "entry_price": 32.9126,
+          "mark_price": 42.3036,
+          "unrealized_pnl": -164.31
+        },
+        {
+          "asset_id": "0000134",
+          "side": "short",
+          "size": 1270.603178,
+          "entry_price": 0.4325,
+          "mark_price": 1.1347,
+          "unrealized_pnl": -58.97
+        },
+        {
+          "asset_id": "0000054",
+          "side": "long",
+          "size": 141645.959694,
+          "entry_price": 0.0114,
+          "mark_price": 0.0112,
+          "unrealized_pnl": 166.78
+        }
+      ]
+    },
+    {
+      "account_id": "4WJ99IBAG7",
+      "positions": [
+        {
+          "asset_id": "0000136",
+          "side": "short",
+          "size": 224.486998,
+          "entry_price": 64.6277,
+          "mark_price": 80.2576,
+          "unrealized_pnl": 71.69
+        },
+        {
+          "asset_id": "0000051",
+          "side": "short",
+          "size": 391203.827885,
+          "entry_price": 0.0491,
+          "mark_price": 0.0498,
+          "unrealized_pnl": 264.14
+        },
+        {
+          "asset_id": "0000117",
+          "side": "long",
+          "size": 2610519.861102,
+          "entry_price": 0.004,
+          "mark_price": 0.0022,
+          "unrealized_pnl": -1198.19
+        },
+        {
+          "asset_id": "0000031",
+          "side": "long",
+          "size": 90.433407,
+          "entry_price": 105.2109,
+          "mark_price": 182.5608,
+          "unrealized_pnl": 6995.01
+        },
+        {
+          "asset_id": "0000036",
+          "side": "short",
+          "size": 2348644.183946,
+          "entry_price": 0.0006,
+          "mark_price": 0.0005,
+          "unrealized_pnl": 281.96
+        },
+        {
+          "asset_id": "0000001",
+          "side": "short",
+          "size": 0.091884,
+          "entry_price": 96067.8207,
+          "mark_price": 106652.1895,
+          "unrealized_pnl": 664.16
+        },
+        {
+          "asset_id": "0000127",
+          "side": "short",
+          "size": 676.372705,
+          "entry_price": 1.8982,
+          "mark_price": 2.1952,
+          "unrealized_pnl": -44.81
+        }
+      ]
+    },
+    {
+      "account_id": "NBQNS6PUQ8",
+      "positions": [
+        {
+          "asset_id": "0000100",
+          "side": "long",
+          "size": 1685.125358,
+          "entry_price": 2.1516,
+          "mark_price": 1.1604,
+          "unrealized_pnl": -304.11
+        },
+        {
+          "asset_id": "0000135",
+          "side": "short",
+          "size": 4.469201,
+          "entry_price": 206.8499,
+          "mark_price": 361.5837,
+          "unrealized_pnl": -60.53
+        },
+        {
+          "asset_id": "0000139",
+          "side": "long",
+          "size": 269876268.341614,
+          "entry_price": 0.0,
+          "mark_price": 0.0,
+          "unrealized_pnl": -119.87
+        },
+        {
+          "asset_id": "0000096",
+          "side": "short",
+          "size": 113644.794339,
+          "entry_price": 0.0407,
+          "mark_price": 0.1235,
+          "unrealized_pnl": -251.02
+        },
+        {
+          "asset_id": "0000036",
+          "side": "short",
+          "size": 628685.653329,
+          "entry_price": 0.0016,
+          "mark_price": 0.0005,
+          "unrealized_pnl": 700.25
+        },
+        {
+          "asset_id": "0000045",
+          "side": "long",
+          "size": 13356.718195,
+          "entry_price": 0.2289,
+          "mark_price": 0.3232,
+          "unrealized_pnl": 1470.05
+        },
+        {
+          "asset_id": "0000102",
+          "side": "long",
+          "size": 1759.187901,
+          "entry_price": 0.1613,
+          "mark_price": 0.1146,
+          "unrealized_pnl": -22.94
+        },
+        {
+          "asset_id": "0000054",
+          "side": "short",
+          "size": 69419.328739,
+          "entry_price": 0.0118,
+          "mark_price": 0.0112,
+          "unrealized_pnl": 107.0
+        },
+        {
+          "asset_id": "0000031",
+          "side": "long",
+          "size": 37.726947,
+          "entry_price": 98.7972,
+          "mark_price": 182.5608,
+          "unrealized_pnl": 3160.14
+        },
+        {
+          "asset_id": "0000022",
+          "side": "long",
+          "size": 15938.387544,
+          "entry_price": 0.034,
+          "mark_price": 0.0185,
+          "unrealized_pnl": -54.32
+        },
+        {
+          "asset_id": "0000065",
+          "side": "long",
+          "size": 262.507449,
+          "entry_price": 0.7079,
+          "mark_price": 2.1142,
+          "unrealized_pnl": 369.16
+        }
+      ]
+    },
+    {
+      "account_id": "W3706I8J76",
+      "positions": [
+        {
+          "asset_id": "0000026",
+          "side": "long",
+          "size": 1132.798755,
+          "entry_price": 8.622,
+          "mark_price": 9.1954,
+          "unrealized_pnl": 662.82
+        },
+        {
+          "asset_id": "0000094",
+          "side": "short",
+          "size": 287762.010753,
+          "entry_price": 0.0037,
+          "mark_price": 0.0044,
+          "unrealized_pnl": -45.55
+        },
+        {
+          "asset_id": "0000044",
+          "side": "long",
+          "size": 181.724675,
+          "entry_price": 14.4936,
+          "mark_price": 12.5879,
+          "unrealized_pnl": 119.19
+        },
+        {
+          "asset_id": "0000019",
+          "side": "long",
+          "size": 1.579594,
+          "entry_price": 1330.3579,
+          "mark_price": 1911.9381,
+          "unrealized_pnl": 918.66
+        },
+        {
+          "asset_id": "0000071",
+          "side": "long",
+          "size": 2530.939529,
+          "entry_price": 1.8547,
+          "mark_price": 1.6209,
+          "unrealized_pnl": -185.98
+        },
+        {
+          "asset_id": "0000009",
+          "side": "short",
+          "size": 17784.303238,
+          "entry_price": 0.2464,
+          "mark_price": 0.565,
+          "unrealized_pnl": -252.23
+        },
+        {
+          "asset_id": "0000052",
+          "side": "short",
+          "size": 13153.6303,
+          "entry_price": 0.0665,
+          "mark_price": 0.0713,
+          "unrealized_pnl": 11.47
+        }
+      ]
+    },
+    {
+      "account_id": "AJLJ4H9DU7",
+      "positions": [
+        {
+          "asset_id": "0000064",
+          "side": "short",
+          "size": 7531.683815,
+          "entry_price": 0.1081,
+          "mark_price": 0.0687,
+          "unrealized_pnl": 296.74
+        },
+        {
+          "asset_id": "0000091",
+          "side": "long",
+          "size": 5.614591,
+          "entry_price": 169.8284,
+          "mark_price": 166.9959,
+          "unrealized_pnl": 10.17
+        },
+        {
+          "asset_id": "0000108",
+          "side": "short",
+          "size": 529.735087,
+          "entry_price": 0.488,
+          "mark_price": 0.3904,
+          "unrealized_pnl": 51.69
+        },
+        {
+          "asset_id": "0000064",
+          "side": "long",
+          "size": 1865.058284,
+          "entry_price": 0.0963,
+          "mark_price": 0.0687,
+          "unrealized_pnl": -13.86
+        }
+      ]
+    },
+    {
+      "account_id": "4G9DPMRCG6",
+      "positions": []
+    },
+    {
+      "account_id": "BE2U66MR26",
+      "positions": []
+    },
+    {
+      "account_id": "6P7Q9M2I0H",
+      "positions": []
+    },
+    {
+      "account_id": "UEP1ENTHJX",
+      "positions": [
+        {
+          "asset_id": "0000092",
+          "side": "short",
+          "size": 1476.800794,
+          "entry_price": 0.1985,
+          "mark_price": 0.1914,
+          "unrealized_pnl": 40.89
+        },
+        {
+          "asset_id": "0000051",
+          "side": "long",
+          "size": 9263.200779,
+          "entry_price": 0.0499,
+          "mark_price": 0.0498,
+          "unrealized_pnl": 2.06
+        },
+        {
+          "asset_id": "0000106",
+          "side": "long",
+          "size": 29.012848,
+          "entry_price": 29.4499,
+          "mark_price": 25.0002,
+          "unrealized_pnl": 2.29
+        },
+        {
+          "asset_id": "0000008",
+          "side": "short",
+          "size": 0.162658,
+          "entry_price": 1192.6827,
+          "mark_price": 2389.7327,
+          "unrealized_pnl": -1.61
+        }
+      ]
+    },
+    {
+      "account_id": "I3OGZ5KOK1",
+      "positions": [
+        {
+          "asset_id": "0000003",
+          "side": "long",
+          "size": 1881.111998,
+          "entry_price": 1.0,
+          "mark_price": 1.0,
+          "unrealized_pnl": 0.0
+        },
+        {
+          "asset_id": "0000080",
+          "side": "long",
+          "size": 158.611459,
+          "entry_price": 12.2607,
+          "mark_price": 7.774,
+          "unrealized_pnl": -106.35
+        },
+        {
+          "asset_id": "0000050",
+          "side": "long",
+          "size": 859599.912332,
+          "entry_price": 0.0007,
+          "mark_price": 0.0012,
+          "unrealized_pnl": 513.25
+        },
+        {
+          "asset_id": "0000099",
+          "side": "long",
+          "size": 9055.532492,
+          "entry_price": 0.1939,
+          "mark_price": 0.21,
+          "unrealized_pnl": 161.4
+        },
+        {
+          "asset_id": "0000023",
+          "side": "short",
+          "size": 1075.383974,
+          "entry_price": 0.5721,
+          "mark_price": 1.3951,
+          "unrealized_pnl": -33.45
+        },
+        {
+          "asset_id": "0000090",
+          "side": "long",
+          "size": 35.328792,
+          "entry_price": 5.5723,
+          "mark_price": 3.3843,
+          "unrealized_pnl": -8.0
+        }
+      ]
+    },
+    {
+      "account_id": "V0MWUFXBV9",
+      "positions": [
+        {
+          "asset_id": "0000115",
+          "side": "short",
+          "size": 423.943459,
+          "entry_price": 22.2688,
+          "mark_price": 18.5162,
+          "unrealized_pnl": 1590.86
+        },
+        {
+          "asset_id": "0000148",
+          "side": "long",
+          "size": 7.078725,
+          "entry_price": 54.8094,
+          "mark_price": 47.7359,
+          "unrealized_pnl": -3.8
+        },
+        {
+          "asset_id": "0000033",
+          "side": "short",
+          "size": 231403.040646,
+          "entry_price": 0.0271,
+          "mark_price": 0.032,
+          "unrealized_pnl": -169.33
+        },
+        {
+          "asset_id": "0000065",
+          "side": "short",
+          "size": 2184.704994,
+          "entry_price": 0.9776,
+          "mark_price": 2.1142,
+          "unrealized_pnl": -128.95
+        },
+        {
+          "asset_id": "0000111",
+          "side": "long",
+          "size": 43.410127,
+          "entry_price": 16.2753,
+          "mark_price": 6.3405,
+          "unrealized_pnl": -76.9
+        }
+      ]
+    },
+    {
+      "account_id": "BYV7S6EHOG",
+      "positions": [
+        {
+          "asset_id": "0000033",
+          "side": "long",
+          "size": 209523.006616,
+          "entry_price": 0.0297,
+          "mark_price": 0.032,
+          "unrealized_pnl": 483.03
+        },
+        {
+          "asset_id": "0000080",
+          "side": "short",
+          "size": 37.315832,
+          "entry_price": 12.546,
+          "mark_price": 7.774,
+          "unrealized_pnl": 178.07
+        },
+        {
+          "asset_id": "0000104",
+          "side": "long",
+          "size": 182.129367,
+          "entry_price": 4.451,
+          "mark_price": 1.61,
+          "unrealized_pnl": -47.24
+        }
+      ]
+    },
+    {
+      "account_id": "RCLRI1QZJ8",
+      "positions": [
+        {
+          "asset_id": "0000106",
+          "side": "long",
+          "size": 83.790315,
+          "entry_price": 27.5576,
+          "mark_price": 25.0002,
+          "unrealized_pnl": 103.43
+        },
+        {
+          "asset_id": "0000083",
+          "side": "long",
+          "size": 405215.542641,
+          "entry_price": 0.0045,
+          "mark_price": 0.006,
+          "unrealized_pnl": 682.07
+        },
+        {
+          "asset_id": "0000017",
+          "side": "long",
+          "size": 21.536803,
+          "entry_price": 19.9865,
+          "mark_price": 123.783,
+          "unrealized_pnl": 2235.45
+        },
+        {
+          "asset_id": "0000056",
+          "side": "long",
+          "size": 14117.605315,
+          "entry_price": 0.0326,
+          "mark_price": 0.0382,
+          "unrealized_pnl": 86.46
+        },
+        {
+          "asset_id": "0000097",
+          "side": "long",
+          "size": 924.573501,
+          "entry_price": 0.3829,
+          "mark_price": 0.3794,
+          "unrealized_pnl": -3.24
+        },
+        {
+          "asset_id": "0000047",
+          "side": "long",
+          "size": 11438.516164,
+          "entry_price": 0.0432,
+          "mark_price": 0.0648,
+          "unrealized_pnl": 247.16
+        }
+      ]
+    },
+    {
+      "account_id": "5UFRDL1ERB",
+      "positions": [
+        {
+          "asset_id": "0000082",
+          "side": "long",
+          "size": 8357.780646,
+          "entry_price": 0.2844,
+          "mark_price": 0.729,
+          "unrealized_pnl": 3725.08
+        },
+        {
+          "asset_id": "0000009",
+          "side": "short",
+          "size": 23852.467656,
+          "entry_price": 0.2804,
+          "mark_price": 0.565,
+          "unrealized_pnl": -388.65
+        }
+      ]
+    },
+    {
+      "account_id": "QFOEQH3AV9",
+      "positions": [
+        {
+          "asset_id": "0000146",
+          "side": "long",
+          "size": 1181.575623,
+          "entry_price": 7.8402,
+          "mark_price": 6.7186,
+          "unrealized_pnl": -491.08
+        },
+        {
+          "asset_id": "0000094",
+          "side": "long",
+          "size": 1270374.059239,
+          "entry_price": 0.004,
+          "mark_price": 0.0044,
+          "unrealized_pnl": 586.38
+        },
+        {
+          "asset_id": "0000017",
+          "side": "long",
+          "size": 230.897098,
+          "entry_price": 24.8211,
+          "mark_price": 123.783,
+          "unrealized_pnl": 22850.02
+        },
+        {
+          "asset_id": "0000122",
+          "side": "long",
+          "size": 30905.581042,
+          "entry_price": 0.0069,
+          "mark_price": 0.0067,
+          "unrealized_pnl": -5.32
+        }
+      ]
+    }
+  ]
+}
