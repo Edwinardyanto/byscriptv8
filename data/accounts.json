@@ -1,0 +1,257 @@
+[
+  {
+    "account_id": "JZDE8GXD6N",
+    "account_name": "CEX Spot #1",
+    "exchange": "coinbase_advanced",
+    "market_type": "spot",
+    "connected_at": "2024-01-20T02:00:00Z"
+  },
+  {
+    "account_id": "0EPF91DHOD",
+    "account_name": "CEX Spot #2",
+    "exchange": "bitget",
+    "market_type": "spot",
+    "connected_at": "2024-10-22T18:00:00Z"
+  },
+  {
+    "account_id": "DOC9IS0J8H",
+    "account_name": "CEX Spot #3",
+    "exchange": "bitget",
+    "market_type": "spot",
+    "connected_at": "2024-10-19T09:00:00Z"
+  },
+  {
+    "account_id": "LGMXG9EDN5",
+    "account_name": "CEX Spot #4",
+    "exchange": "htx",
+    "market_type": "spot",
+    "connected_at": "2024-12-14T17:00:00Z"
+  },
+  {
+    "account_id": "U33XTPLPFT",
+    "account_name": "CEX Spot #5",
+    "exchange": "bitget",
+    "market_type": "spot",
+    "connected_at": "2024-09-25T15:00:00Z"
+  },
+  {
+    "account_id": "2SEH60KVJ5",
+    "account_name": "CEX Spot #6",
+    "exchange": "coinbase_advanced",
+    "market_type": "spot",
+    "connected_at": "2024-08-03T01:00:00Z"
+  },
+  {
+    "account_id": "E9UVW53EFR",
+    "account_name": "CEX Spot #7",
+    "exchange": "binance_us",
+    "market_type": "spot",
+    "connected_at": "2024-08-30T22:00:00Z"
+  },
+  {
+    "account_id": "EDT2SYWB3W",
+    "account_name": "CEX Spot #8",
+    "exchange": "binance_us",
+    "market_type": "spot",
+    "connected_at": "2024-03-27T19:00:00Z"
+  },
+  {
+    "account_id": "5DNSIPZZ5F",
+    "account_name": "CEX Spot #9",
+    "exchange": "bybit",
+    "market_type": "spot",
+    "connected_at": "2024-03-26T14:00:00Z"
+  },
+  {
+    "account_id": "9RI19R0WYO",
+    "account_name": "CEX Spot #10",
+    "exchange": "bitget",
+    "market_type": "spot",
+    "connected_at": "2024-03-18T02:00:00Z"
+  },
+  {
+    "account_id": "JOOA5LQSAJ",
+    "account_name": "CEX Futures #1",
+    "exchange": "okx",
+    "market_type": "futures",
+    "connected_at": "2024-08-02T17:00:00Z"
+  },
+  {
+    "account_id": "UI6D39ZZZZ",
+    "account_name": "CEX Futures #2",
+    "exchange": "kraken_futures",
+    "market_type": "futures",
+    "connected_at": "2024-02-23T15:00:00Z"
+  },
+  {
+    "account_id": "DMEN2KHVDG",
+    "account_name": "CEX Futures #3",
+    "exchange": "coinbase_perpetual",
+    "market_type": "futures",
+    "connected_at": "2024-01-01T18:00:00Z"
+  },
+  {
+    "account_id": "8GXBENYJQW",
+    "account_name": "CEX Futures #4",
+    "exchange": "okx",
+    "market_type": "futures",
+    "connected_at": "2024-11-04T11:00:00Z"
+  },
+  {
+    "account_id": "HH5344TFJG",
+    "account_name": "CEX Futures #5",
+    "exchange": "gate",
+    "market_type": "futures",
+    "connected_at": "2024-06-24T23:00:00Z"
+  },
+  {
+    "account_id": "4K7BN7XJ8B",
+    "account_name": "CEX Futures #6",
+    "exchange": "bitget",
+    "market_type": "futures",
+    "connected_at": "2024-09-27T09:00:00Z"
+  },
+  {
+    "account_id": "Q7XKWO886V",
+    "account_name": "CEX Futures #7",
+    "exchange": "bybit",
+    "market_type": "futures",
+    "connected_at": "2024-11-21T07:00:00Z"
+  },
+  {
+    "account_id": "MPZOM75WBB",
+    "account_name": "CEX Futures #8",
+    "exchange": "gemini",
+    "market_type": "futures",
+    "connected_at": "2024-05-23T15:00:00Z"
+  },
+  {
+    "account_id": "MW2WXFOGO4",
+    "account_name": "CEX Futures #9",
+    "exchange": "bitget",
+    "market_type": "futures",
+    "connected_at": "2024-04-10T10:00:00Z"
+  },
+  {
+    "account_id": "4A4WFHYM4L",
+    "account_name": "CEX Futures #10",
+    "exchange": "kucoin",
+    "market_type": "futures",
+    "connected_at": "2024-08-10T20:00:00Z"
+  },
+  {
+    "account_id": "FZ3ZFKKIBJ",
+    "account_name": "CEX Futures #11",
+    "exchange": "kraken_futures",
+    "market_type": "futures",
+    "connected_at": "2024-10-29T14:00:00Z"
+  },
+  {
+    "account_id": "4WJ99IBAG7",
+    "account_name": "CEX Futures #12",
+    "exchange": "okx",
+    "market_type": "futures",
+    "connected_at": "2024-03-12T13:00:00Z"
+  },
+  {
+    "account_id": "NBQNS6PUQ8",
+    "account_name": "CEX Futures #13",
+    "exchange": "kucoin",
+    "market_type": "futures",
+    "connected_at": "2024-08-02T04:00:00Z"
+  },
+  {
+    "account_id": "W3706I8J76",
+    "account_name": "CEX Futures #14",
+    "exchange": "binance",
+    "market_type": "futures",
+    "connected_at": "2024-01-10T14:00:00Z"
+  },
+  {
+    "account_id": "AJLJ4H9DU7",
+    "account_name": "CEX Futures #15",
+    "exchange": "okx",
+    "market_type": "futures",
+    "connected_at": "2024-09-28T17:00:00Z"
+  },
+  {
+    "account_id": "4G9DPMRCG6",
+    "account_name": "Web3 Spot #1",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-08-19T17:00:00Z",
+    "web3_mode": "spot"
+  },
+  {
+    "account_id": "BE2U66MR26",
+    "account_name": "Web3 Spot #2",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-09-30T15:00:00Z",
+    "web3_mode": "spot"
+  },
+  {
+    "account_id": "6P7Q9M2I0H",
+    "account_name": "Web3 Spot #3",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-07-19T14:00:00Z",
+    "web3_mode": "spot"
+  },
+  {
+    "account_id": "UEP1ENTHJX",
+    "account_name": "Web3 Futures #1",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-03-14T08:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "I3OGZ5KOK1",
+    "account_name": "Web3 Futures #2",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-09-20T12:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "V0MWUFXBV9",
+    "account_name": "Web3 Futures #3",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-08-22T14:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "BYV7S6EHOG",
+    "account_name": "Web3 Futures #4",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-02-13T08:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "RCLRI1QZJ8",
+    "account_name": "Web3 Futures #5",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-09-20T18:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "5UFRDL1ERB",
+    "account_name": "Web3 Futures #6",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-11-20T02:00:00Z",
+    "web3_mode": "futures"
+  },
+  {
+    "account_id": "QFOEQH3AV9",
+    "account_name": "Web3 Futures #7",
+    "exchange": "hyperliquid",
+    "market_type": "web3",
+    "connected_at": "2024-08-01T08:00:00Z",
+    "web3_mode": "futures"
+  }
+]
