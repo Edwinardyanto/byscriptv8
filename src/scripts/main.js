@@ -55,10 +55,10 @@ const evaluateStatus = (data, key) => {
   }
 
   if (key === "alerts") {
-    return data.length === 0 ? "empty" : "ready";
+    return data && typeof data === "object" ? "ready" : "empty";
   }
 
-  // assetSummary & default
+// assetSummary & default
   return "ready";
 };
 
