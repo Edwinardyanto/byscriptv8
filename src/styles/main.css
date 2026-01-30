@@ -747,11 +747,6 @@ main {
   margin-top: 4px;
 }
 
-/* .section--primary .section-title {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-} */
 
 .badge {
   display: inline-flex;
@@ -1192,11 +1187,20 @@ main {
    TOP AUTOTRADERS (DASHBOARD)
 ========================= */
 
+.section--autotraders .section-body {
+  height: 100%;
+  overflow: hidden;
+}
+
 .autotraders-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap-inner);
   min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
+  align-items: stretch;
+  grid-auto-rows: 1fr; /* biar card penuhin tinggi */
 }
 
 .autotrader-card {
@@ -1209,12 +1213,13 @@ main {
   flex-direction: column;
   gap: var(--gap-inner);
   min-height: 0;
+  height: 100%;
 }
 
 .autotrader-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start; /* pnl dikunci pakai margin-left:auto */
   gap: 12px;
 }
 
@@ -1252,16 +1257,6 @@ main {
   min-width: 0;
 }
 
-.autotrader-name {
-  font-weight: 650;
-  font-size: 0.95rem;
-  color: var(--color-text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-width: 0;
-}
-
 .autotrader-live-dot {
   width: 8px;
   height: 8px;
@@ -1280,9 +1275,19 @@ main {
   opacity: 0.6;
 }
 
+.autotrader-name {
+  font-weight: 650;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
 .autotrader-pnl {
   flex: 0 0 auto;
-  margin-left: auto;
+  margin-left: auto; /* mepet kanan */
   font-weight: 750;
   font-size: 0.7rem;
   padding: 2px 8px;
@@ -1310,29 +1315,60 @@ main {
 .autotrader-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* kiri text, kanan chart */
   gap: 10px;
+  min-height: 0;
 }
 
-.autotrader-sub {
-  font-size: 0.8rem;
-  color: var(--color-muted);
-  white-space: nowrap;
+.autotrader-meta-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .autotrader-pair {
   font-size: 0.8rem;
   color: var(--color-text-primary);
-  font-weight: 600;
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.autotrader-runtime {
-  font-size: 0.8rem;
+.autotrader-sub,
+.autotrader-winrate {
+  font-size: 0.75rem;
   color: var(--color-muted);
   white-space: nowrap;
+}
+
+.autotrader-spark {
+  flex: 0 0 auto;
+  width: 84px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  opacity: 0.95;
+}
+
+.autotrader-sparkline {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.autotrader-sparkline-path {
+  fill: none;
+  stroke: var(--color-action-primary);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+
+.autotrader-sparkline-path.is-flat {
+  opacity: 0.35;
 }
 
 .autotrader-footer {
@@ -1341,29 +1377,6 @@ main {
 
 .autotrader-footer .button {
   width: 100%;
-}
-
-/* Fill section-body height */
-.section--autotraders .section-body {
-  height: 100%;
-}
-
-/* Make list stretch to section height */
-.section--autotraders .autotraders-list {
-  height: 100%;
-  align-items: stretch;
-}
-
-/* Each card fills its grid cell height */
-.section--autotraders .autotrader-card {
-  height: 100%;
-}
-
-/* Ensure header stays flex for dashboard (and pnl can stick right) */
-.section--autotraders .autotrader-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .affiliate-card {
