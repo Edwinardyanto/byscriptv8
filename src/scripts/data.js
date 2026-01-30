@@ -21,6 +21,11 @@ const formatCurrency = (value, digits = 0) =>
     maximumFractionDigits: digits,
   }).format(value);
 
+const formatPct = (value, digits = 2) => {
+  const n = Number(value || 0);
+  return `${n.toFixed(digits)}%`;
+};
+
 /* ------------------------------------------------------
  * STATE (SINGLE SOURCE OF TRUTH)
  * ------------------------------------------------------ */
@@ -121,11 +126,6 @@ const buildAccountsSummary = async () => {
  * TOP AUTOTRADERS
  * ------------------------------------------------------ */
 
-const formatPct = (value, digits = 2) => {
-  const n = Number(value || 0);
-  return `${n.toFixed(digits)}%`;
-};
-
 const buildTopAutotraders = async () => {
   const [autotraders, plans, trades, assets] = await Promise.all([
     getAutotraders(),
@@ -134,24 +134,37 @@ const buildTopAutotraders = async () => {
     getAssets(),
   ]);
 
-  const planNameById = new Map(plans.map((p) => [p.plan_id, p.name || ""]));
+  const planNameById = new Map((plans || []).map((p) => [p.plan_id, p.name || ""]));
   const assetSymbolById = new Map(
-    assets.map((a) => [a.asset_id, a.asset_symbol || ""])
+    (assets || []).map((a) => [a.asset_id, a.asset_symbol || ""])
   );
+
+  const SPARK_POINTS = 24;
+
+  const toFilledAtMs = (t) => {
+    const ms =
+      typeof t?.filled_at === "number"
+        ? t.filled_at * 1000
+        : Date.parse(t?.filled_at || "");
+    return Number.isFinite(ms) ? ms : 0;
+  };
 
   // Aggregate realized performance per autotrader (reduce_only only)
   const agg = new Map();
+
+  // For sparkline: store pnl_usd per close (reduce_only) sorted by time
+  const pnlTradesByAutotrader = new Map();
 
   for (const t of trades || []) {
     if (!t || !t.autotrader_id) continue;
     if (t.reduce_only !== true) continue;
 
-    // engine-grade fields
-    const qty = Math.abs(Number(t.size || 0)); // size (not qty)
-    const price = Number(t.price_usd || 0); // price_usd (not price)
+    const qty = Math.abs(Number(t.size || 0));
+    const price = Number(t.price_usd || 0);
     const notional = qty * price;
 
     const pnlUsd = Number(t.pnl_usd || 0);
+    const filledAtMs = toFilledAtMs(t);
 
     const cur = agg.get(t.autotrader_id) || {
       pnlUsd: 0,
@@ -163,17 +176,28 @@ const buildTopAutotraders = async () => {
     cur.pnlUsd += pnlUsd;
     cur.notionalClosed += notional;
     cur.closeCount += 1;
-
-    // filled_at is unix seconds number in your dataset (safe fallback to Date.parse)
-    const filledAtMs =
-      typeof t.filled_at === "number"
-        ? t.filled_at * 1000
-        : Date.parse(t.filled_at || "");
-    if (!Number.isNaN(filledAtMs)) {
-      cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
-    }
+    cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
 
     agg.set(t.autotrader_id, cur);
+
+    const arr = pnlTradesByAutotrader.get(t.autotrader_id) || [];
+    arr.push({ t: filledAtMs, pnl: pnlUsd });
+    pnlTradesByAutotrader.set(t.autotrader_id, arr);
+  }
+
+  // Build spark values: cumulative pnl_usd over last N closes
+  const sparkById = new Map();
+  for (const [id, arr] of pnlTradesByAutotrader.entries()) {
+    arr.sort((a, b) => (a.t || 0) - (b.t || 0));
+    const sliced = arr.slice(-SPARK_POINTS);
+
+    let cum = 0;
+    const values = sliced.map((x) => {
+      cum += Number(x.pnl || 0);
+      return cum;
+    });
+
+    sparkById.set(id, values.length >= 2 ? values : [0, 0]);
   }
 
   const rows = (autotraders || []).map((a) => {
@@ -185,7 +209,6 @@ const buildTopAutotraders = async () => {
         lastFilledAt: 0,
       };
 
-    // Profit% vs allocated capital (more stable than notionalClosed)
     const capital = Number(a.capital_usd || 0);
     const pct = capital > 0 ? (s.pnlUsd / capital) * 100 : 0;
 
@@ -201,14 +224,13 @@ const buildTopAutotraders = async () => {
       profitPct: pct,
       closeCount: s.closeCount,
       lastFilledAt: s.lastFilledAt,
+      spark: sparkById.get(a.autotrader_id) || [0, 0],
     };
   });
 
-  // Prefer those with realized closes
   let ranked = rows.filter((r) => r.closeCount > 0);
   if (!ranked.length) ranked = rows;
 
-  // Sort by profit% desc, tie-breaker by recency
   ranked.sort((a, b) => {
     if (b.profitPct !== a.profitPct) return b.profitPct - a.profitPct;
     return (b.lastFilledAt || 0) - (a.lastFilledAt || 0);
@@ -220,6 +242,7 @@ const buildTopAutotraders = async () => {
     runtime: t.status === "running" ? "Running" : "Stopped",
     tradeCount: Number(t.closeCount || 0),
     pnl: formatPct(t.profitPct, 2),
+    spark: t.spark,
   }));
 };
 
