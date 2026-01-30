@@ -17,6 +17,47 @@ const parsePct = (p) => {
   return Number.isFinite(n) ? n : 0;
 };
 
+const buildSparkSvg = (values) => {
+  const v = Array.isArray(values)
+    ? values.map((x) => Number(x)).filter((x) => Number.isFinite(x))
+    : [];
+
+  const points = v.length >= 2 ? v : [0, 0];
+
+  const width = 84;
+  const height = 28;
+  const pad = 3;
+
+  let min = Math.min(...points);
+  let max = Math.max(...points);
+
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    min = 0;
+    max = 0;
+  }
+
+  const span = max - min || 1;
+  const stepX = (width - pad * 2) / (points.length - 1);
+
+  const yOf = (val) => {
+    const t = (val - min) / span;
+    return pad + (1 - t) * (height - pad * 2);
+  };
+
+  let d = "";
+  for (let i = 0; i < points.length; i++) {
+    const x = pad + stepX * i;
+    const y = yOf(points[i]);
+    d += i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`;
+  }
+
+  return `
+    <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+      <path d="${d}"></path>
+    </svg>
+  `;
+};
+
 export const renderTopAutotraders = (sectionState) => {
   const { data, status } = sectionState;
   const list = document.querySelector('[data-list="topAutotraders"]');
@@ -44,7 +85,8 @@ export const renderTopAutotraders = (sectionState) => {
     const dotClass = isRunning ? "is-live" : "is-off";
 
     const pct = parsePct(trader.pnl);
-    const pnlClass = pct > 0 ? "is-positive" : pct < 0 ? "is-negative" : "is-flat";
+    const pnlClass =
+      pct > 0 ? "is-positive" : pct < 0 ? "is-negative" : "is-flat";
 
     const pair = trader.pair || "";
     const assetSymbol = pair ? String(pair).split("/")[0] : "";
@@ -74,8 +116,14 @@ export const renderTopAutotraders = (sectionState) => {
       </div>
 
       <div class="autotrader-meta">
-        <span class="autotrader-pair">${pair || "Pair"}</span>
-        <span class="autotrader-sub">${subText}</span>
+        <div class="autotrader-meta-left">
+          <span class="autotrader-pair">${pair || "Pair"}</span>
+          <span class="autotrader-sub">${subText}</span>
+        </div>
+
+        <div class="autotrader-spark ${pnlClass}" aria-hidden="true">
+          ${buildSparkSvg(trader.spark)}
+        </div>
       </div>
 
       <div class="autotrader-footer">
