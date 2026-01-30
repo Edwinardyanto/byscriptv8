@@ -1,3 +1,5 @@
+// src/scripts/render/topAutotraders.js
+
 const setListMessage = (list, message) => {
   if (!list) return;
   list.innerHTML = "";
@@ -8,7 +10,10 @@ const setListMessage = (list, message) => {
 };
 
 const parsePct = (p) => {
-  const n = typeof p === "number" ? p : parseFloat(String(p || "0").replace("%", ""));
+  const n =
+    typeof p === "number"
+      ? p
+      : parseFloat(String(p || "0").replace("%", ""));
   return Number.isFinite(n) ? n : 0;
 };
 
@@ -36,9 +41,7 @@ export const renderTopAutotraders = (sectionState) => {
   data.forEach((trader) => {
     const runtimeText = trader.runtime || "Stopped";
     const isRunning = String(runtimeText).toLowerCase() === "running";
-
-    const statusText = isRunning ? "LIVE" : "STOPPED";
-    const statusClass = isRunning ? "running" : "stopped";
+    const dotClass = isRunning ? "is-live" : "is-off";
 
     const pct = parsePct(trader.pnl);
     const pnlClass = pct > 0 ? "is-positive" : pct < 0 ? "is-negative" : "is-flat";
@@ -47,16 +50,22 @@ export const renderTopAutotraders = (sectionState) => {
     const assetSymbol = pair ? String(pair).split("/")[0] : "";
     const avatarLabel = (assetSymbol || "AT").slice(0, 2).toUpperCase();
 
+    const tradeCount =
+      typeof trader.tradeCount === "number" ? trader.tradeCount : null;
+
+    const subText = tradeCount !== null ? `Trades: ${tradeCount}` : runtimeText;
+
     const card = document.createElement("div");
     card.className = "autotrader-card";
     card.innerHTML = `
       <div class="autotrader-header">
         <div class="autotrader-identity">
           <span class="autotrader-avatar" aria-hidden="true">${avatarLabel}</span>
+
           <div class="autotrader-name-group">
             <div class="autotrader-name-row">
               <span class="autotrader-name">${trader.name || "Autotrader"}</span>
-              <span class="autotrader-status ${statusClass}">${statusText}</span>
+              <span class="autotrader-live-dot ${dotClass}" aria-hidden="true"></span>
             </div>
           </div>
         </div>
@@ -66,7 +75,7 @@ export const renderTopAutotraders = (sectionState) => {
 
       <div class="autotrader-meta">
         <span class="autotrader-pair">${pair || "Pair"}</span>
-        <span class="autotrader-runtime">${runtimeText}</span>
+        <span class="autotrader-sub">${subText}</span>
       </div>
 
       <div class="autotrader-footer">
