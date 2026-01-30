@@ -22,7 +22,7 @@ const formatCurrency = (value, digits = 0) =>
   }).format(value);
 
 /* ------------------------------------------------------
- * STATE (SINGLE SOURCE OF TRUTH) — STEP 2
+ * STATE (SINGLE SOURCE OF TRUTH)
  * ------------------------------------------------------ */
 
 let activeRange = "7D";
@@ -34,87 +34,62 @@ export const setActiveRange = (range) => {
 export const getActiveRange = () => activeRange;
 
 /* ------------------------------------------------------
- * RANGE CONFIG — STEP 3
+ * RANGE CONFIG
  * ------------------------------------------------------ */
 
 const RANGE_DAYS = {
   "7D": 7,
   "30D": 30,
   "90D": 90,
-  "ALL": "ALL",
+  ALL: "ALL",
 };
-
-/* ------------------------------------------------------
- * RANGE SLICE HELPER — STEP 3
- * ------------------------------------------------------ */
 
 const sliceSeriesByRange = (series = [], range) => {
   if (!series.length) return [];
-
   if (range === "ALL") return series;
 
   const days = RANGE_DAYS[range];
-
-  // ✅ Guard: kalau range invalid → fallback ALL
   if (!days) return series;
 
   return series.slice(-days);
 };
 
 /* ------------------------------------------------------
- * COMPUTE SUMMARY — STEP 6
+ * COMPUTE SUMMARY
  * ------------------------------------------------------ */
 
 const computeSummary = (series) => {
   if (!series || series.length < 2) {
-    return {
-      totalValue: 0,
-      percent: 0,
-    };
+    return { totalValue: 0, percent: 0 };
   }
 
   const first = Number(series[0]?.equity_usd || 0);
   const last = Number(series[series.length - 1]?.equity_usd || 0);
 
-  const percent =
-    first > 0 ? ((last - first) / first) * 100 : 0;
+  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
 
-  return {
-    totalValue: last,
-    percent,
-  };
+  return { totalValue: last, percent };
 };
 
 /* ------------------------------------------------------
- * ASSET SUMMARY (HEADER + CHART INPUT) — STEP 5
+ * ASSET SUMMARY
  * ------------------------------------------------------ */
 
 const buildAssetSummary = async () => {
-  // ✅ Always fetch ALL series first
   const rawSeries = await getAssetEquityByRange("ALL");
-
-  // ✅ Slice locally based on activeRange
   const slicedSeries = sliceSeriesByRange(rawSeries, activeRange);
 
-  // ✅ Compute header numbers
   const { totalValue, percent } = computeSummary(slicedSeries);
 
   return {
-    // HEADER
     totalValue: formatCurrency(totalValue),
     percent,
-
-    // CHART INPUT (render-ready)
     chart: {
       series: slicedSeries.map((d) => Number(d.equity_usd || 0)),
       labels: slicedSeries.map((d) => d.date),
     },
   };
 };
-
-/* ------------------------------------------------------
- * RANGE CONTROLLER (TIMEFRAME PILLS) — STEP 4
- * ------------------------------------------------------ */
 
 export const setAssetRange = async (range) => {
   activeRange = range;
@@ -166,12 +141,14 @@ const buildTopAutotraders = async () => {
 
   // Aggregate realized performance per autotrader (reduce_only only)
   const agg = new Map();
+
   for (const t of trades || []) {
     if (!t || !t.autotrader_id) continue;
     if (t.reduce_only !== true) continue;
 
-    const qty = Math.abs(Number(t.qty || 0));
-    const price = Number(t.price || 0);
+    // engine-grade fields
+    const qty = Math.abs(Number(t.size || 0));        // <-- size, not qty
+    const price = Number(t.price_usd || 0);           // <-- price_usd, not price
     const notional = qty * price;
 
     const pnlUsd = Number(t.pnl_usd || 0);
@@ -179,24 +156,36 @@ const buildTopAutotraders = async () => {
     const cur = agg.get(t.autotrader_id) || {
       pnlUsd: 0,
       notionalClosed: 0,
+      closeCount: 0,
       lastFilledAt: 0,
     };
 
     cur.pnlUsd += pnlUsd;
     cur.notionalClosed += notional;
+    cur.closeCount += 1;
 
-    const filledAt = Date.parse(t.filled_at || "");
-    if (!Number.isNaN(filledAt)) {
-      cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAt);
-    }
+    // filled_at is unix seconds number in your dataset
+    const filledAtMs =
+      typeof t.filled_at === "number"
+        ? t.filled_at * 1000
+        : Date.parse(t.filled_at || "");
+    if (!Number.isNaN(filledAtMs)) cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
 
     agg.set(t.autotrader_id, cur);
   }
 
   const rows = (autotraders || []).map((a) => {
-    const s = agg.get(a.autotrader_id) || { pnlUsd: 0, notionalClosed: 0 };
-    const pct =
-      s.notionalClosed > 0 ? (s.pnlUsd / s.notionalClosed) * 100 : 0;
+    const s =
+      agg.get(a.autotrader_id) || {
+        pnlUsd: 0,
+        notionalClosed: 0,
+        closeCount: 0,
+        lastFilledAt: 0,
+      };
+
+    // Profit% vs allocated capital (more stable than notionalClosed)
+    const capital = Number(a.capital_usd || 0);
+    const pct = capital > 0 ? (s.pnlUsd / capital) * 100 : 0;
 
     const planName = planNameById.get(a.plan_id) || "";
     const sym = assetSymbolById.get(a.asset_id) || "";
@@ -207,13 +196,24 @@ const buildTopAutotraders = async () => {
       planName,
       assetSymbol: sym,
       profitPct: pct,
+      closeCount: s.closeCount,
+      lastFilledAt: s.lastFilledAt,
     };
   });
 
-  // Top 3 by profit%
-  rows.sort((a, b) => b.profitPct - a.profitPct);
+  // Prefer those with realized closes
+  let ranked = rows.filter((r) => r.closeCount > 0);
 
-  return rows.slice(0, 3).map((t) => ({
+  // Fallback if none (should not happen, but safe)
+  if (!ranked.length) ranked = rows;
+
+  // Sort by profit% desc, tie-breaker by recency
+  ranked.sort((a, b) => {
+    if (b.profitPct !== a.profitPct) return b.profitPct - a.profitPct;
+    return (b.lastFilledAt || 0) - (a.lastFilledAt || 0);
+  });
+
+  return ranked.slice(0, 3).map((t) => ({
     name: t.planName || "Autotrader",
     pair: t.assetSymbol ? `${t.assetSymbol}/USDT` : "Pair",
     runtime: t.status === "running" ? "Running" : "Stopped",
@@ -226,12 +226,11 @@ const buildTopAutotraders = async () => {
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders] =
-    await Promise.all([
-      buildAssetSummary(),
-      buildAccountsSummary(),
-      buildTopAutotraders(),
-    ]);
+  const [assetSummary, accountsSummary, topAutotraders] = await Promise.all([
+    buildAssetSummary(),
+    buildAccountsSummary(),
+    buildTopAutotraders(),
+  ]);
 
   return {
     assetSummary,
