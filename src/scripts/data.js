@@ -147,8 +147,8 @@ const buildTopAutotraders = async () => {
     if (t.reduce_only !== true) continue;
 
     // engine-grade fields
-    const qty = Math.abs(Number(t.size || 0));        // <-- size, not qty
-    const price = Number(t.price_usd || 0);           // <-- price_usd, not price
+    const qty = Math.abs(Number(t.size || 0)); // size (not qty)
+    const price = Number(t.price_usd || 0); // price_usd (not price)
     const notional = qty * price;
 
     const pnlUsd = Number(t.pnl_usd || 0);
@@ -164,12 +164,14 @@ const buildTopAutotraders = async () => {
     cur.notionalClosed += notional;
     cur.closeCount += 1;
 
-    // filled_at is unix seconds number in your dataset
+    // filled_at is unix seconds number in your dataset (safe fallback to Date.parse)
     const filledAtMs =
       typeof t.filled_at === "number"
         ? t.filled_at * 1000
         : Date.parse(t.filled_at || "");
-    if (!Number.isNaN(filledAtMs)) cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
+    if (!Number.isNaN(filledAtMs)) {
+      cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
+    }
 
     agg.set(t.autotrader_id, cur);
   }
@@ -204,8 +206,6 @@ const buildTopAutotraders = async () => {
 
   // Prefer those with realized closes
   let ranked = rows.filter((r) => r.closeCount > 0);
-
-  // Fallback if none (should not happen, but safe)
   if (!ranked.length) ranked = rows;
 
   // Sort by profit% desc, tie-breaker by recency
@@ -218,6 +218,7 @@ const buildTopAutotraders = async () => {
     name: t.autotraderName || t.planName || "Autotrader",
     pair: t.assetSymbol ? `${t.assetSymbol}/USDT` : "Pair",
     runtime: t.status === "running" ? "Running" : "Stopped",
+    tradeCount: Number(t.closeCount || 0),
     pnl: formatPct(t.profitPct, 2),
   }));
 };
