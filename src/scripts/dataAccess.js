@@ -29,15 +29,18 @@ const clone = (d) =>
     : JSON.parse(JSON.stringify(d));
 
 const fetchJson = async (url, key) => {
-  if (cache.has(key)) return clone(cache.get(key));
+  const cacheKey = key || String(url);
+
+  if (cache.has(cacheKey)) return clone(cache.get(cacheKey));
 
   const r = await fetch(url);
   if (!r.ok) throw new Error(`Failed to load ${url}`);
 
   const j = await r.json();
-  cache.set(key, j);
+  cache.set(cacheKey, j);
   return clone(j);
 };
+
 
 /* =========================
    CORE DATA
