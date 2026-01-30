@@ -3,6 +3,7 @@
 import {
   getAssetEquityByRange,
   getAccountsWithSummary,
+  getAccounts,
   getAutotraders,
   getTradingPlans,
   getTrades,
@@ -19,11 +20,40 @@ const formatCurrency = (value, digits = 0) =>
     currency: "USD",
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
-  }).format(value);
+  }).format(Number(value || 0));
+
+const formatNumber = (value) =>
+  new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 0,
+  }).format(Number(value || 0));
 
 const formatPct = (value, digits = 2) => {
   const n = Number(value || 0);
   return `${n.toFixed(digits)}%`;
+};
+
+const formatSignedPct = (value, digits = 2) => {
+  const n = Number(value || 0);
+  const sign = n > 0 ? "+" : "";
+  return `${sign}${n.toFixed(digits)}%`;
+};
+
+const formatTimeAgo = (iso) => {
+  const ms = Date.parse(iso || "");
+  if (!Number.isFinite(ms)) return "-";
+
+  const diff = Math.max(0, Date.now() - ms);
+  const sec = Math.floor(diff / 1000);
+  const min = Math.floor(sec / 60);
+  const hr = Math.floor(min / 60);
+  const day = Math.floor(hr / 24);
+
+  if (day >= 365) return `${Math.floor(day / 365)}y ago`;
+  if (day >= 30) return `${Math.floor(day / 30)}mo ago`;
+  if (day >= 1) return `${day}d ago`;
+  if (hr >= 1) return `${hr}h ago`;
+  if (min >= 1) return `${min}m ago`;
+  return `${sec}s ago`;
 };
 
 /* ------------------------------------------------------
@@ -119,6 +149,115 @@ const buildAccountsSummary = async () => {
   return {
     total: formatCurrency(total),
     accounts: list,
+  };
+};
+
+/* ------------------------------------------------------
+ * DATA OVERVIEW (IN ALERTS SECTION)
+ * ------------------------------------------------------ */
+
+const buildAlertsKpis = async () => {
+  const [accounts, autotraders, trades, equitySeries] = await Promise.all([
+    getAccounts(),
+    getAutotraders(),
+    getTrades(),
+    getAssetEquityByRange("ALL"),
+  ]);
+
+  // Accounts
+  const totalAccounts = Array.isArray(accounts) ? accounts.length : 0;
+
+  let spotCount = 0;
+  let futuresCount = 0;
+  let lastConnectedAt = null;
+
+  for (const a of accounts || []) {
+    const mt = String(a?.market_type || "").toLowerCase();
+    const name = String(a?.account_name || "").toLowerCase();
+
+    if (mt === "spot") spotCount += 1;
+    else if (mt === "futures") futuresCount += 1;
+    else if (mt === "web3") {
+      // fallback: infer from account_name
+      if (name.includes("futures")) futuresCount += 1;
+      else spotCount += 1;
+    }
+
+    if (a?.connected_at) {
+      if (!lastConnectedAt) lastConnectedAt = a.connected_at;
+      else if (Date.parse(a.connected_at) > Date.parse(lastConnectedAt)) {
+        lastConnectedAt = a.connected_at;
+      }
+    }
+  }
+
+  // Autotraders
+  const totalAutotraders = Array.isArray(autotraders) ? autotraders.length : 0;
+
+  let active = 0;
+  let stopped = 0;
+  let paused = 0;
+
+  for (const a of autotraders || []) {
+    const s = String(a?.status || "").toLowerCase();
+    if (s === "running") active += 1;
+    else if (s === "stopped") stopped += 1;
+    else if (s) paused += 1;
+  }
+
+  // Trades
+  const totalTrades = Array.isArray(trades) ? trades.length : 0;
+
+  const closed = (trades || []).filter((t) => t?.reduce_only === true);
+  const closedCount = closed.length;
+
+  const winCount = closed.filter((t) => Number(t?.pnl_usd || 0) > 0).length;
+  const winRate = closedCount > 0 ? (winCount / closedCount) * 100 : 0;
+
+  // Optional if field exists, otherwise 0
+  const failed = (trades || []).filter(
+    (t) => String(t?.status || "").toLowerCase() === "failed"
+  ).length;
+
+  // Total realized PnL
+  const totalPnlUsd = closed.reduce(
+    (sum, t) => sum + Number(t?.pnl_usd || 0),
+    0
+  );
+
+  // ROI from equity series (first vs last)
+  let roiPct = 0;
+  if (Array.isArray(equitySeries) && equitySeries.length >= 2) {
+    const first = Number(equitySeries[0]?.equity_usd || 0);
+    const last = Number(equitySeries[equitySeries.length - 1]?.equity_usd || 0);
+    roiPct = first > 0 ? ((last - first) / first) * 100 : 0;
+  }
+
+  return {
+    accounts: {
+      title: "Accounts Connected",
+      value: formatNumber(totalAccounts),
+      sub: `${formatNumber(spotCount)} Spot, ${formatNumber(futuresCount)} Futures`,
+      meta: `Last connected: ${lastConnectedAt ? formatTimeAgo(lastConnectedAt) : "-"}`,
+    },
+    autotraders: {
+      title: "Autotraders",
+      value: formatNumber(totalAutotraders),
+      sub: `Active: ${formatNumber(active)}, Stopped: ${formatNumber(stopped)}`,
+      meta: `Paused by risk guard: ${formatNumber(paused)}`,
+    },
+    trades: {
+      title: "Trades",
+      value: formatNumber(totalTrades),
+      sub: `Win rate: ${formatPct(winRate, 2)}`,
+      meta: `Failed: ${formatNumber(failed)}`,
+    },
+    pnl: {
+      title: "Total PnL",
+      value: formatCurrency(totalPnlUsd, 2),
+      sub: `ROI: ${formatSignedPct(roiPct, 2)}`,
+      meta: "Fees: -",
+    },
   };
 };
 
@@ -251,17 +390,18 @@ const buildTopAutotraders = async () => {
  * ------------------------------------------------------ */
 
 export const fetchDashboardData = async () => {
-  const [assetSummary, accountsSummary, topAutotraders] = await Promise.all([
+  const [assetSummary, accountsSummary, topAutotraders, alerts] = await Promise.all([
     buildAssetSummary(),
     buildAccountsSummary(),
     buildTopAutotraders(),
+    buildAlertsKpis(),
   ]);
 
   return {
     assetSummary,
     accountsSummary,
     topAutotraders,
-    alerts: [],
+    alerts,
     tradeHistory: [],
   };
 };
