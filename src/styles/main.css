@@ -1266,7 +1266,7 @@ main {
   min-width: 0;
 }
 
-.autotrader-status {
+/* .autotrader-status {
   font-size: 0.7rem;
   padding: 2px 8px;
   border-radius: 999px;
@@ -1284,6 +1284,25 @@ main {
 .autotrader-status.stopped {
   color: var(--color-status-negative);
   border-color: var(--color-status-negative);
+} */
+
+.autotrader-live-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-overlay-xs);
+  flex: 0 0 10px;
+}
+
+.autotrader-live-dot.is-live {
+  background: var(--color-action-primary);
+  border-color: var(--color-action-primary-border-subtle);
+}
+
+.autotrader-live-dot.is-off {
+  background: var(--color-muted);
+  border-color: var(--color-border-subtle);
 }
 
 .autotrader-pnl {
@@ -1316,6 +1335,12 @@ main {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+}
+
+.autotrader-sub {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  white-space: nowrap;
 }
 
 .autotrader-pair {
