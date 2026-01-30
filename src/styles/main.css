@@ -1212,13 +1212,10 @@ main {
 }
 
 .autotrader-header {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
   align-items: center;
-  gap: var(--gap-inner);
-  padding-bottom: var(--gap-inner);
-  border-bottom: 1px solid var(--color-border-subtle);
-  min-width: 0;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .autotrader-identity {
@@ -1226,6 +1223,7 @@ main {
   align-items: center;
   gap: 10px;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .autotrader-avatar {
@@ -1243,10 +1241,8 @@ main {
 }
 
 .autotrader-name-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .autotrader-name-row {
@@ -1266,46 +1262,27 @@ main {
   min-width: 0;
 }
 
-/* .autotrader-status {
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border-subtle);
-  background: var(--color-overlay-xxs);
-  color: var(--color-muted);
-  flex: 0 0 auto;
-}
-
-.autotrader-status.running {
-  color: var(--color-action-primary);
-  border-color: var(--color-action-primary-border-subtle);
-}
-
-.autotrader-status.stopped {
-  color: var(--color-status-negative);
-  border-color: var(--color-status-negative);
-} */
-
 .autotrader-live-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 999px;
-  border: 1px solid var(--color-border-subtle);
-  background: var(--color-overlay-xs);
-  flex: 0 0 10px;
+  flex: 0 0 auto;
+  background: var(--color-muted);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
 }
 
 .autotrader-live-dot.is-live {
   background: var(--color-action-primary);
-  border-color: var(--color-action-primary-border-subtle);
 }
 
 .autotrader-live-dot.is-off {
   background: var(--color-muted);
-  border-color: var(--color-border-subtle);
+  opacity: 0.6;
 }
 
 .autotrader-pnl {
+  flex: 0 0 auto;
+  margin-left: auto;
   font-weight: 750;
   font-size: 0.7rem;
   padding: 2px 8px;
