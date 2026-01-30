@@ -84,6 +84,8 @@ export const getEquityDaily = async () => {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 };
 
+export const getAssetEquityDaily = async () => getEquityDaily();
+
 export const getAssetEquityByRange = async (range = "ALL") => {
   const series = await getEquityDaily();
   if (!series.length) return [];
