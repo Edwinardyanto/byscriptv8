@@ -1188,7 +1188,7 @@ main {
   align-self: flex-start;
 }
 
-.autotraders-list {
+/* .autotraders-list {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: var(--autotrader-card-width);
@@ -1280,6 +1280,159 @@ main {
   align-items: center;
   justify-content: flex-end;
   margin-top: auto;
+} */
+
+/* =========================
+   TOP AUTOTRADERS (DASHBOARD)
+========================= */
+
+.autotraders-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-inner);
+  min-height: 0;
+}
+
+.autotrader-card {
+  padding: var(--gap-inner);
+  background: var(--color-overlay-xxs);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-inner);
+  min-height: 0;
+}
+
+.autotrader-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--gap-inner);
+  padding-bottom: var(--gap-inner);
+  border-bottom: 1px solid var(--color-border-subtle);
+  min-width: 0;
+}
+
+.autotrader-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.autotrader-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 32px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  background: var(--color-overlay-xs);
+  border: 1px solid var(--color-border-subtle);
+  color: var(--color-text-primary);
+}
+
+.autotrader-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.autotrader-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.autotrader-name {
+  font-weight: 650;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.autotrader-status {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-overlay-xxs);
+  color: var(--color-muted);
+  flex: 0 0 auto;
+}
+
+.autotrader-status.running {
+  color: var(--color-action-primary);
+  border-color: var(--color-action-primary-border-subtle);
+}
+
+.autotrader-status.stopped {
+  color: var(--color-status-negative);
+  border-color: var(--color-status-negative);
+}
+
+.autotrader-pnl {
+  font-weight: 750;
+  font-size: 0.95rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-subtle);
+  background: var(--color-overlay-xxs);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.autotrader-pnl.is-positive {
+  color: var(--color-action-primary);
+  border-color: var(--color-action-primary-border-subtle);
+}
+
+.autotrader-pnl.is-negative {
+  color: var(--color-status-negative);
+  border-color: var(--color-status-negative);
+}
+
+.autotrader-pnl.is-flat {
+  color: var(--color-muted);
+}
+
+.autotrader-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.autotrader-pair {
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.autotrader-runtime {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.autotrader-footer {
+  margin-top: auto;
+}
+
+.autotrader-footer .button {
+  width: 100%;
 }
 
 .affiliate-card {
