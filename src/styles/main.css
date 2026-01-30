@@ -1343,6 +1343,29 @@ main {
   width: 100%;
 }
 
+/* Fill section-body height */
+.section--autotraders .section-body {
+  height: 100%;
+}
+
+/* Make list stretch to section height */
+.section--autotraders .autotraders-list {
+  height: 100%;
+  align-items: stretch;
+}
+
+/* Each card fills its grid cell height */
+.section--autotraders .autotrader-card {
+  height: 100%;
+}
+
+/* Ensure header stays flex for dashboard (and pnl can stick right) */
+.section--autotraders .autotrader-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .affiliate-card {
   display: flex;
   flex-direction: column;
