@@ -1309,10 +1309,17 @@ main {
 
 .autotrader-meta {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 4px;
 }
+
+.autotrader-pair,
+.autotrader-sub {
+  width: 100%;
+}
+
 
 .autotrader-sub {
   font-size: 0.8rem;
