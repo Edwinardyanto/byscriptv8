@@ -1,0 +1,2032 @@
+[
+  {
+    "autotrader_id": "C498UK1GEQ",
+    "autotrader_name": "Volume Spike Echo",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "JZDE8GXD6N",
+    "asset_id": "0000063",
+    "status": "running",
+    "capital_usd": 2162.58,
+    "created_at": "2024-12-27T02:00:00Z"
+  },
+  {
+    "autotrader_id": "LOI03P8HSS",
+    "autotrader_name": "Mean Reversion Mirage",
+    "plan_id": "OF7JYU5JSJ",
+    "account_id": "0EPF91DHOD",
+    "asset_id": "0000138",
+    "status": "running",
+    "capital_usd": 2749.89,
+    "created_at": "2025-01-15T14:00:00Z"
+  },
+  {
+    "autotrader_id": "PLPPJSMUEZ",
+    "autotrader_name": "Squeeze Prime v3",
+    "plan_id": "P6AFQFJZCZ",
+    "account_id": "DOC9IS0J8H",
+    "asset_id": "0000078",
+    "status": "running",
+    "capital_usd": 2534.9,
+    "created_at": "2024-12-13T14:00:00Z"
+  },
+  {
+    "autotrader_id": "3CGA4O2XCS",
+    "autotrader_name": "Reversal Rocket",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "LGMXG9EDN5",
+    "asset_id": "0000116",
+    "status": "running",
+    "capital_usd": 598.87,
+    "created_at": "2025-01-11T03:00:00Z"
+  },
+  {
+    "autotrader_id": "EX6L2QAGWN",
+    "autotrader_name": "Ichimoku Scout",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "U33XTPLPFT",
+    "asset_id": "0000063",
+    "status": "running",
+    "capital_usd": 3466.16,
+    "created_at": "2025-01-07T06:00:00Z"
+  },
+  {
+    "autotrader_id": "NAU0XLTENC",
+    "autotrader_name": "Channel Shift",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "2SEH60KVJ5",
+    "asset_id": "0000046",
+    "status": "stopped",
+    "capital_usd": 5525.64,
+    "created_at": "2024-12-17T01:00:00Z"
+  },
+  {
+    "autotrader_id": "9J8FKZR0ST",
+    "autotrader_name": "Mean Reversion Flow v2",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000130",
+    "status": "running",
+    "capital_usd": 608.47,
+    "created_at": "2024-12-07T12:00:00Z"
+  },
+  {
+    "autotrader_id": "BXMZZNA1K1",
+    "autotrader_name": "Fibo Ranger v2",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "EDT2SYWB3W",
+    "asset_id": "0000143",
+    "status": "running",
+    "capital_usd": 995.83,
+    "created_at": "2024-12-27T13:00:00Z"
+  },
+  {
+    "autotrader_id": "IAD9JZFX6K",
+    "autotrader_name": "Ichimoku Wave",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000143",
+    "status": "running",
+    "capital_usd": 2904.62,
+    "created_at": "2024-12-30T05:00:00Z"
+  },
+  {
+    "autotrader_id": "GY5MTIC4UD",
+    "autotrader_name": "Pivot Alpha",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "9RI19R0WYO",
+    "asset_id": "0000116",
+    "status": "running",
+    "capital_usd": 6400.04,
+    "created_at": "2025-01-29T02:00:00Z"
+  },
+  {
+    "autotrader_id": "KOZM4LNCZ7",
+    "autotrader_name": "Grid Fusion v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000011",
+    "status": "running",
+    "capital_usd": 3656.16,
+    "created_at": "2025-01-09T22:00:00Z"
+  },
+  {
+    "autotrader_id": "C9CUHY39T0",
+    "autotrader_name": "Ichimoku Vault",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "UI6D39ZZZZ",
+    "asset_id": "0000041",
+    "status": "running",
+    "capital_usd": 2567.66,
+    "created_at": "2025-01-16T06:00:00Z"
+  },
+  {
+    "autotrader_id": "62LBA53P23",
+    "autotrader_name": "Mean Reversion Drift",
+    "plan_id": "HKKEN659O2",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000070",
+    "status": "stopped",
+    "capital_usd": 8124.24,
+    "created_at": "2024-12-24T14:00:00Z"
+  },
+  {
+    "autotrader_id": "W1XF266CCI",
+    "autotrader_name": "VWAP Rift",
+    "plan_id": "HKKEN659O2",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000141",
+    "status": "running",
+    "capital_usd": 7361.45,
+    "created_at": "2024-12-05T04:00:00Z"
+  },
+  {
+    "autotrader_id": "D6YIBEHMI5",
+    "autotrader_name": "Fibo Rebound",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "HH5344TFJG",
+    "asset_id": "0000075",
+    "status": "running",
+    "capital_usd": 8128.85,
+    "created_at": "2025-01-02T02:00:00Z"
+  },
+  {
+    "autotrader_id": "OEWQKUR3JQ",
+    "autotrader_name": "Momentum Hunter v3",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "4K7BN7XJ8B",
+    "asset_id": "0000059",
+    "status": "running",
+    "capital_usd": 9207.09,
+    "created_at": "2025-01-13T23:00:00Z"
+  },
+  {
+    "autotrader_id": "6PUXCMLZKR",
+    "autotrader_name": "Pivot Pulse v3",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000092",
+    "status": "running",
+    "capital_usd": 8964.59,
+    "created_at": "2024-12-17T19:00:00Z"
+  },
+  {
+    "autotrader_id": "DX297GQ8ZX",
+    "autotrader_name": "RSI Climber Ultra",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000001",
+    "status": "running",
+    "capital_usd": 9905.93,
+    "created_at": "2024-12-08T16:00:00Z"
+  },
+  {
+    "autotrader_id": "F2OLDS7QTU",
+    "autotrader_name": "Supertrend Edge v3",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "MW2WXFOGO4",
+    "asset_id": "0000111",
+    "status": "stopped",
+    "capital_usd": 7496.49,
+    "created_at": "2024-12-24T10:00:00Z"
+  },
+  {
+    "autotrader_id": "106XDI5OCB",
+    "autotrader_name": "Volume Spike Core v2",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000094",
+    "status": "running",
+    "capital_usd": 5714.5,
+    "created_at": "2024-12-19T19:00:00Z"
+  },
+  {
+    "autotrader_id": "8O0TINX4KI",
+    "autotrader_name": "Supertrend Drill",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000039",
+    "status": "running",
+    "capital_usd": 8034.88,
+    "created_at": "2025-01-03T11:00:00Z"
+  },
+  {
+    "autotrader_id": "EJRZQAD9W2",
+    "autotrader_name": "Pivot Turbo",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000136",
+    "status": "running",
+    "capital_usd": 5224.07,
+    "created_at": "2024-12-29T03:00:00Z"
+  },
+  {
+    "autotrader_id": "CD8BZLPKDG",
+    "autotrader_name": "Range Hunter Sentry",
+    "plan_id": "HKKEN659O2",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000045",
+    "status": "running",
+    "capital_usd": 5554.14,
+    "created_at": "2024-12-11T00:00:00Z"
+  },
+  {
+    "autotrader_id": "760L6TETD4",
+    "autotrader_name": "Momentum Matrix",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000094",
+    "status": "running",
+    "capital_usd": 162.86,
+    "created_at": "2024-12-27T06:00:00Z"
+  },
+  {
+    "autotrader_id": "F2LOGQOCHV",
+    "autotrader_name": "Mean Reversion Drill",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "AJLJ4H9DU7",
+    "asset_id": "0000108",
+    "status": "stopped",
+    "capital_usd": 9259.26,
+    "created_at": "2025-01-17T14:00:00Z"
+  },
+  {
+    "autotrader_id": "917QSNF6AK",
+    "autotrader_name": "Keltner Drift",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000125",
+    "status": "running",
+    "capital_usd": 2437.48,
+    "created_at": "2024-12-18T20:00:00Z"
+  },
+  {
+    "autotrader_id": "MYVPY8447A",
+    "autotrader_name": "Scalper Glide",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000007",
+    "status": "stopped",
+    "capital_usd": 4428.42,
+    "created_at": "2025-01-17T10:00:00Z"
+  },
+  {
+    "autotrader_id": "NZEKJCBHGK",
+    "autotrader_name": "Volume Spike Glacier",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000136",
+    "status": "running",
+    "capital_usd": 1504.23,
+    "created_at": "2025-01-26T09:00:00Z"
+  },
+  {
+    "autotrader_id": "CECEXM8EYG",
+    "autotrader_name": "VWAP Beta Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "UEP1ENTHJX",
+    "asset_id": "0000092",
+    "status": "running",
+    "capital_usd": 2111.29,
+    "created_at": "2024-12-03T04:00:00Z"
+  },
+  {
+    "autotrader_id": "FS4GIGNSUV",
+    "autotrader_name": "Supertrend Gamma Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000080",
+    "status": "running",
+    "capital_usd": 307.09,
+    "created_at": "2025-01-30T20:00:00Z"
+  },
+  {
+    "autotrader_id": "XU64SB0B17",
+    "autotrader_name": "Range Hunter Prime",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "V0MWUFXBV9",
+    "asset_id": "0000111",
+    "status": "stopped",
+    "capital_usd": 3533.14,
+    "created_at": "2024-12-04T22:00:00Z"
+  },
+  {
+    "autotrader_id": "FSK1A7MSDA",
+    "autotrader_name": "Swing Flow",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "BYV7S6EHOG",
+    "asset_id": "0000104",
+    "status": "running",
+    "capital_usd": 1047.32,
+    "created_at": "2025-01-06T06:00:00Z"
+  },
+  {
+    "autotrader_id": "6QKSNO5KHF",
+    "autotrader_name": "Squeeze Wave",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000106",
+    "status": "running",
+    "capital_usd": 9912.04,
+    "created_at": "2025-01-07T11:00:00Z"
+  },
+  {
+    "autotrader_id": "GZZF1BXNTQ",
+    "autotrader_name": "Reversal Pulse",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "5UFRDL1ERB",
+    "asset_id": "0000009",
+    "status": "running",
+    "capital_usd": 5494.88,
+    "created_at": "2024-12-21T11:00:00Z"
+  },
+  {
+    "autotrader_id": "O3I8CWU7J2",
+    "autotrader_name": "Ichimoku Sprint",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "QFOEQH3AV9",
+    "asset_id": "0000094",
+    "status": "running",
+    "capital_usd": 7445.67,
+    "created_at": "2025-01-26T20:00:00Z"
+  },
+  {
+    "autotrader_id": "QOIV3P6MRT",
+    "autotrader_name": "Fractal Storm",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000002",
+    "status": "stopped",
+    "capital_usd": 8282.59,
+    "created_at": "2024-12-29T22:00:00Z"
+  },
+  {
+    "autotrader_id": "PU7WKPUMQG",
+    "autotrader_name": "ADX Pulse",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000003",
+    "status": "running",
+    "capital_usd": 6613.21,
+    "created_at": "2025-01-16T04:00:00Z"
+  },
+  {
+    "autotrader_id": "TT1RMGGRNY",
+    "autotrader_name": "Bollinger Ranger",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000004",
+    "status": "running",
+    "capital_usd": 224.91,
+    "created_at": "2024-12-10T04:00:00Z"
+  },
+  {
+    "autotrader_id": "S3BJQZAP10",
+    "autotrader_name": "Liquidity Edge",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000005",
+    "status": "stopped",
+    "capital_usd": 6712.17,
+    "created_at": "2024-12-15T16:00:00Z"
+  },
+  {
+    "autotrader_id": "H31UQG0PZK",
+    "autotrader_name": "Channel Sentry",
+    "plan_id": "HKKEN659O2",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000006",
+    "status": "running",
+    "capital_usd": 4293.44,
+    "created_at": "2024-12-12T20:00:00Z"
+  },
+  {
+    "autotrader_id": "7LUAY5GCQ8",
+    "autotrader_name": "Volume Spike Ranger Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "UEP1ENTHJX",
+    "asset_id": "0000008",
+    "status": "running",
+    "capital_usd": 7190.54,
+    "created_at": "2025-01-09T13:00:00Z"
+  },
+  {
+    "autotrader_id": "38N46BX7V0",
+    "autotrader_name": "Range Hunter Spark",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000010",
+    "status": "stopped",
+    "capital_usd": 4623.4,
+    "created_at": "2024-12-23T03:00:00Z"
+  },
+  {
+    "autotrader_id": "WDQRYZDAE0",
+    "autotrader_name": "Ichimoku Beacon",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000012",
+    "status": "stopped",
+    "capital_usd": 6322.79,
+    "created_at": "2025-01-02T03:00:00Z"
+  },
+  {
+    "autotrader_id": "OTZ7OZ3NKI",
+    "autotrader_name": "Range Hunter Prime v2",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000013",
+    "status": "stopped",
+    "capital_usd": 782.06,
+    "created_at": "2024-12-17T03:00:00Z"
+  },
+  {
+    "autotrader_id": "9OJW03S9I4",
+    "autotrader_name": "RSI Core v3",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000014",
+    "status": "running",
+    "capital_usd": 8521.63,
+    "created_at": "2024-12-31T20:00:00Z"
+  },
+  {
+    "autotrader_id": "Q1L4ARWPTU",
+    "autotrader_name": "Pivot Storm",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000015",
+    "status": "running",
+    "capital_usd": 4342.08,
+    "created_at": "2024-12-25T21:00:00Z"
+  },
+  {
+    "autotrader_id": "JTYDFUI7WA",
+    "autotrader_name": "Grid Climber",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000016",
+    "status": "running",
+    "capital_usd": 2176.52,
+    "created_at": "2025-01-27T11:00:00Z"
+  },
+  {
+    "autotrader_id": "GJOL2WJNZ8",
+    "autotrader_name": "MACD Sprint",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000017",
+    "status": "running",
+    "capital_usd": 8922.24,
+    "created_at": "2024-12-19T08:00:00Z"
+  },
+  {
+    "autotrader_id": "TM5N7F2H9H",
+    "autotrader_name": "VWAP Signal Ultra",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000018",
+    "status": "running",
+    "capital_usd": 2418.34,
+    "created_at": "2025-01-27T17:00:00Z"
+  },
+  {
+    "autotrader_id": "D43J5P5K8A",
+    "autotrader_name": "VWAP Signal v2",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "EDT2SYWB3W",
+    "asset_id": "0000019",
+    "status": "running",
+    "capital_usd": 3274.77,
+    "created_at": "2025-01-01T17:00:00Z"
+  },
+  {
+    "autotrader_id": "X10ELXBBCV",
+    "autotrader_name": "ATR Trail Core Ultra",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000020",
+    "status": "stopped",
+    "capital_usd": 1030.36,
+    "created_at": "2024-12-19T14:00:00Z"
+  },
+  {
+    "autotrader_id": "CN0IVGXV47",
+    "autotrader_name": "ATR Trail Hunter",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000021",
+    "status": "running",
+    "capital_usd": 9132.09,
+    "created_at": "2025-01-18T04:00:00Z"
+  },
+  {
+    "autotrader_id": "Q9DSSW5ZV6",
+    "autotrader_name": "ATR Trail Core",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000022",
+    "status": "stopped",
+    "capital_usd": 8742.35,
+    "created_at": "2024-12-22T13:00:00Z"
+  },
+  {
+    "autotrader_id": "HVMUTIFCZ9",
+    "autotrader_name": "Supertrend Glint",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000023",
+    "status": "stopped",
+    "capital_usd": 5499.47,
+    "created_at": "2025-01-11T15:00:00Z"
+  },
+  {
+    "autotrader_id": "ACM4D68YJF",
+    "autotrader_name": "Channel Mirage",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000024",
+    "status": "running",
+    "capital_usd": 6703.32,
+    "created_at": "2024-12-20T03:00:00Z"
+  },
+  {
+    "autotrader_id": "GLC0GAXIT9",
+    "autotrader_name": "EMA Cross Matrix",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000025",
+    "status": "running",
+    "capital_usd": 8638.26,
+    "created_at": "2025-01-18T05:00:00Z"
+  },
+  {
+    "autotrader_id": "B1D57CH0Z2",
+    "autotrader_name": "Pivot Sentry",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000026",
+    "status": "running",
+    "capital_usd": 6831.63,
+    "created_at": "2024-12-03T10:00:00Z"
+  },
+  {
+    "autotrader_id": "9GF4NJA1AA",
+    "autotrader_name": "RSI Flux",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000027",
+    "status": "running",
+    "capital_usd": 1304.54,
+    "created_at": "2025-01-19T13:00:00Z"
+  },
+  {
+    "autotrader_id": "I4BRP2LDXJ",
+    "autotrader_name": "Momentum Wave Ultra",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "LGMXG9EDN5",
+    "asset_id": "0000028",
+    "status": "stopped",
+    "capital_usd": 934.47,
+    "created_at": "2025-01-25T03:00:00Z"
+  },
+  {
+    "autotrader_id": "3QDCADAFYT",
+    "autotrader_name": "Parabolic Zen",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000029",
+    "status": "running",
+    "capital_usd": 6041.18,
+    "created_at": "2025-01-15T15:00:00Z"
+  },
+  {
+    "autotrader_id": "X24KJHXK04",
+    "autotrader_name": "Keltner Wave v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000030",
+    "status": "running",
+    "capital_usd": 7883.8,
+    "created_at": "2024-12-04T10:00:00Z"
+  },
+  {
+    "autotrader_id": "VSRDVAJT1P",
+    "autotrader_name": "Ichimoku Turbo",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000031",
+    "status": "running",
+    "capital_usd": 6879.74,
+    "created_at": "2025-01-18T18:00:00Z"
+  },
+  {
+    "autotrader_id": "AUQR1KCSJJ",
+    "autotrader_name": "Donchian Pulse",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "EDT2SYWB3W",
+    "asset_id": "0000032",
+    "status": "running",
+    "capital_usd": 8526.71,
+    "created_at": "2024-12-19T22:00:00Z"
+  },
+  {
+    "autotrader_id": "895YMOTDZ3",
+    "autotrader_name": "Keltner Stride",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "V0MWUFXBV9",
+    "asset_id": "0000033",
+    "status": "running",
+    "capital_usd": 9267.39,
+    "created_at": "2025-01-04T02:00:00Z"
+  },
+  {
+    "autotrader_id": "F8WEOZ7Q7U",
+    "autotrader_name": "Liquidity Sentry",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000034",
+    "status": "running",
+    "capital_usd": 5934.35,
+    "created_at": "2024-12-30T17:00:00Z"
+  },
+  {
+    "autotrader_id": "LSXWZ7JPC5",
+    "autotrader_name": "Swing Beta",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000035",
+    "status": "running",
+    "capital_usd": 1150.57,
+    "created_at": "2024-12-13T02:00:00Z"
+  },
+  {
+    "autotrader_id": "UBWR7BGCN5",
+    "autotrader_name": "Scalper Stride",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000036",
+    "status": "running",
+    "capital_usd": 2214.47,
+    "created_at": "2024-12-06T04:00:00Z"
+  },
+  {
+    "autotrader_id": "IQCVMLYFBD",
+    "autotrader_name": "Breakout Fusion v3",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000037",
+    "status": "running",
+    "capital_usd": 3759.37,
+    "created_at": "2024-12-07T14:00:00Z"
+  },
+  {
+    "autotrader_id": "ZHFQUOF6ZL",
+    "autotrader_name": "Breakout Snap",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000038",
+    "status": "running",
+    "capital_usd": 1681.31,
+    "created_at": "2025-01-30T02:00:00Z"
+  },
+  {
+    "autotrader_id": "QWD9BDQ64D",
+    "autotrader_name": "Stoch Sprint",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "LGMXG9EDN5",
+    "asset_id": "0000040",
+    "status": "running",
+    "capital_usd": 3245.06,
+    "created_at": "2024-12-12T01:00:00Z"
+  },
+  {
+    "autotrader_id": "T2G4UXQYHX",
+    "autotrader_name": "Squeeze Arc",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "LGMXG9EDN5",
+    "asset_id": "0000042",
+    "status": "running",
+    "capital_usd": 1768.91,
+    "created_at": "2025-01-13T23:00:00Z"
+  },
+  {
+    "autotrader_id": "A3MCKOEXI2",
+    "autotrader_name": "Grid Beta v3",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "DOC9IS0J8H",
+    "asset_id": "0000043",
+    "status": "stopped",
+    "capital_usd": 9266.8,
+    "created_at": "2025-01-28T21:00:00Z"
+  },
+  {
+    "autotrader_id": "E2VUO4HXJV",
+    "autotrader_name": "Pivot Core Ultra",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000044",
+    "status": "running",
+    "capital_usd": 661.59,
+    "created_at": "2024-12-02T20:00:00Z"
+  },
+  {
+    "autotrader_id": "2JR00PJBRS",
+    "autotrader_name": "Volume Spike Prime",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000047",
+    "status": "running",
+    "capital_usd": 1761.2,
+    "created_at": "2025-01-26T04:00:00Z"
+  },
+  {
+    "autotrader_id": "4HJ6DN94SH",
+    "autotrader_name": "Parabolic Arc",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000048",
+    "status": "running",
+    "capital_usd": 2096.06,
+    "created_at": "2024-12-21T14:00:00Z"
+  },
+  {
+    "autotrader_id": "PGYS0KDSJB",
+    "autotrader_name": "Pivot Vault",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000049",
+    "status": "running",
+    "capital_usd": 5127.14,
+    "created_at": "2024-12-17T07:00:00Z"
+  },
+  {
+    "autotrader_id": "7SLX1C0NRL",
+    "autotrader_name": "Fibo Glacier",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000050",
+    "status": "running",
+    "capital_usd": 1883.29,
+    "created_at": "2024-12-29T00:00:00Z"
+  },
+  {
+    "autotrader_id": "FF5RLNIMTM",
+    "autotrader_name": "Grid Snap",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000051",
+    "status": "running",
+    "capital_usd": 6953.21,
+    "created_at": "2024-12-12T06:00:00Z"
+  },
+  {
+    "autotrader_id": "7WVS5FA04I",
+    "autotrader_name": "Grid Flow v2",
+    "plan_id": "HKKEN659O2",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000052",
+    "status": "stopped",
+    "capital_usd": 2735.97,
+    "created_at": "2025-01-16T01:00:00Z"
+  },
+  {
+    "autotrader_id": "CKXAW727EH",
+    "autotrader_name": "Reversal Apex",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000053",
+    "status": "running",
+    "capital_usd": 2522.79,
+    "created_at": "2025-01-23T11:00:00Z"
+  },
+  {
+    "autotrader_id": "DSG526B78I",
+    "autotrader_name": "Breakout Spark",
+    "plan_id": "HKKEN659O2",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000054",
+    "status": "running",
+    "capital_usd": 9677.52,
+    "created_at": "2025-01-15T12:00:00Z"
+  },
+  {
+    "autotrader_id": "GTQ9BBGMQB",
+    "autotrader_name": "RSI Wave",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000055",
+    "status": "stopped",
+    "capital_usd": 6404.69,
+    "created_at": "2024-12-12T05:00:00Z"
+  },
+  {
+    "autotrader_id": "2GWGLCRH35",
+    "autotrader_name": "Ichimoku Quake",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000056",
+    "status": "running",
+    "capital_usd": 7638.96,
+    "created_at": "2024-12-16T22:00:00Z"
+  },
+  {
+    "autotrader_id": "I8OOJ3ZKBY",
+    "autotrader_name": "Fractal Turbo",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000057",
+    "status": "running",
+    "capital_usd": 6010.7,
+    "created_at": "2024-12-08T12:00:00Z"
+  },
+  {
+    "autotrader_id": "XVZPV1UZ9D",
+    "autotrader_name": "Squeeze Intraday",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000058",
+    "status": "running",
+    "capital_usd": 1551.63,
+    "created_at": "2025-01-30T01:00:00Z"
+  },
+  {
+    "autotrader_id": "AXG7LEU1M6",
+    "autotrader_name": "Range Hunter Dash v2",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000060",
+    "status": "running",
+    "capital_usd": 2332.24,
+    "created_at": "2025-01-25T13:00:00Z"
+  },
+  {
+    "autotrader_id": "CCCRR8CGQH",
+    "autotrader_name": "Keltner Turbo Ultra",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000061",
+    "status": "running",
+    "capital_usd": 4393.54,
+    "created_at": "2025-01-19T14:00:00Z"
+  },
+  {
+    "autotrader_id": "WKHD6RF38J",
+    "autotrader_name": "EMA Cross Alpha",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "HH5344TFJG",
+    "asset_id": "0000062",
+    "status": "running",
+    "capital_usd": 5165.16,
+    "created_at": "2024-12-08T09:00:00Z"
+  },
+  {
+    "autotrader_id": "SRPF8S3OYM",
+    "autotrader_name": "Fibo Dash v2",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "AJLJ4H9DU7",
+    "asset_id": "0000064",
+    "status": "running",
+    "capital_usd": 3731.46,
+    "created_at": "2024-12-27T18:00:00Z"
+  },
+  {
+    "autotrader_id": "4TBPVOM68Y",
+    "autotrader_name": "Breakout Hunter Ultra",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "V0MWUFXBV9",
+    "asset_id": "0000065",
+    "status": "stopped",
+    "capital_usd": 4024.9,
+    "created_at": "2025-01-09T15:00:00Z"
+  },
+  {
+    "autotrader_id": "U9U5RSNSDB",
+    "autotrader_name": "Fibo Gamma v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000066",
+    "status": "running",
+    "capital_usd": 761.31,
+    "created_at": "2025-01-25T07:00:00Z"
+  },
+  {
+    "autotrader_id": "7Y2WG7OJ0V",
+    "autotrader_name": "Grid Turbo v2",
+    "plan_id": "HKKEN659O2",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000067",
+    "status": "running",
+    "capital_usd": 1489.24,
+    "created_at": "2025-01-12T01:00:00Z"
+  },
+  {
+    "autotrader_id": "7G4RI0GA09",
+    "autotrader_name": "Bollinger Fusion v2",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000068",
+    "status": "running",
+    "capital_usd": 5029.04,
+    "created_at": "2025-01-09T08:00:00Z"
+  },
+  {
+    "autotrader_id": "HY23SWSWZ7",
+    "autotrader_name": "Range Hunter Ranger v3",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "E9UVW53EFR",
+    "asset_id": "0000069",
+    "status": "running",
+    "capital_usd": 3906.56,
+    "created_at": "2025-01-24T08:00:00Z"
+  },
+  {
+    "autotrader_id": "5Y2TL8TJ1Y",
+    "autotrader_name": "Pivot Fusion v2",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000071",
+    "status": "running",
+    "capital_usd": 970.5,
+    "created_at": "2025-01-20T23:00:00Z"
+  },
+  {
+    "autotrader_id": "PUN1ABDQ5T",
+    "autotrader_name": "Volume Spike Flow Ultra",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4K7BN7XJ8B",
+    "asset_id": "0000072",
+    "status": "stopped",
+    "capital_usd": 7757.47,
+    "created_at": "2025-01-23T19:00:00Z"
+  },
+  {
+    "autotrader_id": "1Y3WCW2AE7",
+    "autotrader_name": "Pivot Lite Ultra",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000073",
+    "status": "running",
+    "capital_usd": 4154.24,
+    "created_at": "2025-01-22T16:00:00Z"
+  },
+  {
+    "autotrader_id": "JM05Z2V7FK",
+    "autotrader_name": "Keltner Forge",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000074",
+    "status": "running",
+    "capital_usd": 3729.91,
+    "created_at": "2025-01-05T18:00:00Z"
+  },
+  {
+    "autotrader_id": "HSV60K7S6N",
+    "autotrader_name": "Ichimoku Beta v3",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "U33XTPLPFT",
+    "asset_id": "0000076",
+    "status": "running",
+    "capital_usd": 1962.27,
+    "created_at": "2025-01-02T05:00:00Z"
+  },
+  {
+    "autotrader_id": "GWC0AAT9AT",
+    "autotrader_name": "Pivot Fusion Ultra",
+    "plan_id": "P6AFQFJZCZ",
+    "account_id": "JZDE8GXD6N",
+    "asset_id": "0000077",
+    "status": "running",
+    "capital_usd": 1075.12,
+    "created_at": "2025-01-10T18:00:00Z"
+  },
+  {
+    "autotrader_id": "59R86JM0HJ",
+    "autotrader_name": "RSI Dash v2",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "JZDE8GXD6N",
+    "asset_id": "0000079",
+    "status": "running",
+    "capital_usd": 7619.01,
+    "created_at": "2024-12-13T05:00:00Z"
+  },
+  {
+    "autotrader_id": "K7531DAUJP",
+    "autotrader_name": "Scalper Fusion",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000081",
+    "status": "running",
+    "capital_usd": 1777.2,
+    "created_at": "2024-12-07T02:00:00Z"
+  },
+  {
+    "autotrader_id": "EWM2YBDOZC",
+    "autotrader_name": "Fractal Arc",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "5UFRDL1ERB",
+    "asset_id": "0000082",
+    "status": "running",
+    "capital_usd": 6239.76,
+    "created_at": "2024-12-07T18:00:00Z"
+  },
+  {
+    "autotrader_id": "LUA3T0Q5EP",
+    "autotrader_name": "Donchian Climber v2",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000083",
+    "status": "running",
+    "capital_usd": 6781.61,
+    "created_at": "2024-12-03T05:00:00Z"
+  },
+  {
+    "autotrader_id": "5BPFLKWYLA",
+    "autotrader_name": "Fibo Lumen",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000084",
+    "status": "stopped",
+    "capital_usd": 2977.94,
+    "created_at": "2024-12-20T12:00:00Z"
+  },
+  {
+    "autotrader_id": "YVZEH1W9PY",
+    "autotrader_name": "Mean Reversion Ranger Ultra",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000085",
+    "status": "running",
+    "capital_usd": 2907.51,
+    "created_at": "2024-12-22T17:00:00Z"
+  },
+  {
+    "autotrader_id": "BVJPIFMR8I",
+    "autotrader_name": "Range Hunter Dash",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000086",
+    "status": "running",
+    "capital_usd": 4723.82,
+    "created_at": "2024-12-03T08:00:00Z"
+  },
+  {
+    "autotrader_id": "NZYNT46NO2",
+    "autotrader_name": "Bollinger Signal v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000087",
+    "status": "running",
+    "capital_usd": 9426.66,
+    "created_at": "2024-12-24T11:00:00Z"
+  },
+  {
+    "autotrader_id": "X8PZ6NIH6F",
+    "autotrader_name": "Mean Reversion Beta v2",
+    "plan_id": "HKKEN659O2",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000088",
+    "status": "running",
+    "capital_usd": 2777.05,
+    "created_at": "2025-01-27T14:00:00Z"
+  },
+  {
+    "autotrader_id": "JTAYFLOUMG",
+    "autotrader_name": "Bollinger Ninja v2",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000089",
+    "status": "running",
+    "capital_usd": 9147.12,
+    "created_at": "2025-01-12T22:00:00Z"
+  },
+  {
+    "autotrader_id": "TFOSIZSWZ3",
+    "autotrader_name": "MACD Beta v3",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000090",
+    "status": "stopped",
+    "capital_usd": 8839.28,
+    "created_at": "2024-12-05T22:00:00Z"
+  },
+  {
+    "autotrader_id": "BXW0B3PZWG",
+    "autotrader_name": "RSI Rocket",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "AJLJ4H9DU7",
+    "asset_id": "0000091",
+    "status": "running",
+    "capital_usd": 1240.79,
+    "created_at": "2024-12-18T05:00:00Z"
+  },
+  {
+    "autotrader_id": "CZCK1MTJYC",
+    "autotrader_name": "Momentum Signal Ultra",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000093",
+    "status": "running",
+    "capital_usd": 6331.61,
+    "created_at": "2024-12-15T22:00:00Z"
+  },
+  {
+    "autotrader_id": "57Q1WAHSCD",
+    "autotrader_name": "Breakout Pro",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000095",
+    "status": "stopped",
+    "capital_usd": 6842.58,
+    "created_at": "2025-01-23T07:00:00Z"
+  },
+  {
+    "autotrader_id": "WF0ZOR7FW1",
+    "autotrader_name": "Fractal Guard",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000096",
+    "status": "running",
+    "capital_usd": 3468.97,
+    "created_at": "2024-12-21T06:00:00Z"
+  },
+  {
+    "autotrader_id": "N16I5MC9QL",
+    "autotrader_name": "MACD Ranger Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000097",
+    "status": "running",
+    "capital_usd": 9697.2,
+    "created_at": "2024-12-04T21:00:00Z"
+  },
+  {
+    "autotrader_id": "DKWW0FMTII",
+    "autotrader_name": "Reversal Orbit",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000098",
+    "status": "running",
+    "capital_usd": 4915.79,
+    "created_at": "2024-12-17T07:00:00Z"
+  },
+  {
+    "autotrader_id": "A62IWTIJPV",
+    "autotrader_name": "Momentum Ranger v3",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "I3OGZ5KOK1",
+    "asset_id": "0000099",
+    "status": "running",
+    "capital_usd": 1267.92,
+    "created_at": "2025-01-15T07:00:00Z"
+  },
+  {
+    "autotrader_id": "J3ZNHSAX5N",
+    "autotrader_name": "Range Hunter Sprint",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000100",
+    "status": "running",
+    "capital_usd": 8968.54,
+    "created_at": "2025-01-30T05:00:00Z"
+  },
+  {
+    "autotrader_id": "T2HKU23XSK",
+    "autotrader_name": "Fractal Beacon",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000101",
+    "status": "running",
+    "capital_usd": 551.24,
+    "created_at": "2024-12-08T22:00:00Z"
+  },
+  {
+    "autotrader_id": "VQG515M8UA",
+    "autotrader_name": "Parabolic Matrix",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000102",
+    "status": "running",
+    "capital_usd": 1000.58,
+    "created_at": "2025-01-01T02:00:00Z"
+  },
+  {
+    "autotrader_id": "QPFIBBZJSX",
+    "autotrader_name": "Fractal Rift",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000103",
+    "status": "running",
+    "capital_usd": 6417.2,
+    "created_at": "2025-01-09T23:00:00Z"
+  },
+  {
+    "autotrader_id": "TUYLWUOXI9",
+    "autotrader_name": "ADX Zen",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "UI6D39ZZZZ",
+    "asset_id": "0000105",
+    "status": "stopped",
+    "capital_usd": 8394.42,
+    "created_at": "2025-01-20T23:00:00Z"
+  },
+  {
+    "autotrader_id": "GZDN515KTF",
+    "autotrader_name": "Ichimoku Alpha Ultra",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000107",
+    "status": "running",
+    "capital_usd": 2352.24,
+    "created_at": "2024-12-04T01:00:00Z"
+  },
+  {
+    "autotrader_id": "FC24MNXAC6",
+    "autotrader_name": "Volume Spike Hunter",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000109",
+    "status": "running",
+    "capital_usd": 2904.24,
+    "created_at": "2025-01-10T12:00:00Z"
+  },
+  {
+    "autotrader_id": "0VE2ALKYSA",
+    "autotrader_name": "MACD Drift",
+    "plan_id": "HKKEN659O2",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000110",
+    "status": "running",
+    "capital_usd": 5677.4,
+    "created_at": "2025-01-02T22:00:00Z"
+  },
+  {
+    "autotrader_id": "F8U7318JZF",
+    "autotrader_name": "MACD Edge Ultra",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000112",
+    "status": "stopped",
+    "capital_usd": 694.08,
+    "created_at": "2024-12-13T15:00:00Z"
+  },
+  {
+    "autotrader_id": "0X4ITV7BMO",
+    "autotrader_name": "Keltner Dash v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000113",
+    "status": "running",
+    "capital_usd": 4528.72,
+    "created_at": "2025-01-12T09:00:00Z"
+  },
+  {
+    "autotrader_id": "X90X7P2ZQH",
+    "autotrader_name": "Divergence Gamma",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000114",
+    "status": "running",
+    "capital_usd": 9688.45,
+    "created_at": "2025-01-12T18:00:00Z"
+  },
+  {
+    "autotrader_id": "OQGM7Q5O93",
+    "autotrader_name": "Grid Echo",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000115",
+    "status": "running",
+    "capital_usd": 5769.8,
+    "created_at": "2025-01-17T03:00:00Z"
+  },
+  {
+    "autotrader_id": "F0E2I696H6",
+    "autotrader_name": "Trend Rider Rift",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000117",
+    "status": "running",
+    "capital_usd": 8319.09,
+    "created_at": "2025-01-02T18:00:00Z"
+  },
+  {
+    "autotrader_id": "4FIXDZPDXC",
+    "autotrader_name": "Bollinger Orbit",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "MW2WXFOGO4",
+    "asset_id": "0000118",
+    "status": "running",
+    "capital_usd": 5983.65,
+    "created_at": "2024-12-11T06:00:00Z"
+  },
+  {
+    "autotrader_id": "I1FMHWKXVA",
+    "autotrader_name": "Stoch Echo",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000119",
+    "status": "stopped",
+    "capital_usd": 1314.95,
+    "created_at": "2024-12-20T03:00:00Z"
+  },
+  {
+    "autotrader_id": "W5CWGW9UHC",
+    "autotrader_name": "VWAP Flow Ultra",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "6P7Q9M2I0H",
+    "asset_id": "0000120",
+    "status": "stopped",
+    "capital_usd": 6784.66,
+    "created_at": "2025-01-17T16:00:00Z"
+  },
+  {
+    "autotrader_id": "2B2HB5HEQL",
+    "autotrader_name": "RSI Prime",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "4K7BN7XJ8B",
+    "asset_id": "0000121",
+    "status": "running",
+    "capital_usd": 9317.89,
+    "created_at": "2024-12-13T22:00:00Z"
+  },
+  {
+    "autotrader_id": "Q8R2ABVJ56",
+    "autotrader_name": "Ichimoku Fusion v3",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "QFOEQH3AV9",
+    "asset_id": "0000122",
+    "status": "running",
+    "capital_usd": 413.24,
+    "created_at": "2024-12-10T18:00:00Z"
+  },
+  {
+    "autotrader_id": "Z4K2ZO7EXV",
+    "autotrader_name": "Trend Rider Dash v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "UI6D39ZZZZ",
+    "asset_id": "0000123",
+    "status": "running",
+    "capital_usd": 3181.44,
+    "created_at": "2024-12-12T19:00:00Z"
+  },
+  {
+    "autotrader_id": "NKX3V3YWUA",
+    "autotrader_name": "Bollinger Snap",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "9RI19R0WYO",
+    "asset_id": "0000124",
+    "status": "running",
+    "capital_usd": 4886.03,
+    "created_at": "2025-01-09T01:00:00Z"
+  },
+  {
+    "autotrader_id": "CJJRYRE6QW",
+    "autotrader_name": "Pivot Shift",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000126",
+    "status": "running",
+    "capital_usd": 5328.67,
+    "created_at": "2024-12-16T14:00:00Z"
+  },
+  {
+    "autotrader_id": "GM1GXSPJET",
+    "autotrader_name": "MACD Fusion v2",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000127",
+    "status": "stopped",
+    "capital_usd": 3480.85,
+    "created_at": "2024-12-03T17:00:00Z"
+  },
+  {
+    "autotrader_id": "PW9ZVDVU46",
+    "autotrader_name": "Donchian Wave v2",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "MW2WXFOGO4",
+    "asset_id": "0000128",
+    "status": "running",
+    "capital_usd": 2509.88,
+    "created_at": "2025-01-24T20:00:00Z"
+  },
+  {
+    "autotrader_id": "NA3Z2ZTKEJ",
+    "autotrader_name": "Keltner Signal v2",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "2SEH60KVJ5",
+    "asset_id": "0000129",
+    "status": "running",
+    "capital_usd": 3154.11,
+    "created_at": "2024-12-10T04:00:00Z"
+  },
+  {
+    "autotrader_id": "VEMFLTW3W1",
+    "autotrader_name": "Reversal Ninja",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000131",
+    "status": "stopped",
+    "capital_usd": 9227.34,
+    "created_at": "2025-01-05T21:00:00Z"
+  },
+  {
+    "autotrader_id": "RQ8BKRPBND",
+    "autotrader_name": "Range Hunter Storm",
+    "plan_id": "OF7JYU5JSJ",
+    "account_id": "2SEH60KVJ5",
+    "asset_id": "0000132",
+    "status": "running",
+    "capital_usd": 2083.44,
+    "created_at": "2025-01-27T05:00:00Z"
+  },
+  {
+    "autotrader_id": "MPDIDFEVIA",
+    "autotrader_name": "Fibo Ninja",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "5DNSIPZZ5F",
+    "asset_id": "0000133",
+    "status": "running",
+    "capital_usd": 5415.7,
+    "created_at": "2025-01-11T03:00:00Z"
+  },
+  {
+    "autotrader_id": "NUUB5ZVLD0",
+    "autotrader_name": "RSI Zen",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000134",
+    "status": "stopped",
+    "capital_usd": 963.26,
+    "created_at": "2024-12-21T00:00:00Z"
+  },
+  {
+    "autotrader_id": "ZQ3ABUUD0V",
+    "autotrader_name": "Mean Reversion Dash v2",
+    "plan_id": "HKKEN659O2",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000135",
+    "status": "running",
+    "capital_usd": 284.15,
+    "created_at": "2025-01-01T19:00:00Z"
+  },
+  {
+    "autotrader_id": "WX1W89JVOQ",
+    "autotrader_name": "Keltner Pro v3",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "DOC9IS0J8H",
+    "asset_id": "0000137",
+    "status": "stopped",
+    "capital_usd": 4827.85,
+    "created_at": "2025-01-03T02:00:00Z"
+  },
+  {
+    "autotrader_id": "939RX77RIQ",
+    "autotrader_name": "Supertrend Fusion v2",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000139",
+    "status": "running",
+    "capital_usd": 4810.06,
+    "created_at": "2025-01-11T09:00:00Z"
+  },
+  {
+    "autotrader_id": "ZFBIHD86N9",
+    "autotrader_name": "Supertrend Climber v3",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000140",
+    "status": "stopped",
+    "capital_usd": 2665.22,
+    "created_at": "2025-01-10T07:00:00Z"
+  },
+  {
+    "autotrader_id": "LK7BWP25NW",
+    "autotrader_name": "Trend Rider Pilot",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4K7BN7XJ8B",
+    "asset_id": "0000142",
+    "status": "stopped",
+    "capital_usd": 3951.38,
+    "created_at": "2025-01-17T04:00:00Z"
+  },
+  {
+    "autotrader_id": "GAEZWDOY0Y",
+    "autotrader_name": "Supertrend Beta",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000144",
+    "status": "stopped",
+    "capital_usd": 6308.52,
+    "created_at": "2025-01-20T00:00:00Z"
+  },
+  {
+    "autotrader_id": "Q1POWNU1RT",
+    "autotrader_name": "VWAP Pulse v2",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000145",
+    "status": "stopped",
+    "capital_usd": 5036.15,
+    "created_at": "2024-12-17T00:00:00Z"
+  },
+  {
+    "autotrader_id": "RITSFVA5PK",
+    "autotrader_name": "Mean Reversion Anchor",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "QFOEQH3AV9",
+    "asset_id": "0000146",
+    "status": "running",
+    "capital_usd": 6141.53,
+    "created_at": "2024-12-11T15:00:00Z"
+  },
+  {
+    "autotrader_id": "NXC2L1ITBH",
+    "autotrader_name": "Grid Alpha Ultra",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000147",
+    "status": "running",
+    "capital_usd": 9135.7,
+    "created_at": "2025-01-07T01:00:00Z"
+  },
+  {
+    "autotrader_id": "WGK3ZF0VZV",
+    "autotrader_name": "Mean Reversion Spark",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "V0MWUFXBV9",
+    "asset_id": "0000148",
+    "status": "stopped",
+    "capital_usd": 425.86,
+    "created_at": "2024-12-10T16:00:00Z"
+  },
+  {
+    "autotrader_id": "ACI6O1GBDU",
+    "autotrader_name": "Bollinger Wave Ultra",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000149",
+    "status": "running",
+    "capital_usd": 1192.44,
+    "created_at": "2025-01-20T20:00:00Z"
+  },
+  {
+    "autotrader_id": "ALO8J86H7W",
+    "autotrader_name": "Scalper Ninja",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "4G9DPMRCG6",
+    "asset_id": "0000150",
+    "status": "stopped",
+    "capital_usd": 9576.67,
+    "created_at": "2025-01-03T13:00:00Z"
+  },
+  {
+    "autotrader_id": "ERLAQRECM6",
+    "autotrader_name": "Divergence Pilot",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "2SEH60KVJ5",
+    "asset_id": "0000151",
+    "status": "running",
+    "capital_usd": 7916.24,
+    "created_at": "2024-12-14T07:00:00Z"
+  },
+  {
+    "autotrader_id": "C38S9V0RZ1",
+    "autotrader_name": "Keltner Anchor",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000053",
+    "status": "running",
+    "capital_usd": 4249.58,
+    "created_at": "2024-12-01T10:00:00Z"
+  },
+  {
+    "autotrader_id": "0JAP6QYPMH",
+    "autotrader_name": "Grid Mirage",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000024",
+    "status": "running",
+    "capital_usd": 6246.24,
+    "created_at": "2025-01-18T12:00:00Z"
+  },
+  {
+    "autotrader_id": "9U29U3A446",
+    "autotrader_name": "Pivot Lite v3",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "DMEN2KHVDG",
+    "asset_id": "0000011",
+    "status": "running",
+    "capital_usd": 5507.18,
+    "created_at": "2024-12-04T12:00:00Z"
+  },
+  {
+    "autotrader_id": "YWEZ7RUE8O",
+    "autotrader_name": "Bollinger Lite Ultra",
+    "plan_id": "HKKEN659O2",
+    "account_id": "MW2WXFOGO4",
+    "asset_id": "0000045",
+    "status": "stopped",
+    "capital_usd": 7677.35,
+    "created_at": "2025-01-22T20:00:00Z"
+  },
+  {
+    "autotrader_id": "W74OJE7X7N",
+    "autotrader_name": "Mean Reversion Lite Ultra",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000022",
+    "status": "running",
+    "capital_usd": 8152.19,
+    "created_at": "2025-01-24T23:00:00Z"
+  },
+  {
+    "autotrader_id": "3LCUYX1H0J",
+    "autotrader_name": "Mean Reversion Wave v3",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "9RI19R0WYO",
+    "asset_id": "0000065",
+    "status": "running",
+    "capital_usd": 3813.95,
+    "created_at": "2024-12-12T04:00:00Z"
+  },
+  {
+    "autotrader_id": "7T2FRZS2H2",
+    "autotrader_name": "Ichimoku Core v3",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000036",
+    "status": "running",
+    "capital_usd": 7333.72,
+    "created_at": "2025-01-12T16:00:00Z"
+  },
+  {
+    "autotrader_id": "AIX57PX7VY",
+    "autotrader_name": "ATR Trail Gamma Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "BYV7S6EHOG",
+    "asset_id": "0000033",
+    "status": "running",
+    "capital_usd": 5606.38,
+    "created_at": "2025-01-03T04:00:00Z"
+  },
+  {
+    "autotrader_id": "LT8RUQPQ2F",
+    "autotrader_name": "EMA Cross Climber v3",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "0EPF91DHOD",
+    "asset_id": "0000063",
+    "status": "running",
+    "capital_usd": 4984.57,
+    "created_at": "2024-12-17T01:00:00Z"
+  },
+  {
+    "autotrader_id": "SXC2YXCS01",
+    "autotrader_name": "Momentum Crest",
+    "plan_id": "IC7PHKQDLM",
+    "account_id": "U33XTPLPFT",
+    "asset_id": "0000046",
+    "status": "running",
+    "capital_usd": 8127.18,
+    "created_at": "2024-12-09T13:00:00Z"
+  },
+  {
+    "autotrader_id": "IMXENVEF2Y",
+    "autotrader_name": "Mean Reversion Compass",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000008",
+    "status": "running",
+    "capital_usd": 4205.65,
+    "created_at": "2024-12-25T18:00:00Z"
+  },
+  {
+    "autotrader_id": "33104LE2Z5",
+    "autotrader_name": "Mean Reversion Hunter v3",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000001",
+    "status": "running",
+    "capital_usd": 7552.72,
+    "created_at": "2024-12-07T18:00:00Z"
+  },
+  {
+    "autotrader_id": "MZ8CS9VY3H",
+    "autotrader_name": "Squeeze Apex",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "MPZOM75WBB",
+    "asset_id": "0000071",
+    "status": "running",
+    "capital_usd": 8494.1,
+    "created_at": "2024-12-15T23:00:00Z"
+  },
+  {
+    "autotrader_id": "FN3DMV4D90",
+    "autotrader_name": "EMA Cross Zen",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "AJLJ4H9DU7",
+    "asset_id": "0000064",
+    "status": "stopped",
+    "capital_usd": 1488.18,
+    "created_at": "2024-12-07T15:00:00Z"
+  },
+  {
+    "autotrader_id": "JUVM7AL8R7",
+    "autotrader_name": "Mean Reversion Fusion",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "QFOEQH3AV9",
+    "asset_id": "0000017",
+    "status": "running",
+    "capital_usd": 3199.1,
+    "created_at": "2025-01-25T20:00:00Z"
+  },
+  {
+    "autotrader_id": "60DTTPY18Q",
+    "autotrader_name": "Breakout Rebound",
+    "plan_id": "P6AFQFJZCZ",
+    "account_id": "JZDE8GXD6N",
+    "asset_id": "0000078",
+    "status": "running",
+    "capital_usd": 1404.33,
+    "created_at": "2025-01-05T12:00:00Z"
+  },
+  {
+    "autotrader_id": "35JXVM39DU",
+    "autotrader_name": "VWAP Ninja",
+    "plan_id": "S3E62RYNNE",
+    "account_id": "HH5344TFJG",
+    "asset_id": "0000051",
+    "status": "running",
+    "capital_usd": 769.66,
+    "created_at": "2025-01-11T11:00:00Z"
+  },
+  {
+    "autotrader_id": "2SMN3Z2NND",
+    "autotrader_name": "MACD Ranger v2",
+    "plan_id": "MEVXRVCQUR",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000017",
+    "status": "running",
+    "capital_usd": 8595.43,
+    "created_at": "2024-12-18T07:00:00Z"
+  },
+  {
+    "autotrader_id": "5LA9K5OSN8",
+    "autotrader_name": "Trend Rider Drill",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "BYV7S6EHOG",
+    "asset_id": "0000080",
+    "status": "stopped",
+    "capital_usd": 1543.18,
+    "created_at": "2024-12-09T02:00:00Z"
+  },
+  {
+    "autotrader_id": "3GMFD0OQ21",
+    "autotrader_name": "Keltner Flow v3",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000019",
+    "status": "running",
+    "capital_usd": 660.98,
+    "created_at": "2025-01-03T03:00:00Z"
+  },
+  {
+    "autotrader_id": "2SOU9JTQU9",
+    "autotrader_name": "Ichimoku Climber v2",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "NBQNS6PUQ8",
+    "asset_id": "0000065",
+    "status": "stopped",
+    "capital_usd": 1603.79,
+    "created_at": "2024-12-03T05:00:00Z"
+  },
+  {
+    "autotrader_id": "CUYJSO8FM3",
+    "autotrader_name": "Fractal Compass",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "Q7XKWO886V",
+    "asset_id": "0000002",
+    "status": "running",
+    "capital_usd": 1921.1,
+    "created_at": "2024-12-15T12:00:00Z"
+  },
+  {
+    "autotrader_id": "CWHN77ES5W",
+    "autotrader_name": "Fractal Glacier",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4WJ99IBAG7",
+    "asset_id": "0000031",
+    "status": "running",
+    "capital_usd": 7836.44,
+    "created_at": "2024-12-26T03:00:00Z"
+  },
+  {
+    "autotrader_id": "T8FMI4ROTC",
+    "autotrader_name": "Range Hunter Climber",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000074",
+    "status": "running",
+    "capital_usd": 1096.6,
+    "created_at": "2025-01-01T08:00:00Z"
+  },
+  {
+    "autotrader_id": "TDLVW24PVX",
+    "autotrader_name": "Mean Reversion Alpha Ultra",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "RCLRI1QZJ8",
+    "asset_id": "0000083",
+    "status": "running",
+    "capital_usd": 7898.49,
+    "created_at": "2024-12-13T04:00:00Z"
+  },
+  {
+    "autotrader_id": "3G9HKZ3CCC",
+    "autotrader_name": "Scalper Signal",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "JOOA5LQSAJ",
+    "asset_id": "0000014",
+    "status": "running",
+    "capital_usd": 1062.55,
+    "created_at": "2025-01-16T17:00:00Z"
+  },
+  {
+    "autotrader_id": "WEXKXKFVA4",
+    "autotrader_name": "Reversal Mirage",
+    "plan_id": "2PGOJJ7G3F",
+    "account_id": "8GXBENYJQW",
+    "asset_id": "0000065",
+    "status": "running",
+    "capital_usd": 2686.68,
+    "created_at": "2024-12-27T18:00:00Z"
+  },
+  {
+    "autotrader_id": "5R88HU3PK8",
+    "autotrader_name": "Supertrend Rebound",
+    "plan_id": "5MTMO3OQSG",
+    "account_id": "BE2U66MR26",
+    "asset_id": "0000150",
+    "status": "running",
+    "capital_usd": 2636.65,
+    "created_at": "2024-12-08T04:00:00Z"
+  },
+  {
+    "autotrader_id": "NIP86PGAGD",
+    "autotrader_name": "Trend Rider Glacier",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "V0MWUFXBV9",
+    "asset_id": "0000115",
+    "status": "running",
+    "capital_usd": 7931.38,
+    "created_at": "2024-12-26T17:00:00Z"
+  },
+  {
+    "autotrader_id": "OFKJQB1Z7H",
+    "autotrader_name": "Range Hunter Hunter Ultra",
+    "plan_id": "I76BOFBCIX",
+    "account_id": "EDT2SYWB3W",
+    "asset_id": "0000116",
+    "status": "running",
+    "capital_usd": 8916.0,
+    "created_at": "2025-01-14T23:00:00Z"
+  },
+  {
+    "autotrader_id": "OP6DPEVGCN",
+    "autotrader_name": "EMA Cross Flow v3",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000071",
+    "status": "running",
+    "capital_usd": 6949.21,
+    "created_at": "2025-01-07T06:00:00Z"
+  },
+  {
+    "autotrader_id": "3LAU00CFPJ",
+    "autotrader_name": "Divergence Matrix",
+    "plan_id": "B0TDBM50FQ",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000009",
+    "status": "stopped",
+    "capital_usd": 6820.18,
+    "created_at": "2024-12-22T02:00:00Z"
+  },
+  {
+    "autotrader_id": "NMOVEA4C57",
+    "autotrader_name": "Keltner Wave",
+    "plan_id": "158Z6TNOVM",
+    "account_id": "0EPF91DHOD",
+    "asset_id": "0000115",
+    "status": "stopped",
+    "capital_usd": 9090.15,
+    "created_at": "2025-01-19T04:00:00Z"
+  },
+  {
+    "autotrader_id": "DX0FWK55IQ",
+    "autotrader_name": "EMA Cross Crest",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "UEP1ENTHJX",
+    "asset_id": "0000051",
+    "status": "stopped",
+    "capital_usd": 9377.61,
+    "created_at": "2025-01-25T20:00:00Z"
+  },
+  {
+    "autotrader_id": "K1Y6T8HEQO",
+    "autotrader_name": "Keltner Pulse v2",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "UI6D39ZZZZ",
+    "asset_id": "0000003",
+    "status": "running",
+    "capital_usd": 5917.49,
+    "created_at": "2024-12-30T21:00:00Z"
+  },
+  {
+    "autotrader_id": "DZZVYZFOV1",
+    "autotrader_name": "Pivot Alpha v2",
+    "plan_id": "GAFRFW0H9N",
+    "account_id": "UEP1ENTHJX",
+    "asset_id": "0000106",
+    "status": "stopped",
+    "capital_usd": 144.5,
+    "created_at": "2025-01-06T21:00:00Z"
+  },
+  {
+    "autotrader_id": "400T3JV8NF",
+    "autotrader_name": "Grid Gamma",
+    "plan_id": "HKKEN659O2",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000054",
+    "status": "running",
+    "capital_usd": 8460.92,
+    "created_at": "2024-12-02T03:00:00Z"
+  },
+  {
+    "autotrader_id": "FRL208PHNC",
+    "autotrader_name": "Pivot Gamma v3",
+    "plan_id": "VD5RXI67NF",
+    "account_id": "FZ3ZFKKIBJ",
+    "asset_id": "0000099",
+    "status": "running",
+    "capital_usd": 8975.53,
+    "created_at": "2024-12-19T10:00:00Z"
+  },
+  {
+    "autotrader_id": "XKOWZT5U6M",
+    "autotrader_name": "Grid Ninja",
+    "plan_id": "OF7JYU5JSJ",
+    "account_id": "U33XTPLPFT",
+    "asset_id": "0000130",
+    "status": "stopped",
+    "capital_usd": 9685.7,
+    "created_at": "2024-12-22T04:00:00Z"
+  },
+  {
+    "autotrader_id": "LGP3QWG96Y",
+    "autotrader_name": "Mean Reversion Edge Ultra",
+    "plan_id": "HKKEN659O2",
+    "account_id": "MW2WXFOGO4",
+    "asset_id": "0000106",
+    "status": "running",
+    "capital_usd": 7557.95,
+    "created_at": "2024-12-01T00:00:00Z"
+  },
+  {
+    "autotrader_id": "6V2RSXTY7D",
+    "autotrader_name": "Trend Rider Alpha Ultra",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "HH5344TFJG",
+    "asset_id": "0000142",
+    "status": "stopped",
+    "capital_usd": 5031.35,
+    "created_at": "2024-12-27T02:00:00Z"
+  },
+  {
+    "autotrader_id": "H9Y2T6J3CU",
+    "autotrader_name": "Pivot Turbo Ultra",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "UI6D39ZZZZ",
+    "asset_id": "0000130",
+    "status": "running",
+    "capital_usd": 170.0,
+    "created_at": "2024-12-02T01:00:00Z"
+  },
+  {
+    "autotrader_id": "6CZLRPS8B0",
+    "autotrader_name": "Pivot Turbo v3",
+    "plan_id": "ASQXEZYEX1",
+    "account_id": "4A4WFHYM4L",
+    "asset_id": "0000112",
+    "status": "running",
+    "capital_usd": 4134.87,
+    "created_at": "2024-12-13T18:00:00Z"
+  },
+  {
+    "autotrader_id": "5XRUK5D8WI",
+    "autotrader_name": "Ichimoku Core Ultra",
+    "plan_id": "5QA3E68F7E",
+    "account_id": "W3706I8J76",
+    "asset_id": "0000026",
+    "status": "running",
+    "capital_usd": 8093.66,
+    "created_at": "2025-01-10T12:00:00Z"
+  }
+]
