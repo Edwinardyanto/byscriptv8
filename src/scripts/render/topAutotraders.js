@@ -64,8 +64,8 @@ export const renderTopAutotraders = (sectionState) => {
 
           <div class="autotrader-name-group">
             <div class="autotrader-name-row">
-              <span class="autotrader-name">${trader.name || "Autotrader"}</span>
               <span class="autotrader-live-dot ${dotClass}" aria-hidden="true"></span>
+              <span class="autotrader-name">${trader.name || "Autotrader"}</span>
             </div>
           </div>
         </div>
