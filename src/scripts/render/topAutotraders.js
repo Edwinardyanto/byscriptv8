@@ -1,88 +1,106 @@
 // src/scripts/render/topAutotraders.js
 
-const setListMessage = (list, message) => {
-  if (!list) return;
-  list.innerHTML = "";
-  const item = document.createElement("div");
-  item.className = "autotrader-card";
-  item.textContent = message;
-  list.appendChild(item);
+const safeText = (v) => String(v ?? "").replace(/[<>&"]/g, (c) => ({
+  "<": "&lt;",
+  ">": "&gt;",
+  "&": "&amp;",
+  '"': "&quot;",
+}[c]));
+
+const isLive = (runtime) => String(runtime || "").toLowerCase() === "running";
+
+const formatWinRate = (n) => {
+  const x = Number(n || 0);
+  return `${x.toFixed(2)}%`;
 };
 
-const parsePct = (p) => {
-  const n =
-    typeof p === "number"
-      ? p
-      : parseFloat(String(p || "0").replace("%", ""));
-  return Number.isFinite(n) ? n : 0;
+const sparkSvg = (series = []) => {
+  if (!Array.isArray(series) || series.length < 2) {
+    return `
+      <svg class="autotrader-sparkline" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true">
+        <polyline class="autotrader-sparkline-path is-flat" points="2,16 98,16"></polyline>
+      </svg>
+    `;
+  }
+
+  const w = 100;
+  const h = 32;
+  const padX = 2;
+  const padY = 4;
+
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const span = max - min || 1;
+
+  const n = series.length;
+  const step = (w - padX * 2) / (n - 1);
+
+  const pts = series
+    .map((v, i) => {
+      const x = padX + i * step;
+      const y = padY + (h - padY * 2) * (1 - (v - min) / span);
+      return `${x.toFixed(2)},${y.toFixed(2)}`;
+    })
+    .join(" ");
+
+  return `
+    <svg class="autotrader-sparkline" viewBox="0 0 100 32" preserveAspectRatio="none" aria-hidden="true">
+      <polyline class="autotrader-sparkline-path" points="${pts}"></polyline>
+    </svg>
+  `;
 };
 
-export const renderTopAutotraders = (sectionState) => {
-  const { data, status } = sectionState;
-  const list = document.querySelector('[data-list="topAutotraders"]');
+export const renderTopAutotraders = ({ container, sectionState }) => {
+  if (!container) return;
 
-  if (status === "loading") {
-    setListMessage(list, "Loading autotraders...");
-    return;
-  }
+  const list = sectionState?.data || [];
 
-  if (status === "error") {
-    setListMessage(list, "Unable to load autotraders");
-    return;
-  }
+  const html = list
+    .map((a) => {
+      const name = safeText(a.name || "Autotrader");
+      const pair = safeText(a.pair || "");
+      const tradeCount = Number(a.tradeCount || 0);
+      const winRate = Number(a.winRate || 0);
+      const pnl = safeText(a.pnl || "0.00%");
+      const live = isLive(a.runtime);
 
-  if (!data || data.length === 0) {
-    setListMessage(list, "No autotraders available");
-    return;
-  }
+      return `
+        <div class="autotrader-card">
+          <div class="autotrader-header">
+            <div class="autotrader-identity">
+              <div class="autotrader-avatar">${safeText(name.slice(0, 2).toUpperCase())}</div>
+              <div class="autotrader-name-group">
+                <div class="autotrader-name-row">
+                  <span class="autotrader-live-dot ${live ? "is-live" : "is-off"}"></span>
+                  <span class="autotrader-name" title="${name}">${name}</span>
+                </div>
+              </div>
+            </div>
 
-  list.innerHTML = "";
+            <span class="autotrader-pnl ${Number(pnl) > 0 ? "is-positive" : Number(pnl) < 0 ? "is-negative" : "is-flat"}">
+              ${pnl}
+            </span>
+          </div>
 
-  data.forEach((trader) => {
-    const runtimeText = trader.runtime || "Stopped";
-    const isRunning = String(runtimeText).toLowerCase() === "running";
-    const dotClass = isRunning ? "is-live" : "is-off";
+          <div class="autotrader-meta">
+            <div class="autotrader-meta-left">
+              <span class="autotrader-pair">${pair}</span>
+              <span class="autotrader-sub">Trades: ${tradeCount}</span>
+              <span class="autotrader-winrate">Win rate: ${formatWinRate(winRate)}</span>
+            </div>
 
-    const pct = parsePct(trader.pnl);
-    const pnlClass = pct > 0 ? "is-positive" : pct < 0 ? "is-negative" : "is-flat";
-
-    const pair = trader.pair || "";
-    const assetSymbol = pair ? String(pair).split("/")[0] : "";
-    const avatarLabel = (assetSymbol || "AT").slice(0, 2).toUpperCase();
-
-    const tradeCount =
-      typeof trader.tradeCount === "number" ? trader.tradeCount : null;
-
-    const subText = tradeCount !== null ? `Trades: ${tradeCount}` : runtimeText;
-
-    const card = document.createElement("div");
-    card.className = "autotrader-card";
-    card.innerHTML = `
-      <div class="autotrader-header">
-        <div class="autotrader-identity">
-          <span class="autotrader-avatar" aria-hidden="true">${avatarLabel}</span>
-
-          <div class="autotrader-name-group">
-            <div class="autotrader-name-row">
-              <span class="autotrader-live-dot ${dotClass}" aria-hidden="true"></span>
-              <span class="autotrader-name">${trader.name || "Autotrader"}</span>
+            <div class="autotrader-spark">
+              ${sparkSvg(a.spark)}
             </div>
           </div>
+
+          <div class="autotrader-footer">
+            <button class="button">View Autotrader</button>
+          </div>
         </div>
+      `;
+    })
+    .join("");
 
-        <span class="autotrader-pnl ${pnlClass}">${trader.pnl || "0.00%"}</span>
-      </div>
-
-      <div class="autotrader-meta">
-        <span class="autotrader-pair">${pair || "Pair"}</span>
-        <span class="autotrader-sub">${subText}</span>
-      </div>
-
-      <div class="autotrader-footer">
-        <button class="button" type="button">View Autotrader</button>
-      </div>
-    `;
-
-    list.appendChild(card);
-  });
+  container.innerHTML = `<div class="autotraders-list">${html}</div>`;
 };
