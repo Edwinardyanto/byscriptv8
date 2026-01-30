@@ -193,6 +193,7 @@ const buildTopAutotraders = async () => {
     return {
       autotrader_id: a.autotrader_id,
       status: a.status,
+      autotraderName: a.autotrader_name || "",
       planName,
       assetSymbol: sym,
       profitPct: pct,
@@ -214,7 +215,7 @@ const buildTopAutotraders = async () => {
   });
 
   return ranked.slice(0, 3).map((t) => ({
-    name: t.planName || "Autotrader",
+    name: t.autotraderName || t.planName || "Autotrader",
     pair: t.assetSymbol ? `${t.assetSymbol}/USDT` : "Pair",
     runtime: t.status === "running" ? "Running" : "Stopped",
     pnl: formatPct(t.profitPct, 2),
