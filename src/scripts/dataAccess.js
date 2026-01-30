@@ -84,7 +84,7 @@ export const getEquityDaily = async () => {
       value: typeof d.value === "number" ? d.value : Number(d.equity_usd || 0),
       equity_usd: typeof d.equity_usd === "number" ? d.equity_usd : Number(d.value || 0),
     }))
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+    .sort((a, b) => a.date.localeCompare(b.date));
 };
 
 export const getAssetEquityDaily = async () => getEquityDaily();
