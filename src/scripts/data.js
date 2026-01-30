@@ -1,13 +1,12 @@
 // src/scripts/data.js
-// ======================================================
-// DATA ORCHESTRATION LAYER (STEP 2–6 — LOCKED)
-// ======================================================
 
 import {
   getAssetEquityByRange,
   getAccountsWithSummary,
-  getAccounts,
-  getAutotradersByAccount,
+  getAutotraders,
+  getTradingPlans,
+  getTrades,
+  getAssets,
 } from "./dataAccess.js";
 
 /* ------------------------------------------------------
@@ -147,19 +146,78 @@ const buildAccountsSummary = async () => {
  * TOP AUTOTRADERS
  * ------------------------------------------------------ */
 
+const formatPct = (value, digits = 2) => {
+  const n = Number(value || 0);
+  return `${n.toFixed(digits)}%`;
+};
+
 const buildTopAutotraders = async () => {
-  const accounts = await getAccounts();
+  const [autotraders, plans, trades, assets] = await Promise.all([
+    getAutotraders(),
+    getTradingPlans(),
+    getTrades(),
+    getAssets(),
+  ]);
 
-  const traders = (
-    await Promise.all(
-      accounts.map((a) => getAutotradersByAccount(a.account_id))
-    )
-  ).flat();
+  const planNameById = new Map(plans.map((p) => [p.plan_id, p.name || ""]));
+  const assetSymbolById = new Map(
+    assets.map((a) => [a.asset_id, a.asset_symbol || ""])
+  );
 
-  return traders.slice(0, 3).map((t) => ({
-    name: t.tradingPlanName || "Autotrader",
-    runtime: t.status === "active" ? "Running" : "Stopped",
-    pnl: "—",
+  // Aggregate realized performance per autotrader (reduce_only only)
+  const agg = new Map();
+  for (const t of trades || []) {
+    if (!t || !t.autotrader_id) continue;
+    if (t.reduce_only !== true) continue;
+
+    const qty = Math.abs(Number(t.qty || 0));
+    const price = Number(t.price || 0);
+    const notional = qty * price;
+
+    const pnlUsd = Number(t.pnl_usd || 0);
+
+    const cur = agg.get(t.autotrader_id) || {
+      pnlUsd: 0,
+      notionalClosed: 0,
+      lastFilledAt: 0,
+    };
+
+    cur.pnlUsd += pnlUsd;
+    cur.notionalClosed += notional;
+
+    const filledAt = Date.parse(t.filled_at || "");
+    if (!Number.isNaN(filledAt)) {
+      cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAt);
+    }
+
+    agg.set(t.autotrader_id, cur);
+  }
+
+  const rows = (autotraders || []).map((a) => {
+    const s = agg.get(a.autotrader_id) || { pnlUsd: 0, notionalClosed: 0 };
+    const pct =
+      s.notionalClosed > 0 ? (s.pnlUsd / s.notionalClosed) * 100 : 0;
+
+    const planName = planNameById.get(a.plan_id) || "";
+    const sym = assetSymbolById.get(a.asset_id) || "";
+
+    return {
+      autotrader_id: a.autotrader_id,
+      status: a.status,
+      planName,
+      assetSymbol: sym,
+      profitPct: pct,
+    };
+  });
+
+  // Top 3 by profit%
+  rows.sort((a, b) => b.profitPct - a.profitPct);
+
+  return rows.slice(0, 3).map((t) => ({
+    name: t.planName || "Autotrader",
+    pair: t.assetSymbol ? `${t.assetSymbol}/USDT` : "Pair",
+    runtime: t.status === "running" ? "Running" : "Stopped",
+    pnl: formatPct(t.profitPct, 2),
   }));
 };
 
