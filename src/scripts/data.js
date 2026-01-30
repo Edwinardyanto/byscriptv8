@@ -126,6 +126,29 @@ const formatPct = (value, digits = 2) => {
   return `${n.toFixed(digits)}%`;
 };
 
+const toFilledAtMs = (filled_at) => {
+  const ms =
+    typeof filled_at === "number"
+      ? filled_at * 1000
+      : Date.parse(filled_at || "");
+  return Number.isFinite(ms) ? ms : 0;
+};
+
+const buildSparkSeries = (closes = [], maxPoints = 18) => {
+  if (!Array.isArray(closes) || closes.length < 2) return [];
+
+  const sorted = closes
+    .slice()
+    .sort((a, b) => (a.t || 0) - (b.t || 0))
+    .slice(-maxPoints);
+
+  let cum = 0;
+  return sorted.map((x) => {
+    cum += Number(x.pnl || 0);
+    return cum;
+  });
+};
+
 const buildTopAutotraders = async () => {
   const [autotraders, plans, trades, assets] = await Promise.all([
     getAutotraders(),
@@ -146,31 +169,32 @@ const buildTopAutotraders = async () => {
     if (!t || !t.autotrader_id) continue;
     if (t.reduce_only !== true) continue;
 
-    // engine-grade fields
     const qty = Math.abs(Number(t.size || 0)); // size (not qty)
     const price = Number(t.price_usd || 0); // price_usd (not price)
     const notional = qty * price;
 
     const pnlUsd = Number(t.pnl_usd || 0);
+    const filledAtMs = toFilledAtMs(t.filled_at);
 
     const cur = agg.get(t.autotrader_id) || {
       pnlUsd: 0,
       notionalClosed: 0,
       closeCount: 0,
+      winCount: 0,
       lastFilledAt: 0,
+      closes: [],
     };
 
     cur.pnlUsd += pnlUsd;
     cur.notionalClosed += notional;
     cur.closeCount += 1;
+    if (pnlUsd > 0) cur.winCount += 1;
 
-    // filled_at is unix seconds number in your dataset (safe fallback to Date.parse)
-    const filledAtMs =
-      typeof t.filled_at === "number"
-        ? t.filled_at * 1000
-        : Date.parse(t.filled_at || "");
-    if (!Number.isNaN(filledAtMs)) {
+    if (filledAtMs) {
       cur.lastFilledAt = Math.max(cur.lastFilledAt, filledAtMs);
+      cur.closes.push({ t: filledAtMs, pnl: pnlUsd });
+      // cap memory per autotrader (keep last 200 closes)
+      if (cur.closes.length > 200) cur.closes.splice(0, cur.closes.length - 200);
     }
 
     agg.set(t.autotrader_id, cur);
@@ -182,7 +206,9 @@ const buildTopAutotraders = async () => {
         pnlUsd: 0,
         notionalClosed: 0,
         closeCount: 0,
+        winCount: 0,
         lastFilledAt: 0,
+        closes: [],
       };
 
     // Profit% vs allocated capital (more stable than notionalClosed)
@@ -192,6 +218,9 @@ const buildTopAutotraders = async () => {
     const planName = planNameById.get(a.plan_id) || "";
     const sym = assetSymbolById.get(a.asset_id) || "";
 
+    const winRate =
+      s.closeCount > 0 ? (Number(s.winCount || 0) / s.closeCount) * 100 : 0;
+
     return {
       autotrader_id: a.autotrader_id,
       status: a.status,
@@ -200,7 +229,9 @@ const buildTopAutotraders = async () => {
       assetSymbol: sym,
       profitPct: pct,
       closeCount: s.closeCount,
+      winRate,
       lastFilledAt: s.lastFilledAt,
+      spark: buildSparkSeries(s.closes, 18),
     };
   });
 
@@ -219,7 +250,9 @@ const buildTopAutotraders = async () => {
     pair: t.assetSymbol ? `${t.assetSymbol}/USDT` : "Pair",
     runtime: t.status === "running" ? "Running" : "Stopped",
     tradeCount: Number(t.closeCount || 0),
+    winRate: Number(t.winRate || 0),
     pnl: formatPct(t.profitPct, 2),
+    spark: Array.isArray(t.spark) ? t.spark : [],
   }));
 };
 
