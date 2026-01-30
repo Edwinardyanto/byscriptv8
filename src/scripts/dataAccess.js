@@ -117,7 +117,7 @@ export const getAutotradersByAccount = async (accountId) => {
     .filter((a) => a.account_id === accountId)
     .map((a) => ({
       ...a,
-      tradingPlanName: planMap.get(a.plan_id)?.plan_name || "",
+      tradingPlanName: planMap.get(a.plan_id)?.name || "",
     }));
 };
 
