@@ -1549,7 +1549,7 @@ text-align: center;
   gap: var(--gap-inner);
 }
 
-.autotrader-header {
+.page-autotraders .autotrader-header {
   display: grid;
   grid-template-columns: 140px 1.4fr 1fr 1fr;
   align-items: center;
