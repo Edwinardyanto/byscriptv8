@@ -1146,10 +1146,28 @@ main {
   line-height: 1.1;
 }
 
+.data-kpi-value.is-positive {
+  color: var(--color-accent);
+}
+
+.data-kpi-value.is-negative {
+  color: var(--color-status-negative);
+}
+
 .data-kpi-sub {
   font-size: 0.75rem;
   color: var(--color-text-primary);
   opacity: 0.88;
+}
+
+.data-kpi-sub.is-accent {
+  color: var(--color-accent);
+  opacity: 1;
+}
+
+.data-kpi-accent {
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 .data-kpi-meta {
