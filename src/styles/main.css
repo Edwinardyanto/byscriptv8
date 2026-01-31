@@ -1139,7 +1139,7 @@ main {
 }
 
 .data-kpi-value {
-  font-size: 1.55rem;
+  font-size: 1.3rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--color-text-primary);
@@ -1147,14 +1147,14 @@ main {
 }
 
 .data-kpi-sub {
-  font-size: 0.86rem;
+  font-size: 0.75rem;
   color: var(--color-text-primary);
   opacity: 0.88;
 }
 
 .data-kpi-meta {
   margin-top: auto;
-  font-size: 0.78rem;
+  font-size: 0.6rem;
   color: var(--color-text-secondary);
   opacity: 0.9;
 }
