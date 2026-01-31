@@ -1,5 +1,5 @@
 // src/scripts/render/alerts.js
-// Re-purposed: 4 KPI cards inside the existing Alerts section (section--alerts)
+// Re-purposed: Data Overview (4 KPI cards) inside the existing section--alerts container.
 
 const setText = (el, value) => {
   if (!el) return;
@@ -7,14 +7,19 @@ const setText = (el, value) => {
 };
 
 const getSection = () => document.querySelector(".section--alerts");
+const getTitle = () => document.querySelector(".section--alerts .section-title");
 const getTrack = () =>
   document.querySelector(".section--alerts .alerts-slider__track");
 
-const getControls = () => document.querySelector(".section--alerts .alerts-controls");
+const getControls = () =>
+  document.querySelector(".section--alerts .alerts-controls");
 
-const createKpiCard = ({ title, value, sub, meta }) => {
+const createKpiCard = (key, { title, value, sub, meta, _tone }) => {
   const card = document.createElement("div");
   card.className = "data-kpi-card";
+  card.dataset.kpi = key;
+  if (_tone) card.dataset.tone = _tone;
+
   card.innerHTML = `
     <div class="data-kpi-title"></div>
     <div class="data-kpi-value"></div>
@@ -38,10 +43,10 @@ const renderGrid = (track, kpis) => {
   grid.className = "data-kpi-grid";
 
   grid.append(
-    createKpiCard(kpis.accounts),
-    createKpiCard(kpis.autotraders),
-    createKpiCard(kpis.trades),
-    createKpiCard(kpis.pnl)
+    createKpiCard("accounts", kpis.accounts),
+    createKpiCard("autotraders", kpis.autotraders),
+    createKpiCard("trades", kpis.trades),
+    createKpiCard("pnl", kpis.pnl)
   );
 
   track.append(grid);
@@ -78,6 +83,11 @@ export const renderAlerts = ({ data, status }) => {
   const section = getSection();
   const track = getTrack();
   if (!section || !track) return;
+
+  // Repurpose the section header
+  const title = getTitle();
+  setText(title, "Data Overview");
+  section.classList.add("section--data-overview");
 
   // Hide slider controls (we keep DOM as-is, only replace content)
   const controls = getControls();
