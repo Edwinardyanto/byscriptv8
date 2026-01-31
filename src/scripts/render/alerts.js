@@ -6,6 +6,19 @@ const setText = (el, value) => {
   el.textContent = value == null ? "" : String(value);
 };
 
+const setHtml = (el, value) => {
+  if (!el) return;
+  el.innerHTML = value == null ? "" : String(value);
+};
+
+const setStateClass = (el, state) => {
+  if (!el) return;
+  el.classList.remove("is-positive", "is-negative", "is-accent");
+  if (state === "positive") el.classList.add("is-positive");
+  if (state === "negative") el.classList.add("is-negative");
+  if (state === "accent") el.classList.add("is-accent");
+};
+
 const getSection = () => document.querySelector(".section--alerts");
 const getTrack = () =>
   document.querySelector(".section--alerts .alerts-slider__track");
@@ -22,10 +35,39 @@ const createKpiCard = ({ title, value, sub, meta }) => {
     <div class="data-kpi-meta"></div>
   `;
 
-  setText(card.querySelector(".data-kpi-title"), title);
-  setText(card.querySelector(".data-kpi-value"), value);
-  setText(card.querySelector(".data-kpi-sub"), sub);
-  setText(card.querySelector(".data-kpi-meta"), meta);
+  const titleEl = card.querySelector(".data-kpi-title");
+  const valueEl = card.querySelector(".data-kpi-value");
+  const subEl = card.querySelector(".data-kpi-sub");
+  const metaEl = card.querySelector(".data-kpi-meta");
+
+  setText(titleEl, title);
+  setText(valueEl, value);
+
+  // allow controlled HTML for sub/meta when provided
+  if (typeof arguments[0]?.subHtml === "string") setHtml(subEl, arguments[0].subHtml);
+  else setText(subEl, sub);
+
+  if (typeof arguments[0]?.metaHtml === "string") setHtml(metaEl, arguments[0].metaHtml);
+  else setText(metaEl, meta);
+
+  // Conditional coloring rules for Data Overview
+  // - Total PnL value: green if >0, red if <0, neutral otherwise
+  if (typeof arguments[0]?.valueRaw === "number") {
+    const n = arguments[0].valueRaw;
+    setStateClass(valueEl, n > 0 ? "positive" : n < 0 ? "negative" : "neutral");
+  }
+
+  // - ROI in Total PnL sub: green if >0
+  if (typeof arguments[0]?.roiRaw === "number") {
+    const n = arguments[0].roiRaw;
+    setStateClass(subEl, n > 0 ? "accent" : "neutral");
+  }
+
+  // - Trades win rate: green if >50%
+  if (typeof arguments[0]?.winRateRaw === "number") {
+    const n = arguments[0].winRateRaw;
+    setStateClass(subEl, n > 50 ? "accent" : "neutral");
+  }
 
   return card;
 };
