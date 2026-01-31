@@ -1119,11 +1119,14 @@ main {
 }
 
 .data-kpi-card {
-  padding: 14px 14px 12px;
+  --kpi-accent: var(--color-action-primary);
+  position: relative;
+  overflow: hidden;
+  padding: 12px 14px 12px;
   border-radius: var(--radius-lg);
-  background: var(--color-overlay-xxs);
-  border: 1px solid var(--color-border-subtle);
-  box-shadow: var(--shadow-soft);
+  background: linear-gradient(120deg, var(--color-overlay-xxs), var(--color-overlay-sm));
+  border: 1px solid var(--color-overlay-sm);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -1131,32 +1134,74 @@ main {
   min-height: 0;
 }
 
+.data-kpi-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--kpi-accent);
+  opacity: 0.8;
+}
+
+.data-kpi-card[data-kpi="accounts"] {
+  --kpi-accent: var(--color-action-primary);
+}
+
+.data-kpi-card[data-kpi="autotraders"] {
+  --kpi-accent: var(--color-state-active);
+}
+
+.data-kpi-card[data-kpi="trades"] {
+  --kpi-accent: var(--color-state-selected);
+}
+
+.data-kpi-card[data-kpi="pnl"] {
+  --kpi-accent: var(--color-status-positive);
+}
+
+.data-kpi-card[data-kpi="pnl"][data-tone="negative"] {
+  --kpi-accent: var(--color-status-negative);
+}
+
 .data-kpi-title {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
+  opacity: 0.78;
 }
 
 .data-kpi-value {
-  font-size: 1.55rem;
+  font-size: 1.72rem;
   font-weight: 700;
   letter-spacing: 0.01em;
   color: var(--color-text-primary);
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-kpi-card[data-tone="positive"] .data-kpi-value {
+  color: var(--color-status-positive);
+}
+
+.data-kpi-card[data-tone="negative"] .data-kpi-value {
+  color: var(--color-status-negative);
 }
 
 .data-kpi-sub {
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   color: var(--color-text-primary);
-  opacity: 0.88;
+  opacity: 0.9;
 }
 
 .data-kpi-meta {
   margin-top: auto;
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--color-text-secondary);
   opacity: 0.9;
+  font-variant-numeric: tabular-nums;
 }
 
 
