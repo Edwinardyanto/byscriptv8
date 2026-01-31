@@ -25,7 +25,19 @@ const getTrack = () =>
 
 const getControls = () => document.querySelector(".section--alerts .alerts-controls");
 
-const createKpiCard = ({ title, value, sub, meta }) => {
+const createKpiCard = (opts = {}) => {
+  const {
+    title,
+    value,
+    sub,
+    meta,
+    subHtml,
+    metaHtml,
+    valueRaw,
+    roiRaw,
+    winRateRaw,
+  } = opts || {};
+
   const card = document.createElement("div");
   card.className = "data-kpi-card";
   card.innerHTML = `
@@ -43,34 +55,31 @@ const createKpiCard = ({ title, value, sub, meta }) => {
   setText(titleEl, title);
   setText(valueEl, value);
 
-  // allow controlled HTML for sub/meta when provided
-  if (typeof arguments[0]?.subHtml === "string") setHtml(subEl, arguments[0].subHtml);
+  if (typeof subHtml === "string") setHtml(subEl, subHtml);
   else setText(subEl, sub);
 
-  if (typeof arguments[0]?.metaHtml === "string") setHtml(metaEl, arguments[0].metaHtml);
+  if (typeof metaHtml === "string") setHtml(metaEl, metaHtml);
   else setText(metaEl, meta);
 
   // Conditional coloring rules for Data Overview
   // - Total PnL value: green if >0, red if <0, neutral otherwise
-  if (typeof arguments[0]?.valueRaw === "number") {
-    const n = arguments[0].valueRaw;
-    setStateClass(valueEl, n > 0 ? "positive" : n < 0 ? "negative" : "neutral");
+  if (typeof valueRaw === "number" && Number.isFinite(valueRaw)) {
+    setStateClass(valueEl, valueRaw > 0 ? "positive" : valueRaw < 0 ? "negative" : "neutral");
   }
 
-  // - ROI in Total PnL sub: green if >0
-  if (typeof arguments[0]?.roiRaw === "number") {
-    const n = arguments[0].roiRaw;
-    setStateClass(subEl, n > 0 ? "accent" : "neutral");
+  // - ROI sub (Total PnL card): green if positive
+  if (typeof roiRaw === "number" && Number.isFinite(roiRaw)) {
+    setStateClass(subEl, roiRaw > 0 ? "accent" : "neutral");
   }
 
-  // - Trades win rate: green if >50%
-  if (typeof arguments[0]?.winRateRaw === "number") {
-    const n = arguments[0].winRateRaw;
-    setStateClass(subEl, n > 50 ? "accent" : "neutral");
+  // - Win rate (Trades card): green if above 50%
+  if (typeof winRateRaw === "number" && Number.isFinite(winRateRaw)) {
+    setStateClass(subEl, winRateRaw > 50 ? "accent" : "neutral");
   }
 
   return card;
 };
+
 
 const renderGrid = (track, kpis) => {
   track.innerHTML = "";
