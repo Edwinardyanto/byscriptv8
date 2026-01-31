@@ -157,15 +157,19 @@ const buildAccountsSummary = async () => {
  * ------------------------------------------------------ */
 
 const buildAlertsKpis = async () => {
-  const [accounts, autotraders, trades, equitySeries] = await Promise.all([
-    getAccounts(),
-    getAutotraders(),
-    getTrades(),
-    getAssetEquityByRange("ALL"),
-  ]);
+  const [accounts, accountsSummary, autotraders, trades, equitySeries] =
+    await Promise.all([
+      getAccounts(),
+      getAccountsWithSummary(),
+      getAutotraders(),
+      getTrades(),
+      getAssetEquityByRange("ALL"),
+    ]);
 
   // Accounts
   const totalAccounts = Array.isArray(accounts) ? accounts.length : 0;
+  const summaryCount = Array.isArray(accountsSummary) ? accountsSummary.length : 0;
+  const connectedIssueCount = Math.max(0, totalAccounts - summaryCount);
 
   let spotCount = 0;
   let futuresCount = 0;
@@ -238,25 +242,31 @@ const buildAlertsKpis = async () => {
       title: "Accounts Connected",
       value: formatNumber(totalAccounts),
       sub: `${formatNumber(spotCount)} Spot, ${formatNumber(futuresCount)} Futures`,
-      meta: `Last connected: ${lastConnectedAt ? formatTimeAgo(lastConnectedAt) : "-"}`,
+      meta: `Connected issue: ${formatNumber(connectedIssueCount)}`,
     },
     autotraders: {
       title: "Autotraders",
       value: formatNumber(totalAutotraders),
-      sub: `Active: ${formatNumber(active)}, Stopped: ${formatNumber(stopped)}`,
+      subHtml: `Active: <span class="data-kpi-accent">${formatNumber(
+        active
+      )}</span>, Stopped: ${formatNumber(stopped)}`,
       meta: `Paused by risk guard: ${formatNumber(paused)}`,
+      activeRaw: Number(active || 0),
     },
     trades: {
       title: "Trades",
       value: formatNumber(totalTrades),
       sub: `Win rate: ${formatPct(winRate, 2)}`,
       meta: `Failed: ${formatNumber(failed)}`,
+      winRateRaw: Number(winRate || 0),
     },
     pnl: {
       title: "Total PnL",
       value: formatCurrency(totalPnlUsd, 2),
       sub: `ROI: ${formatSignedPct(roiPct, 2)}`,
       meta: "Fees: -",
+      valueRaw: Number(totalPnlUsd || 0),
+      roiRaw: Number(roiPct || 0),
     },
   };
 };
