@@ -225,6 +225,8 @@ const buildAlertsKpis = async () => {
     0
   );
 
+  const pnlTone = totalPnlUsd > 0 ? "positive" : totalPnlUsd < 0 ? "negative" : "neutral";
+
   // ROI from equity series (first vs last)
   let roiPct = 0;
   if (Array.isArray(equitySeries) && equitySeries.length >= 2) {
@@ -239,24 +241,28 @@ const buildAlertsKpis = async () => {
       value: formatNumber(totalAccounts),
       sub: `${formatNumber(spotCount)} Spot, ${formatNumber(futuresCount)} Futures`,
       meta: `Last connected: ${lastConnectedAt ? formatTimeAgo(lastConnectedAt) : "-"}`,
+      _tone: "neutral",
     },
     autotraders: {
       title: "Autotraders",
       value: formatNumber(totalAutotraders),
       sub: `Active: ${formatNumber(active)}, Stopped: ${formatNumber(stopped)}`,
       meta: `Paused by risk guard: ${formatNumber(paused)}`,
+      _tone: "neutral",
     },
     trades: {
       title: "Trades",
       value: formatNumber(totalTrades),
       sub: `Win rate: ${formatPct(winRate, 2)}`,
       meta: `Failed: ${formatNumber(failed)}`,
+      _tone: "neutral",
     },
     pnl: {
       title: "Total PnL",
       value: formatCurrency(totalPnlUsd, 2),
       sub: `ROI: ${formatSignedPct(roiPct, 2)}`,
       meta: "Fees: -",
+      _tone: pnlTone,
     },
   };
 };
