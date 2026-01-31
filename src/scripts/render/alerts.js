@@ -1,33 +1,25 @@
 // src/scripts/render/alerts.js
-// Re-purposed: 4 KPI cards inside the existing Alerts section (section--alerts)
+// Re-purposed: Data Overview (4 KPI cards) inside the existing section--alerts container.
 
 const setText = (el, value) => {
   if (!el) return;
   el.textContent = value == null ? "" : String(value);
 };
 
-const setHtml = (el, value) => {
-  if (!el) return;
-  el.innerHTML = value == null ? "" : String(value);
-};
-
-const setStateClass = (el, state) => {
-  if (!el) return;
-  el.classList.remove("is-positive", "is-negative", "is-accent");
-  if (state === "positive") el.classList.add("is-positive");
-  if (state === "negative") el.classList.add("is-negative");
-  if (state === "accent") el.classList.add("is-accent");
-};
-
 const getSection = () => document.querySelector(".section--alerts");
+const getTitle = () => document.querySelector(".section--alerts .section-title");
 const getTrack = () =>
   document.querySelector(".section--alerts .alerts-slider__track");
 
-const getControls = () => document.querySelector(".section--alerts .alerts-controls");
+const getControls = () =>
+  document.querySelector(".section--alerts .alerts-controls");
 
-const createKpiCard = ({ title, value, sub, meta }) => {
+const createKpiCard = (key, { title, value, sub, meta, _tone }) => {
   const card = document.createElement("div");
   card.className = "data-kpi-card";
+  card.dataset.kpi = key;
+  if (_tone) card.dataset.tone = _tone;
+
   card.innerHTML = `
     <div class="data-kpi-title"></div>
     <div class="data-kpi-value"></div>
@@ -35,39 +27,10 @@ const createKpiCard = ({ title, value, sub, meta }) => {
     <div class="data-kpi-meta"></div>
   `;
 
-  const titleEl = card.querySelector(".data-kpi-title");
-  const valueEl = card.querySelector(".data-kpi-value");
-  const subEl = card.querySelector(".data-kpi-sub");
-  const metaEl = card.querySelector(".data-kpi-meta");
-
-  setText(titleEl, title);
-  setText(valueEl, value);
-
-  // allow controlled HTML for sub/meta when provided
-  if (typeof arguments[0]?.subHtml === "string") setHtml(subEl, arguments[0].subHtml);
-  else setText(subEl, sub);
-
-  if (typeof arguments[0]?.metaHtml === "string") setHtml(metaEl, arguments[0].metaHtml);
-  else setText(metaEl, meta);
-
-  // Conditional coloring rules for Data Overview
-  // - Total PnL value: green if >0, red if <0, neutral otherwise
-  if (typeof arguments[0]?.valueRaw === "number") {
-    const n = arguments[0].valueRaw;
-    setStateClass(valueEl, n > 0 ? "positive" : n < 0 ? "negative" : "neutral");
-  }
-
-  // - ROI in Total PnL sub: green if >0
-  if (typeof arguments[0]?.roiRaw === "number") {
-    const n = arguments[0].roiRaw;
-    setStateClass(subEl, n > 0 ? "accent" : "neutral");
-  }
-
-  // - Trades win rate: green if >50%
-  if (typeof arguments[0]?.winRateRaw === "number") {
-    const n = arguments[0].winRateRaw;
-    setStateClass(subEl, n > 50 ? "accent" : "neutral");
-  }
+  setText(card.querySelector(".data-kpi-title"), title);
+  setText(card.querySelector(".data-kpi-value"), value);
+  setText(card.querySelector(".data-kpi-sub"), sub);
+  setText(card.querySelector(".data-kpi-meta"), meta);
 
   return card;
 };
@@ -80,10 +43,10 @@ const renderGrid = (track, kpis) => {
   grid.className = "data-kpi-grid";
 
   grid.append(
-    createKpiCard(kpis.accounts),
-    createKpiCard(kpis.autotraders),
-    createKpiCard(kpis.trades),
-    createKpiCard(kpis.pnl)
+    createKpiCard("accounts", kpis.accounts),
+    createKpiCard("autotraders", kpis.autotraders),
+    createKpiCard("trades", kpis.trades),
+    createKpiCard("pnl", kpis.pnl)
   );
 
   track.append(grid);
@@ -120,6 +83,11 @@ export const renderAlerts = ({ data, status }) => {
   const section = getSection();
   const track = getTrack();
   if (!section || !track) return;
+
+  // Repurpose the section header
+  const title = getTitle();
+  setText(title, "Data Overview");
+  section.classList.add("section--data-overview");
 
   // Hide slider controls (we keep DOM as-is, only replace content)
   const controls = getControls();
