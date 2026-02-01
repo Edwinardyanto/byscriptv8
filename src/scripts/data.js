@@ -122,6 +122,7 @@ const buildAssetSummary = async () => {
     chart: {
       series: slicedSeries.map((d) => Number(d.equity_usd || 0)),
       labels: slicedSeries.map((d) => d.date),
+      activeRange,
     },
   };
 };
