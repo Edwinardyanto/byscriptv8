@@ -945,25 +945,25 @@ main {
   border-radius: 999px;
   flex: 0 0 8px;
   background: var(--dot-color, var(--color-action-primary));
-  box-shadow: 0 0 0 2px var(--dot-ring-color, var(--color-overlay-sm));
-  transition: box-shadow 0.18s ease, opacity 0.18s ease, filter 0.18s ease;
+  box-shadow: 0 0 0 2px var(--color-overlay-sm);
+  transition: box-shadow 0.15s ease, opacity 0.15s ease;
 }
 
-/* Stopped state: keep identity color, but clearly "inactive" */
 .color-dot.is-stopped,
 .color-dot[data-state="stopped"] {
   opacity: 0.35;
-  box-shadow: 0 0 0 2px var(--color-border-subtle);
+  box-shadow: 0 0 0 2px var(--color-overlay-sm), 0 0 0 3px var(--color-overlay-md);
 }
 
-/* Hover: glow using the identity color (no color swapping) */
-.trade-history-row:hover .color-dot:not(.is-stopped):not([data-state="stopped"]),
-.summary-item:hover .color-dot:not(.is-stopped):not([data-state="stopped"]) {
-  box-shadow:
-    0 0 0 2px var(--dot-ring-color, var(--color-overlay-sm)),
-    0 0 12px var(--dot-color, var(--color-action-primary));
+.trade-history-row:hover {
+  background: var(--color-overlay-xs);
 }
 
+.trade-history-row:hover .color-dot,
+.summary-item:hover .color-dot {
+  box-shadow: 0 0 0 2px var(--color-overlay-sm),
+    0 0 0 8px color-mix(in srgb, var(--dot-color) 18%, transparent);
+}
 
 .summary-item-value {
   font-weight: 700;
@@ -1673,14 +1673,13 @@ main {
   border: 1px solid var(--color-overlay-sm);
   color: inherit;
   text-decoration: none;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 
 .trade-history-row:hover {
   transform: translateY(-1px);
   border-color: var(--color-border-strong);
   box-shadow: 0 6px 14px var(--color-shadow-soft), 0 0 10px var(--color-shadow-soft);
-  background: var(--color-overlay-xs);
 }
 
 .trade-history-pair {
