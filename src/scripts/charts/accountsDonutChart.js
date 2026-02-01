@@ -55,14 +55,19 @@ const getAccountColor = (account, fallbackIndex = 0) => {
  * Donut Renderer (Colored Segments)
  * ============================================ */
 
-export const renderAccountsDonutChart = ({ container, accounts }) => {
+export const renderAccountsDonutChart = ({
+  container,
+  accounts,
+  onActiveChange,
+}) => {
   if (!container || !Array.isArray(accounts) || accounts.length === 0) return;
 
   const width = 214;
   const height = 214;
-  const strokeWidth = 18;
+  const baseStrokeWidth = 18;
+  const activeStrokeWidth = 22;
 
-  const radius = (Math.min(width, height) - strokeWidth) / 2;
+  const radius = (Math.min(width, height) - baseStrokeWidth) / 2;
 
   const total =
     accounts.reduce((sum, item) => sum + Number(item.totalValueUsd || 0), 0) ||
@@ -82,6 +87,23 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
   svg.setAttribute("width", `${width}`);
   svg.setAttribute("height", `${height}`);
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+  /* ----------------------------------
+   * Glow Filter
+   * ---------------------------------- */
+
+  const defs = createSvgElement("defs");
+  const filter = createSvgElement("filter");
+  filter.setAttribute("id", "segmentGlow");
+  filter.innerHTML = `
+    <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+    <feMerge>
+      <feMergeNode in="blur"></feMergeNode>
+      <feMergeNode in="SourceGraphic"></feMergeNode>
+    </feMerge>
+  `;
+  defs.appendChild(filter);
+  svg.appendChild(defs);
 
   /* ----------------------------------
    * Hover Label
@@ -109,6 +131,57 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
    * Segments
    * ---------------------------------- */
 
+  const arcById = new Map();
+  const valueById = new Map();
+  let activeId = null;
+
+  const setActive = (accountId) => {
+    if (!accountId) return;
+    activeId = accountId;
+
+    accounts.forEach((a) => {
+      const arc = arcById.get(a.account_id);
+      if (!arc) return;
+
+      const isOn = a.account_id === accountId;
+
+      arc.setAttribute("opacity", isOn ? "1" : "0.22");
+      arc.setAttribute(
+        "stroke-width",
+        isOn ? `${activeStrokeWidth}` : `${baseStrokeWidth}`
+      );
+      arc.setAttribute("filter", isOn ? "url(#segmentGlow)" : "");
+      arc.style.cursor = "pointer";
+    });
+
+    const a = accounts.find((x) => x.account_id === accountId);
+    if (a) {
+      labelName.textContent = a.account_name;
+      labelValue.textContent = formatCurrency.format(
+        Number(valueById.get(accountId) || 0)
+      );
+      labelGroup.style.visibility = "visible";
+    }
+
+    if (typeof onActiveChange === "function") onActiveChange(accountId);
+  };
+
+  const clearActive = () => {
+    activeId = null;
+    labelGroup.style.visibility = "hidden";
+
+    accounts.forEach((a) => {
+      const arc = arcById.get(a.account_id);
+      if (!arc) return;
+
+      arc.setAttribute("opacity", "0.95");
+      arc.setAttribute("stroke-width", `${baseStrokeWidth}`);
+      arc.setAttribute("filter", "");
+    });
+
+    if (typeof onActiveChange === "function") onActiveChange(null);
+  };
+
   let currentAngle = 0;
 
   accounts.forEach((account, index) => {
@@ -132,24 +205,16 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
 
     arc.setAttribute("fill", "none");
     arc.setAttribute("stroke", color);
-    arc.setAttribute("stroke-width", `${strokeWidth}`);
+    arc.setAttribute("stroke-width", `${baseStrokeWidth}`);
     arc.setAttribute("stroke-linecap", "butt");
     arc.setAttribute("opacity", "0.95");
 
-    arc.style.cursor = "pointer";
+    arc.dataset.accountId = account.account_id;
 
-    arc.addEventListener("mouseenter", () => {
-      labelName.textContent = account.account_name;
-      labelValue.textContent = formatCurrency.format(value);
+    arc.addEventListener("mouseenter", () => setActive(account.account_id));
 
-      labelGroup.style.visibility = "visible";
-      arc.setAttribute("opacity", "1");
-    });
-
-    arc.addEventListener("mouseleave", () => {
-      labelGroup.style.visibility = "hidden";
-      arc.setAttribute("opacity", "0.95");
-    });
+    arcById.set(account.account_id, arc);
+    valueById.set(account.account_id, value);
 
     svg.appendChild(arc);
 
@@ -163,11 +228,14 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
   const center = createSvgElement("circle");
   center.setAttribute("cx", `${width / 2}`);
   center.setAttribute("cy", `${height / 2}`);
-  center.setAttribute("r", `${radius - strokeWidth / 2}`);
+  center.setAttribute("r", `${radius - baseStrokeWidth / 2}`);
   center.setAttribute("fill", cssVar("--color-bg-surface"));
 
   svg.appendChild(center);
   svg.appendChild(labelGroup);
+
+  // Clear state when leaving the full SVG area
+  svg.addEventListener("mouseleave", () => clearActive());
 
   /* ----------------------------------
    * Mount
@@ -175,4 +243,6 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
 
   container.innerHTML = "";
   container.appendChild(svg);
+
+  return { setActive, clearActive };
 };
