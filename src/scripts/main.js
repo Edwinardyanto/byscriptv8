@@ -14,6 +14,10 @@ import { setAssetRange } from "./data.js";
 
 const appRoot = document.getElementById("app");
 
+// Guard: main.js is the Dashboard bootstrap.
+// Other pages still import it to get the shared sidebar behavior.
+const IS_DASHBOARD = document.body?.classList?.contains("page-dashboard");
+
 /**
  * Dashboard sections controlled by state
  */
@@ -207,6 +211,14 @@ if (appRoot) {
   appRoot.dataset.ready = "true";
 
   initSidebar(appRoot);
+
+  // Non-dashboard pages should not run the dashboard data/state render loop.
+  if (!IS_DASHBOARD) {
+    bindSidebarToggle();
+    // Do not subscribe/load dashboard state on non-dashboard pages.
+    // Page-specific scripts (pages/*) will handle their own data/render.
+    return;
+  }
 
   // Subscribe render ke perubahan state
   subscribe(renderDashboard);
