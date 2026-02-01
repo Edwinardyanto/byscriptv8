@@ -103,7 +103,7 @@ export const renderTradeHistory = async (sectionState) => {
     const symbol = assetMeta.symbol || "UNKNOWN";
 
     const accountMeta = accountMap.get(t.account_id) || {
-      name: t.account_id,
+      name: t.account_id || "-",
       exchange: "exchange",
     };
 
