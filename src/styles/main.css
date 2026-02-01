@@ -1490,7 +1490,7 @@ main {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   justify-content: space-between;
 }
 
