@@ -2,9 +2,11 @@
 
 import {
   getTrades,
-  getAssetSymbolMap,
+  getAssetMetaMap,
   getAccountMetaMap,
 } from "../dataAccess.js";
+
+import { colorFromId } from "../color.js";
 
 import { openSharePopup } from "../components/sharePopup.js";
 
@@ -82,7 +84,7 @@ export const renderTradeHistory = async (sectionState) => {
     return;
   }
 
-  const assetMap = await getAssetSymbolMap();
+  const assetMap = await getAssetMetaMap();
   const accountMap = await getAccountMetaMap();
 
   /* ---------- ✅ SORT NEWEST FIRST ---------- */
@@ -97,12 +99,16 @@ export const renderTradeHistory = async (sectionState) => {
   list.innerHTML = "";
 
   latestTrades.forEach((t) => {
-    const symbol = assetMap.get(t.asset_id) || "UNKNOWN";
+    const assetMeta = assetMap.get(t.asset_id) || { symbol: "UNKNOWN" };
+    const symbol = assetMeta.symbol || "UNKNOWN";
 
     const accountMeta = accountMap.get(t.account_id) || {
       name: t.account_id,
       exchange: "exchange",
     };
+
+    const accountColor = colorFromId(accountMeta.color_id);
+    const assetColor = colorFromId(assetMeta.color_id);
 
     const iconUrl = `assets/exchanges/${accountMeta.exchange}.svg`;
 
@@ -131,14 +137,20 @@ export const renderTradeHistory = async (sectionState) => {
     row.innerHTML = `
       <!-- ASSET -->
       <div class="trade-history-asset">
-        <div class="trade-history-asset-symbol">${symbol}</div>
+        <div class="trade-history-asset-symbol">
+          <span class="color-dot" style="--dot-color: ${assetColor};" aria-hidden="true"></span>
+          ${symbol}
+        </div>
         <div class="trade-history-asset-meta">
           <img
             class="exchange-icon"
             src="${iconUrl}"
             alt="${accountMeta.exchange}"
           />
-          <span>${accountMeta.name}</span>
+          <span class="trade-history-account">
+            <span class="color-dot" style="--dot-color: ${accountColor};" aria-hidden="true"></span>
+            ${accountMeta.name}
+          </span>
         </div>
       </div>
 
