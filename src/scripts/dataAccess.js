@@ -193,6 +193,7 @@ export const getAccountsSummaryByDate = async (date) => {
     accountValues.push({
       account_id: acc.account_id,
       account_name: meta?.account_name || acc.account_id,
+      color_id: meta?.color_id,
       totalValueUsd: totalUsd,
     });
   }
@@ -229,6 +230,21 @@ export const getAccountMetaMap = async () => {
     map.set(a.account_id, {
       name: a.account_name,
       exchange: a.exchange,
+      color_id: a.color_id,
+    });
+  }
+
+  return map;
+};
+
+export const getAssetMetaMap = async () => {
+  const assets = await getAssets();
+  const map = new Map();
+
+  for (const a of assets || []) {
+    map.set(a.asset_id, {
+      symbol: a.asset_symbol,
+      color_id: a.color_id,
     });
   }
 
