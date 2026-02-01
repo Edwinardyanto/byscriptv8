@@ -1,79 +1,143 @@
 // src/scripts/components/TotalPerformanceChart.js
-// ======================================================
-// TOTAL PERFORMANCE CHART (STATE CONTROLLED)
-// ======================================================
-
 import { renderAssetLineChart } from "../charts/assetLineChart.js";
 
-/* ------------------------------------------------------
- * Component Renderer
- * ------------------------------------------------------ */
+const chartMarkup = `
+  <div class="asset-summary-bg"></div>
+  <div class="asset-summary-content">
+    <div class="card card--summary">
+      <div class="summary-top">
+        <div class="stat">
+          <div class="asset-summary-header">
+            <div class="stat-value-row">
+              <div class="stat-value" data-field="asset.totalBalance"></div>
+              <span class="stat-status-dot" aria-hidden="true"></span>
+              <span class="badge badge--positive" data-field="asset.change"></span>
+            </div>
+            <div class="timeframe-pills" aria-label="Asset summary timeframe">
+              <span class="timeframe-pill timeframe-pill--active">7D</span>
+              <span class="timeframe-pill">30D</span>
+              <span class="timeframe-pill">90D</span>
+              <span class="timeframe-pill">All</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-placeholder" data-field="asset.chartLabel">Chart Placeholder</div>
+    </div>
+  </div>
+`;
+
+const setText = (container, selector, value) => {
+  const element = container?.querySelector(selector);
+  if (element) element.textContent = value;
+};
+
+const setBadge = (container, selector, value, isPositive) => {
+  const element = container?.querySelector(selector);
+  if (!element) return;
+  element.textContent = value;
+  element.classList.toggle("badge--positive", Boolean(isPositive));
+  element.classList.toggle("badge--negative", !isPositive);
+};
+
+const setChartMessage = (chartContainer, message) => {
+  if (!chartContainer) return;
+  chartContainer.innerHTML = "";
+  chartContainer.textContent = message;
+};
+
+const updateTimeframeButtons = (pillsContainer, activeRange) => {
+  if (!pillsContainer) return;
+
+  const pills = pillsContainer.querySelectorAll(".timeframe-pill");
+  const activeLabel = String(activeRange || "7D").toUpperCase() === "ALL" ? "All" : activeRange;
+
+  pills.forEach((pill) => {
+    const label = pill.textContent.trim();
+    const isActive = label.toLowerCase() === String(activeLabel || "").toLowerCase();
+    pill.classList.toggle("timeframe-pill--active", isActive);
+  });
+};
+
+const bindTimeframeControls = (pillsContainer, onRangeChange) => {
+  if (!pillsContainer) return;
+
+  const pills = pillsContainer.querySelectorAll(".timeframe-pill");
+  pills.forEach((pill) => {
+    if (pill.dataset.bound) return;
+    pill.dataset.bound = "true";
+
+    pill.addEventListener("click", () => {
+      const label = pill.textContent.trim();
+      const range = label.toLowerCase() === "all" ? "ALL" : label.toUpperCase();
+      if (typeof onRangeChange === "function") onRangeChange(range);
+    });
+  });
+};
 
 export const renderTotalPerformanceChart = ({
   container,
   data,
-  status,
+  status = "ready",
   onRangeChange,
 }) => {
   if (!container) return;
 
-  // ===============================
-  // Loading / Empty Guards
-  // ===============================
+  if (!container.dataset.totalPerformanceReady) {
+    container.innerHTML = chartMarkup;
+    container.dataset.totalPerformanceReady = "true";
+  }
+
+  const pillsContainer = container.querySelector(".timeframe-pills");
+  bindTimeframeControls(pillsContainer, onRangeChange);
+
+  const chartContainer = container.querySelector('[data-field="asset.chartLabel"]');
+  const isAccountsPage = document.body?.classList.contains("page-accounts");
+
   if (status === "loading") {
-    container.innerHTML = "Loading...";
+    setText(container, '[data-field="asset.totalBalance"]', "Loading...");
+    setBadge(container, '[data-field="asset.change"]', "--", true);
+    setChartMessage(chartContainer, "Loading chart...");
     return;
   }
 
-  if (!data?.chart) {
-    container.innerHTML = "No data";
+  if (status === "error") {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
+    setBadge(container, '[data-field="asset.change"]', "--", false);
+    setChartMessage(chartContainer, "Chart unavailable");
     return;
   }
 
-  // ===============================
-  // HEADER FIELDS (match index.html)
-  // ===============================
-  const totalField = document.querySelector(
-    "[data-field='asset.totalBalance']"
-  );
-
-  const changeField = document.querySelector(
-    "[data-field='asset.change']"
-  );
-
-  if (totalField) totalField.textContent = data.totalValue;
-
-  if (changeField) {
-    const pct = data.percent || 0;
-    changeField.textContent = `${pct >= 0 ? "+" : ""}${pct.toFixed(2)}%`;
-
-    changeField.classList.toggle("positive", pct >= 0);
-    changeField.classList.toggle("negative", pct < 0);
+  if (!data || !data.chart) {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
+    setBadge(container, '[data-field="asset.change"]', "--", true);
+    setChartMessage(chartContainer, "No chart data");
+    return;
   }
 
-  // ===============================
-  // TIMEFRAME PILLS (controlled)
-  // ===============================
-  const pills = document.querySelectorAll("[data-range]");
-  pills.forEach((btn) => {
-    btn.classList.toggle(
-      "active",
-      btn.dataset.range === data.chart.activeRange
-    );
+  if (isAccountsPage) {
+    setText(container, '[data-field="asset.totalBalance"]', "--");
+    setText(container, '[data-field="asset.change"]', "");
+  } else {
+    setText(container, '[data-field="asset.totalBalance"]', data.totalValue || "--");
 
-    btn.onclick = () => {
-      if (onRangeChange) onRangeChange(btn.dataset.range);
-    };
-  });
+    const pct = Number(data.percent || 0);
+    const sign = pct > 0 ? "+" : pct < 0 ? "-" : "";
+    const label = `${sign}${Math.abs(pct).toFixed(2)}%`;
+    setBadge(container, '[data-field="asset.change"]', label, pct >= 0);
+  }
 
-  // ===============================
-  // CHART RENDER (SVG)
-  // ===============================
-  container.innerHTML = "";
+  const activeRange = data.chart.activeRange || "7D";
+  updateTimeframeButtons(pillsContainer, activeRange);
 
-  renderAssetLineChart({
-    container,
-    series: data.chart.series,
-    labels: data.chart.labels,
-  });
+  const series = data.chart.series || [];
+  const labels = data.chart.labels || [];
+
+  if (!series.length || series.length !== labels.length) {
+    setChartMessage(chartContainer, "No chart data");
+    return;
+  }
+
+  chartContainer.innerHTML = "";
+  renderAssetLineChart({ container: chartContainer, series, labels });
 };
