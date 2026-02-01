@@ -89,12 +89,20 @@ export const renderAccountsDonutChart = ({
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
   /* ----------------------------------
-   * Glow Filter
+   * Glow Filter (non-clipped)
    * ---------------------------------- */
+
+  // Unique id to avoid collisions if multiple charts exist.
+  const glowId = `segmentGlow-${Math.random().toString(36).slice(2, 9)}`;
 
   const defs = createSvgElement("defs");
   const filter = createSvgElement("filter");
-  filter.setAttribute("id", "segmentGlow");
+  filter.setAttribute("id", glowId);
+  // Expand filter region so blur doesn't get clipped.
+  filter.setAttribute("x", "-50%");
+  filter.setAttribute("y", "-50%");
+  filter.setAttribute("width", "200%");
+  filter.setAttribute("height", "200%");
   filter.innerHTML = `
     <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
     <feMerge>
@@ -131,6 +139,7 @@ export const renderAccountsDonutChart = ({
    * Segments
    * ---------------------------------- */
 
+  const segmentsGroup = createSvgElement("g");
   const arcById = new Map();
   const valueById = new Map();
   let activeId = null;
@@ -145,12 +154,15 @@ export const renderAccountsDonutChart = ({
 
       const isOn = a.account_id === accountId;
 
+      // Bring active segment to front within the segment group.
+      if (isOn) segmentsGroup.appendChild(arc);
+
       arc.setAttribute("opacity", isOn ? "1" : "0.22");
       arc.setAttribute(
         "stroke-width",
         isOn ? `${activeStrokeWidth}` : `${baseStrokeWidth}`
       );
-      arc.setAttribute("filter", isOn ? "url(#segmentGlow)" : "");
+      arc.setAttribute("filter", isOn ? `url(#${glowId})` : "");
       arc.style.cursor = "pointer";
     });
 
@@ -208,6 +220,8 @@ export const renderAccountsDonutChart = ({
     arc.setAttribute("stroke-width", `${baseStrokeWidth}`);
     arc.setAttribute("stroke-linecap", "butt");
     arc.setAttribute("opacity", "0.95");
+    // Improves hover stability when segments overlap.
+    arc.setAttribute("pointer-events", "stroke");
 
     arc.dataset.accountId = account.account_id;
 
@@ -216,10 +230,12 @@ export const renderAccountsDonutChart = ({
     arcById.set(account.account_id, arc);
     valueById.set(account.account_id, value);
 
-    svg.appendChild(arc);
+    segmentsGroup.appendChild(arc);
 
     currentAngle += angle;
   });
+
+  svg.appendChild(segmentsGroup);
 
   /* ----------------------------------
    * Center Circle
