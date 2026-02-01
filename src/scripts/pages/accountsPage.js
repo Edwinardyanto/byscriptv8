@@ -14,7 +14,7 @@ const PERFORMANCE_RANGES = [
 ];
 
 const getAssetBrandColor = (asset) => {
-  // New standard: assets.json uses color_id
+  // Standard: assets.json uses color_id (HEX string)
   if (asset?.color_id !== undefined && asset?.color_id !== null) {
     return colorFromId(asset.color_id);
   }
@@ -24,8 +24,8 @@ const getAssetBrandColor = (asset) => {
     return colorFromId(asset.asset.color_id);
   }
 
-  // Backward compatibility
-  return asset?.brand_color || asset?.asset?.brand_color || asset?.asset_color || "";
+  // If missing, return empty so CSS can fall back gracefully.
+  return "";
 };
 
 const getTopAssetColor = (assets = []) => {
