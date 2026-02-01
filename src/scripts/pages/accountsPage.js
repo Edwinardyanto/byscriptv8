@@ -2,9 +2,11 @@ import {
   getAccountsWithSummary,
   getAutotradersByAccount,
   getTradeHistory,
+  getAssetEquityByRange,
 } from "../dataAccess.js";
 
 import { colorFromId } from "../color.js";
+import { renderTotalPerformanceChart } from "../components/TotalPerformanceChart.js";
 
 const PAGE_SIZE = 5;
 const PERFORMANCE_RANGES = [
@@ -47,6 +49,138 @@ const formatCurrency = (value, digits = 0) =>
     minimumFractionDigits: digits,
     maximumFractionDigits: digits,
   }).format(value);
+
+// ------------------------------------------------------
+// Asset Summary (Accounts Page)
+// ------------------------------------------------------
+
+let assetRange = "7D";
+
+const computeAssetSummaryByRange = async (range) => {
+  const series = await getAssetEquityByRange(range);
+  if (!series || series.length < 2) {
+    return {
+      totalValue: formatCurrency(0),
+      percent: 0,
+      chart: { series: [], labels: [], activeRange: range },
+    };
+  }
+
+  const first = Number(series[0]?.equity_usd || 0);
+  const last = Number(series[series.length - 1]?.equity_usd || 0);
+  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
+
+  return {
+    totalValue: formatCurrency(last),
+    percent,
+    chart: {
+      series: series.map((d) => Number(d.equity_usd || 0)),
+      labels: series.map((d) => d.date),
+      activeRange: range,
+    },
+  };
+};
+
+const initAssetSummary = async () => {
+  const chartContainer = document.querySelector('[data-total-performance="accounts"]');
+  if (!chartContainer) return;
+
+  renderTotalPerformanceChart({
+    container: chartContainer,
+    status: "loading",
+    data: null,
+  });
+
+  const handleRangeChange = async (range) => {
+    assetRange = range;
+    const next = await computeAssetSummaryByRange(assetRange);
+    renderTotalPerformanceChart({
+      container: chartContainer,
+      status: next.chart.series.length ? "ready" : "empty",
+      data: next,
+      onRangeChange: handleRangeChange,
+    });
+  };
+
+  const data = await computeAssetSummaryByRange(assetRange);
+  renderTotalPerformanceChart({
+    container: chartContainer,
+    status: data.chart.series.length ? "ready" : "empty",
+    data,
+    onRangeChange: handleRangeChange,
+  });
+};
+
+/* ------------------------------------------------------
+ * ASSET SUMMARY (PAGE-LOCAL)
+ * ------------------------------------------------------ */
+
+const computeAssetSummary = (series = []) => {
+  if (!Array.isArray(series) || series.length < 2) {
+    const last = Number(series?.[series.length - 1]?.equity_usd || 0);
+    return { totalValue: last, percent: 0 };
+  }
+
+  const first = Number(series[0]?.equity_usd || 0);
+  const last = Number(series[series.length - 1]?.equity_usd || 0);
+  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
+  return { totalValue: last, percent };
+};
+
+const buildAssetSummaryForRange = async (range = "7D") => {
+  const normalized = String(range || "7D").toUpperCase();
+  const raw = await getAssetEquityByRange(normalized);
+  const { totalValue, percent } = computeAssetSummary(raw);
+
+  return {
+    totalValue: formatCurrency(totalValue, 0),
+    percent,
+    chart: {
+      series: raw.map((d) => Number(d.equity_usd || 0)),
+      labels: raw.map((d) => d.date),
+      activeRange: normalized,
+    },
+  };
+};
+
+const initAssetSummary = async () => {
+  const chartContainer = document.querySelector(
+    '[data-total-performance="accounts"]'
+  );
+  if (!chartContainer) return;
+
+  let activeRange = "7D";
+
+  const renderRange = async (nextRange) => {
+    activeRange = String(nextRange || activeRange).toUpperCase();
+    renderTotalPerformanceChart({
+      container: chartContainer,
+      status: "loading",
+      data: { totalValue: "--", percent: 0, chart: { series: [], labels: [], activeRange } },
+      onRangeChange: renderRange,
+    });
+
+    try {
+      const data = await buildAssetSummaryForRange(activeRange);
+      renderTotalPerformanceChart({
+        container: chartContainer,
+        status: "ready",
+        data,
+        onRangeChange: renderRange,
+      });
+    } catch (e) {
+      renderTotalPerformanceChart({
+        container: chartContainer,
+        status: "error",
+        data: null,
+        onRangeChange: renderRange,
+      });
+    }
+  };
+
+  // Initial
+  renderRange(activeRange);
+};
 
 const formatPercent = (value) => {
   const sign = value > 0 ? "+" : value < 0 ? "-" : "";
@@ -564,6 +698,9 @@ const initAccountsPage = async () => {
   if (!document.body.classList.contains("page-accounts")) {
     return;
   }
+
+  // Asset summary chart for accounts page
+  initAssetSummary();
 
   const tableBody = document.querySelector("[data-accounts-rows]");
   const pagination = document.querySelector("[data-accounts-pagination]");
