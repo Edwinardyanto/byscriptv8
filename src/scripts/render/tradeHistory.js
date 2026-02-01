@@ -6,6 +6,8 @@ import {
   getAccountMetaMap,
 } from "../dataAccess.js";
 
+import { openSharePopup } from "../components/sharePopup.js";
+
 /* =========================
    HELPERS
 ========================= */
@@ -164,7 +166,20 @@ export const renderTradeHistory = async (sectionState) => {
     row.querySelector(".trade-history-share").onclick = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      alert("Share popup next step bro ✅");
+
+      const pairLabel = `${symbol}/USDT`;
+
+      openSharePopup({
+        symbol,
+        pairLabel,
+        action,
+        pnlUsd: Number(t.pnl_usd || 0),
+        pnlPct: Number(t.pnl_percent || 0),
+        timeLabel: timeAgo,
+        accountName: accountMeta.name,
+        exchangeLabel: accountMeta.exchange,
+        shareUrl: window.location.href,
+      });
     };
 
     list.appendChild(row);
