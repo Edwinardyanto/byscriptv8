@@ -5,7 +5,7 @@
     "asset_name": "Bitcoin",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#4b9169"
+    "color_id": "#F7931A"
   },
   {
     "asset_id": "0000002",
@@ -13,7 +13,7 @@
     "asset_name": "Ethereum",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#f8d2e1"
+    "color_id": "#627EEA"
   },
   {
     "asset_id": "0000003",
@@ -21,7 +21,7 @@
     "asset_name": "Tether",
     "type": "crypto",
     "decimals": 6,
-    "asset_color": "#6741d2"
+    "color_id": "#26A17B"
   },
   {
     "asset_id": "0000004",
@@ -29,7 +29,7 @@
     "asset_name": "USD Coin",
     "type": "crypto",
     "decimals": 6,
-    "asset_color": "#e874c1"
+    "color_id": "#2775CA"
   },
   {
     "asset_id": "0000005",
@@ -37,7 +37,7 @@
     "asset_name": "BNB",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#872439"
+    "color_id": "#F3BA2F"
   },
   {
     "asset_id": "0000006",
@@ -45,7 +45,7 @@
     "asset_name": "Solana",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#46ba9e"
+    "color_id": "#14F195"
   },
   {
     "asset_id": "0000007",
@@ -53,7 +53,7 @@
     "asset_name": "XRP",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#b963e1"
+    "color_id": "#2985E0"
   },
   {
     "asset_id": "0000008",
@@ -61,7 +61,7 @@
     "asset_name": "Cardano",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#347cbc"
+    "color_id": "#0A52FF"
   },
   {
     "asset_id": "0000009",
@@ -69,7 +69,7 @@
     "asset_name": "Dogecoin",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#6bb4bf"
+    "color_id": "#C2A633"
   },
   {
     "asset_id": "0000010",
@@ -77,7 +77,7 @@
     "asset_name": "Avalanche",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#5fea55"
+    "color_id": "#E84142"
   },
   {
     "asset_id": "0000011",
@@ -85,7 +85,7 @@
     "asset_name": "TRON",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#364e6b"
+    "color_id": "#EF0027"
   },
   {
     "asset_id": "0000012",
@@ -93,7 +93,7 @@
     "asset_name": "Polkadot",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#406795"
+    "color_id": "#E6007A"
   },
   {
     "asset_id": "0000013",
@@ -101,7 +101,7 @@
     "asset_name": "Polygon",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#52f337"
+    "color_id": "#8247E5"
   },
   {
     "asset_id": "0000014",
@@ -109,7 +109,7 @@
     "asset_name": "Chainlink",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#58c0a0"
+    "color_id": "#2A5ADA"
   },
   {
     "asset_id": "0000015",
@@ -117,7 +117,7 @@
     "asset_name": "Toncoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#99f2da"
+    "color_id": "#99F2DA"
   },
   {
     "asset_id": "0000016",
@@ -125,7 +125,7 @@
     "asset_name": "Shiba Inu",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#812621"
+    "color_id": "#E03229"
   },
   {
     "asset_id": "0000017",
@@ -133,7 +133,7 @@
     "asset_name": "Bitcoin Cash",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#43f2b0"
+    "color_id": "#8DC351"
   },
   {
     "asset_id": "0000018",
@@ -141,7 +141,7 @@
     "asset_name": "Litecoin",
     "type": "crypto",
     "decimals": 8,
-    "asset_color": "#521f46"
+    "color_id": "#2970E0"
   },
   {
     "asset_id": "0000019",
@@ -149,7 +149,7 @@
     "asset_name": "Cosmos",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7baa93"
+    "color_id": "#652AE0"
   },
   {
     "asset_id": "0000020",
@@ -157,7 +157,7 @@
     "asset_name": "Uniswap",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#94030d"
+    "color_id": "#FF007A"
   },
   {
     "asset_id": "0000021",
@@ -165,7 +165,7 @@
     "asset_name": "Ethereum Classic",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#602bcb"
+    "color_id": "#6629E0"
   },
   {
     "asset_id": "0000022",
@@ -173,7 +173,7 @@
     "asset_name": "Stellar",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d23206"
+    "color_id": "#D23206"
   },
   {
     "asset_id": "0000023",
@@ -181,7 +181,7 @@
     "asset_name": "Internet Computer",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#ec7804"
+    "color_id": "#EC7804"
   },
   {
     "asset_id": "0000024",
@@ -189,7 +189,7 @@
     "asset_name": "Filecoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#f9f1e7"
+    "color_id": "#F9F1E7"
   },
   {
     "asset_id": "0000025",
@@ -197,7 +197,7 @@
     "asset_name": "Aptos",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#bf103b"
+    "color_id": "#00E5FF"
   },
   {
     "asset_id": "0000026",
@@ -205,7 +205,7 @@
     "asset_name": "Arbitrum",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d63083"
+    "color_id": "#2966E0"
   },
   {
     "asset_id": "0000027",
@@ -213,7 +213,7 @@
     "asset_name": "Optimism",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7457cd"
+    "color_id": "#FF0420"
   },
   {
     "asset_id": "0000028",
@@ -221,7 +221,7 @@
     "asset_name": "Injective",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7b98f7"
+    "color_id": "#7B98F7"
   },
   {
     "asset_id": "0000029",
@@ -229,7 +229,7 @@
     "asset_name": "Celestia",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#e2948f"
+    "color_id": "#E2948F"
   },
   {
     "asset_id": "0000030",
@@ -237,7 +237,7 @@
     "asset_name": "Sui",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#f7c0d3"
+    "color_id": "#6AC1FF"
   },
   {
     "asset_id": "0000031",
@@ -245,7 +245,7 @@
     "asset_name": "NEAR Protocol",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#64edd4"
+    "color_id": "#00E599"
   },
   {
     "asset_id": "0000032",
@@ -253,7 +253,7 @@
     "asset_name": "Algorand",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#5bc091"
+    "color_id": "#5BC091"
   },
   {
     "asset_id": "0000033",
@@ -261,7 +261,7 @@
     "asset_name": "VeChain",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#72cb07"
+    "color_id": "#72CB07"
   },
   {
     "asset_id": "0000034",
@@ -269,7 +269,7 @@
     "asset_name": "Hedera",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3bbdb0"
+    "color_id": "#3BBDB0"
   },
   {
     "asset_id": "0000035",
@@ -277,7 +277,7 @@
     "asset_name": "MultiversX",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#e303de"
+    "color_id": "#E303DE"
   },
   {
     "asset_id": "0000036",
@@ -285,7 +285,7 @@
     "asset_name": "Fantom",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#dde932"
+    "color_id": "#DDE932"
   },
   {
     "asset_id": "0000037",
@@ -293,7 +293,7 @@
     "asset_name": "THORChain",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3681a9"
+    "color_id": "#3681A9"
   },
   {
     "asset_id": "0000038",
@@ -301,7 +301,7 @@
     "asset_name": "Aave",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#1b6c9c"
+    "color_id": "#1B6C9C"
   },
   {
     "asset_id": "0000039",
@@ -309,7 +309,7 @@
     "asset_name": "Maker",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#c1353b"
+    "color_id": "#C1353B"
   },
   {
     "asset_id": "0000040",
@@ -317,7 +317,7 @@
     "asset_name": "Synthetix",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#dec510"
+    "color_id": "#DEC510"
   },
   {
     "asset_id": "0000041",
@@ -325,7 +325,7 @@
     "asset_name": "Lido DAO",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2b333a"
+    "color_id": "#298BE0"
   },
   {
     "asset_id": "0000042",
@@ -333,7 +333,7 @@
     "asset_name": "Curve DAO",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#1be86a"
+    "color_id": "#1BE86A"
   },
   {
     "asset_id": "0000043",
@@ -341,7 +341,7 @@
     "asset_name": "The Graph",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#a968a3"
+    "color_id": "#A968A3"
   },
   {
     "asset_id": "0000044",
@@ -349,7 +349,7 @@
     "asset_name": "Kaspa",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3bf9c3"
+    "color_id": "#3BF9C3"
   },
   {
     "asset_id": "0000045",
@@ -357,7 +357,7 @@
     "asset_name": "Immutable",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#355f07"
+    "color_id": "#89EE1B"
   },
   {
     "asset_id": "0000046",
@@ -365,7 +365,7 @@
     "asset_name": "Render",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#b434d0"
+    "color_id": "#B434D0"
   },
   {
     "asset_id": "0000047",
@@ -373,7 +373,7 @@
     "asset_name": "Stacks",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#db8faa"
+    "color_id": "#DB8FAA"
   },
   {
     "asset_id": "0000048",
@@ -381,7 +381,7 @@
     "asset_name": "Kava",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3593cc"
+    "color_id": "#3593CC"
   },
   {
     "asset_id": "0000049",
@@ -389,7 +389,7 @@
     "asset_name": "Flow",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#38b13c"
+    "color_id": "#38B13C"
   },
   {
     "asset_id": "0000050",
@@ -397,7 +397,7 @@
     "asset_name": "The Sandbox",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#dd8b86"
+    "color_id": "#DD8B86"
   },
   {
     "asset_id": "0000051",
@@ -405,7 +405,7 @@
     "asset_name": "Decentraland",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d07a90"
+    "color_id": "#D07A90"
   },
   {
     "asset_id": "0000052",
@@ -413,7 +413,7 @@
     "asset_name": "Axie Infinity",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#71b363"
+    "color_id": "#71B363"
   },
   {
     "asset_id": "0000053",
@@ -421,7 +421,7 @@
     "asset_name": "Gala",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#867e89"
+    "color_id": "#867E89"
   },
   {
     "asset_id": "0000054",
@@ -429,7 +429,7 @@
     "asset_name": "Chiliz",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#8dd733"
+    "color_id": "#8DD733"
   },
   {
     "asset_id": "0000055",
@@ -437,7 +437,7 @@
     "asset_name": "Enjin Coin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#9a8b38"
+    "color_id": "#9A8B38"
   },
   {
     "asset_id": "0000056",
@@ -445,7 +445,7 @@
     "asset_name": "Waves",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3a5394"
+    "color_id": "#295CE0"
   },
   {
     "asset_id": "0000057",
@@ -453,7 +453,7 @@
     "asset_name": "Zcash",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#15733c"
+    "color_id": "#15733C"
   },
   {
     "asset_id": "0000058",
@@ -461,7 +461,7 @@
     "asset_name": "Dash",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#abb5fe"
+    "color_id": "#ABB5FE"
   },
   {
     "asset_id": "0000059",
@@ -469,7 +469,7 @@
     "asset_name": "Monero",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#4a234c"
+    "color_id": "#D729E0"
   },
   {
     "asset_id": "0000060",
@@ -477,7 +477,7 @@
     "asset_name": "Kusama",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#08957f"
+    "color_id": "#08957F"
   },
   {
     "asset_id": "0000061",
@@ -485,7 +485,7 @@
     "asset_name": "Zilliqa",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2afdf8"
+    "color_id": "#2AFDF8"
   },
   {
     "asset_id": "0000062",
@@ -493,7 +493,7 @@
     "asset_name": "Basic Attention Token",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7ac04c"
+    "color_id": "#7AC04C"
   },
   {
     "asset_id": "0000063",
@@ -501,7 +501,7 @@
     "asset_name": "Qtum",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7ad935"
+    "color_id": "#7AD935"
   },
   {
     "asset_id": "0000064",
@@ -509,7 +509,7 @@
     "asset_name": "OMG Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#5af83e"
+    "color_id": "#5AF83E"
   },
   {
     "asset_id": "0000065",
@@ -517,7 +517,7 @@
     "asset_name": "1inch",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#8df478"
+    "color_id": "#8DF478"
   },
   {
     "asset_id": "0000066",
@@ -525,7 +525,7 @@
     "asset_name": "Compound",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#85a1cd"
+    "color_id": "#85A1CD"
   },
   {
     "asset_id": "0000067",
@@ -533,7 +533,7 @@
     "asset_name": "yearn.finance",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2e0510"
+    "color_id": "#E72257"
   },
   {
     "asset_id": "0000068",
@@ -541,7 +541,7 @@
     "asset_name": "SushiSwap",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#cc4a30"
+    "color_id": "#CC4A30"
   },
   {
     "asset_id": "0000069",
@@ -549,7 +549,7 @@
     "asset_name": "PancakeSwap",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#f791e2"
+    "color_id": "#F791E2"
   },
   {
     "asset_id": "0000070",
@@ -557,7 +557,7 @@
     "asset_name": "dYdX",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#ab0e9b"
+    "color_id": "#EC1DD7"
   },
   {
     "asset_id": "0000071",
@@ -565,7 +565,7 @@
     "asset_name": "GMX",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#992809"
+    "color_id": "#F14718"
   },
   {
     "asset_id": "0000072",
@@ -573,7 +573,7 @@
     "asset_name": "Pepe",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#41e74c"
+    "color_id": "#41E74C"
   },
   {
     "asset_id": "0000073",
@@ -581,7 +581,7 @@
     "asset_name": "FLOKI",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#9a6d93"
+    "color_id": "#9A6D93"
   },
   {
     "asset_id": "0000074",
@@ -589,7 +589,7 @@
     "asset_name": "Bonk",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#965fe5"
+    "color_id": "#965FE5"
   },
   {
     "asset_id": "0000075",
@@ -597,7 +597,7 @@
     "asset_name": "dogwifhat",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2c7658"
+    "color_id": "#2C7658"
   },
   {
     "asset_id": "0000076",
@@ -605,7 +605,7 @@
     "asset_name": "BOOK OF MEME",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#359242"
+    "color_id": "#359242"
   },
   {
     "asset_id": "0000077",
@@ -613,7 +613,7 @@
     "asset_name": "Jupiter",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#a6d812"
+    "color_id": "#A6D812"
   },
   {
     "asset_id": "0000078",
@@ -621,7 +621,7 @@
     "asset_name": "Pyth Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2670e9"
+    "color_id": "#2670E9"
   },
   {
     "asset_id": "0000079",
@@ -629,7 +629,7 @@
     "asset_name": "Jito",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#681732"
+    "color_id": "#E02966"
   },
   {
     "asset_id": "0000080",
@@ -637,7 +637,7 @@
     "asset_name": "Starknet",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#479b98"
+    "color_id": "#479B98"
   },
   {
     "asset_id": "0000081",
@@ -645,7 +645,7 @@
     "asset_name": "Blur",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#ed5a97"
+    "color_id": "#ED5A97"
   },
   {
     "asset_id": "0000082",
@@ -653,7 +653,7 @@
     "asset_name": "Sei",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#96cda1"
+    "color_id": "#96CDA1"
   },
   {
     "asset_id": "0000083",
@@ -661,7 +661,7 @@
     "asset_name": "Worldcoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#c90289"
+    "color_id": "#C90289"
   },
   {
     "asset_id": "0000084",
@@ -669,7 +669,7 @@
     "asset_name": "ApeCoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#85fb93"
+    "color_id": "#85FB93"
   },
   {
     "asset_id": "0000085",
@@ -677,7 +677,7 @@
     "asset_name": "Terra Classic",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#8b842a"
+    "color_id": "#8B842A"
   },
   {
     "asset_id": "0000086",
@@ -685,7 +685,7 @@
     "asset_name": "Terra",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7e015e"
+    "color_id": "#FD0CBF"
   },
   {
     "asset_id": "0000087",
@@ -693,7 +693,7 @@
     "asset_name": "Oasis Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2dfd32"
+    "color_id": "#2DFD32"
   },
   {
     "asset_id": "0000088",
@@ -701,7 +701,7 @@
     "asset_name": "Mina",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#40b81d"
+    "color_id": "#40B81D"
   },
   {
     "asset_id": "0000089",
@@ -709,7 +709,7 @@
     "asset_name": "Kadena",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#862c79"
+    "color_id": "#E029C6"
   },
   {
     "asset_id": "0000090",
@@ -717,7 +717,7 @@
     "asset_name": "Celo",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#23de92"
+    "color_id": "#23DE92"
   },
   {
     "asset_id": "0000091",
@@ -725,7 +725,7 @@
     "asset_name": "IOTA",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#cf48de"
+    "color_id": "#CF48DE"
   },
   {
     "asset_id": "0000092",
@@ -733,7 +733,7 @@
     "asset_name": "Theta Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#9b450e"
+    "color_id": "#EB6E1E"
   },
   {
     "asset_id": "0000093",
@@ -741,7 +741,7 @@
     "asset_name": "Theta Fuel",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#901f7d"
+    "color_id": "#E029C2"
   },
   {
     "asset_id": "0000094",
@@ -749,7 +749,7 @@
     "asset_name": "Helium",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#92b91c"
+    "color_id": "#92B91C"
   },
   {
     "asset_id": "0000095",
@@ -757,7 +757,7 @@
     "asset_name": "NEO",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d9cfac"
+    "color_id": "#D9CFAC"
   },
   {
     "asset_id": "0000096",
@@ -765,7 +765,7 @@
     "asset_name": "Gas",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#505273"
+    "color_id": "#2933E0"
   },
   {
     "asset_id": "0000097",
@@ -773,7 +773,7 @@
     "asset_name": "Ontology",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#81a634"
+    "color_id": "#81A634"
   },
   {
     "asset_id": "0000098",
@@ -781,7 +781,7 @@
     "asset_name": "ICON",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#f1f43d"
+    "color_id": "#F1F43D"
   },
   {
     "asset_id": "0000099",
@@ -789,7 +789,7 @@
     "asset_name": "WAX",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#793212"
+    "color_id": "#E06229"
   },
   {
     "asset_id": "0000100",
@@ -797,7 +797,7 @@
     "asset_name": "iExec RLC",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#9b22ff"
+    "color_id": "#9B22FF"
   },
   {
     "asset_id": "0000101",
@@ -805,7 +805,7 @@
     "asset_name": "Ankr",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#9ddd48"
+    "color_id": "#9DDD48"
   },
   {
     "asset_id": "0000102",
@@ -813,7 +813,7 @@
     "asset_name": "Celer Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#82c83f"
+    "color_id": "#82C83F"
   },
   {
     "asset_id": "0000103",
@@ -821,7 +821,7 @@
     "asset_name": "SKALE",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#1310e4"
+    "color_id": "#1D1AEF"
   },
   {
     "asset_id": "0000104",
@@ -829,7 +829,7 @@
     "asset_name": "Harmony",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#bc21e6"
+    "color_id": "#BC21E6"
   },
   {
     "asset_id": "0000105",
@@ -837,7 +837,7 @@
     "asset_name": "Moonbeam",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#898d4f"
+    "color_id": "#898D4F"
   },
   {
     "asset_id": "0000106",
@@ -845,7 +845,7 @@
     "asset_name": "Astar",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#2f733b"
+    "color_id": "#2F733B"
   },
   {
     "asset_id": "0000107",
@@ -853,7 +853,7 @@
     "asset_name": "0x",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#ba8fb8"
+    "color_id": "#BA8FB8"
   },
   {
     "asset_id": "0000108",
@@ -861,7 +861,7 @@
     "asset_name": "Kyber Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#20748f"
+    "color_id": "#20748F"
   },
   {
     "asset_id": "0000109",
@@ -869,7 +869,7 @@
     "asset_name": "Balancer",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#6049a0"
+    "color_id": "#5929E0"
   },
   {
     "asset_id": "0000110",
@@ -877,7 +877,7 @@
     "asset_name": "Bancor",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#dc1be6"
+    "color_id": "#DC1BE6"
   },
   {
     "asset_id": "0000111",
@@ -885,7 +885,7 @@
     "asset_name": "UMA",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#12b3a5"
+    "color_id": "#12B3A5"
   },
   {
     "asset_id": "0000112",
@@ -893,7 +893,7 @@
     "asset_name": "Band Protocol",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#a8a5bb"
+    "color_id": "#A8A5BB"
   },
   {
     "asset_id": "0000113",
@@ -901,7 +901,7 @@
     "asset_name": "API3",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#4d8123"
+    "color_id": "#4D8123"
   },
   {
     "asset_id": "0000114",
@@ -909,7 +909,7 @@
     "asset_name": "Ocean Protocol",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d9a814"
+    "color_id": "#D9A814"
   },
   {
     "asset_id": "0000115",
@@ -917,7 +917,7 @@
     "asset_name": "SingularityNET",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#eeb934"
+    "color_id": "#EEB934"
   },
   {
     "asset_id": "0000116",
@@ -925,7 +925,7 @@
     "asset_name": "Fetch.ai",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#bf1e2d"
+    "color_id": "#BF1E2D"
   },
   {
     "asset_id": "0000117",
@@ -933,7 +933,7 @@
     "asset_name": "Akash Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7ed9a5"
+    "color_id": "#7ED9A5"
   },
   {
     "asset_id": "0000118",
@@ -941,7 +941,7 @@
     "asset_name": "Cartesi",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#3bf613"
+    "color_id": "#3BF613"
   },
   {
     "asset_id": "0000119",
@@ -949,7 +949,7 @@
     "asset_name": "Audius",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#e423b8"
+    "color_id": "#E423B8"
   },
   {
     "asset_id": "0000120",
@@ -957,7 +957,7 @@
     "asset_name": "Klaytn",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#27d96c"
+    "color_id": "#27D96C"
   },
   {
     "asset_id": "0000121",
@@ -965,7 +965,7 @@
     "asset_name": "Livepeer",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#112db2"
+    "color_id": "#2043EA"
   },
   {
     "asset_id": "0000122",
@@ -973,7 +973,7 @@
     "asset_name": "COTI",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#16b310"
+    "color_id": "#16B310"
   },
   {
     "asset_id": "0000123",
@@ -981,7 +981,7 @@
     "asset_name": "SafePal",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7079bc"
+    "color_id": "#7079BC"
   },
   {
     "asset_id": "0000124",
@@ -989,7 +989,7 @@
     "asset_name": "Trust Wallet Token",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#01fcc5"
+    "color_id": "#01FCC5"
   },
   {
     "asset_id": "0000125",
@@ -997,7 +997,7 @@
     "asset_name": "Holo",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#c429fd"
+    "color_id": "#C429FD"
   },
   {
     "asset_id": "0000126",
@@ -1005,7 +1005,7 @@
     "asset_name": "Nervos Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#89c719"
+    "color_id": "#89C719"
   },
   {
     "asset_id": "0000127",
@@ -1013,7 +1013,7 @@
     "asset_name": "Arweave",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#5b61a1"
+    "color_id": "#5B61A1"
   },
   {
     "asset_id": "0000128",
@@ -1021,7 +1021,7 @@
     "asset_name": "Gnosis",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#0a5a7c"
+    "color_id": "#1CAFED"
   },
   {
     "asset_id": "0000129",
@@ -1029,7 +1029,7 @@
     "asset_name": "Illuvium",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#e176a3"
+    "color_id": "#E176A3"
   },
   {
     "asset_id": "0000130",
@@ -1037,7 +1037,7 @@
     "asset_name": "Pendle",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#0ef0b5"
+    "color_id": "#0EF0B5"
   },
   {
     "asset_id": "0000131",
@@ -1045,7 +1045,7 @@
     "asset_name": "EigenLayer",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#c9d956"
+    "color_id": "#C9D956"
   },
   {
     "asset_id": "0000132",
@@ -1053,7 +1053,7 @@
     "asset_name": "Vulcan Forged",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7136ed"
+    "color_id": "#7136ED"
   },
   {
     "asset_id": "0000133",
@@ -1061,7 +1061,7 @@
     "asset_name": "Manta Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#13387a"
+    "color_id": "#296BE0"
   },
   {
     "asset_id": "0000134",
@@ -1069,7 +1069,7 @@
     "asset_name": "ZetaChain",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#50c268"
+    "color_id": "#50C268"
   },
   {
     "asset_id": "0000135",
@@ -1077,7 +1077,7 @@
     "asset_name": "Altlayer",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#dfbfc9"
+    "color_id": "#DFBFC9"
   },
   {
     "asset_id": "0000136",
@@ -1085,7 +1085,7 @@
     "asset_name": "Pixels",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#06e536"
+    "color_id": "#06E536"
   },
   {
     "asset_id": "0000137",
@@ -1093,7 +1093,7 @@
     "asset_name": "Notcoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#10df3d"
+    "color_id": "#10DF3D"
   },
   {
     "asset_id": "0000138",
@@ -1101,7 +1101,7 @@
     "asset_name": "ORDI",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#bf801b"
+    "color_id": "#BF801B"
   },
   {
     "asset_id": "0000139",
@@ -1109,7 +1109,7 @@
     "asset_name": "SATS",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#02b81d"
+    "color_id": "#02B81D"
   },
   {
     "asset_id": "0000140",
@@ -1117,7 +1117,7 @@
     "asset_name": "BRC20 Index",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#d80fd9"
+    "color_id": "#D80FD9"
   },
   {
     "asset_id": "0000141",
@@ -1125,7 +1125,7 @@
     "asset_name": "Bittensor",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#961cce"
+    "color_id": "#A727E2"
   },
   {
     "asset_id": "0000142",
@@ -1133,7 +1133,7 @@
     "asset_name": "JasmyCoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#a3526a"
+    "color_id": "#A3526A"
   },
   {
     "asset_id": "0000143",
@@ -1141,7 +1141,7 @@
     "asset_name": "WOO Network",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#7fa3cc"
+    "color_id": "#7FA3CC"
   },
   {
     "asset_id": "0000144",
@@ -1149,7 +1149,7 @@
     "asset_name": "Komodo",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#0cccf5"
+    "color_id": "#0CCCF5"
   },
   {
     "asset_id": "0000145",
@@ -1157,7 +1157,7 @@
     "asset_name": "NKN",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#4f82cc"
+    "color_id": "#4F82CC"
   },
   {
     "asset_id": "0000146",
@@ -1165,7 +1165,7 @@
     "asset_name": "Siacoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#6a65ed"
+    "color_id": "#6A65ED"
   },
   {
     "asset_id": "0000147",
@@ -1173,7 +1173,7 @@
     "asset_name": "DigiByte",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#633278"
+    "color_id": "#A929E0"
   },
   {
     "asset_id": "0000148",
@@ -1181,7 +1181,7 @@
     "asset_name": "Ravencoin",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#a54da2"
+    "color_id": "#A54DA2"
   },
   {
     "asset_id": "0000149",
@@ -1189,7 +1189,7 @@
     "asset_name": "Horizen",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#567b9e"
+    "color_id": "#567B9E"
   },
   {
     "asset_id": "0000150",
@@ -1197,7 +1197,7 @@
     "asset_name": "IOST",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#05849e"
+    "color_id": "#05849E"
   },
   {
     "asset_id": "0000151",
@@ -1205,6 +1205,6 @@
     "asset_name": "NEM",
     "type": "crypto",
     "decimals": 18,
-    "asset_color": "#f3f0b2"
+    "color_id": "#F3F0B2"
   }
 ]
