@@ -1,4 +1,5 @@
 import { cssVar } from "./cssVar.js";
+import { colorFromId } from "../color.js";
 
 /* ============================================
  * Utils
@@ -37,17 +38,22 @@ const describeArc = (x, y, radius, startAngle, endAngle) => {
 };
 
 /* ============================================
- * Color Palette (byScript Accent Set)
+ * Color
  * ============================================ */
 
-const DONUT_COLORS = [
-  "#68FE1D", // Hyper Lime
-  "#00F7D5", // Cyan Signal
-  "#AFFF5C", // Lime Pulse
-  "#3D2C8D", // Code Purple
-  "#FF5F5F", // Neon Coral
-  "#2A2F3A", // Dark Steel
-];
+const getAccountColor = (account, fallbackIndex = 0) => {
+  // Primary: color_id (new standard)
+  if (account && account.color_id !== undefined && account.color_id !== null) {
+    return colorFromId(account.color_id);
+  }
+
+  // Backward compatibility
+  if (account?.brand_color) return account.brand_color;
+  if (account?.brandColor) return account.brandColor;
+
+  // Last resort: deterministic by index
+  return colorFromId(fallbackIndex);
+};
 
 /* ============================================
  * Donut Renderer (Colored Segments)
@@ -115,10 +121,7 @@ export const renderAccountsDonutChart = ({ container, accounts }) => {
 
     const arc = createSvgElement("path");
 
-    const color =
-      account.brand_color ||
-      account.brandColor ||
-      DONUT_COLORS[index % DONUT_COLORS.length];
+    const color = getAccountColor(account, index);
 
     arc.setAttribute(
       "d",
