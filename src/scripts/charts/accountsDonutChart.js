@@ -166,7 +166,7 @@ export const renderAccountsDonutChart = ({
   activeHalo.setAttribute("fill", "transparent");
   activeHalo.setAttribute("opacity", "0");
   activeHalo.setAttribute("pointer-events", "none");
-  activeHalo.setAttribute("stroke-linecap", "round");
+  activeHalo.setAttribute("stroke-linecap", "butt");
   activeHalo.setAttribute("stroke-width", String(haloWidth));
   activeHalo.style.filter = "drop-shadow(0 0 10px rgba(104,254,29,0.35))";
 
@@ -244,7 +244,7 @@ export const renderAccountsDonutChart = ({
     circle.setAttribute("fill", "transparent");
     circle.setAttribute("stroke", color);
     circle.setAttribute("stroke-width", String(strokeWidth));
-    circle.setAttribute("stroke-linecap", "round");
+    circle.setAttribute("stroke-linecap", "butt");
     circle.setAttribute("stroke-dasharray", `${segLen} ${circumference}`);
     circle.setAttribute("stroke-dashoffset", String(-offset));
     circle.setAttribute("class", "donut-segment");
