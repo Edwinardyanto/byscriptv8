@@ -914,16 +914,54 @@ main {
   transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.summary-item:first-child {
-  background: linear-gradient(120deg, var(--color-state-selected), var(--color-component-summary-bg));
-  border-color: var(--color-action-primary-border);
-  color: var(--color-text);
-}
 
 .summary-item:hover {
   background: linear-gradient(120deg, var(--color-overlay-sm), var(--color-component-summary-bg));
   border-color: var(--color-overlay-lg);
   color: var(--color-text);
+}
+
+
+/* =========================
+   ACCOUNTS SUMMARY VALUE CUES
+========================= */
+
+.summary-item {
+  position: relative;
+  border-left: 3px solid color-mix(in srgb, var(--acc-color, var(--color-action-primary)) 70%, transparent);
+}
+
+.summary-item::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--acc-color, var(--color-action-primary)) 70%, transparent);
+  transform-origin: left center;
+  transform: scaleX(calc(var(--share, 0) / 100));
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.summary-item.is-active {
+  border-color: var(--acc-color, var(--color-action-primary));
+  box-shadow: inset 0 0 0 1px var(--color-overlay-sm),
+    0 0 0 1px color-mix(in srgb, var(--acc-color, var(--color-action-primary)) 35%, transparent);
+}
+
+.summary-item-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.summary-item-pct {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  font-weight: 600;
 }
 
 .summary-item-name {
