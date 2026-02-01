@@ -2,28 +2,58 @@ import { cssVar } from "./cssVar.js";
 import { colorFromId } from "../color.js";
 
 /* ============================================
- * Accounts Summary Donut (Dashboard)
- *
- * This implementation intentionally mirrors the stable
- * hover-glow mechanism used in the Accounts Distribution
- * donut chart (circle + stroke-dasharray).
- *
- * Notes:
- * - Dashboard donut: glow + dim only (NO tooltip / NO center label)
- * - Active segment is moved to the end of the SVG so it renders on top
- * - Uses CSS classes: .accounts-donut-segment, .is-active, .is-dimmed
+ * Utils
  * ============================================ */
 
-const SVG_NS = "http://www.w3.org/2000/svg";
+const createSvgElement = (tag) =>
+  document.createElementNS("http://www.w3.org/2000/svg", tag);
 
-const svgEl = (tag) => document.createElementNS(SVG_NS, tag);
+const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+  const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+  return {
+    x: centerX + radius * Math.cos(angleInRadians),
+    y: centerY + radius * Math.sin(angleInRadians),
+  };
+};
+
+const describeArc = (x, y, radius, startAngle, endAngle) => {
+  const start = polarToCartesian(x, y, radius, endAngle);
+  const end = polarToCartesian(x, y, radius, startAngle);
+
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  return [
+    "M",
+    start.x,
+    start.y,
+    "A",
+    radius,
+    radius,
+    0,
+    largeArcFlag,
+    0,
+    end.x,
+    end.y,
+  ].join(" ");
+};
+
+/* ============================================
+ * Color
+ * ============================================ */
 
 const getAccountColor = (account, fallbackIndex = 0) => {
+  // Primary: color_id (new standard)
   if (account && account.color_id !== undefined && account.color_id !== null) {
     return colorFromId(account.color_id);
   }
+
+  // Last resort: deterministic by index
   return colorFromId(fallbackIndex);
 };
+
+/* ============================================
+ * Donut Renderer (Colored Segments)
+ * ============================================ */
 
 export const renderAccountsDonutChart = ({
   container,
@@ -32,108 +62,236 @@ export const renderAccountsDonutChart = ({
 }) => {
   if (!container || !Array.isArray(accounts) || accounts.length === 0) return;
 
-  // Match the existing dashboard donut placeholder size.
-  const size = 214;
-  const stroke = 18;
-  const radius = (size - stroke) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const START_ANGLE = -90;
+  const width = 214;
+  const height = 214;
 
+  // Keep stroke width stable (small segments look broken if we inflate stroke width).
+  const strokeWidth = 18;
+
+  // A soft halo is rendered as a separate overlay path.
+  const haloWidth = 30;
+
+  const radius = (Math.min(width, height) - strokeWidth) / 2;
+
+  // Use only positive values for donut denominator so the ring always closes to 100%.
   const total =
-    accounts.reduce((sum, a) => sum + Number(a.totalValueUsd || 0), 0) || 1;
+    accounts.reduce((sum, item) => {
+      const v = Number(item.totalValueUsd || 0);
+      return sum + (v > 0 ? v : 0);
+    }, 0) || 1;
 
-  const svg = svgEl("svg");
-  svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  svg.setAttribute("width", "100%");
-  svg.setAttribute("height", "100%");
-  svg.style.transform = `rotate(${START_ANGLE}deg)`;
-  svg.style.transformOrigin = "50% 50%";
-  // Avoid any glow clipping.
+  const formatCurrency = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
+
+  /* ----------------------------------
+   * SVG Root
+   * ---------------------------------- */
+
+  const svg = createSvgElement("svg");
+  svg.setAttribute("width", `${width}`);
+  svg.setAttribute("height", `${height}`);
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  // Prevent hover glow from being clipped.
   svg.setAttribute("overflow", "visible");
 
-  // Group for segments so we can re-append the active segment to the end.
-  const segmentsGroup = svgEl("g");
+  /* ----------------------------------
+   * Glow / Halo Filter (non-clipped)
+   * ---------------------------------- */
 
-  const segmentById = new Map();
+  // Unique id to avoid collisions if multiple charts exist.
+  const glowId = `segmentGlow-${Math.random().toString(36).slice(2, 9)}`;
+
+  const defs = createSvgElement("defs");
+  const filter = createSvgElement("filter");
+  filter.setAttribute("id", glowId);
+  filter.setAttribute("x", "-60%");
+  filter.setAttribute("y", "-60%");
+  filter.setAttribute("width", "220%");
+  filter.setAttribute("height", "220%");
+  filter.innerHTML = `
+    <feGaussianBlur stdDeviation="3.2" result="blur"></feGaussianBlur>
+    <feMerge>
+      <feMergeNode in="blur"></feMergeNode>
+      <feMergeNode in="SourceGraphic"></feMergeNode>
+    </feMerge>
+  `;
+  defs.appendChild(filter);
+  svg.appendChild(defs);
+
+  /* ----------------------------------
+   * Hover Label
+   * ---------------------------------- */
+
+  const labelGroup = createSvgElement("g");
+  labelGroup.style.visibility = "hidden";
+
+  const labelName = createSvgElement("text");
+  labelName.setAttribute("x", `${width / 2}`);
+  labelName.setAttribute("y", `${height / 2 - 6}`);
+  labelName.setAttribute("text-anchor", "middle");
+  labelName.setAttribute("class", "donut-label donut-label__name");
+
+  const labelValue = createSvgElement("text");
+  labelValue.setAttribute("x", `${width / 2}`);
+  labelValue.setAttribute("y", `${height / 2 + 16}`);
+  labelValue.setAttribute("text-anchor", "middle");
+  labelValue.setAttribute("class", "donut-label donut-label__value");
+
+  labelGroup.appendChild(labelName);
+  labelGroup.appendChild(labelValue);
+
+  /* ----------------------------------
+   * Segments
+   * ---------------------------------- */
+
+  const segmentsGroup = createSvgElement("g");
+  const arcById = new Map();
+  const valueById = new Map();
   let activeId = null;
+
+  // Circle segment math
+  const centerX = width / 2;
+  const centerY = height / 2;
+  const circumference = 2 * Math.PI * radius;
+
+
+  // Active halo overlay (separate circle segment so we do not fatten the real segment).
+  const activeHalo = createSvgElement("circle");
+  activeHalo.setAttribute("cx", String(centerX));
+  activeHalo.setAttribute("cy", String(centerY));
+  activeHalo.setAttribute("r", String(radius));
+  activeHalo.setAttribute("fill", "transparent");
+  activeHalo.setAttribute("opacity", "0");
+  activeHalo.setAttribute("pointer-events", "none");
+  activeHalo.setAttribute("stroke-linecap", "round");
+  activeHalo.setAttribute("stroke-width", String(haloWidth));
+  activeHalo.style.filter = "drop-shadow(0 0 10px rgba(104,254,29,0.35))";
 
   const setActive = (accountId) => {
     if (!accountId) return;
     activeId = accountId;
 
-    segmentById.forEach((seg, id) => {
-      const isOn = id === accountId;
-      seg.classList.toggle("is-active", isOn);
-      seg.classList.toggle("is-dimmed", !isOn);
-
-      // Bring active segment to front.
-      if (isOn) segmentsGroup.appendChild(seg);
+    segmentsGroup.childNodes.forEach((n) => {
+      if (n && n.nodeType === 1) n.style.opacity = "0.35";
     });
+
+    const active = arcById.get(accountId);
+    if (active) active.style.opacity = "1";
+
+    // Halo follows the active segment by copying dash settings.
+    const halo = arcById.get(accountId);
+    if (halo) {
+      const dasharray = halo.getAttribute("stroke-dasharray") || "";
+      const dashoffset = halo.getAttribute("stroke-dashoffset") || "0";
+      activeHalo.setAttribute("stroke", halo.getAttribute("stroke") || cssVar("--color-accent"));
+      activeHalo.setAttribute("stroke-dasharray", dasharray);
+      activeHalo.setAttribute("stroke-dashoffset", dashoffset);
+      activeHalo.setAttribute("opacity", "0.9");
+    } else {
+      activeHalo.setAttribute("opacity", "0");
+    }
+
+    const account = accounts.find((a) => a.account_id === accountId);
+    if (account) {
+      labelName.textContent = account.account_name || account.account_id;
+      labelValue.textContent = formatCurrency.format(
+        Number(account.totalValueUsd || 0)
+      );
+      labelGroup.style.visibility = "visible";
+    }
 
     if (typeof onActiveChange === "function") onActiveChange(accountId);
   };
 
   const clearActive = () => {
     activeId = null;
-    segmentById.forEach((seg) => {
-      seg.classList.remove("is-active");
-      seg.classList.remove("is-dimmed");
+    segmentsGroup.childNodes.forEach((n) => {
+      if (n && n.nodeType === 1) n.style.opacity = "1";
     });
+    activeHalo.setAttribute("opacity", "0");
+    labelGroup.style.visibility = "hidden";
     if (typeof onActiveChange === "function") onActiveChange(null);
   };
 
-  // Build segments.
+  // Build circle segments with dasharray so the ring always closes cleanly.
   let offset = 0;
-  accounts.forEach((account, index) => {
-    const value = Number(account.totalValueUsd || 0);
-    if (!Number.isFinite(value) || value <= 0) return;
+  const visibleAccounts = accounts
+    .map((a, idx) => ({ a, idx, v: Number(a.totalValueUsd || 0) }))
+    .filter((x) => x.v > 0);
 
-    const segmentLength = (value / total) * circumference;
-    if (!Number.isFinite(segmentLength) || segmentLength <= 0) return;
+  visibleAccounts.forEach((item, i) => {
+    const account = item.a;
+    const value = item.v;
+    const pct = value / total;
+    let segLen = pct * circumference;
 
-    const color = getAccountColor(account, index);
+    // Force the last visible segment to close the ring exactly to avoid floating drift.
+    if (i === visibleAccounts.length - 1) {
+      segLen = Math.max(0, circumference - offset);
+    }
 
-    const circle = svgEl("circle");
-    circle.setAttribute("cx", String(size / 2));
-    circle.setAttribute("cy", String(size / 2));
+    if (segLen <= 0) return;
+
+    const color = getAccountColor(account, item.idx);
+
+    const circle = createSvgElement("circle");
+    circle.setAttribute("cx", String(centerX));
+    circle.setAttribute("cy", String(centerY));
     circle.setAttribute("r", String(radius));
     circle.setAttribute("fill", "transparent");
     circle.setAttribute("stroke", color);
-    circle.setAttribute("stroke-width", String(stroke));
-    circle.setAttribute("stroke-dasharray", `${segmentLength} ${circumference}`);
+    circle.setAttribute("stroke-width", String(strokeWidth));
+    circle.setAttribute("stroke-linecap", "round");
+    circle.setAttribute("stroke-dasharray", `${segLen} ${circumference}`);
     circle.setAttribute("stroke-dashoffset", String(-offset));
-    // Stable appearance for tiny segments.
-    circle.setAttribute("stroke-linecap", "butt");
-    circle.setAttribute("vector-effect", "non-scaling-stroke");
-    circle.setAttribute("pointer-events", "stroke");
-
-    circle.classList.add("accounts-donut-segment");
-    circle.dataset.accountId = account.account_id;
-    // Make drop-shadow use the segment color (currentColor).
-    circle.style.color = color;
-    circle.style.cursor = "pointer";
+    circle.setAttribute("class", "donut-segment");
+    circle.style.transition = "opacity 0.18s ease, filter 0.18s ease";
+    circle.style.filter = "none";
+    circle.style.opacity = "1";
 
     circle.addEventListener("mouseenter", () => setActive(account.account_id));
+    circle.addEventListener("mouseleave", () => {
+      // Do not clear on segment leave; the svg handles global leave so label stays while inside.
+    });
 
-    segmentById.set(account.account_id, circle);
+    arcById.set(account.account_id, circle);
+    valueById.set(account.account_id, value);
+
     segmentsGroup.appendChild(circle);
-
-    offset += segmentLength;
+    offset += segLen;
   });
 
+  // Rotate so the first segment starts at the top like the distribution donut.
+  segmentsGroup.setAttribute("transform", `rotate(-90 ${centerX} ${centerY})`);
+  activeHalo.setAttribute("transform", `rotate(-90 ${centerX} ${centerY})`);
+
+  // Keep active state while the cursor stays within the chart area.
+  svg.addEventListener("mouseleave", clearActive);
+
+
   svg.appendChild(segmentsGroup);
+  svg.appendChild(activeHalo);
 
-  // Center disc (keeps the donut feel consistent with dashboard).
-  const center = svgEl("circle");
-  center.setAttribute("cx", String(size / 2));
-  center.setAttribute("cy", String(size / 2));
-  center.setAttribute("r", String(radius - stroke / 2));
+  /* ----------------------------------
+   * Center Circle
+   * ---------------------------------- */
+
+  const center = createSvgElement("circle");
+  center.setAttribute("cx", `${width / 2}`);
+  center.setAttribute("cy", `${height / 2}`);
+  center.setAttribute("r", `${radius - strokeWidth / 2}`);
   center.setAttribute("fill", cssVar("--color-bg-surface"));
-  // Prevent center from blocking segment hover.
-  center.setAttribute("pointer-events", "none");
-  svg.appendChild(center);
 
-  svg.addEventListener("mouseleave", () => clearActive());
+  svg.appendChild(center);
+  svg.appendChild(labelGroup);
+
+
+  /* ----------------------------------
+   * Mount
+   * ---------------------------------- */
 
   container.innerHTML = "";
   container.appendChild(svg);
