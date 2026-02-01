@@ -4,6 +4,8 @@ import {
   getTradeHistory,
 } from "../dataAccess.js";
 
+import { colorFromId } from "../color.js";
+
 const PAGE_SIZE = 5;
 const PERFORMANCE_RANGES = [
   { label: "7D", days: 7 },
@@ -11,8 +13,20 @@ const PERFORMANCE_RANGES = [
   { label: "90D", days: 90 },
 ];
 
-const getAssetBrandColor = (asset) =>
-  asset?.brand_color || asset?.asset?.brand_color || "";
+const getAssetBrandColor = (asset) => {
+  // New standard: assets.json uses color_id
+  if (asset?.color_id !== undefined && asset?.color_id !== null) {
+    return colorFromId(asset.color_id);
+  }
+
+  // When asset is nested under { asset: {...} }
+  if (asset?.asset?.color_id !== undefined && asset?.asset?.color_id !== null) {
+    return colorFromId(asset.asset.color_id);
+  }
+
+  // Backward compatibility
+  return asset?.brand_color || asset?.asset?.brand_color || asset?.asset_color || "";
+};
 
 const getTopAssetColor = (assets = []) => {
   if (!Array.isArray(assets) || assets.length === 0) {
