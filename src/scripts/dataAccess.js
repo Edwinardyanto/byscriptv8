@@ -66,6 +66,143 @@ export const getAssetSymbolMap = async () => {
 };
 
 /* =========================
+   TRADE HISTORY (NORMALIZED)
+========================= */
+
+const normalizeTradeResult = (trade) => {
+  if (trade?.reduce_only !== true) return "open";
+  const pnl = Number(trade?.pnl_usd || 0);
+  if (pnl < 0) return "loss";
+  if (pnl > 0) return "win";
+  return "flat";
+};
+
+const buildTradeCache = async () => {
+  if (cache.has("tradeHistory:v1")) return clone(cache.get("tradeHistory:v1"));
+
+  const [trades, assets, accounts, autotraders, plans] = await Promise.all([
+    getTrades(),
+    getAssets(),
+    getAccounts(),
+    getAutotraders(),
+    getTradingPlans(),
+  ]);
+
+  const assetMap = new Map((assets || []).map((a) => [a.asset_id, a]));
+  const accountMap = new Map((accounts || []).map((a) => [a.account_id, a]));
+  const autotraderMap = new Map((autotraders || []).map((a) => [a.autotrader_id, a]));
+  const planMap = new Map((plans || []).map((p) => [p.plan_id, p]));
+
+  const normalized = (trades || []).map((t) => {
+    const asset = assetMap.get(t.asset_id);
+    const account = accountMap.get(t.account_id);
+    const autotrader = autotraderMap.get(t.autotrader_id);
+    const plan = planMap.get(t.plan_id);
+
+    const filledAt = Number(t.filled_at || 0);
+    const createdAt = Number(t.created_at || 0);
+    const executedAtSec = filledAt || createdAt;
+
+    const priceUsd = Number(t.price_usd || 0);
+    const qty = Number(t.size || 0);
+    const valueUsd = priceUsd * qty;
+
+    return {
+      tradeId: t.trade_id,
+      trade_id: t.trade_id,
+
+      order_id: t.order_id,
+      custom_id: t.custom_id,
+
+      account_id: t.account_id,
+      accountName: account?.exchange || account?.account_name || t.account_id,
+      accountCode: t.account_id,
+      account,
+
+      marketType: plan?.market_type || account?.market_type || "",
+      tradingPlanName: plan?.name || "",
+      tradingPlan: plan,
+      plan_id: t.plan_id,
+      plan,
+
+      autotrader_id: t.autotrader_id,
+      autotrader,
+
+      asset_id: t.asset_id,
+      assetSymbol: asset?.asset_symbol || "",
+      assetName: asset?.asset_name || "",
+      asset,
+
+      order_type: t.order_type,
+      side: t.side,
+      reduce_only: t.reduce_only === true,
+
+      executedAt: executedAtSec ? new Date(executedAtSec * 1000) : null,
+      executed_at: executedAtSec,
+
+      price: priceUsd,
+      price_usd: priceUsd,
+      quantity: qty,
+      size: qty,
+      valueUsd,
+      value: valueUsd,
+      fee: 0,
+
+      pnl_usd: Number(t.pnl_usd || 0),
+      pnl_percent: Number(t.pnl_percent || 0),
+      result: normalizeTradeResult(t),
+      status: "filled",
+    };
+  });
+
+  // sort DESC by executed time
+  normalized.sort((a, b) => Number(b.executed_at || 0) - Number(a.executed_at || 0));
+
+  cache.set("tradeHistory:v1", normalized);
+  return clone(normalized);
+};
+
+export const getTradeHistory = async (filters = {}) => {
+  const trades = await buildTradeCache();
+
+  const accountId = filters.accountId || filters.account_id;
+  const marketType = filters.marketType || filters.market_type;
+  const side = filters.side;
+  const assetId = filters.assetId || filters.asset_id;
+  const planId = filters.planId || filters.plan_id;
+  const autotraderId = filters.autotraderId || filters.autotrader_id;
+  const result = filters.result;
+
+  const from = filters.from instanceof Date ? filters.from : null;
+  const to = filters.to instanceof Date ? filters.to : null;
+
+  return trades.filter((t) => {
+    if (accountId && t.account_id !== accountId) return false;
+    if (assetId && t.asset_id !== assetId) return false;
+    if (planId && (t.plan_id !== planId) && (t.plan?.plan_id !== planId)) return false;
+    if (autotraderId && t.autotrader_id !== autotraderId) return false;
+
+    if (marketType && String(t.marketType || "").toLowerCase() !== String(marketType).toLowerCase())
+      return false;
+
+    if (side && String(t.side || "").toLowerCase() !== String(side).toLowerCase()) return false;
+
+    if (result && String(t.result || "").toLowerCase() !== String(result).toLowerCase()) return false;
+
+    if (from) {
+      const ts = Number(t.executed_at || 0) * 1000;
+      if (ts && ts < from.getTime()) return false;
+    }
+    if (to) {
+      const ts = Number(t.executed_at || 0) * 1000;
+      if (ts && ts > to.getTime()) return false;
+    }
+
+    return true;
+  });
+};
+
+/* =========================
    DERIVED EQUITY (CHART SOURCE)
 ========================= */
 
@@ -127,7 +264,9 @@ export const getAutotradersByAccount = async (accountId) => {
 
 export const getAccountsSummaryByDate = async (date) => {
   const [accounts, assets] = await Promise.all([getAccounts(), getAssets()]);
+
   const accountMap = new Map(accounts.map((a) => [a.account_id, a]));
+  const assetMap = new Map(assets.map((a) => [a.asset_id, a]));
 
   const stableIds = new Set(
     assets
@@ -135,32 +274,30 @@ export const getAccountsSummaryByDate = async (date) => {
       .map((a) => a.asset_id)
   );
 
-  // load account asset snapshot
-  const dailyAssets = await fetchJson(
-    new URL(`${date}.json`, DATA_URLS.accountAssetsBase),
-    `accountAssets-${date}`
-  );
+  // load snapshots
+  const [dailyAssets, dailyPrices, dailyPositions] = await Promise.all([
+    fetchJson(
+      new URL(`${date}.json`, DATA_URLS.accountAssetsBase),
+      `accountAssets-${date}`
+    ),
+    fetchJson(
+      new URL(`${date}.json`, DATA_URLS.assetPriceBase),
+      `assetPrices-${date}`
+    ),
+    fetchJson(
+      new URL(`${date}.json`, DATA_URLS.positionsDailyBase),
+      `positions-${date}`
+    ),
+  ]);
 
-  // load asset price snapshot
-  const dailyPrices = await fetchJson(
-    new URL(`${date}.json`, DATA_URLS.assetPriceBase),
-    `assetPrices-${date}`
-  );
-
-  // load positions snapshot (for unrealized PnL)
-  const dailyPositions = await fetchJson(
-    new URL(`${date}.json`, DATA_URLS.positionsDailyBase),
-    `positions-${date}`
-  );
-
-  // build price map (force stablecoins = 1.0)
+  // price map (force stablecoins = 1.0)
   const priceMap = new Map();
   for (const p of dailyPrices.prices || []) {
     priceMap.set(p.asset_id, Number(p.price_usd || 0));
   }
   for (const sid of stableIds) priceMap.set(sid, 1.0);
 
-  // build unrealized map per account
+  // unrealized map per account (futures positions)
   const unrealizedMap = new Map();
   for (const a of dailyPositions.accounts || []) {
     let u = 0;
@@ -170,37 +307,56 @@ export const getAccountsSummaryByDate = async (date) => {
     unrealizedMap.set(a.account_id, u);
   }
 
-  // compute per account equity
   const accountValues = [];
 
   for (const acc of dailyAssets.accounts || []) {
-    let totalUsd = 0;
-
-    // spot + cash holdings
-    for (const asset of acc.assets || []) {
-      const qty = Number(asset.value || 0);
-      if (!qty) continue;
-
-      const price = priceMap.get(asset.asset_id) || 0;
-      totalUsd += qty * price;
-    }
-
-    // include unrealized for futures + web3_futures
-    totalUsd += unrealizedMap.get(acc.account_id) || 0;
-
     const meta = accountMap.get(acc.account_id);
 
+    const items = [];
+    let assetsUsd = 0;
+
+    for (const row of acc.assets || []) {
+      const qty = Number(row.value || 0);
+      if (!qty) continue;
+
+      const price = priceMap.get(row.asset_id) || 0;
+      const usd = qty * price;
+      if (!usd) continue;
+
+      const asset = assetMap.get(row.asset_id);
+      items.push({
+        ...row,
+        usd_value: usd,
+        asset,
+        assetSymbol: asset?.asset_symbol,
+        assetName: asset?.asset_name,
+        color_id: asset?.color_id,
+      });
+
+      assetsUsd += usd;
+    }
+
+    // sort assets DESC
+    items.sort((a, b) => Number(b.usd_value || 0) - Number(a.usd_value || 0));
+
+    // include unrealized for account total equity
+    const unrealized = Number(unrealizedMap.get(acc.account_id) || 0);
+    const totalUsd = assetsUsd + unrealized;
+
     accountValues.push({
+      ...(meta || {}),
       account_id: acc.account_id,
       account_name: meta?.account_name || acc.account_id,
+      provider: meta?.exchange || meta?.provider || meta?.exchange_name || meta?.exchange || "",
+      exchange: meta?.exchange || "",
+      market_type: meta?.market_type || "",
       color_id: meta?.color_id,
       totalValueUsd: totalUsd,
+      assets: items,
     });
   }
 
-  // sort DESC
-  accountValues.sort((a, b) => b.totalValueUsd - a.totalValueUsd);
-
+  accountValues.sort((a, b) => Number(b.totalValueUsd || 0) - Number(a.totalValueUsd || 0));
   return accountValues;
 };
 
@@ -226,11 +382,15 @@ export const getAccountMetaMap = async () => {
   const accounts = await getAccounts();
   const map = new Map();
 
-  for (const a of accounts) {
+  for (const a of accounts || []) {
     map.set(a.account_id, {
-      name: a.account_name,
+      account_id: a.account_id,
+      account_name: a.account_name,
       exchange: a.exchange,
+      provider: a.exchange,
+      market_type: a.market_type,
       color_id: a.color_id,
+      connected_at: a.connected_at,
     });
   }
 
