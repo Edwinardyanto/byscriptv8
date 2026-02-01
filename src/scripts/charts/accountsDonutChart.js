@@ -64,10 +64,14 @@ export const renderAccountsDonutChart = ({
 
   const width = 214;
   const height = 214;
-  const baseStrokeWidth = 18;
-  const activeStrokeWidth = 22;
 
-  const radius = (Math.min(width, height) - baseStrokeWidth) / 2;
+  // Keep stroke width stable (small segments look broken if we inflate stroke width).
+  const strokeWidth = 18;
+
+  // A soft halo is rendered as a separate overlay path.
+  const haloWidth = 30;
+
+  const radius = (Math.min(width, height) - strokeWidth) / 2;
 
   const total =
     accounts.reduce((sum, item) => sum + Number(item.totalValueUsd || 0), 0) ||
@@ -87,9 +91,11 @@ export const renderAccountsDonutChart = ({
   svg.setAttribute("width", `${width}`);
   svg.setAttribute("height", `${height}`);
   svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  // Prevent hover glow from being clipped.
+  svg.setAttribute("overflow", "visible");
 
   /* ----------------------------------
-   * Glow Filter (non-clipped)
+   * Glow / Halo Filter (non-clipped)
    * ---------------------------------- */
 
   // Unique id to avoid collisions if multiple charts exist.
@@ -98,13 +104,12 @@ export const renderAccountsDonutChart = ({
   const defs = createSvgElement("defs");
   const filter = createSvgElement("filter");
   filter.setAttribute("id", glowId);
-  // Expand filter region so blur doesn't get clipped.
-  filter.setAttribute("x", "-50%");
-  filter.setAttribute("y", "-50%");
-  filter.setAttribute("width", "200%");
-  filter.setAttribute("height", "200%");
+  filter.setAttribute("x", "-60%");
+  filter.setAttribute("y", "-60%");
+  filter.setAttribute("width", "220%");
+  filter.setAttribute("height", "220%");
   filter.innerHTML = `
-    <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+    <feGaussianBlur stdDeviation="3.2" result="blur"></feGaussianBlur>
     <feMerge>
       <feMergeNode in="blur"></feMergeNode>
       <feMergeNode in="SourceGraphic"></feMergeNode>
@@ -144,6 +149,16 @@ export const renderAccountsDonutChart = ({
   const valueById = new Map();
   let activeId = null;
 
+  // Active halo overlay (so we don't have to fatten the real segment).
+  const activeHalo = createSvgElement("path");
+  activeHalo.setAttribute("fill", "none");
+  activeHalo.setAttribute("opacity", "0");
+  activeHalo.setAttribute("pointer-events", "none");
+  activeHalo.setAttribute("stroke-linecap", "round");
+  activeHalo.setAttribute("stroke-linejoin", "round");
+  activeHalo.setAttribute("stroke-width", `${haloWidth}`);
+  activeHalo.setAttribute("filter", `url(#${glowId})`);
+
   const setActive = (accountId) => {
     if (!accountId) return;
     activeId = accountId;
@@ -157,22 +172,25 @@ export const renderAccountsDonutChart = ({
       // Bring active segment to front within the segment group.
       if (isOn) segmentsGroup.appendChild(arc);
 
-      arc.setAttribute("opacity", isOn ? "1" : "0.22");
-      arc.setAttribute(
-        "stroke-width",
-        isOn ? `${activeStrokeWidth}` : `${baseStrokeWidth}`
-      );
+      arc.setAttribute("opacity", isOn ? "1" : "0.18");
       arc.setAttribute("filter", isOn ? `url(#${glowId})` : "");
       arc.style.cursor = "pointer";
     });
 
     const a = accounts.find((x) => x.account_id === accountId);
     if (a) {
+      const v = Number(valueById.get(accountId) || 0);
       labelName.textContent = a.account_name;
-      labelValue.textContent = formatCurrency.format(
-        Number(valueById.get(accountId) || 0)
-      );
+      labelValue.textContent = formatCurrency.format(v);
       labelGroup.style.visibility = "visible";
+
+      // Halo follows the active arc path.
+      const arc = arcById.get(accountId);
+      if (arc) {
+        activeHalo.setAttribute("d", arc.getAttribute("d") || "");
+        activeHalo.setAttribute("stroke", arc.getAttribute("stroke") || "");
+        activeHalo.setAttribute("opacity", "0.33");
+      }
     }
 
     if (typeof onActiveChange === "function") onActiveChange(accountId);
@@ -181,13 +199,13 @@ export const renderAccountsDonutChart = ({
   const clearActive = () => {
     activeId = null;
     labelGroup.style.visibility = "hidden";
+    activeHalo.setAttribute("opacity", "0");
 
     accounts.forEach((a) => {
       const arc = arcById.get(a.account_id);
       if (!arc) return;
 
       arc.setAttribute("opacity", "0.95");
-      arc.setAttribute("stroke-width", `${baseStrokeWidth}`);
       arc.setAttribute("filter", "");
     });
 
@@ -200,8 +218,10 @@ export const renderAccountsDonutChart = ({
     const value = Number(account.totalValueUsd || 0);
     const angle = (value / total) * 360;
 
-    const arc = createSvgElement("path");
+    // Skip 0-values safely (avoid NaN arcs).
+    if (!Number.isFinite(angle) || angle <= 0) return;
 
+    const arc = createSvgElement("path");
     const color = getAccountColor(account, index);
 
     arc.setAttribute(
@@ -217,9 +237,14 @@ export const renderAccountsDonutChart = ({
 
     arc.setAttribute("fill", "none");
     arc.setAttribute("stroke", color);
-    arc.setAttribute("stroke-width", `${baseStrokeWidth}`);
-    arc.setAttribute("stroke-linecap", "butt");
+    arc.setAttribute("stroke-width", `${strokeWidth}`);
+
+    // Rounded caps make tiny segments look like a clean "dot", not a broken rectangle.
+    arc.setAttribute("stroke-linecap", "round");
+    arc.setAttribute("stroke-linejoin", "round");
+
     arc.setAttribute("opacity", "0.95");
+
     // Improves hover stability when segments overlap.
     arc.setAttribute("pointer-events", "stroke");
 
@@ -237,6 +262,9 @@ export const renderAccountsDonutChart = ({
 
   svg.appendChild(segmentsGroup);
 
+  // Put halo above segments (but below the center disc).
+  svg.appendChild(activeHalo);
+
   /* ----------------------------------
    * Center Circle
    * ---------------------------------- */
@@ -244,7 +272,7 @@ export const renderAccountsDonutChart = ({
   const center = createSvgElement("circle");
   center.setAttribute("cx", `${width / 2}`);
   center.setAttribute("cy", `${height / 2}`);
-  center.setAttribute("r", `${radius - baseStrokeWidth / 2}`);
+  center.setAttribute("r", `${radius - strokeWidth / 2}`);
   center.setAttribute("fill", cssVar("--color-bg-surface"));
 
   svg.appendChild(center);
