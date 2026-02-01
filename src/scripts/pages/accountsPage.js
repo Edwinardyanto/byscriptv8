@@ -50,70 +50,10 @@ const formatCurrency = (value, digits = 0) =>
     maximumFractionDigits: digits,
   }).format(value);
 
-// ------------------------------------------------------
-// Asset Summary (Accounts Page)
-// ------------------------------------------------------
-
-let assetRange = "7D";
-
-const computeAssetSummaryByRange = async (range) => {
-  const series = await getAssetEquityByRange(range);
-  if (!series || series.length < 2) {
-    return {
-      totalValue: formatCurrency(0),
-      percent: 0,
-      chart: { series: [], labels: [], activeRange: range },
-    };
-  }
-
-  const first = Number(series[0]?.equity_usd || 0);
-  const last = Number(series[series.length - 1]?.equity_usd || 0);
-  const percent = first > 0 ? ((last - first) / first) * 100 : 0;
-
-  return {
-    totalValue: formatCurrency(last),
-    percent,
-    chart: {
-      series: series.map((d) => Number(d.equity_usd || 0)),
-      labels: series.map((d) => d.date),
-      activeRange: range,
-    },
-  };
-};
-
-const initAssetSummary = async () => {
-  const chartContainer = document.querySelector('[data-total-performance="accounts"]');
-  if (!chartContainer) return;
-
-  renderTotalPerformanceChart({
-    container: chartContainer,
-    status: "loading",
-    data: null,
-  });
-
-  const handleRangeChange = async (range) => {
-    assetRange = range;
-    const next = await computeAssetSummaryByRange(assetRange);
-    renderTotalPerformanceChart({
-      container: chartContainer,
-      status: next.chart.series.length ? "ready" : "empty",
-      data: next,
-      onRangeChange: handleRangeChange,
-    });
-  };
-
-  const data = await computeAssetSummaryByRange(assetRange);
-  renderTotalPerformanceChart({
-    container: chartContainer,
-    status: data.chart.series.length ? "ready" : "empty",
-    data,
-    onRangeChange: handleRangeChange,
-  });
-};
-
 /* ------------------------------------------------------
  * ASSET SUMMARY (PAGE-LOCAL)
  * ------------------------------------------------------ */
+
 
 const computeAssetSummary = (series = []) => {
   if (!Array.isArray(series) || series.length < 2) {
