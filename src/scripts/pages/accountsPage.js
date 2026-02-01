@@ -254,7 +254,8 @@ const buildDistributionData = (type, accounts) => {
       provider: account.provider || "Provider",
       market: capitalize(account.market_type || "spot"),
       amount: Number(account.totalValueUsd || 0),
-      color: getTopAssetColor(account.assets),
+      // Account identity color must follow accounts.json color_id
+      color: colorFromId(account.color_id) || getTopAssetColor(account.assets),
       assets: account.assets,
       listIndex: null,
     }))
@@ -469,7 +470,8 @@ const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
     const pageItems = accounts.slice(start, start + PAGE_SIZE);
     pageItems.forEach((account) => {
       const row = document.createElement("tr");
-      const accountLabel = formatAccountCode(account.account_code || account.account_id);
+      // Show full account_name, truncate only via CSS (ellipsis at end)
+      const accountLabel = account.account_name || account.account_id;
       const marketLabel = capitalize(account.market_type || "spot");
       const performanceCells = PERFORMANCE_RANGES.map(({ label }) => {
         const value = account.performance?.[label] || 0;
@@ -481,7 +483,7 @@ const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
         <td>
           <div class="account-main">
             <span class="account-id">${accountLabel}</span>
-            <span class="account-type"><span>${account.provider}</span> · ${marketLabel}</span>
+            <span class="account-type"><span>${account.provider || "exchange"}</span> · ${marketLabel}</span>
           </div>
         </td>
         <td>${formatCurrency(account.totalValueUsd)}</td>
