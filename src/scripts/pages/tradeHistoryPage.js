@@ -31,23 +31,34 @@ const normalizeMarket = (marketType) => {
 };
 
 const mapTrade = (trade) => {
-  const timestamp = trade.executedAt instanceof Date ? trade.executedAt : new Date(trade.executedAt);
+  const filledMs =
+    typeof trade.filled_at === "number"
+      ? trade.filled_at * 1000
+      : trade.filledAt instanceof Date
+        ? trade.filledAt.getTime()
+        : typeof trade.filledAt === "number"
+          ? trade.filledAt
+          : Date.now();
+  const timestamp = new Date(filledMs);
   const { date, time } = formatTimestamp(timestamp);
-  const price = Number(trade.price_usd || 0);
-  const quantity = Number(trade.quantity || 0);
+  const price = Number(trade.price || 0);
+  const quantity = Number(trade.size || trade.quantity || 0);
   const value = Number(trade.valueUsd || price * quantity);
   const fee = value * 0.0005;
-  const sideLabel = trade.side === "sell" ? "Sell" : "Buy";
-  const statusLabel = trade.result === "loss" ? "Failed" : "Filled";
-  const assetSymbol = trade.assetSymbol || "BTC";
+  const sideLabel =
+    trade.action || (trade.reduce_only ? "Close" : trade.side === "sell" ? "Sell" : "Buy");
+  const statusLabel = "Filled";
+  const assetSymbol = trade.asset_symbol || trade.assetSymbol || "BTC";
+  const exchangeName = trade.exchange || trade.accountName || "Exchange";
+  const accountName = trade.account_name || trade.account || trade.accountCode || trade.account_id;
 
   return {
-    id: trade.tradeId,
+    id: trade.trade_id || trade.tradeId,
     time: { date, time, raw: timestamp },
-    exchange: trade.accountName || "Exchange",
-    exchangeIcon: trade.accountName?.charAt(0) || "E",
-    market: normalizeMarket(trade.marketType),
-    pair: `${assetSymbol}USDT`,
+    exchange: exchangeName,
+    exchangeIcon: exchangeName?.charAt(0) || "E",
+    market: normalizeMarket(trade.market_type || trade.marketType),
+    pair: `${assetSymbol}/USDT`,
     action: sideLabel,
     price,
     quantity,
@@ -55,8 +66,8 @@ const mapTrade = (trade) => {
     fee,
     pnl: Number(trade.pnl_usd || 0),
     status: statusLabel,
-    tradingPlan: trade.tradingPlanName || "Default Plan",
-    account: trade.accountCode || trade.accountName || trade.account_id,
+    tradingPlan: trade.trading_plan_name || trade.tradingPlanName || "Default Plan",
+    account: accountName,
   };
 };
 
