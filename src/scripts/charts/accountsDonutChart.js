@@ -47,10 +47,6 @@ const getAccountColor = (account, fallbackIndex = 0) => {
     return colorFromId(account.color_id);
   }
 
-  // Backward compatibility
-  if (account?.brand_color) return account.brand_color;
-  if (account?.brandColor) return account.brandColor;
-
   // Last resort: deterministic by index
   return colorFromId(fallbackIndex);
 };
