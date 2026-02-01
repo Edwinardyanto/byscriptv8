@@ -2429,11 +2429,24 @@ main {
 }
 
 .accounts-donut-segment {
-  transition: opacity 0.2s ease;
+  opacity: 0.85;
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
-.accounts-donut-segment:hover {
-  opacity: 1 !important;
+/* Hover-glow mechanism (matches Accounts Distribution donut).
+   Important: do not let :hover override dimmed segments. */
+.accounts-donut-segment.is-active {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+.accounts-donut-segment.is-dimmed {
+  opacity: 0.25;
+  filter: none;
+}
+
+.accounts-donut-segment:hover:not(.is-dimmed) {
+  opacity: 1;
 }
 
 .trade-history-share {
