@@ -212,22 +212,18 @@ if (appRoot) {
 
   initSidebar(appRoot);
 
-  // Non-dashboard pages should not run the dashboard data/state render loop.
-  if (!IS_DASHBOARD) {
-    bindSidebarToggle();
-    // Do not subscribe/load dashboard state on non-dashboard pages.
-    // Page-specific scripts (pages/*) will handle their own data/render.
-    return;
-  }
-
-  // Subscribe render ke perubahan state
-  subscribe(renderDashboard);
-
+  // Sidebar behavior is shared across pages
   bindSidebarToggle();
 
-  // Initial render (empty / loading-safe)
-  renderDashboard(getState());
+  // Dashboard bootstrapping should run only on Dashboard page
+  if (IS_DASHBOARD) {
+    // Subscribe render ke perubahan state
+    subscribe(renderDashboard);
 
-  // Load real data
-  loadDashboardData();
+    // Initial render (empty / loading-safe)
+    renderDashboard(getState());
+
+    // Load real data
+    loadDashboardData();
+  }
 }
