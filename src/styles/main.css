@@ -2744,3 +2744,34 @@ main {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ============================================
+ * Accounts page: allow the accounts table section to fill
+ * the remaining vertical space (even with few rows).
+ * ============================================ */
+
+.page-accounts .accounts-content {
+  flex: 1;
+  min-height: 0;
+}
+
+.page-accounts .accounts-table-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.page-accounts .accounts-table-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.page-accounts .accounts-table-scroll {
+  flex: 1;
+  min-height: 0;
+  /* keep scroll available if the content grows */
+  overflow: auto;
+}
