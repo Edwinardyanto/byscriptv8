@@ -19,8 +19,15 @@ const setBadge = (scope, selector, value, isPositive) => {
   const el = scope?.querySelector(selector);
   if (!el) return;
   el.textContent = value;
+
+  // Match Dashboard asset summary badge styling.
+  // Dashboard uses: .badge.positive / .badge.negative inside .asset-summary-metric
+  el.classList.toggle("positive", Boolean(isPositive));
+  el.classList.toggle("negative", !isPositive);
+
+  // Keep generic badge variants for other places.
   el.classList.toggle("badge--positive", Boolean(isPositive));
-  el.classList.toggle("badge--negative", !isPositive);
+  el.classList.toggle("badge--warning", !isPositive);
 };
 
 const normalizeRange = (raw) => {
