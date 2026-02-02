@@ -2775,3 +2775,11 @@ main {
   /* keep scroll available if the content grows */
   overflow: auto;
 }
+
+/* Accounts controls row + sticky header fix */
+.page-accounts .accounts-controls{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-top:10px}
+.page-accounts .accounts-controls .filter-bar{display:flex;gap:10px;flex:1;align-items:end}
+.page-accounts .accounts-searchbar{flex:2}
+.page-accounts .accounts-filterbar{flex:3}
+.page-accounts .accounts-table-scroll thead{position:sticky;top:0;z-index:5;background:var(--color-surface)}
+.page-accounts .accounts-table-scroll thead th{background:var(--color-overlay-xxs);}a
