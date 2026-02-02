@@ -8,7 +8,7 @@ import {
 import { colorFromId } from "../color.js";
 import { renderTotalPerformanceChart } from "../components/TotalPerformanceChart.js";
 
-const PAGE_SIZE = 5;
+const DEFAULT_PAGE_SIZE = 10;
 const PERFORMANCE_RANGES = [
   { label: "7D", days: 7 },
   { label: "30D", days: 30 },
@@ -132,6 +132,65 @@ const formatAccountCode = (code = "") =>
 
 const capitalize = (value = "") =>
   value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
+
+const normalizeText = (value) => String(value || "").trim().toLowerCase();
+
+const uniq = (arr = []) => Array.from(new Set(arr.filter(Boolean)));
+
+const setSelectOptions = (select, values, { allLabel = "All", allValue = "all" } = {}) => {
+  if (!(select instanceof HTMLSelectElement)) return;
+
+  const previous = select.value;
+  const opts = [
+    { value: allValue, label: allLabel },
+    ...values.map((v) => ({ value: v, label: v })),
+  ];
+
+  select.innerHTML = "";
+  opts.forEach((opt) => {
+    const option = document.createElement("option");
+    option.value = opt.value;
+    option.textContent = opt.label;
+    select.appendChild(option);
+  });
+
+  // restore if still valid
+  const stillValid = opts.some((opt) => opt.value === previous);
+  select.value = stillValid ? previous : allValue;
+};
+
+const computeAutotraderActivity = (autotraders = []) => {
+  const list = Array.isArray(autotraders) ? autotraders : [];
+  const activeCount = list.filter((a) => String(a?.status || "").toLowerCase() === "running").length;
+  return {
+    autotradersCount: list.length,
+    autotradersActiveCount: activeCount,
+    hasActiveAutotrader: activeCount > 0,
+  };
+};
+
+const applyAccountFilters = (accounts, state) => {
+  const query = normalizeText(state.query);
+  const provider = String(state.provider || "all");
+  const market = String(state.market || "all");
+  const autotrader = String(state.autotrader || "all");
+
+  return (Array.isArray(accounts) ? accounts : []).filter((acc) => {
+    const name = normalizeText(acc.account_name);
+    const id = normalizeText(acc.account_id);
+    const providerOk = provider === "all" || String(acc.provider || "") === provider;
+    const marketOk = market === "all" || String(acc.market_type || "") === market;
+
+    const autoOk =
+      autotrader === "all" ||
+      (autotrader === "active" && Boolean(acc.hasActiveAutotrader)) ||
+      (autotrader === "inactive" && !Boolean(acc.hasActiveAutotrader));
+
+    const queryOk = !query || name.includes(query) || id.includes(query);
+
+    return providerOk && marketOk && autoOk && queryOk;
+  });
+};
 
 const buildAccountPerformance = async (accountId, totalValue) => {
   const now = Date.now();
@@ -544,14 +603,31 @@ const renderDistribution = (filter, accounts, donutContainer, legendContainer, t
   }
 };
 
-const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
-  const totalPages = Math.ceil(accounts.length / PAGE_SIZE);
-  let currentPage = 1;
+const renderAccountsTable = ({
+  accounts,
+  tableBody,
+  pagination,
+  tooltip,
+  pageSize = DEFAULT_PAGE_SIZE,
+  currentPage = 1,
+  onPageChange,
+} = {}) => {
+  const safeAccounts = Array.isArray(accounts) ? accounts : [];
+  const safePageSize = Math.max(1, Number(pageSize || DEFAULT_PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(safeAccounts.length / safePageSize));
+  const safeCurrentPage = Math.min(Math.max(1, Number(currentPage || 1)), totalPages);
 
   const renderRows = () => {
     tableBody.innerHTML = "";
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const pageItems = accounts.slice(start, start + PAGE_SIZE);
+    if (safeAccounts.length === 0) {
+      const row = document.createElement("tr");
+      row.innerHTML = `<td colspan="8" style="padding: 18px 10px; color: var(--color-text-secondary);">No accounts found</td>`;
+      tableBody.appendChild(row);
+      return;
+    }
+
+    const start = (safeCurrentPage - 1) * safePageSize;
+    const pageItems = safeAccounts.slice(start, start + safePageSize);
     pageItems.forEach((account) => {
       const row = document.createElement("tr");
       // Show full account_name, truncate only via CSS (ellipsis at end)
@@ -588,18 +664,18 @@ const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
 
   const renderPagination = () => {
     pagination.innerHTML = "";
-    if (totalPages <= 1) {
+    if (totalPages <= 1 || safeAccounts.length === 0) {
       return;
     }
     for (let page = 1; page <= totalPages; page += 1) {
       const button = document.createElement("button");
       button.type = "button";
-      button.className = `page-button${page === currentPage ? " active" : ""}`;
+      button.className = `page-button${page === safeCurrentPage ? " active" : ""}`;
       button.textContent = String(page);
       button.addEventListener("click", () => {
-        currentPage = page;
-        renderRows();
-        renderPagination();
+        if (typeof onPageChange === "function") {
+          onPageChange(page);
+        }
       });
       pagination.appendChild(button);
     }
@@ -607,6 +683,8 @@ const renderAccountsTable = (accounts, tableBody, pagination, tooltip) => {
 
   renderRows();
   renderPagination();
+
+  return { totalPages, currentPage: safeCurrentPage };
 };
 
 const syncDistributionHeight = () => {
@@ -654,6 +732,11 @@ const initAccountsPage = async () => {
 
   const tableBody = document.querySelector("[data-accounts-rows]");
   const pagination = document.querySelector("[data-accounts-pagination]");
+  const searchInput = document.querySelector("[data-accounts-search]");
+  const marketSelect = document.querySelector("[data-accounts-market-filter]");
+  const providerSelect = document.querySelector("[data-accounts-provider-filter]");
+  const autotraderSelect = document.querySelector("[data-accounts-autotrader-filter]");
+  const rowsPerPageSelect = document.querySelector("[data-accounts-rows-per-page]");
   const filterSelect = document.querySelector("[data-accounts-filter]");
   const donutContainer = document.querySelector("[data-accounts-donut]");
   const legendContainer = document.querySelector("[data-accounts-legend]");
@@ -672,19 +755,64 @@ const initAccountsPage = async () => {
   const accountsWithMeta = await Promise.all(
     accounts.map(async (account) => {
       const autotraders = await getAutotradersByAccount(account.account_id);
+      const activity = computeAutotraderActivity(autotraders);
       const performance = await buildAccountPerformance(
         account.account_id,
         account.totalValueUsd
       );
       return {
         ...account,
-        autotradersCount: autotraders.length,
+        ...activity,
         performance,
       };
     })
   );
 
-  renderAccountsTable(accountsWithMeta, tableBody, pagination, tooltip);
+  // Controls
+  if (marketSelect) {
+    setSelectOptions(marketSelect, uniq(accountsWithMeta.map((a) => String(a.market_type || ""))));
+  }
+
+  if (providerSelect) {
+    setSelectOptions(providerSelect, uniq(accountsWithMeta.map((a) => String(a.provider || ""))));
+  }
+
+  const state = {
+    query: "",
+    market: marketSelect ? marketSelect.value : "all",
+    provider: providerSelect ? providerSelect.value : "all",
+    autotrader: autotraderSelect ? autotraderSelect.value : "all",
+    pageSize: rowsPerPageSelect ? Number(rowsPerPageSelect.value || DEFAULT_PAGE_SIZE) : DEFAULT_PAGE_SIZE,
+    page: 1,
+  };
+
+  const renderTable = () => {
+    const filtered = applyAccountFilters(accountsWithMeta, state);
+    const { totalPages, currentPage } = renderAccountsTable({
+      accounts: filtered,
+      tableBody,
+      pagination,
+      tooltip,
+      pageSize: state.pageSize,
+      currentPage: state.page,
+      onPageChange: (nextPage) => {
+        state.page = nextPage;
+        renderTable();
+      },
+    });
+
+    // If filters shrink the list, keep page valid.
+    if (state.page !== currentPage) {
+      state.page = currentPage;
+    }
+
+    if (state.page > totalPages) {
+      state.page = totalPages;
+    }
+  };
+
+  // Initial render
+  renderTable();
   renderDistribution(
     filterSelect.value || "accounts",
     accountsWithMeta,
@@ -692,6 +820,35 @@ const initAccountsPage = async () => {
     legendContainer,
     tooltip
   );
+
+  const onFiltersChanged = () => {
+    state.query = searchInput ? searchInput.value : state.query;
+    state.market = marketSelect ? marketSelect.value : state.market;
+    state.provider = providerSelect ? providerSelect.value : state.provider;
+    state.autotrader = autotraderSelect ? autotraderSelect.value : state.autotrader;
+    state.page = 1;
+    renderTable();
+  };
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => onFiltersChanged());
+  }
+  if (marketSelect) {
+    marketSelect.addEventListener("change", () => onFiltersChanged());
+  }
+  if (providerSelect) {
+    providerSelect.addEventListener("change", () => onFiltersChanged());
+  }
+  if (autotraderSelect) {
+    autotraderSelect.addEventListener("change", () => onFiltersChanged());
+  }
+  if (rowsPerPageSelect) {
+    rowsPerPageSelect.addEventListener("change", () => {
+      state.pageSize = Number(rowsPerPageSelect.value || DEFAULT_PAGE_SIZE);
+      state.page = 1;
+      renderTable();
+    });
+  }
 
   filterSelect.addEventListener("change", (event) => {
     const target = event.target;
