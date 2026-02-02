@@ -506,12 +506,10 @@
 
       /* Footer (rows per page + pagination) */
       .page-accounts .accounts-table-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         gap: 12px;
-        padding-top: 10px;
-        flex-wrap: wrap;
+        padding: 10px 16px 14px;
       }
 
       .page-accounts .accounts-rows-select {
