@@ -148,13 +148,23 @@ const buildAccountPerformance = async (accountId, totalValue) => {
 };
 
 const buildAssetsBar = (assets, tooltip) => {
-  const total = assets.reduce((sum, asset) => sum + Number(asset.usd_value || 0), 0);
+  const list = Array.isArray(assets) ? assets : [];
+
+  // Sort: biggest segment on the left, smallest on the right
+  const sorted = [...list].sort(
+    (a, b) => Number(b?.usd_value || 0) - Number(a?.usd_value || 0)
+  );
+
+  const total = sorted.reduce(
+    (sum, asset) => sum + Number(asset?.usd_value || 0),
+    0
+  );
   const container = document.createElement("div");
   container.className = "assets-bar";
   container.setAttribute("role", "img");
   container.setAttribute("aria-label", "Asset distribution");
 
-  assets.forEach((asset) => {
+  sorted.forEach((asset) => {
     const value = Number(asset.usd_value || 0);
     const percent = total ? (value / total) * 100 : 0;
     const symbol = asset.assetSymbol || asset.asset?.symbol || "ASSET";
