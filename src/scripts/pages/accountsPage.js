@@ -736,6 +736,7 @@ const initAccountsPage = async () => {
   const marketSelect = document.querySelector("[data-accounts-market-filter]");
   const providerSelect = document.querySelector("[data-accounts-provider-filter]");
   const autotraderSelect = document.querySelector("[data-accounts-autotrader-filter]");
+  const clearButton = document.querySelector("[data-accounts-clear]");
   const rowsPerPageSelect = document.querySelector("[data-accounts-rows-per-page]");
   const filterSelect = document.querySelector("[data-accounts-filter]");
   const donutContainer = document.querySelector("[data-accounts-donut]");
@@ -830,9 +831,30 @@ const initAccountsPage = async () => {
     renderTable();
   };
 
+const clearAllFilters = () => {
+  if (searchInput) searchInput.value = "";
+  if (marketSelect) marketSelect.value = "all";
+  if (providerSelect) providerSelect.value = "all";
+  if (autotraderSelect) autotraderSelect.value = "all";
+  if (rowsPerPageSelect) rowsPerPageSelect.value = String(DEFAULT_PAGE_SIZE);
+
+  state.query = "";
+  state.market = "all";
+  state.provider = "all";
+  state.autotrader = "all";
+  state.pageSize = DEFAULT_PAGE_SIZE;
+  state.page = 1;
+
+  renderTable();
+};
+
   if (searchInput) {
     searchInput.addEventListener("input", () => onFiltersChanged());
   }
+
+if (clearButton) {
+  clearButton.addEventListener("click", () => clearAllFilters());
+}
   if (marketSelect) {
     marketSelect.addEventListener("change", () => onFiltersChanged());
   }
