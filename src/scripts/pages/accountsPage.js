@@ -633,6 +633,8 @@ const renderAccountsTable = ({
       // Show full account_name, truncate only via CSS (ellipsis at end)
       const accountLabel = account.account_name || account.account_id;
       const marketLabel = capitalize(account.market_type || "spot");
+      const providerLabel = account.provider || account.exchange || "exchange";
+      const providerIcon = String(providerLabel).toLowerCase().replace(/\s+/g, "_");
       const performanceCells = PERFORMANCE_RANGES.map(({ label }) => {
         const value = account.performance?.[label] || 0;
         const className = value > 0 ? "metric-positive" : value < 0 ? "metric-negative" : "";
@@ -643,7 +645,7 @@ const renderAccountsTable = ({
         <td>
           <div class="account-main">
             <span class="account-id">${accountLabel}</span>
-            <span class="account-type"><span>${account.provider || "exchange"}</span> · ${marketLabel}</span>
+            <span class="account-type"><img class="exchange-icon" src="assets/exchanges/${providerIcon}.svg" alt="${providerLabel}" onerror="this.style.display=\'none\'" /><span>${providerLabel}</span> · ${marketLabel}</span>
           </div>
         </td>
         <td>${formatCurrency(account.totalValueUsd)}</td>
