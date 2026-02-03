@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Accounts | Trading Dashboard</title>
-
-    <link rel="stylesheet" href="../src/styles/color-tokens.css" />
-    <link rel="stylesheet" href="../src/styles/main.css" />
+    <link rel="stylesheet" href="../src/styles/color-tokens.css">
+    <link rel="stylesheet" href="../src/styles/main.css">
 
     <style>
       body.page-accounts {
@@ -118,7 +117,6 @@
         align-items: flex-start;
       }
 
-      /* Match Dashboard: value + PnL pill inline */
       .page-accounts .accounts-summary-panel .asset-summary-metric h1 {
         display: flex;
         align-items: center;
@@ -148,7 +146,6 @@
         display: inline-flex;
       }
 
-      /* Distribution */
       .page-accounts .accounts-distribution {
         display: flex;
         flex-direction: column;
@@ -267,118 +264,7 @@
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
       }
 
-      .page-accounts .accounts-distribution-item {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        padding: 4px 8px;
-        border-radius: 12px;
-        background: rgba(15, 18, 23, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        transition: border-color 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .page-accounts .accounts-distribution-item.is-active {
-        border-color: rgba(255, 255, 255, 0.12);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-      }
-
-      .page-accounts .accounts-distribution-item--compact {
-        gap: 6px;
-      }
-
-      .page-accounts .accounts-distribution-item-line {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.74rem;
-        color: var(--color-text);
-      }
-
-      .page-accounts .accounts-distribution-item-label {
-        font-weight: 600;
-        flex: 1;
-      }
-
-      .page-accounts .accounts-distribution-item-percent {
-        font-size: 0.68rem;
-        color: var(--color-text-secondary);
-      }
-
-      .page-accounts .accounts-distribution-item-value {
-        font-weight: 600;
-        font-size: 0.7rem;
-      }
-
-      .page-accounts .accounts-distribution-item-details {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        flex: 1;
-      }
-
-      .page-accounts .accounts-distribution-item-provider {
-        font-size: 0.72rem;
-        font-weight: 600;
-        color: var(--color-text);
-      }
-
-      .page-accounts .accounts-distribution-item-stats {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        font-size: 0.66rem;
-        color: var(--color-text-secondary);
-      }
-
-      .page-accounts .accounts-distribution-item-stats span:first-child {
-        color: var(--color-text);
-        font-weight: 600;
-      }
-
-      .page-accounts .accounts-distribution-item-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        font-size: 0.74rem;
-        color: var(--color-text);
-      }
-
-      .page-accounts .accounts-distribution-item-name {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 600;
-      }
-
-      .page-accounts .accounts-distribution-item-meta {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        font-size: 0.68rem;
-        color: var(--color-text-secondary);
-      }
-
-      .page-accounts .accounts-distribution-item-meta span:first-child {
-        color: var(--color-text);
-      }
-
-      .page-accounts .accounts-distribution-bar {
-        height: 6px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.08);
-        overflow: hidden;
-      }
-
-      .page-accounts .accounts-distribution-bar span {
-        display: block;
-        height: 100%;
-        width: var(--fill-width, 0%);
-        background: var(--fill-color);
-      }
-
-      /* Filters (1 row, like trade-history-filters) */
+      /* Accounts filters */
       .page-accounts .accounts-filters {
         padding: 10px 16px;
       }
@@ -445,7 +331,7 @@
         box-shadow: none;
       }
 
-      /* Table panel */
+      /* Accounts table (single source of truth, no duplicate rules) */
       .page-accounts .table-panel {
         padding: 0;
         overflow: hidden;
@@ -454,7 +340,6 @@
         min-height: 0;
       }
 
-      /* IMPORTANT: tbody scroll + sticky header without overlap */
       .page-accounts .accounts-table-panel {
         flex: 1;
         min-height: 0;
@@ -540,7 +425,6 @@
         text-align: right;
       }
 
-      /* Column widths */
       .page-accounts .accounts-table th:nth-child(1),
       .page-accounts .accounts-table td:nth-child(1) { width: 22%; }
       .page-accounts .accounts-table th:nth-child(2),
@@ -749,7 +633,6 @@
 
         <main class="main accounts-main">
           <div class="accounts-content">
-            <!-- Summary -->
             <section class="section section--primary accounts-summary">
               <div class="accounts-summary-grid">
                 <div class="accounts-summary-left accounts-panel">
@@ -763,7 +646,6 @@
                             <span class="badge positive" data-field="asset.change">--</span>
                           </h1>
                         </div>
-
                         <div class="asset-summary-pills">
                           <button data-range="7D">7D</button>
                           <button data-range="30D">30D</button>
@@ -771,12 +653,7 @@
                           <button data-range="ALL" class="active">ALL</button>
                         </div>
                       </div>
-
-                      <div
-                        class="total-performance-chart"
-                        data-total-performance="accounts"
-                        data-field="asset.chart"
-                      ></div>
+                      <div class="total-performance-chart" data-total-performance="accounts" data-field="asset.chart"></div>
                     </div>
                   </div>
                 </div>
@@ -796,7 +673,6 @@
                       </span>
                     </label>
                   </div>
-
                   <div class="accounts-distribution-layout">
                     <div class="accounts-donut" data-accounts-donut>
                       <div class="chart-placeholder"></div>
@@ -809,18 +685,12 @@
               </div>
             </section>
 
-            <!-- Filters -->
             <section class="section trade-history-filters accounts-filters">
-              <div class="filter-bar" aria-label="Accounts filters">
+              <div class="filter-bar accounts-filterbar" aria-label="Accounts filters">
                 <div class="filter-field">
                   <span class="filter-label">Search</span>
                   <div class="filter-section">
-                    <input
-                      class="filter-input"
-                      type="search"
-                      placeholder="Search account name"
-                      data-accounts-search
-                    />
+                    <input class="filter-input" type="search" placeholder="Search account name" data-accounts-search />
                   </div>
                 </div>
 
@@ -853,13 +723,10 @@
                   </div>
                 </div>
 
-                <button class="button filter-button" type="button" data-accounts-clear>
-                  Clear
-                </button>
+                <button class="button filter-button" type="button" data-accounts-clear>Clear</button>
               </div>
             </section>
 
-            <!-- Table -->
             <section class="section table-panel accounts-table-panel">
               <div class="table-wrap">
                 <table class="accounts-table">
