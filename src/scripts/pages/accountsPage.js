@@ -652,7 +652,6 @@ const renderAccountsTable = ({
                 class="exchange-icon"
                 src="assets/exchanges/${providerKey}.svg"
                 alt="${providerRaw}"
-                onerror="this.style.display='none'"
               />
               <span>${providerRaw}</span> · ${marketLabel}
             </span>
