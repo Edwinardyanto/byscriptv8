@@ -4,8 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Accounts | Trading Dashboard</title>
-    <link rel="stylesheet" href="../src/styles/color-tokens.css">
-    <link rel="stylesheet" href="../src/styles/main.css">
+
+    <link rel="stylesheet" href="../src/styles/color-tokens.css" />
+    <link rel="stylesheet" href="../src/styles/main.css" />
+
     <style>
       body.page-accounts {
         background: radial-gradient(circle at top, #101319 0%, #0c0f14 50%, #080b10 100%);
@@ -146,6 +148,7 @@
         display: inline-flex;
       }
 
+      /* Distribution */
       .page-accounts .accounts-distribution {
         display: flex;
         flex-direction: column;
@@ -242,17 +245,6 @@
         filter: none;
       }
 
-      .page-accounts .accounts-distribution-empty {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        text-align: center;
-        color: var(--color-text-tertiary);
-        font-size: 0.72rem;
-      }
-
       .page-accounts .accounts-legend {
         display: flex;
         flex-direction: column;
@@ -265,24 +257,6 @@
         gap: 12px;
         flex: 1;
         overflow: hidden;
-      }
-
-      .page-accounts .accounts-legend-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 6px 10px;
-        border-radius: 12px;
-        font-size: 0.76rem;
-        color: var(--color-text-secondary);
-        background: transparent;
-        transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .page-accounts .accounts-legend-item.is-active {
-        color: var(--color-text-primary);
-        background: rgba(255, 255, 255, 0.04);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
       }
 
       .page-accounts .accounts-legend-dot {
@@ -404,12 +378,74 @@
         background: var(--fill-color);
       }
 
-      
-      /* Accounts filters + table (match Trade History layout) */
+      /* Filters (1 row, like trade-history-filters) */
       .page-accounts .accounts-filters {
         padding: 10px 16px;
       }
 
+      .page-accounts .filter-bar {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)) auto;
+        gap: 10px;
+        align-items: end;
+      }
+
+      .page-accounts .filter-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      .page-accounts .filter-label {
+        font-size: 0.62rem;
+        color: var(--color-text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+      }
+
+      .page-accounts .filter-section {
+        display: flex;
+        align-items: center;
+        border-radius: 8px;
+        border: 1px solid var(--color-border-subtle);
+        background: var(--color-surface-panel-strong);
+        box-shadow: inset 0 1px 0 var(--color-overlay-xxs-strong), 0 10px 18px var(--color-shadow-soft);
+      }
+
+      .page-accounts .filter-input,
+      .page-accounts .filter-select {
+        width: 100%;
+        background: var(--color-component-dropdown-bg);
+        border: 1px solid var(--color-component-dropdown-border);
+        border-radius: 6px;
+        color: var(--color-component-dropdown-text);
+        font-size: 0.72rem;
+        padding: 6px 8px;
+        height: 32px;
+        outline: none;
+      }
+
+      .page-accounts .filter-input::placeholder {
+        color: var(--color-text-tertiary);
+      }
+
+      .page-accounts .filter-select {
+        cursor: pointer;
+      }
+
+      .page-accounts .filter-button {
+        align-self: end;
+        height: 32px;
+        padding: 0 14px;
+        border-radius: 999px;
+        white-space: nowrap;
+        border-color: var(--color-action-primary-border);
+        background: transparent;
+        box-shadow: none;
+      }
+
+      /* Table panel */
       .page-accounts .table-panel {
         padding: 0;
         overflow: hidden;
@@ -418,6 +454,7 @@
         min-height: 0;
       }
 
+      /* IMPORTANT: tbody scroll + sticky header without overlap */
       .page-accounts .accounts-table-panel {
         flex: 1;
         min-height: 0;
@@ -428,6 +465,7 @@
         flex-direction: column;
         min-height: 0;
         overflow: hidden;
+        flex: 1;
       }
 
       .page-accounts .accounts-table {
@@ -446,6 +484,8 @@
 
       .page-accounts .accounts-table thead {
         flex: 0 0 auto;
+        position: relative;
+        z-index: 3;
       }
 
       .page-accounts .accounts-table tbody {
@@ -473,16 +513,6 @@
         vertical-align: middle;
       }
 
-      /* PnL / Performance coloring */
-      .page-accounts .accounts-table td.metric-positive {
-        color: var(--color-status-positive);
-      }
-
-      .page-accounts .accounts-table td.metric-negative {
-        color: var(--color-status-negative);
-      }
-
-
       .page-accounts .accounts-table th {
         position: sticky;
         top: 0;
@@ -491,12 +521,15 @@
         font-size: 0.62rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        z-index: 2;
+        z-index: 4;
       }
 
-      .page-accounts .accounts-table td.numeric,
-      .page-accounts .accounts-table th.numeric {
-        text-align: right;
+      .page-accounts .accounts-table td.metric-positive {
+        color: var(--color-status-positive);
+      }
+
+      .page-accounts .accounts-table td.metric-negative {
+        color: var(--color-status-negative);
       }
 
       .page-accounts .accounts-table td:nth-child(2),
@@ -507,7 +540,7 @@
         text-align: right;
       }
 
-      /* Column widths (tidy header alignment) */
+      /* Column widths */
       .page-accounts .accounts-table th:nth-child(1),
       .page-accounts .accounts-table td:nth-child(1) { width: 22%; }
       .page-accounts .accounts-table th:nth-child(2),
@@ -692,178 +725,15 @@
         border-color: var(--color-action-primary-border-strong);
         color: var(--color-text);
       }
-@media (max-width: 1200px) {
+
+      @media (max-width: 1200px) {
         .page-accounts .accounts-summary-grid {
           grid-template-columns: 1fr;
         }
       }
-    
-/* Filters */
-.page-accounts .filter-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr)) auto;
-  gap: 10px;
-  align-items: end;
-}
-
-.page-accounts .filter-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-
-.page-accounts .filter-label {
-  font-size: 0.62rem;
-  color: var(--color-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-}
-
-.page-accounts .filter-section {
-  display: flex;
-  align-items: center;
-  border-radius: 8px;
-  border: 1px solid var(--color-border-subtle);
-  background: var(--color-surface-panel-strong);
-  box-shadow: inset 0 1px 0 var(--color-overlay-xxs-strong), 0 10px 18px var(--color-shadow-soft);
-}
-
-.page-accounts .filter-input,
-.page-accounts .filter-select {
-  width: 100%;
-  background: var(--color-component-dropdown-bg);
-  border: 1px solid var(--color-component-dropdown-border);
-  border-radius: 6px;
-  color: var(--color-component-dropdown-text);
-  font-size: 0.72rem;
-  padding: 6px 8px;
-  height: 32px;
-  outline: none;
-}
-
-.page-accounts .filter-input::placeholder {
-  color: var(--color-text-tertiary);
-}
-
-.page-accounts .filter-select {
-  cursor: pointer;
-}
-
-.page-accounts .filter-button {
-  align-self: end;
-  height: 32px;
-  padding: 0 14px;
-  border-radius: 999px;
-  white-space: nowrap;
-  border-color: var(--color-action-primary-border);
-  background: transparent;
-  box-shadow: none;
-}
-
-/* Table panel (like Trade History) */
-.page-accounts .accounts-table-panel {
-  padding: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-
-.page-accounts .accounts-table-wrap {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  flex: 1;
-}
-
-/* Trade-history-like fixed header + scroll body */
-.page-accounts .accounts-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-}
-
-.page-accounts .accounts-table thead,
-.page-accounts .accounts-table tbody {
-  display: block;
-}
-
-.page-accounts .accounts-table thead tr,
-.page-accounts .accounts-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.page-accounts .accounts-table tbody {
-  overflow-y: auto;
-  flex: 1 1 auto;
-  scrollbar-gutter: stable;
-}
-
-.page-accounts .accounts-table th,
-.page-accounts .accounts-table td {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--color-overlay-sm);
-  font-size: 0.78rem;
-  color: var(--color-text-secondary);
-  text-align: left;
-  white-space: nowrap;
-}
-
-.page-accounts .accounts-table th {
-  padding: 10px 18px;
-  background: var(--color-component-table-header-bg);
-  color: var(--color-text);
-  font-size: 0.62rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  text-align: center;
-}
-      
-.page-accounts .accounts-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.page-accounts .accounts-table td:first-child {
-  white-space: normal;
-}
-
-/* Value column emphasis */
-.page-accounts .accounts-table td:nth-child(2) {
-  font-size: 0.86rem;
-  font-weight: 650;
-  color: var(--color-text);
-}
-      
-/* Column alignment */
-.page-accounts .accounts-table th:nth-child(2),
-.page-accounts .accounts-table td:nth-child(2),
-.page-accounts .accounts-table th:nth-child(3),
-.page-accounts .accounts-table td:nth-child(3),
-.page-accounts .accounts-table th:nth-child(4),
-.page-accounts .accounts-table td:nth-child(4),
-.page-accounts .accounts-table th:nth-child(5),
-.page-accounts .accounts-table td:nth-child(5) {
-  text-align: right;
-}
-
-.page-accounts .accounts-table th:nth-child(6),
-.page-accounts .accounts-table td:nth-child(6),
-.page-accounts .accounts-table th:nth-child(8),
-.page-accounts .accounts-table td:nth-child(8) {
-  text-align: center;
-}
-
-
     </style>
   </head>
+
   <body class="page-accounts">
     <div id="app" class="app">
       <header class="header section section--header section-header accounts-header">
@@ -873,10 +743,13 @@
           <div class="accounts-header-spacer"></div>
         </div>
       </header>
+
       <div class="app-body">
         <aside data-sidebar-slot></aside>
+
         <main class="main accounts-main">
           <div class="accounts-content">
+            <!-- Summary -->
             <section class="section section--primary accounts-summary">
               <div class="accounts-summary-grid">
                 <div class="accounts-summary-left accounts-panel">
@@ -890,6 +763,7 @@
                             <span class="badge positive" data-field="asset.change">--</span>
                           </h1>
                         </div>
+
                         <div class="asset-summary-pills">
                           <button data-range="7D">7D</button>
                           <button data-range="30D">30D</button>
@@ -897,10 +771,16 @@
                           <button data-range="ALL" class="active">ALL</button>
                         </div>
                       </div>
-                      <div class="total-performance-chart" data-total-performance="accounts" data-field="asset.chart"></div>
+
+                      <div
+                        class="total-performance-chart"
+                        data-total-performance="accounts"
+                        data-field="asset.chart"
+                      ></div>
                     </div>
                   </div>
                 </div>
+
                 <div class="accounts-distribution accounts-panel">
                   <div class="accounts-distribution-header">
                     <div class="accounts-distribution-title">Accounts Distribution</div>
@@ -916,6 +796,7 @@
                       </span>
                     </label>
                   </div>
+
                   <div class="accounts-distribution-layout">
                     <div class="accounts-donut" data-accounts-donut>
                       <div class="chart-placeholder"></div>
@@ -927,9 +808,10 @@
                 </div>
               </div>
             </section>
-                        
+
+            <!-- Filters -->
             <section class="section trade-history-filters accounts-filters">
-              <div class="filter-bar accounts-filterbar" aria-label="Accounts filters">
+              <div class="filter-bar" aria-label="Accounts filters">
                 <div class="filter-field">
                   <span class="filter-label">Search</span>
                   <div class="filter-section">
@@ -977,6 +859,7 @@
               </div>
             </section>
 
+            <!-- Table -->
             <section class="section table-panel accounts-table-panel">
               <div class="table-wrap">
                 <table class="accounts-table">
@@ -1009,11 +892,11 @@
                 <div></div>
               </div>
             </section>
-
           </div>
         </main>
       </div>
     </div>
+
     <script type="module" src="../src/scripts/main.js"></script>
     <script type="module" src="../src/scripts/pages/accountsPage.js"></script>
   </body>
