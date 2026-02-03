@@ -638,21 +638,25 @@ const renderAccountsTable = ({
         const className = value > 0 ? "metric-positive" : value < 0 ? "metric-negative" : "";
         return `<td class="${className}">${formatPercent(value)}</td>`;
       }).join("");
+      
+      const providerRaw = account.provider || "exchange";
+      const providerKey = String(providerRaw).trim().toLowerCase().replace(/\s+/g, "_");
 
       row.innerHTML = `
         <td>
           <div class="account-main">
             <span class="account-id">${accountLabel}</span>
+      
             <span class="account-type">
               <img
                 class="exchange-icon"
-                src="assets/exchanges/${(account.provider || "exchange").toLowerCase()}.svg"
-                alt="${account.provider || "exchange"}"
+                src="assets/exchanges/${providerKey}.svg"
+                alt="${providerRaw}"
                 onerror="this.style.display='none'"
               />
-              <span>${account.provider || "exchange"}</span> · ${marketLabel}
+              <span>${providerRaw}</span> · ${marketLabel}
             </span>
-
+      
           </div>
         </td>
         <td>${formatCurrency(account.totalValueUsd)}</td>
