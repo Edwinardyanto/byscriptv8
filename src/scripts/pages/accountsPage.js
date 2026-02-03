@@ -133,6 +133,22 @@ const formatAccountCode = (code = "") =>
 const capitalize = (value = "") =>
   value ? value.charAt(0).toUpperCase() + value.slice(1) : value;
 
+const providerKey = (value = "") => {
+  const raw = String(value || "").trim().toLowerCase();
+  // keep underscores because your providers look like: kraken_futures
+  return raw
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
+};
+
+const getExchangeIconUrl = (provider) => {
+  const key = providerKey(provider);
+  if (!key) return "";
+  // accounts.html lives in /pages, so ../assets points to root /assets
+  return `../assets/exchanges/${key}.svg`;
+};
+
+
 const normalizeText = (value) => String(value || "").trim().toLowerCase();
 
 const uniq = (arr = []) => Array.from(new Set(arr.filter(Boolean)));
