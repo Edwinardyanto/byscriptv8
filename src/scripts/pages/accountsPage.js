@@ -643,7 +643,16 @@ const renderAccountsTable = ({
         <td>
           <div class="account-main">
             <span class="account-id">${accountLabel}</span>
-            <span class="account-type"><span>${account.provider || "exchange"}</span> · ${marketLabel}</span>
+            <span class="account-type">
+              <img
+                class="exchange-icon"
+                src="assets/exchanges/${(account.provider || "exchange").toLowerCase()}.svg"
+                alt="${account.provider || "exchange"}"
+                onerror="this.style.display='none'"
+              />
+              <span>${account.provider || "exchange"}</span> · ${marketLabel}
+            </span>
+
           </div>
         </td>
         <td>${formatCurrency(account.totalValueUsd)}</td>
