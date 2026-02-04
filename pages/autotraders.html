@@ -4,9 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Autotraders | Trading Dashboard</title>
-    <link rel="stylesheet" href="../src/styles/color-tokens.css">
-    <link rel="stylesheet" href="../src/styles/main.css">
+
+    <link rel="stylesheet" href="../src/styles/color-tokens.css" />
+    <link rel="stylesheet" href="../src/styles/main.css" />
+
     <style>
+      /* =========================================
+       * Pills and small helpers
+       * ========================================= */
       .page-autotraders .status-pill.active {
         color: var(--color-status-positive);
         border: 1px solid var(--color-action-primary-border);
@@ -32,37 +37,27 @@
         color: var(--color-status-negative);
       }
 
+      /* =========================================
+       * Metrics block (right side)
+       * ========================================= */
       .page-autotraders .performance-metrics {
         display: grid;
         grid-template-rows: repeat(3, minmax(0, auto));
         gap: 0;
-        --metric-positive: var(--color-status-positive);
-        --metric-negative: var(--color-status-negative);
       }
 
-      .page-autotraders .metrics-stack {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 24px;
-        row-gap: 14px;
-      }
-
-      .page-autotraders .metric-card {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding: 12px 0;
-        border-radius: 0;
-        background: transparent;
-        border: none;
-      }
-
-      .page-autotraders .metric-card:nth-child(n + 3) {
+      .page-autotraders .metric-row {
+        padding: 14px 0;
         border-top: 1px solid var(--color-border-subtle);
-        padding-top: 14px;
       }
 
-      .page-autotraders .metric-card .metric-label {
+      .page-autotraders .metric-row:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+
+      .page-autotraders .metric-label {
+        display: block;
         font-size: 0.62rem;
         color: var(--color-muted);
         text-transform: uppercase;
@@ -70,49 +65,31 @@
         opacity: 0.55;
       }
 
-      .page-autotraders .metric-card .metric-value {
+      .page-autotraders .metric-value {
         display: block;
         text-align: left;
         font-size: 0.98rem;
         font-weight: 500;
+        margin-top: 6px;
       }
 
-      .page-autotraders .metric-card .metric-sub {
+      .page-autotraders .metric-subvalue {
+        display: block;
         font-size: 0.78rem;
         color: var(--color-text-secondary);
-        display: block;
         margin-top: 8px;
       }
 
-      .page-autotraders .metric-card .metric-sub-value {
-        font-weight: 500;
-      }
-
-      .page-autotraders .metric-card .metric-sub-positive {
-        color: var(--metric-positive);
-      }
-
-      .page-autotraders .metric-card .metric-sub-negative {
-        color: var(--metric-negative);
-      }
-
-      .page-autotraders .metric-card .metric-breakdown {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-      }
-
-      .page-autotraders .metric-card .metric-sub-divider {
-        color: var(--color-text-disabled);
-      }
-
+      /* =========================================
+       * Live summary pill
+       * ========================================= */
       .page-autotraders .autotraders-live {
         display: inline-flex;
         align-items: center;
         justify-content: flex-start;
         flex-direction: row;
         min-height: auto;
-        
+
         gap: 8px;
         padding: 8px 12px;
         border-radius: 18px;
@@ -121,8 +98,6 @@
         box-shadow: 0 0 16px var(--color-shadow-soft);
         line-height: 1;
       }
-
-      
 
       .page-autotraders .live-indicator {
         width: 10px;
@@ -165,6 +140,21 @@
         margin: 0 6px;
       }
 
+      @keyframes livePulse {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: scale(0.9);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.2);
+        }
+      }
+
+      /* =========================================
+       * Table panel
+       * ========================================= */
       .page-autotraders .table-panel {
         padding: 0;
         overflow: hidden;
@@ -188,7 +178,7 @@
       .page-autotraders .autotraders-table {
         width: 100%;
         border-collapse: collapse;
-        table-layout: fixed;
+        table-layout: fixed; /* kunci */
         display: flex;
         flex-direction: column;
         min-height: 0;
@@ -214,7 +204,7 @@
       .page-autotraders .autotraders-table tbody tr {
         display: table;
         width: 100%;
-        table-layout: fixed;
+        table-layout: fixed; /* kunci */
       }
 
       .page-autotraders .autotraders-table th,
@@ -240,13 +230,78 @@
         color: var(--color-text-tertiary);
         font-weight: 600;
         letter-spacing: 0.02em;
-        background: linear-gradient(180deg, rgba(20, 23, 30, 0.92), rgba(16, 18, 24, 0.86));
+        background: linear-gradient(
+          180deg,
+          rgba(20, 23, 30, 0.92),
+          rgba(16, 18, 24, 0.86)
+        );
       }
 
       .page-autotraders .autotraders-table tbody tr:hover {
         background: rgba(255, 255, 255, 0.02);
       }
 
+      /* =========================================
+       * Column widths (pakai class)
+       * ========================================= */
+      .page-autotraders .autotraders-table th.col-status,
+      .page-autotraders .autotraders-table td.col-status {
+        width: 110px;
+      }
+
+      .page-autotraders .autotraders-table th.col-autotrader,
+      .page-autotraders .autotraders-table td.col-autotrader {
+        width: 220px; /* ini yang kamu pengen bisa dikontrol */
+      }
+
+      .page-autotraders .autotraders-table th.col-plan,
+      .page-autotraders .autotraders-table td.col-plan {
+        width: 190px;
+      }
+
+      .page-autotraders .autotraders-table th.col-pair,
+      .page-autotraders .autotraders-table td.col-pair {
+        width: 150px;
+      }
+
+      .page-autotraders .autotraders-table th.col-provider,
+      .page-autotraders .autotraders-table td.col-provider {
+        width: 140px;
+      }
+
+      .page-autotraders .autotraders-table th.col-capital,
+      .page-autotraders .autotraders-table td.col-capital {
+        width: 130px;
+      }
+
+      .page-autotraders .autotraders-table th.col-pnl,
+      .page-autotraders .autotraders-table td.col-pnl {
+        width: 120px;
+      }
+
+      .page-autotraders .autotraders-table th.col-winrate,
+      .page-autotraders .autotraders-table td.col-winrate {
+        width: 110px;
+      }
+
+      .page-autotraders .autotraders-table th.col-running,
+      .page-autotraders .autotraders-table td.col-running {
+        width: 90px;
+      }
+
+      .page-autotraders .autotraders-table th.col-action,
+      .page-autotraders .autotraders-table td.col-action {
+        width: 110px;
+      }
+
+      .page-autotraders .autotraders-table th.col-detail,
+      .page-autotraders .autotraders-table td.col-detail {
+        width: 90px;
+      }
+
+      /* =========================================
+       * Footer
+       * ========================================= */
       .page-autotraders .table-footer {
         display: grid;
         grid-template-columns: auto 1fr auto;
@@ -275,36 +330,47 @@
         font-size: 0.75rem;
         cursor: pointer;
       }
-
-      @keyframes livePulse {
-        0%,
-        100% {
-          opacity: 0.35;
-          transform: scale(0.9);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1.2);
-        }
-      }
-
     </style>
   </head>
+
   <body class="page-autotraders">
     <div id="app" class="app">
       <header class="header section section--header section-header app-header">
         <div class="app-header-bar">
           <div class="app-header-left" data-header-left></div>
+
           <div class="app-header-center">
             <h1 class="section-title app-header-title">Autotraders</h1>
           </div>
-          <div class="app-header-right">
-            <a class="button autotraders-add-button" href="autotraders/new.html">+ Add Autotrader</a>
 
-            <button class="app-header-icon" type="button" aria-label="Notifications">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2Z" fill="currentColor"/>
-                <path d="M18 16v-5a6 6 0 0 0-5-5.91V4a1 1 0 1 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h20v-1l-2-2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <div class="app-header-right">
+            <a class="button autotraders-add-button" href="autotraders/new.html"
+              >+ Add Autotrader</a
+            >
+
+            <button
+              class="app-header-icon"
+              type="button"
+              aria-label="Notifications"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2Z"
+                  fill="currentColor"
+                />
+                <path
+                  d="M18 16v-5a6 6 0 0 0-5-5.91V4a1 1 0 1 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h20v-1l-2-2Z"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linejoin="round"
+                />
               </svg>
             </button>
 
@@ -316,8 +382,10 @@
           </div>
         </div>
       </header>
+
       <div class="app-body">
         <aside data-sidebar-slot></aside>
+
         <main class="main autotraders-main">
           <div class="autotraders-page">
             <section class="autotraders-performance autotraders-chart section section--primary">
@@ -326,6 +394,7 @@
                   <h2 class="section-title">Total Autotraders Performance</h2>
                 </div>
               </div>
+
               <div class="section-body">
                 <div class="performance-layout">
                   <div class="performance-chart">
@@ -337,6 +406,7 @@
                             <span class="badge positive" data-field="asset.change">--</span>
                           </h1>
                         </div>
+
                         <div class="asset-summary-pills">
                           <button data-range="7D">7D</button>
                           <button data-range="30D">30D</button>
@@ -344,6 +414,7 @@
                           <button data-range="ALL" class="active">ALL</button>
                         </div>
                       </div>
+
                       <div class="total-performance-chart" data-total-performance="autotraders"></div>
                     </div>
                   </div>
@@ -354,11 +425,13 @@
                       <span class="metric-value" id="metric-profit-factor">--</span>
                       <span class="metric-subvalue">(Gross Profit / Gross Loss)</span>
                     </div>
+
                     <div class="metric-row">
                       <span class="metric-label">Trades</span>
                       <span class="metric-value" id="metric-trades">--</span>
                       <span class="metric-subvalue" id="metric-trades-sub">--</span>
                     </div>
+
                     <div class="metric-row">
                       <span class="metric-label">Volume</span>
                       <span class="metric-value" id="metric-volume">--</span>
@@ -368,48 +441,47 @@
                 </div>
               </div>
             </section>
+
             <section class="autotraders-live autotraders-summary section section--secondary">
-            <span class="live-indicator" aria-hidden="true"></span>
-            <span class="live-item" id="live-autotraders">
-              <span class="live-label">Autotraders</span>
-              <span class="live-value">
-                <span id="live-autotraders-total">201</span>
-                (<span
-                  class="text-green"
-                  id="live-autotraders-active"
-                  title="Active autotraders currently running"
-                >151</span> /
-                <span
-                  class="text-red"
-                  id="live-autotraders-stopped"
-                  title="Stopped autotraders"
-                >50</span>)
+              <span class="live-indicator" aria-hidden="true"></span>
+
+              <span class="live-item" id="live-autotraders">
+                <span class="live-label">Autotraders</span>
+                <span class="live-value">
+                  <span id="live-autotraders-total">--</span>
+                  (<span class="text-green" id="live-autotraders-active" title="Active autotraders currently running">--</span>
+                  /
+                  <span class="text-red" id="live-autotraders-stopped" title="Stopped autotraders">--</span>)
+                </span>
               </span>
-            </span>
-            <span class="live-divider" aria-hidden="true"></span>
-            <span class="live-item" id="live-capital">
-              <span class="live-label">Capital Allocation</span>
-              <span class="live-value" id="live-capital-value">$305,000</span>
-            </span>
-          </section>
+
+              <span class="live-divider" aria-hidden="true"></span>
+
+              <span class="live-item" id="live-capital">
+                <span class="live-label">Capital Allocation</span>
+                <span class="live-value" id="live-capital-value">--</span>
+              </span>
+            </section>
+
             <section class="section table-panel autotraders-table-panel">
               <div class="table-wrap">
                 <table class="autotraders-table">
                   <thead>
                     <tr>
-                      <th>Status</th>
-                      <th>Autotrader</th>
-                      <th class="col-trading-plan">Trading Plan</th>
-                      <th>Pair</th>
-                      <th>Provider</th>
-                      <th class="numeric">Capital</th>
-                      <th class="numeric">PnL ($)</th>
-                      <th class="numeric">Win Rate</th>
-                      <th class="numeric">Running</th>
-                      <th>Action</th>
-                      <th>Detail</th>
+                      <th class="col-status">Status</th>
+                      <th class="col-autotrader">Autotrader</th>
+                      <th class="col-plan">Trading Plan</th>
+                      <th class="col-pair">Pair</th>
+                      <th class="col-provider">Provider</th>
+                      <th class="col-capital numeric">Capital</th>
+                      <th class="col-pnl numeric">PnL ($)</th>
+                      <th class="col-winrate numeric">Win Rate</th>
+                      <th class="col-running numeric">Running</th>
+                      <th class="col-action">Action</th>
+                      <th class="col-detail">Detail</th>
                     </tr>
                   </thead>
+
                   <tbody data-autotraders-rows></tbody>
                 </table>
               </div>
@@ -423,7 +495,9 @@
                     <option value="100" selected>100</option>
                   </select>
                 </div>
+
                 <div class="pagination" data-autotraders-pagination></div>
+
                 <div></div>
               </div>
             </section>
@@ -431,6 +505,7 @@
         </main>
       </div>
     </div>
+
     <script type="module" src="../src/scripts/main.js"></script>
     <script type="module" src="../src/scripts/pages/autotradersPage.js"></script>
   </body>
