@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Affiliate | Trading Dashboard</title>
+    <link rel="stylesheet" href="../src/styles/color-tokens.css">
+    <link rel="stylesheet" href="../src/styles/main.css">
+  </head>
+  <body>
+    <div id="app" class="app">
+      <header class="header section section--header section-header app-header">
+        <div class="app-header-bar">
+          <div class="app-header-left" data-header-left></div>
+          <div class="app-header-center">
+            <h1 class="section-title app-header-title">Affiliate</h1>
+          </div>
+          <div class="app-header-right">
+            <button class="app-header-icon" type="button" aria-label="Notifications">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2Z" fill="currentColor"/>
+                <path d="M18 16v-5a6 6 0 0 0-5-5.91V4a1 1 0 1 0-2 0v1.09A6 6 0 0 0 6 11v5l-2 2v1h20v-1l-2-2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              </svg>
+            </button>
+
+            <button class="app-header-profile" type="button" aria-label="Profile">
+              <span class="app-header-avatar">U</span>
+              <span class="app-header-name">HELLO, USER</span>
+              <span class="app-header-caret" aria-hidden="true">▾</span>
+            </button>
+          </div>
+        </div>
+      </header>
+      <div class="app-body">
+        <aside data-sidebar-slot></aside>
+        <main class="main">
+          <section class="section section--secondary empty-state">
+            <div class="section-body">
+              <div class="empty-state__content">
+                <h2 class="empty-state__title">Affiliate</h2>
+                <p class="empty-state__subtitle">This page is under construction</p>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script type="module" src="../src/scripts/main.js"></script>
+  </body>
+</html>
