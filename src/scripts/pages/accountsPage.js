@@ -1,7 +1,8 @@
 import {
   getAccountsWithSummary,
   getAutotradersByAccount,
-  getTradeHistory,
+  getEquityDaily,
+  getAccountsSummaryByDate,
   getAssetEquityByRange,
 } from "../dataAccess.js";
 
@@ -192,18 +193,67 @@ const applyAccountFilters = (accounts, state) => {
   });
 };
 
-const buildAccountPerformance = async (accountId, totalValue) => {
-  const now = Date.now();
-  const performance = {};
+const buildPerformanceMaps = async () => {
+  const equitySeries = await getEquityDaily();
+  if (!Array.isArray(equitySeries) || equitySeries.length === 0) {
+    return {
+      endDate: null,
+      byRange: Object.fromEntries(PERFORMANCE_RANGES.map(({ label }) => [label, new Map()])),
+    };
+  }
+
+  const endDate = equitySeries[equitySeries.length - 1].date;
+
+  // Resolve start dates based on available equity series (avoids missing file dates).
+  const rangeStartDates = PERFORMANCE_RANGES.map(({ label, days }) => {
+    const idx = Math.max(0, equitySeries.length - days);
+    const startDate = equitySeries[idx]?.date || equitySeries[0].date;
+    return { label, startDate };
+  });
+
+  // Load all required summaries once.
+  const uniqueDates = Array.from(new Set([endDate, ...rangeStartDates.map((r) => r.startDate)]));
+  const summariesByDate = new Map();
   await Promise.all(
-    PERFORMANCE_RANGES.map(async ({ label, days }) => {
-      const from = new Date(now - days * 24 * 60 * 60 * 1000);
-      const trades = await getTradeHistory({ accountId, from });
-      const pnl = trades.reduce((sum, trade) => sum + Number(trade.pnl_usd || 0), 0);
-      performance[label] = totalValue ? (pnl / totalValue) * 100 : 0;
+    uniqueDates.map(async (date) => {
+      try {
+        const summary = await getAccountsSummaryByDate(date);
+        summariesByDate.set(date, Array.isArray(summary) ? summary : []);
+      } catch (e) {
+        summariesByDate.set(date, []);
+      }
     })
   );
-  return performance;
+
+  const valueMapForDate = (date) => {
+    const rows = summariesByDate.get(date) || [];
+    const map = new Map();
+    for (const r of rows) {
+      map.set(String(r.account_id), Number(r.totalValueUsd || 0));
+    }
+    return map;
+  };
+
+  const endMap = valueMapForDate(endDate);
+
+  const byRange = {};
+  for (const { label, startDate } of rangeStartDates) {
+    const startMap = valueMapForDate(startDate);
+    const perfMap = new Map();
+
+    // Union of accounts that exist in start/end snapshots.
+    const ids = new Set([...startMap.keys(), ...endMap.keys()]);
+    for (const id of ids) {
+      const start = Number(startMap.get(id) || 0);
+      const end = Number(endMap.get(id) || 0);
+      const pct = start > 0 ? ((end - start) / start) * 100 : 0;
+      perfMap.set(id, pct);
+    }
+
+    byRange[label] = perfMap;
+  }
+
+  return { endDate, byRange };
 };
 
 const buildAssetsBar = (assets, tooltip) => {
@@ -764,15 +814,22 @@ const initAccountsPage = async () => {
   tooltip.className = "asset-tooltip";
   document.body.appendChild(tooltip);
 
-  const accounts = await getAccountsWithSummary();
+  const [accounts, performanceMaps] = await Promise.all([
+    getAccountsWithSummary(),
+    buildPerformanceMaps(),
+  ]);
+
   const accountsWithMeta = await Promise.all(
     accounts.map(async (account) => {
       const autotraders = await getAutotradersByAccount(account.account_id);
       const activity = computeAutotraderActivity(autotraders);
-      const performance = await buildAccountPerformance(
-        account.account_id,
-        account.totalValueUsd
-      );
+
+      const performance = {};
+      for (const { label } of PERFORMANCE_RANGES) {
+        const pct = performanceMaps.byRange?.[label]?.get(String(account.account_id));
+        performance[label] = Number.isFinite(pct) ? pct : 0;
+      }
+
       return {
         ...account,
         ...activity,
