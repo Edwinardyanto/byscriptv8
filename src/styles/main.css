@@ -262,17 +262,6 @@ body.sidebar-collapsed .sidebar-toggle-panel--sidebar {
   min-width: 0;
 }
 
-.app-header-kicker {
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.28em;
-  color: var(--color-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
 .app-header-title {
   margin: 0;
   text-align: center;
