@@ -473,6 +473,7 @@ header.section-header {
 .section--header.section-header {
   border-radius: 0;
   z-index: 4;
+  align-items: unset;
 }
 
 .section--header .section-header {
