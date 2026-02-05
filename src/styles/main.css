@@ -2314,7 +2314,7 @@ main {
 }
 
 .page-autotraders .autotraders-table thead th {
-  text-align: left;
+  text-align: center;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   color: var(--color-muted);
