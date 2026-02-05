@@ -30,6 +30,34 @@ const setBadge = (scope, selector, value, isPositive) => {
   el.classList.toggle("badge--warning", !isPositive);
 };
 
+const parseSignedNumber = (value) => {
+  if (value == null) return 0;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+
+  const s = String(value).trim();
+  if (!s) return 0;
+
+  // "+$30,856" -> "30856", "-$1,250" -> "-1250"
+  const cleaned = s.replace(/[^0-9.-]+/g, "");
+  const n = Number(cleaned);
+  return Number.isFinite(n) ? n : 0;
+};
+
+const setSignedValueColor = (scope, selector, value) => {
+  // Autotraders page only (supaya ga ganggu page lain)
+  if (!document.body.classList.contains("page-autotraders")) return;
+
+  const el = scope?.querySelector(selector);
+  if (!el) return;
+
+  const n = parseSignedNumber(value);
+
+  el.classList.toggle("positive", n > 0);
+  el.classList.toggle("negative", n < 0);
+  el.classList.toggle("neutral", n === 0);
+};
+
+
 const normalizeRange = (raw) => {
   const v = String(raw || "").trim();
   if (!v) return "7D";
@@ -98,6 +126,7 @@ export const renderTotalPerformanceChart = ({
   // Loading / Error states
   if (status === "loading") {
     setText(scope, '[data-field="asset.totalBalance"]', "Loading...");
+    setSignedValueColor(scope, '[data-field="asset.totalBalance"]', 0);
     setBadge(scope, '[data-field="asset.change"]', "--", true);
     container.innerHTML = "";
     container.textContent = "Loading chart...";
@@ -106,6 +135,7 @@ export const renderTotalPerformanceChart = ({
 
   if (status === "error") {
     setText(scope, '[data-field="asset.totalBalance"]', "--");
+    setSignedValueColor(scope, '[data-field="asset.totalBalance"]', 0);
     setBadge(scope, '[data-field="asset.change"]', "--", false);
     container.innerHTML = "";
     container.textContent = "Chart unavailable";
@@ -114,6 +144,7 @@ export const renderTotalPerformanceChart = ({
 
   if (!data || !data.chart) {
     setText(scope, '[data-field="asset.totalBalance"]', "--");
+    setSignedValueColor(scope, '[data-field="asset.totalBalance"]', 0);
     setBadge(scope, '[data-field="asset.change"]', "--", true);
     container.innerHTML = "";
     container.textContent = "No chart data";
@@ -122,6 +153,11 @@ export const renderTotalPerformanceChart = ({
 
   // Header
   setText(scope, '[data-field="asset.totalBalance"]', data.totalValue || "--");
+  setSignedValueColor(
+    scope,
+    '[data-field="asset.totalBalance"]',
+    data.totalValueNum ?? data.totalValue ?? 0
+  );
 
   const pct = Number(data.percent || 0);
   const sign = pct > 0 ? "+" : pct < 0 ? "-" : "";
