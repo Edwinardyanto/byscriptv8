@@ -210,7 +210,7 @@ const renderAutotradersTable = ({ rows, page, pageSize }) => {
   for (const r of pageRows) {
     const statusClass =
       r.status === "running" ? "status-pill--active" : "status-pill--stopped";
-    const pnlClass = r.pnl_usd >= 0 ? "pnl-positive" : "pnl-negative";
+    const pnlClass = r.pnl_usd > 0 ? "pnl-positive" : r.pnl_usd < 0 ? "pnl-negative" : "";
     const actionLabel = r.status === "running" ? "Stop" : "Start";
 
     const tr = document.createElement("tr");
