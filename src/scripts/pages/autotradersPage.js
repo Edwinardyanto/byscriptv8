@@ -215,19 +215,27 @@ const renderAutotradersTable = ({ rows, page, pageSize }) => {
 
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td><span class="status-pill ${statusClass}">${
+      <td class="col-status"><span class="status-pill ${statusClass}">${
       r.status === "running" ? "RUNNING" : "STOPPED"
     }</span></td>
-      <td title="${r.autotrader_name || ""}">${r.autotrader_name}</td>
-      <td title="${r.plan_name || ""}">${r.plan_name}</td>
-      <td title="${r.pair || ""}">${r.pair}</td>
-      <td title="${r.provider_label || ""}">${r.provider_label}</td>
-      <td class="numeric">${fmtUSD0(r.capital_usd)}</td>
-      <td class="numeric ${pnlClass}">${fmtUSDSign0(r.pnl_usd)}</td>
-      <td class="numeric">${Number(r.win_rate || 0).toFixed(0)}%</td>
-      <td class="numeric">${Number(r.running_positions || 0)}</td>
-      <td><button class="table-action" type="button" data-action="toggle" data-id="${r.autotrader_id}">${actionLabel}</button></td>
-      <td><a class="table-action" href="autotraders/detail.html?id=${encodeURIComponent(
+      <td class="col-autotrader" title="${r.autotrader_name || ""}">${
+      r.autotrader_name
+    }</td>
+      <td class="col-plan" title="${r.plan_name || ""}">${r.plan_name}</td>
+      <td class="col-pair" title="${r.pair || ""}">${r.pair}</td>
+      <td class="col-provider" title="${r.provider_label || ""}">${
+      r.provider_label
+    }</td>
+      <td class="col-capital numeric">${fmtUSD0(r.capital_usd)}</td>
+      <td class="col-pnl numeric ${pnlClass}">${fmtUSDSign0(r.pnl_usd)}</td>
+      <td class="col-winrate numeric">${Number(r.win_rate || 0).toFixed(
+      0
+    )}%</td>
+      <td class="col-running numeric">${Number(r.running_positions || 0)}</td>
+      <td class="col-action"><button class="table-action" type="button" data-action="toggle" data-id="${
+      r.autotrader_id
+    }">${actionLabel}</button></td>
+      <td class="col-detail"><a class="table-action" href="autotraders/detail.html?id=${encodeURIComponent(
         r.autotrader_id
       )}">View</a></td>
     `;
