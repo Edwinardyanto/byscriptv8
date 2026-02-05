@@ -43,6 +43,21 @@
         opacity: 0.9;
       }
 
+      /* Autotraders only: signed color for asset-summary totalBalance */
+      .page-autotraders .asset-summary-metric [data-field="asset.totalBalance"].positive {
+        color: var(--color-status-positive);
+      }
+      
+      .page-autotraders .asset-summary-metric [data-field="asset.totalBalance"].negative {
+        color: var(--color-status-negative);
+      }
+      
+      .page-autotraders .asset-summary-metric [data-field="asset.totalBalance"].neutral {
+        color: var(--color-text-muted);
+      }
+
+
+      
       .page-autotraders .text-green {
         color: var(--color-status-positive);
       }
